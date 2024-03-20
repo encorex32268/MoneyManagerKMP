@@ -1,0 +1,7 @@
+version: "Apple Swift version 5.8 (swiftlang-5.8.0.124.2 clang-1403.0.22.11.100)"
+options: "f2d0cc3e391e2eb00ad51c6d9b65856c38b4cac983755b1e02deb929bc69b66e"
+build_start_time: [1710569707, 32540000]
+build_end_time: [1710569707, 111287000]
+inputs:
+  "/Users/lihan/Downloads/MoneyManagerKMP/iosApp/iosApp/ContentView.swift": !private [1710526644, 0]
+  "/Users/lihan/Downloads/MoneyManagerKMP/iosApp/iosApp/iOSApp.swift": !private [1710526644, 0]

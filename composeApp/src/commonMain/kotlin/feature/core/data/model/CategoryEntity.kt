@@ -1,0 +1,3 @@
+package feature.core.data.model
+
+data class CategoryEntity()
