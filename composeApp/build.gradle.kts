@@ -33,7 +33,6 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
-
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -62,6 +61,14 @@ kotlin {
             implementation(libs.cupertino.adaptive)
             implementation(libs.cupertino.icons.extended)
 
+            implementation(libs.kotlin.date.time)
+
+            implementation(libs.koin.core)
+
+
+        }
+        commonTest.dependencies {
+            implementation(libs.koin.test)
 
         }
     }

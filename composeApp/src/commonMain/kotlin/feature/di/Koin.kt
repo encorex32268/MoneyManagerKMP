@@ -1,51 +1,63 @@
-package com.jetbrains.kmpapp.di
+package feature.di
 
-import com.jetbrains.kmpapp.data.InMemoryMuseumStorage
-import com.jetbrains.kmpapp.data.KtorMuseumApi
-import com.jetbrains.kmpapp.data.MuseumApi
-import com.jetbrains.kmpapp.data.MuseumRepository
-import com.jetbrains.kmpapp.data.MuseumStorage
-import com.jetbrains.kmpapp.screens.detail.DetailScreenModel
-import com.jetbrains.kmpapp.screens.list.ListScreenModel
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.http.ContentType
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
+import feature.core.data.model.CategoryEntity
+import feature.core.data.model.ExpenseEntity
+import feature.home.data.repository.HomeRepositoryImpl
+import feature.home.domain.repository.HomeRepository
+import feature.home.presentation.HomeScreenModel
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val dataModule = module {
-    single {
-        val json = Json { ignoreUnknownKeys = true }
-        HttpClient {
-            install(ContentNegotiation) {
-                // TODO Fix API so it serves application/json
-                json(json, contentType = ContentType.Any)
-            }
-        }
+
+    single<Realm>{
+        val config = RealmConfiguration.create(
+           schema = setOf(
+               ExpenseEntity::class,
+               CategoryEntity::class
+           )
+        )
+        Realm.open(config)
     }
 
-    single<MuseumApi> { KtorMuseumApi(get()) }
-    single<MuseumStorage> { InMemoryMuseumStorage() }
-    single {
-        MuseumRepository(get(), get()).apply {
-            initialize()
-        }
+
+    single<HomeRepository>{
+        HomeRepositoryImpl(get())
     }
+
+
+//    single {
+//        val json = Json { ignoreUnknownKeys = true }
+//        HttpClient {
+//            install(ContentNegotiation) {
+//                // TODO Fix API so it serves application/json
+//                json(json, contentType = ContentType.Any)
+//            }
+//        }
+//    }
+
+//    single<MuseumApi> { KtorMuseumApi(get()) }
+//    single<MuseumStorage> { InMemoryMuseumStorage() }
+//    single {
+//        MuseumRepository(get(), get()).apply {
+//            initialize()
+//        }
+//    }
 }
 
+
 val screenModelsModule = module {
-    factoryOf(::ListScreenModel)
-    factoryOf(::DetailScreenModel)
+    factoryOf(::HomeScreenModel)
 }
 
 fun initKoin() {
     startKoin {
         modules(
             dataModule,
-            screenModelsModule,
+            screenModelsModule
         )
     }
 }

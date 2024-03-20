@@ -21,6 +21,8 @@ kotlin-corutines = "1.7.0"
 kotlinxSerializationJson = "1.6.1"
 voyager = "1.0.0"
 cupertinoVer = "0.1.0-alpha03"
+kotlinxDateTime = "0.6.0-RC.2"
+koin = "3.5.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -52,6 +54,12 @@ cupertino-native = {module = "io.github.alexzhirkevich:cupertino-native" , versi
 cupertino-adaptive = {module = "io.github.alexzhirkevich:cupertino-adaptive" , version.ref = "cupertinoVer"}
 cupertino-icons-extended = {module = "io.github.alexzhirkevich:cupertino-icons-extended" , version.ref = "cupertinoVer"}
 
+kotlin-date-time = { module = "org.jetbrains.kotlinx:kotlinx-datetime" , version.ref = "kotlinxDateTime"}
+
+
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

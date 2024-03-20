@@ -1,4 +1,11 @@
 package com.lihan.moneymanager
 
-class MonenyManagerApp {
+import android.app.Application
+import feature.di.initKoin
+
+class MoneyManagerApp: Application() {
+    override fun onCreate() {
+        super.onCreate()
+        initKoin()
+    }
 }

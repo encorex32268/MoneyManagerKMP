@@ -1,3 +1,7 @@
 package feature.home.presentation
 
-data class HomeState()
+import feature.core.domain.model.Expense
+
+data class HomeState(
+    val items: List<Expense> = emptyList()
+)
