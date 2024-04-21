@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import feature.core.navigation.CustomTab
+import feature.core.navigation.CustomTabOptions
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -42,13 +44,15 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.app_name
+import moneymanagerkmp.composeapp.generated.resources.baseline_receipt_24_filled
+import moneymanagerkmp.composeapp.generated.resources.baseline_receipt_24_outline
 import moneymanagerkmp.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @ExperimentalResourceApi
-object HomeTab : Tab {
+object HomeTab : CustomTab {
 
     @Composable
     override fun Content() {
@@ -90,17 +94,20 @@ object HomeTab : Tab {
         }
     }
 
-
-    override val options: TabOptions
+    override val customTabOptions: CustomTabOptions
         @Composable
         get() {
-            val icon = rememberVectorPainter(Icons.Default.Home)
+            val selectedIcon = painterResource(Res.drawable.baseline_receipt_24_filled)
+            val unSelectedIcon = painterResource(Res.drawable.baseline_receipt_24_outline)
             return remember{
-                TabOptions(
+                CustomTabOptions(
                     index = 0u,
                     title = "Home",
-                    icon = icon
+                    selectedIcon = selectedIcon,
+                    unSelectedIcon = unSelectedIcon
                 )
             }
         }
+
+
 }
