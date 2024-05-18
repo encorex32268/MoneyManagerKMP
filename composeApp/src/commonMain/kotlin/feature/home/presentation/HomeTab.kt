@@ -47,6 +47,7 @@ import moneymanagerkmp.composeapp.generated.resources.app_name
 import moneymanagerkmp.composeapp.generated.resources.baseline_receipt_24_filled
 import moneymanagerkmp.composeapp.generated.resources.baseline_receipt_24_outline
 import moneymanagerkmp.composeapp.generated.resources.compose_multiplatform
+import moneymanagerkmp.composeapp.generated.resources.wear_bag
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -58,6 +59,8 @@ object HomeTab : CustomTab {
     override fun Content() {
         val screenModel = getScreenModel<HomeScreenModel>()
         val state by screenModel.state.collectAsState()
+
+        
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -86,7 +89,7 @@ object HomeTab : CustomTab {
             }
             Image(
                 painter = painterResource(
-                    Res.drawable.compose_multiplatform
+                    Res.drawable.wear_bag
                 ),
                 contentDescription = null
             )

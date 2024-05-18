@@ -110,3 +110,5 @@ android {
     }
 }
 
+task("testClasses")
+

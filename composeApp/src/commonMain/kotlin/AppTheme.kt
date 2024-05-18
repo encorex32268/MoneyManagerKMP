@@ -19,23 +19,13 @@ fun AppTheme(
     AdaptiveTheme(
         material = {
             MaterialTheme(
-                colorScheme = if (useDarkTheme) {
-//                    androidx.compose.material3.darkColorScheme()
-                    androidx.compose.material3.lightColorScheme()
-                } else {
-                    androidx.compose.material3.lightColorScheme()
-                },
+                colorScheme = androidx.compose.material3.lightColorScheme(),
                 content = it
             )
         },
         cupertino = {
             CupertinoTheme(
-                colorScheme = if (useDarkTheme) {
-//                    darkColorScheme()
-                    lightColorScheme()
-                } else {
-                    lightColorScheme()
-                },
+                colorScheme = lightColorScheme(),
                 content = it
             )
         },
