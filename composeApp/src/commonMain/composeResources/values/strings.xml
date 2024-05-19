@@ -39,6 +39,14 @@
     <string name="description">Description...</string>
     <string name="alarm_permission">Need Alarm Permission</string>
 
+    <string name="monday">Mon</string>
+    <string name="tuesday">Tue</string>
+    <string name="wednesday">Wed</string>
+    <string name="thursday">Thu</string>
+    <string name="friday">Fri</string>
+    <string name="saturday">Sat</string>
+    <string name="sunday">Sun</string>
+
 
         <!-- Food -->
         <string name="food_beer">Beer</string>

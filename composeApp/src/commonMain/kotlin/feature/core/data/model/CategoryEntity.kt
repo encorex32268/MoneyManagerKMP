@@ -7,12 +7,10 @@ import org.mongodb.kbson.ObjectId
 class CategoryEntity(
     @PrimaryKey
     var id: ObjectId = ObjectId(),
-    var nameResId: Int?,
-    var name: String,
-    var resIdString: String,
+    var categoryId: Int,
     var typeId: Int,
 ): RealmObject {
     constructor() : this(
-        nameResId = null , name = "",  resIdString = "", typeId = 0
+       id = ObjectId() , typeId = 0 , categoryId = 0
     )
 }

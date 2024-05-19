@@ -23,8 +23,8 @@ class HomeRepositoryImpl(
     override suspend fun getExpenseByStartTimeAndEndTime(
         startTimeOfMonth: Long,
         endTimeOfMonth: Long
-    ): Flow<List<Expense>> {
-        return  realm.query(
+    ):  Flow<List<Expense>>{
+        return realm.query(
             clazz = ExpenseEntity::class,
             query = "timestamp < $0 AND timestamp > $1",
             endTimeOfMonth ,
@@ -32,7 +32,8 @@ class HomeRepositoryImpl(
         ).asFlow()
             .map {
                 it.list.toList().map {expenseEntity ->
-                    expenseEntity.toExpense() }
+                    expenseEntity.toExpense()
+                }
             }
     }
 

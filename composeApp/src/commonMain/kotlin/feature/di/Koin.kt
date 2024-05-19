@@ -17,7 +17,7 @@ val dataModule = module {
         val config = RealmConfiguration.create(
            schema = setOf(
                ExpenseEntity::class,
-               CategoryEntity::class
+//               CategoryEntity::class
            )
         )
         Realm.open(config)
@@ -50,7 +50,11 @@ val dataModule = module {
 
 
 val screenModelsModule = module {
-    factoryOf(::HomeScreenModel)
+    factory{
+        HomeScreenModel(
+            homeRepository = get()
+        )
+    }
 }
 
 fun initKoin() {

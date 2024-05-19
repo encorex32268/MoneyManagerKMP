@@ -60,7 +60,10 @@ fun App() {
                     }
                 }
             ){
-                Box(modifier = Modifier.fillMaxSize().padding(it)){
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
+                ){
                     CurrentTab()
                 }
             }
