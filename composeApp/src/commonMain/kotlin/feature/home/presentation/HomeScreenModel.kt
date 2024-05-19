@@ -2,11 +2,9 @@ package feature.home.presentation
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import feature.core.domain.model.Category
-import feature.core.domain.model.Expense
+import feature.core.data.MongoDB
 import feature.core.presentation.date.DateConverter
 import feature.core.presentation.date.DateConverter.getNowDate
-import feature.home.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -14,7 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeScreenModel(
-    private val homeRepository: HomeRepository
+    private val mogoDB: MongoDB
 ) : ScreenModel {
 
     private val _state = MutableStateFlow(HomeState())
@@ -24,11 +22,12 @@ class HomeScreenModel(
         when(event){
             is HomeEvent.OnDatePick -> {
                 screenModelScope.launch {
+
                     val (startTime,endTime) = DateConverter.getMonthStartAndEndTime(
-                        year = event.year,
+                        year =  event.year,
                         month = event.month
                     )
-                    val result = homeRepository.getExpenseByStartTimeAndEndTime(
+                    val result = mogoDB.getExpenseByStartTimeAndEndTime(
                         startTimeOfMonth = startTime,
                         endTimeOfMonth = endTime
                     )

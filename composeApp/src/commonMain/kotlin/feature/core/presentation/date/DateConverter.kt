@@ -58,24 +58,19 @@ object DateConverter {
             second = 59
         )
         return Pair(
-            first = startDayOfMonth.atStartOfDayIn(timeZone).epochSeconds,
-            second = endTime.toInstant(timeZone).epochSeconds
+            first = startDayOfMonth.atStartOfDayIn(timeZone).toEpochMilliseconds(),
+            second = endTime.toInstant(timeZone).toEpochMilliseconds()
         )
     }
 
 
 
-    @Suppress("IMPLICIT_CAST_TO_ANY")
     @OptIn(ExperimentalResourceApi::class)
     @Composable
-    fun getDayStringWithLocalTranslate(
-        timestamp: Long
+    fun getDayOfWeekStringByDayOfWeek(
+        dayOfWeek: DayOfWeek
     ): String{
-        val timezone = TimeZone.currentSystemDefault()
-        val localDateTime = Instant.fromEpochMilliseconds(timestamp).toLocalDateTime(timezone)
-        val dayOfMonth = localDateTime.dayOfMonth
-        val dayOfWeek = localDateTime.dayOfWeek
-        val dayOfWeekDisplayName = when(dayOfWeek){
+        return when(dayOfWeek){
             DayOfWeek.MONDAY -> stringResource(Res.string.monday)
             DayOfWeek.TUESDAY -> stringResource(Res.string.tuesday)
             DayOfWeek.WEDNESDAY -> stringResource(Res.string.wednesday)
@@ -83,9 +78,8 @@ object DateConverter {
             DayOfWeek.FRIDAY -> stringResource(Res.string.friday)
             DayOfWeek.SATURDAY -> stringResource(Res.string.saturday)
             DayOfWeek.SUNDAY -> stringResource(Res.string.sunday)
-            else -> Unit
+            else -> ""
         }
-        return "$dayOfMonth $dayOfWeekDisplayName"
     }
 
     fun getDayStringDefault(
@@ -96,6 +90,21 @@ object DateConverter {
         val dayOfMonth = localDateTime.dayOfMonth
         val dayOfWeek = localDateTime.dayOfWeek
         return "$dayOfMonth $dayOfWeek"
+    }
+
+    fun getLocalDateTimeFromTimestamp(
+        timestamp: Long
+    ): LocalDateTime{
+        val timezone = TimeZone.currentSystemDefault()
+        val localDateTime = Instant.fromEpochMilliseconds(timestamp).toLocalDateTime(timezone)
+        return localDateTime
+    }
+
+    fun localDateTimeToTimestamp(
+        localDateTime: LocalDateTime?
+    ): Long{
+        val timezone = TimeZone.currentSystemDefault()
+        return localDateTime?.toInstant(timezone)?.toEpochMilliseconds()?:0L
     }
 
     fun getStringDateFromLong(): String {

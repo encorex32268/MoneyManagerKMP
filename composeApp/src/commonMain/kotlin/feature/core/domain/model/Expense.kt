@@ -8,7 +8,8 @@ import org.mongodb.kbson.ObjectId
 
 data class Expense(
     val id: ObjectId = BsonObjectId(),
-    val category: Category?,
+    val categoryId: Int,
+    val typeId: Int,
     val description: String,
     val isIncome: Boolean=false,
     val cost: Long = 0,

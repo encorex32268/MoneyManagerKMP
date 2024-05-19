@@ -22,6 +22,17 @@
     <string name="shopping">購物</string>
     <string name="health">健康</string>
     <string name="other">其他</string>
+
+    <string name="recently">最近</string>
+    <string name="food">食</string>
+    <string name="traffic">交通</string>
+    <string name="wear">服</string>
+    <string name="sports">運動</string>
+    <string name="shopping">購物</string>
+    <string name="health">健康</string>
+    <string name="other">其他</string>
+    <string name="life">生活</string>
+
     <string name="no_data">沒有資料</string>
     <string name="all">全部</string>
     <string name="defaultError">錯誤：101</string>

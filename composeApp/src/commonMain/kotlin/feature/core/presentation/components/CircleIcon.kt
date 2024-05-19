@@ -14,13 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun CircleIcon(
     modifier: Modifier = Modifier,
-    imageResId: Painter,
+    image: Painter,
     isClicked: Boolean = false,
     id: Int?=null,
     onItemClick: (Int) -> Unit = {},
@@ -50,9 +51,9 @@ fun CircleIcon(
                 modifier = Modifier
                     .size(50.dp)
                     .padding(8.dp),
-                painter = imageResId,
+                painter = image,
                 contentDescription = null,
-                tint =  tintColor,
+                tint =  if (backgroundColor.luminance() < 0.5f && isClicked) Color.White else Color.Black,
             )
         }
     }

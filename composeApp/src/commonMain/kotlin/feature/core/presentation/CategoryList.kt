@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import feature.core.domain.model.Category
 import moneymanagerkmp.composeapp.generated.resources.Res
+import moneymanagerkmp.composeapp.generated.resources.food
 import moneymanagerkmp.composeapp.generated.resources.food_beer
 import moneymanagerkmp.composeapp.generated.resources.food_bread
 import moneymanagerkmp.composeapp.generated.resources.food_buy_food
@@ -26,6 +27,7 @@ import moneymanagerkmp.composeapp.generated.resources.food_salad
 import moneymanagerkmp.composeapp.generated.resources.food_seafood
 import moneymanagerkmp.composeapp.generated.resources.food_vegetables
 import moneymanagerkmp.composeapp.generated.resources.food_wine
+import moneymanagerkmp.composeapp.generated.resources.health
 import moneymanagerkmp.composeapp.generated.resources.health_doctor
 import moneymanagerkmp.composeapp.generated.resources.health_doctor2
 import moneymanagerkmp.composeapp.generated.resources.health_health
@@ -36,6 +38,7 @@ import moneymanagerkmp.composeapp.generated.resources.health_massage
 import moneymanagerkmp.composeapp.generated.resources.health_pill
 import moneymanagerkmp.composeapp.generated.resources.health_sick
 import moneymanagerkmp.composeapp.generated.resources.health_tooth
+import moneymanagerkmp.composeapp.generated.resources.life
 import moneymanagerkmp.composeapp.generated.resources.life_bank
 import moneymanagerkmp.composeapp.generated.resources.life_car
 import moneymanagerkmp.composeapp.generated.resources.life_hammer
@@ -60,6 +63,7 @@ import moneymanagerkmp.composeapp.generated.resources.life_video
 import moneymanagerkmp.composeapp.generated.resources.life_water_fee
 import moneymanagerkmp.composeapp.generated.resources.life_wifi
 import moneymanagerkmp.composeapp.generated.resources.life_wifi_router
+import moneymanagerkmp.composeapp.generated.resources.other
 import moneymanagerkmp.composeapp.generated.resources.other_bill
 import moneymanagerkmp.composeapp.generated.resources.other_book
 import moneymanagerkmp.composeapp.generated.resources.other_book2
@@ -76,7 +80,7 @@ import moneymanagerkmp.composeapp.generated.resources.other_job
 import moneymanagerkmp.composeapp.generated.resources.other_karaoke
 import moneymanagerkmp.composeapp.generated.resources.other_light_fee
 import moneymanagerkmp.composeapp.generated.resources.other_massage
-import moneymanagerkmp.composeapp.generated.resources.other_moeny_exchange
+import moneymanagerkmp.composeapp.generated.resources.other_money_exchange
 import moneymanagerkmp.composeapp.generated.resources.other_money_income
 import moneymanagerkmp.composeapp.generated.resources.other_money_transfer
 import moneymanagerkmp.composeapp.generated.resources.other_movie_theater
@@ -94,6 +98,8 @@ import moneymanagerkmp.composeapp.generated.resources.other_unknown
 import moneymanagerkmp.composeapp.generated.resources.other_video
 import moneymanagerkmp.composeapp.generated.resources.other_washing_machine
 import moneymanagerkmp.composeapp.generated.resources.other_water_fee
+import moneymanagerkmp.composeapp.generated.resources.recently
+import moneymanagerkmp.composeapp.generated.resources.shopping
 import moneymanagerkmp.composeapp.generated.resources.shopping_bag
 import moneymanagerkmp.composeapp.generated.resources.shopping_camera
 import moneymanagerkmp.composeapp.generated.resources.shopping_flowers
@@ -111,6 +117,7 @@ import moneymanagerkmp.composeapp.generated.resources.shopping_plant2
 import moneymanagerkmp.composeapp.generated.resources.shopping_ring
 import moneymanagerkmp.composeapp.generated.resources.shopping_shopping
 import moneymanagerkmp.composeapp.generated.resources.shopping_switch
+import moneymanagerkmp.composeapp.generated.resources.sports
 import moneymanagerkmp.composeapp.generated.resources.sports_8ball
 import moneymanagerkmp.composeapp.generated.resources.sports_baseball
 import moneymanagerkmp.composeapp.generated.resources.sports_basketball
@@ -128,6 +135,7 @@ import moneymanagerkmp.composeapp.generated.resources.sports_tennis
 import moneymanagerkmp.composeapp.generated.resources.sports_usa_football
 import moneymanagerkmp.composeapp.generated.resources.sports_volley
 import moneymanagerkmp.composeapp.generated.resources.sports_yoga
+import moneymanagerkmp.composeapp.generated.resources.traffic
 import moneymanagerkmp.composeapp.generated.resources.traffic_bicycle
 import moneymanagerkmp.composeapp.generated.resources.traffic_bus
 import moneymanagerkmp.composeapp.generated.resources.traffic_cable_car
@@ -142,6 +150,7 @@ import moneymanagerkmp.composeapp.generated.resources.traffic_ship
 import moneymanagerkmp.composeapp.generated.resources.traffic_taxi
 import moneymanagerkmp.composeapp.generated.resources.traffic_train
 import moneymanagerkmp.composeapp.generated.resources.traffic_train_ticket
+import moneymanagerkmp.composeapp.generated.resources.wear
 import moneymanagerkmp.composeapp.generated.resources.wear_baby
 import moneymanagerkmp.composeapp.generated.resources.wear_bag
 import moneymanagerkmp.composeapp.generated.resources.wear_bag2
@@ -157,6 +166,7 @@ import moneymanagerkmp.composeapp.generated.resources.wear_socks
 import moneymanagerkmp.composeapp.generated.resources.wear_trousers
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 object CategoryList {
 
@@ -785,7 +795,7 @@ object CategoryList {
             }
 
             OTHER + 29 -> {
-                painterResource(Res.drawable.other_moeny_exchange)
+                painterResource(Res.drawable.other_money_exchange)
             }
 
             OTHER + 30 -> {
@@ -823,17 +833,661 @@ object CategoryList {
         }
     }
 
+
+    @OptIn(ExperimentalResourceApi::class)
+    @Composable
+    fun getCategoryDescriptionById(
+        id: Int
+    ): String {
+        return when (id) {
+            FOOD + 1 -> {
+                stringResource(Res.string.food_food)
+            }
+
+            FOOD + 2 -> {
+                stringResource(Res.string.food_fast_food)
+            }
+
+            FOOD + 3 -> {
+                stringResource(Res.string.food_rice)
+            }
+
+            FOOD + 4 -> {
+                stringResource(Res.string.food_noodles)
+            }
+
+            FOOD + 5 -> {
+                stringResource(Res.string.food_fruits)
+            }
+
+            FOOD + 6 -> {
+                stringResource(Res.string.food_salad)
+            }
+
+            FOOD + 7 -> {
+                stringResource(Res.string.food_seafood)
+            }
+
+            FOOD + 8 -> {
+                stringResource(Res.string.food_buy_food)
+            }
+
+            FOOD + 9 -> {
+                stringResource(Res.string.food_pizza)
+            }
+
+            FOOD + 10 -> {
+                stringResource(Res.string.food_hamburger)
+            }
+
+            FOOD + 11 -> {
+                stringResource(Res.string.food_buy_food2)
+            }
+
+            FOOD + 12 -> {
+                stringResource(Res.string.food_vegetables)
+            }
+
+            FOOD + 13 -> {
+                stringResource(Res.string.food_cake)
+            }
+
+            FOOD + 14 -> {
+                stringResource(Res.string.food_cookie)
+            }
+
+            FOOD + 15 -> {
+                stringResource(Res.string.food_bread)
+            }
+
+            FOOD + 16 -> {
+                stringResource(Res.string.food_beer)
+            }
+
+            FOOD + 17 -> {
+                stringResource(Res.string.food_drink)
+            }
+
+            FOOD + 18 -> {
+                stringResource(Res.string.food_wine)
+            }
+
+            FOOD + 19 -> {
+                stringResource(Res.string.food_coffee)
+            }
+
+            FOOD + 20 -> {
+                stringResource(Res.string.food_hot_coffee)
+            }
+
+            FOOD + 21 -> {
+                stringResource(Res.string.food_hot_tea)
+            }
+
+            TRAFFIC + 1 -> {
+                stringResource(Res.string.traffic_train)
+            }
+
+            TRAFFIC + 2 -> {
+                stringResource(Res.string.traffic_city_train)
+            }
+
+            TRAFFIC + 3 -> {
+                stringResource(Res.string.traffic_highspeed_train)
+            }
+
+            TRAFFIC + 4 -> {
+                stringResource(Res.string.traffic_bus)
+            }
+
+            TRAFFIC + 5 -> {
+                stringResource(Res.string.traffic_highway_bus)
+            }
+
+            TRAFFIC + 6 -> {
+                stringResource(Res.string.traffic_bicycle)
+            }
+
+            TRAFFIC + 7 -> {
+                stringResource(Res.string.traffic_motobike)
+            }
+
+            TRAFFIC + 8 -> {
+                stringResource(Res.string.traffic_car)
+            }
+
+            TRAFFIC + 9 -> {
+                stringResource(Res.string.traffic_taxi)
+            }
+
+            TRAFFIC + 10 -> {
+                stringResource(Res.string.traffic_cable_car)
+            }
+
+            TRAFFIC + 11 -> {
+                stringResource(Res.string.traffic_train_ticket)
+            }
+
+            TRAFFIC + 12 -> {
+                stringResource(Res.string.traffic_ship)
+            }
+
+            TRAFFIC + 13 -> {
+                stringResource(Res.string.traffic_parking)
+            }
+
+            TRAFFIC + 14 -> {
+                stringResource(Res.string.traffic_plane)
+            }
+
+            LIFE + 1 -> {
+                stringResource(Res.string.life_rent)
+            }
+
+            LIFE + 2 -> {
+                stringResource(Res.string.life_car)
+            }
+
+            LIFE + 3 -> {
+                stringResource(Res.string.life_bank)
+            }
+
+            LIFE + 4 -> {
+                stringResource(Res.string.life_light_fee)
+            }
+
+            LIFE + 5 -> {
+                stringResource(Res.string.life_water_fee)
+            }
+
+            LIFE + 6 -> {
+                stringResource(Res.string.life_phone_fee)
+            }
+
+            LIFE + 7 -> {
+                stringResource(Res.string.life_smart_phone_fee)
+            }
+
+            LIFE + 8 -> {
+                stringResource(Res.string.life_network_fee)
+            }
+
+            LIFE + 9 -> {
+                stringResource(Res.string.life_wifi)
+            }
+
+            LIFE + 10 -> {
+                stringResource(Res.string.life_wifi_router)
+            }
+
+            LIFE + 11 -> {
+                stringResource(Res.string.life_money_transfer)
+            }
+
+            LIFE + 12 -> {
+                stringResource(Res.string.life_money_income)
+            }
+
+            LIFE + 13 -> {
+                stringResource(Res.string.life_rent)
+            }
+
+            LIFE + 14 -> {
+                stringResource(Res.string.life_salary)
+            }
+
+            LIFE + 15 -> {
+                stringResource(Res.string.life_music)
+            }
+
+            LIFE + 16 -> {
+                stringResource(Res.string.life_save_money)
+            }
+
+            LIFE + 17 -> {
+                stringResource(Res.string.life_stock_increase)
+            }
+
+            LIFE + 18 -> {
+                stringResource(Res.string.life_stock_decrease)
+            }
+
+            LIFE + 19 -> {
+                stringResource(Res.string.life_stocks)
+            }
+
+            LIFE + 20 -> {
+                stringResource(Res.string.life_taxes)
+            }
+
+            LIFE + 21 -> {
+                stringResource(Res.string.life_taxes2)
+            }
+
+            LIFE + 22 -> {
+                stringResource(Res.string.life_taxes3)
+            }
+
+            LIFE + 23 -> {
+                stringResource(Res.string.life_video)
+            }
+
+            LIFE + 24 -> {
+                stringResource(Res.string.life_paint)
+            }
+
+            LIFE + 25 -> {
+                stringResource(Res.string.life_hammer)
+            }
+
+            HEALTH + 1 -> {
+                stringResource(Res.string.health_doctor2)
+            }
+
+            HEALTH + 2 -> {
+                stringResource(Res.string.health_doctor)
+            }
+
+            HEALTH + 3 -> {
+                stringResource(Res.string.health_sick)
+            }
+
+            HEALTH + 4 -> {
+                stringResource(Res.string.health_pill)
+            }
+
+            HEALTH + 5 -> {
+                stringResource(Res.string.health_health)
+            }
+
+            HEALTH + 6 -> {
+                stringResource(Res.string.health_tooth)
+            }
+
+            HEALTH + 7 -> {
+                stringResource(Res.string.health_help)
+            }
+
+            HEALTH + 8 -> {
+                stringResource(Res.string.health_hospital)
+            }
+
+            HEALTH + 9 -> {
+                stringResource(Res.string.health_hospital2)
+            }
+
+            HEALTH + 10 -> {
+                stringResource(Res.string.health_massage)
+            }
+
+            SPORTS + 1 -> {
+                stringResource(Res.string.sports_sports)
+            }
+
+            SPORTS + 2 -> {
+                stringResource(Res.string.sports_boxing)
+            }
+
+            SPORTS + 3 -> {
+                stringResource(Res.string.sports_basketball)
+            }
+
+            SPORTS + 4 -> {
+                stringResource(Res.string.sports_baseball)
+            }
+
+            SPORTS + 5 -> {
+                stringResource(Res.string.sports_gym)
+            }
+
+            SPORTS + 6 -> {
+                stringResource(Res.string.sports_8ball)
+            }
+
+            SPORTS + 7 -> {
+                stringResource(Res.string.sports_tennis)
+            }
+
+            SPORTS + 8 -> {
+                stringResource(Res.string.sports_usa_football)
+            }
+
+            SPORTS + 9 -> {
+                stringResource(Res.string.sports_football)
+            }
+
+            SPORTS + 10 -> {
+                stringResource(Res.string.sports_yoga)
+            }
+
+            SPORTS + 11 -> {
+                stringResource(Res.string.sports_volley)
+            }
+
+            SPORTS + 12 -> {
+                stringResource(Res.string.sports_golf)
+            }
+
+            SPORTS + 13 -> {
+                stringResource(Res.string.sports_pingpong)
+            }
+
+            SPORTS + 14 -> {
+                stringResource(Res.string.sports_skiing)
+            }
+
+            SPORTS + 15 -> {
+                stringResource(Res.string.sports_bowling)
+            }
+
+            SPORTS + 16 -> {
+                stringResource(Res.string.sports_swim)
+            }
+
+            SPORTS + 17 -> {
+                stringResource(Res.string.sports_camp)
+            }
+
+            WEAR + 1 -> {
+                stringResource(Res.string.wear_shirts)
+            }
+
+            WEAR + 2 -> {
+                stringResource(Res.string.wear_shorts)
+            }
+
+            WEAR + 3 -> {
+                stringResource(Res.string.wear_dress)
+            }
+
+            WEAR + 4 -> {
+                stringResource(Res.string.wear_skirt)
+            }
+
+            WEAR + 5 -> {
+                stringResource(Res.string.wear_shoes)
+            }
+
+            WEAR + 6 -> {
+                stringResource(Res.string.wear_socks)
+            }
+
+            WEAR + 7 -> {
+                stringResource(Res.string.wear_trousers)
+            }
+
+            WEAR + 8 -> {
+                stringResource(Res.string.wear_cap)
+            }
+
+            WEAR + 9 -> {
+                stringResource(Res.string.wear_hat)
+            }
+
+            WEAR + 10 -> {
+                stringResource(Res.string.wear_baby)
+            }
+
+            WEAR + 11 -> {
+                stringResource(Res.string.wear_bag)
+            }
+
+            WEAR + 12 -> {
+                stringResource(Res.string.wear_bag2)
+            }
+
+            WEAR + 13 -> {
+                stringResource(Res.string.wear_bag3)
+            }
+
+            SHOPPING + 1 -> {
+                stringResource(Res.string.shopping_shopping)
+            }
+
+            SHOPPING + 2 -> {
+                stringResource(Res.string.shopping_gift)
+            }
+
+            SHOPPING + 3 -> {
+                stringResource(Res.string.shopping_glasses)
+            }
+
+            SHOPPING + 4 -> {
+                stringResource(Res.string.shopping_flowers)
+            }
+
+            SHOPPING + 5 -> {
+                stringResource(Res.string.shopping_makeup)
+            }
+
+            SHOPPING + 6 -> {
+                stringResource(Res.string.shopping_makeup2)
+            }
+
+            SHOPPING + 7 -> {
+                stringResource(Res.string.shopping_makeup3)
+            }
+
+            SHOPPING + 8 -> {
+                stringResource(Res.string.shopping_makeup_brush)
+            }
+
+            SHOPPING + 9 -> {
+                stringResource(Res.string.shopping_necklace)
+            }
+
+            SHOPPING + 10 -> {
+                stringResource(Res.string.shopping_ring)
+            }
+
+            SHOPPING + 11 -> {
+                stringResource(Res.string.shopping_pc)
+            }
+
+            SHOPPING + 12 -> {
+                stringResource(Res.string.shopping_phone)
+            }
+
+            SHOPPING + 13 -> {
+                stringResource(Res.string.shopping_camera)
+            }
+
+            SHOPPING + 14 -> {
+                stringResource(Res.string.shopping_switch)
+            }
+
+            SHOPPING + 15 -> {
+                stringResource(Res.string.shopping_bag)
+            }
+
+            SHOPPING + 16 -> {
+                stringResource(Res.string.shopping_plant)
+            }
+
+            SHOPPING + 17 -> {
+                stringResource(Res.string.shopping_plant2)
+            }
+
+            OTHER + 1 -> {
+                stringResource(Res.string.other_save_money)
+            }
+
+            OTHER + 2 -> {
+                stringResource(Res.string.other_washing_machine)
+            }
+
+            OTHER + 3 -> {
+                stringResource(Res.string.other_bill)
+            }
+
+            OTHER + 4 -> {
+                stringResource(Res.string.other_book)
+            }
+
+            OTHER + 5 -> {
+                stringResource(Res.string.other_book2)
+            }
+
+            OTHER + 6 -> {
+                stringResource(Res.string.other_car_repair)
+            }
+
+            OTHER + 7 -> {
+                stringResource(Res.string.other_car_wash)
+            }
+
+            OTHER + 8 -> {
+                stringResource(Res.string.other_car_fee)
+            }
+
+            OTHER + 9 -> {
+                stringResource(Res.string.other_card_fee)
+            }
+
+            OTHER + 10 -> {
+                stringResource(Res.string.other_creditcard)
+            }
+
+            OTHER + 11 -> {
+                stringResource(Res.string.other_light_fee)
+            }
+
+            OTHER + 12 -> {
+                stringResource(Res.string.other_water_fee)
+            }
+
+            OTHER + 13 -> {
+                stringResource(Res.string.other_book2)
+            }
+
+            OTHER + 14 -> {
+                stringResource(Res.string.other_pet)
+            }
+
+            OTHER + 15 -> {
+                stringResource(Res.string.other_phone_fee)
+            }
+
+            OTHER + 16 -> {
+                stringResource(Res.string.other_bill)
+            }
+
+            OTHER + 17 -> {
+                stringResource(Res.string.other_music)
+            }
+
+            OTHER + 18 -> {
+                stringResource(Res.string.other_music2)
+            }
+
+            OTHER + 19 -> {
+                stringResource(Res.string.other_unknown)
+            }
+
+            OTHER + 20 -> {
+                stringResource(Res.string.other_video)
+            }
+
+            OTHER + 21 -> {
+                stringResource(Res.string.other_toys)
+            }
+
+            OTHER + 22 -> {
+                stringResource(Res.string.other_repair)
+            }
+
+            OTHER + 23 -> {
+                stringResource(Res.string.other_salary)
+            }
+
+            OTHER + 24 -> {
+                stringResource(Res.string.other_stock_decrease)
+            }
+
+            OTHER + 25 -> {
+                stringResource(Res.string.other_stock_increase)
+            }
+
+            OTHER + 26 -> {
+                stringResource(Res.string.other_movie_theater)
+            }
+
+            OTHER + 27 -> {
+                stringResource(Res.string.other_money_transfer)
+            }
+
+            OTHER + 28 -> {
+                stringResource(Res.string.other_money_income)
+            }
+
+            OTHER + 29 -> {
+                stringResource(Res.string.other_money_exchange)
+            }
+
+            OTHER + 30 -> {
+                stringResource(Res.string.other_massage)
+            }
+
+            OTHER + 31 -> {
+                stringResource(Res.string.other_cuthair)
+            }
+
+            OTHER + 32 -> {
+                stringResource(Res.string.other_gamble)
+            }
+
+            OTHER + 33 -> {
+                stringResource(Res.string.other_game)
+            }
+
+            OTHER + 34 -> {
+                stringResource(Res.string.other_iphone)
+            }
+
+            OTHER + 35 -> {
+                stringResource(Res.string.other_job)
+            }
+
+            OTHER + 36 -> {
+                stringResource(Res.string.other_karaoke)
+            }
+
+
+            else -> {
+                ""
+            }
+        }
+    }
+
     fun getColorByCategory(id: Int): Color {
         return Color(
             when (id) {
-                FOOD -> 0xFFFFFF93
-                TRAFFIC -> 0xFF84C1FF
-                WEAR -> 0xFFFFC78E
-                SPORTS -> 0xFFA6FFFF
+                FOOD -> 0xFFF9F871
+                TRAFFIC -> 0xFF0081CF
+                WEAR -> 0xFFFBEAFF
+                SPORTS -> 0xFFC4FCEF
                 SHOPPING -> 0xFFCA8EFF
-                HEALTH -> 0xFFFF7575
-                else -> 0xFF9D9D9D
+                HEALTH -> 0xFFC34A36
+                LIFE -> 0xFFFF9671
+                else -> 0xFFD5CABD
             }
         )
+    }
+
+    @OptIn(ExperimentalResourceApi::class)
+    @Composable
+    fun getTypeStringByTypeId(typeId: Int): String {
+        return when(typeId){
+            RECENTLY -> { stringResource(Res.string.recently) }
+            FOOD -> { stringResource(Res.string.food)  }
+            TRAFFIC -> {  stringResource(Res.string.traffic)  }
+            LIFE -> { stringResource(Res.string.life)  }
+            HEALTH -> { stringResource(Res.string.health)  }
+            SPORTS -> { stringResource(Res.string.sports)  }
+            WEAR -> { stringResource(Res.string.wear)  }
+            SHOPPING -> { stringResource(Res.string.shopping)  }
+            OTHER -> { stringResource(Res.string.other)  }
+            else -> ""
+        }
     }
 }

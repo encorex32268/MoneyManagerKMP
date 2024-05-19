@@ -18,10 +18,12 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import feature.add.presentation.AddScreen
 import feature.core.navigation.CustomTab
 import feature.core.navigation.CustomTabOptions
@@ -50,10 +53,11 @@ object HomeTab : CustomTab {
 
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.current
+        val navigator = LocalNavigator.currentOrThrow
         val homeScreenModel = getScreenModel<HomeScreenModel>()
         val state by homeScreenModel.state.collectAsState()
         LaunchedEffect(Unit){
+            println("LaunchedEffect Init")
             homeScreenModel.onEvent(
                 HomeEvent.OnDatePick(
                     isInit = true
@@ -65,7 +69,7 @@ object HomeTab : CustomTab {
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        navigator?.push(AddScreen())
+                        navigator.parent?.push(AddScreen())
                     },
                     containerColor = MaterialTheme.colorScheme.onBackground
                 ) {
@@ -110,16 +114,14 @@ object HomeTab : CustomTab {
             ){
                 items(
                     items = state.items
-                ) {(dayTimestampText , expenses) ->
+                ) {(_ , expenses) ->
                     ExpenseItem(
                         modifier = Modifier
                             .fillMaxWidth(),
                         items = expenses,
                         onItemClick = {
 
-                        },
-                        month = state.nowDateMonth,
-                        dayText = dayTimestampText
+                        }
                     )
                 }
                 item {

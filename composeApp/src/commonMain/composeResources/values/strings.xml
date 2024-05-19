@@ -24,14 +24,17 @@
     <string name="dialog_cancel_button">Cancel</string>
     <string name="dialog_delete_title">Delete</string>
     <string name="dialog_delete_content">Do you want to delete this?</string>
+
     <string name="recently">Recently</string>
     <string name="food">Food</string>
     <string name="traffic">Traffic</string>
     <string name="wear">Wear</string>
-    <string name="education">Education</string>
+    <string name="sports">Sports</string>
     <string name="shopping">Shopping</string>
     <string name="health">Health</string>
     <string name="other">Other</string>
+    <string name="life">Life</string>
+
     <string name="no_data">Data is empty</string>
     <string name="all">All</string>
     <string name="defaultError">Error:101</string>

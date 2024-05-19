@@ -22,14 +22,17 @@
     <string name="dialog_cancel_button">キャンセル</string>
     <string name="dialog_delete_title">削除</string>
     <string name="dialog_delete_content">削除しますか？</string>
+
     <string name="recently">最近</string>
-    <string name="food">食べ物</string>
+    <string name="food">食</string>
     <string name="traffic">交通</string>
     <string name="wear">服</string>
-    <string name="education">教育</string>
+    <string name="sports">運動</string>
     <string name="shopping">買い物</string>
     <string name="health">健康</string>
     <string name="other">その他</string>
+    <string name="life">生活</string>
+
     <string name="no_data">データがありません</string>
     <string name="all">すべて</string>
     <string name="defaultError">エラー：101</string>

@@ -21,6 +21,7 @@ import feature.core.domain.model.Expense
 import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
+import feature.core.presentation.date.DateConverter
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.other_unknown
 import moneymanagerkmp.composeapp.generated.resources.total_expense_item
@@ -32,9 +33,7 @@ import toMoneyString
 @Composable
 fun ExpenseItem(
     modifier: Modifier = Modifier,
-    dayText : String,
     items: List<Expense>,
-    month : String,
     onItemClick: (Expense) -> Unit = {},
 ){
     val total = mutableStateOf(
@@ -54,6 +53,7 @@ fun ExpenseItem(
             color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -66,7 +66,10 @@ fun ExpenseItem(
             ) {
                 Texts.BodyMedium(
                     modifier = Modifier.weight(1f),
-                    text = "$month/$dayText"
+                    text = kotlin.run {
+                        val localDateTime =DateConverter.getLocalDateTimeFromTimestamp(items[0].timestamp)
+                        "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} ${DateConverter.getDayOfWeekStringByDayOfWeek(localDateTime.dayOfWeek)}"
+                    }
                 )
                 Texts.BodyMedium(
                     text = stringResource(
@@ -76,6 +79,7 @@ fun ExpenseItem(
                 )
             }
             items.forEach {expense ->
+                println("expense ${expense}")
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -89,8 +93,8 @@ fun ExpenseItem(
                     CircleIcon(
                         modifier = Modifier.size(36.dp),
                         isClicked = true,
-                        imageResId = CategoryList.getCategoryIconById(expense.category?.id?:0),
-                        backgroundColor = CategoryList.getColorByCategory(expense.category?.typeId?:0)
+                        image = CategoryList.getCategoryIconById(expense.categoryId),
+                        backgroundColor = CategoryList.getColorByCategory(expense.typeId)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Texts.BodySmall(

@@ -11,5 +11,7 @@ actual fun formatString(
 actual fun Long.toMoneyString(): String {
     return NumberFormat.getCurrencyInstance(
         Locale.getDefault()
-    ).format(this)
+    ).apply {
+        maximumFractionDigits = 0
+    }.format(this)
 }

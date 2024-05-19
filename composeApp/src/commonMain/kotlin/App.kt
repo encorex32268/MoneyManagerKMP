@@ -1,24 +1,6 @@
-@file:OptIn(ExperimentalAdaptiveApi::class, ExperimentalResourceApi::class)
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import cafe.adriel.voyager.navigator.tab.CurrentTab
-import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
-import cafe.adriel.voyager.navigator.tab.TabNavigator
-import feature.chart.presentation.ChartTab
-import feature.core.navigation.CustomTab
-import feature.home.presentation.HomeTab
+import cafe.adriel.voyager.navigator.Navigator
 import io.github.alexzhirkevich.cupertino.adaptive.ExperimentalAdaptiveApi
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
@@ -33,7 +15,6 @@ class Task : RealmObject {
     var isDone : Boolean = false
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 @Preview
 fun App() {
@@ -45,49 +26,11 @@ fun App() {
 //    val realm = Realm.open(config)
 
     AppTheme {
-        TabNavigator(HomeTab){
-            Scaffold(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .systemBarsPadding()
-                    .navigationBarsPadding(),
-                bottomBar = {
-                    NavigationBar(
-                        containerColor = Color.Transparent
-                    ) {
-                        TabNavigationItem(HomeTab)
-                        TabNavigationItem(ChartTab)
-                    }
-                }
-            ){
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-                ){
-                    CurrentTab()
-                }
-            }
-        }
+        Navigator(
+            RootScreen()
+        )
+
     }
 }
 
-@Composable
-private fun RowScope.TabNavigationItem(tab: CustomTab) {
-    val tabNavigator = LocalTabNavigator.current
-    val customTabOptions = tab.customTabOptions
-    BottomNavigationItem(
-        selected = tabNavigator.current == tab,
-        onClick = {
-            tabNavigator.current = tab
-        },
-        alwaysShowLabel = false,
-        icon = {
-            (if (tabNavigator.current == tab) customTabOptions.selectedIcon else customTabOptions.unSelectedIcon)?.let {
-                Icon(
-                    painter = it,
-                    contentDescription = tab.options.title
-                )
-            }
-        }
-    )
-}
+

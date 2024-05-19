@@ -16,6 +16,7 @@ actual fun Long.toMoneyString(): String {
     val formatter = NSNumberFormatter().apply {
         numberStyle = NSNumberFormatterCurrencyStyle
         locale = NSLocale.currentLocale
+        maximumFractionDigits = 0U
     }
     return formatter.stringFromNumber(NSNumber(this)) ?: ""
 }

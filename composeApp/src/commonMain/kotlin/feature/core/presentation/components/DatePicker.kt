@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package feature.core.presentation.components
 
 import androidx.compose.foundation.layout.Row
@@ -15,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import feature.core.domain.util.zeroStringDisplay
 import feature.core.presentation.Texts
 import formatString
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @Composable
 fun DatePicker(

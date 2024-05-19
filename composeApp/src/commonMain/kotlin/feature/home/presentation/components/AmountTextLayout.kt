@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package feature.home.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
