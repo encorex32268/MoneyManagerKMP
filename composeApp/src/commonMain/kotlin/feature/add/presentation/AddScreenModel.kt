@@ -7,6 +7,7 @@ import feature.core.domain.mapper.toCategory
 import feature.core.domain.model.Expense
 import feature.core.presentation.CategoryList
 import feature.core.presentation.date.DateConverter
+import feature.core.presentation.model.CategoryUi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AddScreenModel(
-    private val mogoDB: MongoDB
+    private val mongoDB: MongoDB
 ): ScreenModel {
 
     companion object{
@@ -28,28 +29,41 @@ class AddScreenModel(
     private val _uiEvent = Channel<AddUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    init {
-        val localDateTime = DateConverter.getNowDate()
-        _state.update {
-            it.copy(
-                year = localDateTime.year,
-                monthNumber = localDateTime.monthNumber,
-                dayOfMonth = localDateTime.dayOfMonth,
-                nowLocalDateTime = localDateTime
-            )
-        }
-    }
-
     fun onEvent(event: AddEvent){
         when(event){
             is AddEvent.SetupExpense -> {
-                event.expense?.let { expense ->
+                if (event.expense != null){
+                    val expense = event.expense
+                    val localDateTime = DateConverter.getLocalDateTimeFromTimestamp(expense.timestamp)
                     _state.update {
                         it.copy(
-                            currentExpense = expense
+                            currentExpense = expense,
+                            year = localDateTime.year,
+                            monthNumber = localDateTime.monthNumber,
+                            dayOfMonth = localDateTime.dayOfMonth,
+                            nowLocalDateTime = DateConverter.getNowDate(),
+                            isIncome = expense.isIncome,
+                            cost = expense.cost.toString(),
+                            categoryUi = CategoryUi(
+                                typeId = expense.typeId,
+                                categoryId = expense.categoryId,
+                                isClick = true
+                            ),
+                            description = expense.description
+                        )
+                    }
+                }else{
+                    val localDateTime = DateConverter.getNowDate()
+                    _state.update {
+                        it.copy(
+                            year = localDateTime.year,
+                            monthNumber = localDateTime.monthNumber,
+                            dayOfMonth = localDateTime.dayOfMonth,
+                            nowLocalDateTime = localDateTime
                         )
                     }
                 }
+
             }
             is AddEvent.OnDescriptionChange -> {
                 _state.update {
@@ -132,7 +146,6 @@ class AddScreenModel(
                         localDateTime = state.value.nowLocalDateTime
                     )
                     if(state.value.currentExpense == null){
-                        println("CategorUI ${state.value.categoryUi} / ${state.value.categoryUi?.toCategory()}")
                         val expense = Expense(
                             typeId = state.value.categoryUi?.typeId?:0,
                             categoryId = state.value.categoryUi?.categoryId?:0,
@@ -141,10 +154,9 @@ class AddScreenModel(
                             cost = state.value.cost.toLong(),
                             timestamp = timestamp
                         )
-                        mogoDB.insertExpense(
+                        mongoDB.insertExpense(
                             expense
                         )
-                        println("Insert ${expense}")
                     }else{
                         val updateExpense =  Expense(
                             description = state.value.description,
@@ -155,11 +167,9 @@ class AddScreenModel(
                             id = state.value.currentExpense!!.id,
                             timestamp = timestamp
                         )
-                        //update
-                        mogoDB.updateExpense(
+                        mongoDB.updateExpense(
                             updateExpense
                         )
-                        println("Update ${updateExpense}")
                     }
                     _uiEvent.send(
                         AddUiEvent.Success

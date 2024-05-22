@@ -61,10 +61,9 @@ fun CostTypeSelect(
                 .clickable { onTypeChange(false) }
                 .background(
                     if (!isIncome) {
-                        light_CorrectColorContainer
+                        light_ErrorColorContainer
                     } else {
-                       light_onCorrectColor
-
+                        light_onErrorColor
                     },
 //                    if (!isIncome) {
 //                        if (isSystemInDarkTheme()) dark_CorrectColorContainer else light_CorrectColorContainer
@@ -95,9 +94,9 @@ fun CostTypeSelect(
                 }
                 .background(
                     if (isIncome) {
-                        light_ErrorColorContainer
+                        light_CorrectColorContainer
                     } else {
-                       light_onErrorColor
+                        light_onCorrectColor
                     },
 //                    if (isIncome) {
 //                        if (isSystemInDarkTheme()) dark_ErrorColorContainer else light_ErrorColorContainer

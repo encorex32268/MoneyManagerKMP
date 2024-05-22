@@ -107,8 +107,11 @@ object DateConverter {
         return localDateTime?.toInstant(timezone)?.toEpochMilliseconds()?:0L
     }
 
-    fun getStringDateFromLong(): String {
-        return ""
+    @Composable
+    fun getStringDateFromLong(timestamp: Long): String {
+        val localDateTime = getLocalDateTimeFromTimestamp(timestamp)
+
+        return "${localDateTime.year}.${localDateTime.monthNumber}.${localDateTime.dayOfMonth} ${getDayOfWeekStringByDayOfWeek(localDateTime.dayOfWeek)}"
     }
 
 

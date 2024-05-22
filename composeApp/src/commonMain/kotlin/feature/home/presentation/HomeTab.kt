@@ -40,6 +40,7 @@ import feature.core.navigation.CustomTabOptions
 import feature.core.presentation.CategoryList
 import feature.core.presentation.components.CircleIcon
 import feature.core.presentation.components.DatePicker
+import feature.edit.presentation.EditExpenseScreen
 import feature.home.presentation.components.AmountTextLayout
 import feature.home.presentation.components.ExpenseItem
 import moneymanagerkmp.composeapp.generated.resources.Res
@@ -68,7 +69,7 @@ object HomeTab : CustomTab {
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        navigator.parent?.push(AddScreen())
+                        navigator.parent?.push(AddScreen(null))
                     },
                     containerColor = MaterialTheme.colorScheme.onBackground
                 ) {
@@ -119,7 +120,9 @@ object HomeTab : CustomTab {
                             .fillMaxWidth(),
                         items = expenses,
                         onItemClick = {
-
+                            navigator.parent?.push(
+                                EditExpenseScreen(it)
+                            )
                         }
                     )
                 }

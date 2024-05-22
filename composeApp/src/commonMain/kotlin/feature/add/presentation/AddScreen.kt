@@ -44,11 +44,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import feature.add.presentation.components.CalculateLayout
 import feature.add.presentation.components.CostTypeSelect
+import feature.core.domain.model.Expense
 import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
@@ -64,8 +66,12 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
     ExperimentalLayoutApi::class
 )
 
-class AddScreen: Screen {
+class AddScreen(
+    private val expense: Expense?
+): Screen {
 
+    override val key: ScreenKey
+        get() = "AddScreen"
 
     @Composable
     override fun Content() {
@@ -85,7 +91,11 @@ class AddScreen: Screen {
         var currentCategoryUi by remember {
             mutableStateOf<CategoryUi?>(null)
         }
-
+        LaunchedEffect(Unit){
+            addScreenModel.onEvent(
+                AddEvent.SetupExpense(expense)
+            )
+        }
         LaunchedEffect(addScreenModel){
             addScreenModel.uiEvent.collectLatest {
                 when(it){
@@ -97,7 +107,7 @@ class AddScreen: Screen {
             }
         }
 
-        LaunchedEffect(state.categoryUi , Unit){
+        LaunchedEffect(state.categoryUi){
             currentCategoryUi = state.categoryUi
             scope.launch {
                 if (currentCategoryUi == null){
@@ -252,7 +262,6 @@ class AddScreen: Screen {
                                             isClicked = categoryState.isClick,
                                             categoryUi = categoryState,
                                             onItemClick = {
-                                                println("CategoryItem Click ${categoryState}")
                                                 addScreenModel.onEvent(
                                                     AddEvent.OnItemSelected(
                                                         categoryUi = categoryState,

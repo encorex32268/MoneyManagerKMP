@@ -7,6 +7,7 @@ import feature.core.domain.model.Expense
 fun Expense.toExpenseEntity() : ExpenseEntity {
 
     return ExpenseEntity().apply {
+        id = this@toExpenseEntity.id
         timestamp = this@toExpenseEntity.timestamp
         typeId = this@toExpenseEntity.typeId
         categoryId = this@toExpenseEntity.categoryId
@@ -18,6 +19,7 @@ fun Expense.toExpenseEntity() : ExpenseEntity {
 
 fun ExpenseEntity.toExpense() : Expense {
     return Expense(
+        id = id,
         typeId = typeId,
         categoryId = categoryId,
         description = description,

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeScreenModel(
-    private val mogoDB: MongoDB
+    private val mongoDB: MongoDB
 ) : ScreenModel {
 
     private val _state = MutableStateFlow(HomeState())
@@ -27,7 +27,7 @@ class HomeScreenModel(
                         year =  event.year,
                         month = event.month
                     )
-                    val result = mogoDB.getExpenseByStartTimeAndEndTime(
+                    val result = mongoDB.getExpenseByStartTimeAndEndTime(
                         startTimeOfMonth = startTime,
                         endTimeOfMonth = endTime
                     )
