@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import feature.add.presentation.AddState
 import feature.core.domain.mapper.toCategory
 import feature.core.presentation.Texts
@@ -104,7 +105,6 @@ fun CalculateLayout(
             day = day
 
         )
-        Spacer(modifier = Modifier.height(50.dp))
     }
 
 }
@@ -262,6 +262,7 @@ private fun NumberButton(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 color = textColor,
+                fonSize = 24.sp
             )
 
         }

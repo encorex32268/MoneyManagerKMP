@@ -57,7 +57,6 @@ object HomeTab : CustomTab {
         val homeScreenModel = getScreenModel<HomeScreenModel>()
         val state by homeScreenModel.state.collectAsState()
         LaunchedEffect(Unit){
-            println("LaunchedEffect Init")
             homeScreenModel.onEvent(
                 HomeEvent.OnDatePick(
                     isInit = true

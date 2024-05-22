@@ -11,6 +11,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.nunitosans_10pt_bold
 import moneymanagerkmp.composeapp.generated.resources.nunitosans_10pt_regular
@@ -50,14 +52,17 @@ object Texts {
     @Composable
     fun TitleMedium(
         modifier : Modifier = Modifier,
-        style : TextStyle = MaterialTheme.typography.titleMedium,
+        fonSize: TextUnit = 24.sp,
+        style : TextStyle = TextStyle(
+            fontFamily = FontFamily(Font(Res.font.nunitosans_10pt_bold)),
+            fontSize = fonSize
+        ),
         text : String,
         textAlign : TextAlign = TextAlign.Start,
         overflow : TextOverflow = TextOverflow.Ellipsis,
         onTextLayout : (TextLayoutResult) -> Unit = {},
         maxLines : Int = Int.MAX_VALUE,
         color : Color = MaterialTheme.colorScheme.onSurface,
-        font: FontResource = Res.font.nunitosans_10pt_bold
         ){
         Text(
             modifier = modifier,
@@ -68,7 +73,7 @@ object Texts {
             overflow = overflow,
             onTextLayout = onTextLayout,
             maxLines = maxLines,
-            fontFamily = FontFamily(Font(font))
+
         )
     }
 

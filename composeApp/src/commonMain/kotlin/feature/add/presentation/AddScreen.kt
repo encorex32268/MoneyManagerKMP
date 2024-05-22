@@ -21,12 +21,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -71,19 +74,18 @@ class AddScreen: Screen {
         val addScreenModel = getScreenModel<AddScreenModel>()
         val state by addScreenModel.state.collectAsState()
 
-        val bottomSheetState  = rememberModalBottomSheetState(
-            skipPartiallyExpanded = false
+        val bottomSheetState = rememberStandardBottomSheetState(
+            skipHiddenState = false,
         )
-
+        val bottomSheetScaffoldState  = rememberBottomSheetScaffoldState(
+            bottomSheetState = bottomSheetState
+        )
         val scope = rememberCoroutineScope()
 
         var currentCategoryUi by remember {
             mutableStateOf<CategoryUi?>(null)
         }
 
-        var isShowBottomSheet by remember {
-            mutableStateOf(false)
-        }
         LaunchedEffect(addScreenModel){
             addScreenModel.uiEvent.collectLatest {
                 when(it){
@@ -97,42 +99,93 @@ class AddScreen: Screen {
 
         LaunchedEffect(state.categoryUi , Unit){
             currentCategoryUi = state.categoryUi
-            println("state.categoryUi ${state.categoryUi}")
             scope.launch {
                 if (currentCategoryUi == null){
-                    println("hide")
-                    isShowBottomSheet = false
+                    bottomSheetScaffoldState.bottomSheetState.hide()
                 }else{
-                    println("expand")
-                    isShowBottomSheet = true
+                    bottomSheetScaffoldState.bottomSheetState.expand()
                 }
             }
         }
 
-        Column(
+        BottomSheetScaffold(
             modifier = Modifier
-                .fillMaxSize()
-        ) {
-            AddTitleSection(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                onCloseClick = {
-                    navigator.pop()
-                }
-            )
-            CostTypeSelect(
-                modifier = Modifier.padding(8.dp),
-                isIncome =  state.isIncome,
-                onTypeChange = {
-                    addScreenModel.onEvent(
-                        AddEvent.OnTypeChange(it)
+                .padding(horizontal = 8.dp)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = {
+                            scope.launch {
+                                if (bottomSheetScaffoldState.bottomSheetState.currentValue == SheetValue.Expanded) {
+                                    bottomSheetScaffoldState.bottomSheetState.hide()
+                                }
+                            }
+                        }
                     )
+                },
+            scaffoldState = bottomSheetScaffoldState,
+            sheetPeekHeight = 0.dp,
+            sheetContent = {
+                currentCategoryUi?.let {
+                    CalculateLayout(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)
+                            .padding(bottom = 16.dp)
+                        ,
+                        onItemClick = {
+                            addScreenModel.onEvent(
+                                AddEvent.OnCostChange(it)
+                            )
+                        },
+                        onDelete = {
+                            addScreenModel.onEvent(
+                                AddEvent.OnDeleteTextClick
+                            )
+                        },
+                        onOkClick = {
+                            addScreenModel.onEvent(
+                                AddEvent.OnSaveClick
+                            )
+                        },
+                        onValueChange = {
+                            addScreenModel.onEvent(
+                                AddEvent.OnDescriptionChange(it)
+                            )
+                        },
+                        onDateSelected = {
+                            addScreenModel.onEvent(
+                                AddEvent.OnSelectedDate(it)
+                            )
+                        } ,
+                        month = state.monthNumber.toString(),
+                        day = state.dayOfMonth.toString(),
+                        state = state
+                    )
+
                 }
-            )
-            LazyColumn(
+            }
+        ){
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ){
+                    .fillMaxSize()
+            ) {
+                CostTypeSelect(
+                    modifier = Modifier.padding(8.dp),
+                    isIncome =  state.isIncome,
+                    onTypeChange = {
+                        addScreenModel.onEvent(
+                            AddEvent.OnTypeChange(it)
+                        )
+                    },
+                    onCloseClick = {
+                        navigator.pop()
+                    }
+                )
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp)
+                ){
 //                    if (state.recentlyCategoryItems.isNotEmpty()){
 //                        item {
 //                            Column {
@@ -178,139 +231,56 @@ class AddScreen: Screen {
 //                        }
 //                    }
 
-                state.categoryItems.groupBy { it.typeId }.toList().sortedBy {
-                    it.first
-                }.forEach { (typeId, category) ->
-                    item {
-                        Column {
-                            Texts.TitleSmall(
-                                text = CategoryList.getTypeStringByTypeId(
-                                    typeId
-                                )
-                            )
-                            FlowRow(
-                                modifier = Modifier.fillMaxWidth(),
-                                maxItemsInEachRow = 4,
-                            ) {
-                                category.forEach {categoryState ->
-                                    val categoryNameRes = CategoryList.getCategoryDescriptionById(categoryState.categoryId)
-                                    CategoryItem(
-                                        modifier = Modifier.weight(1f),
-                                        isClicked = categoryState.isClick,
-                                        categoryUi = categoryState,
-                                        onItemClick = {
-                                            println("CategoryItem Click ${categoryState}")
-                                            addScreenModel.onEvent(
-                                                AddEvent.OnItemSelected(
-                                                    categoryUi = categoryState,
-                                                    description = categoryNameRes
-                                                )
-                                            )
-                                            isShowBottomSheet = true
-                                        }
+                    state.categoryItems.groupBy { it.typeId }.toList().sortedBy {
+                        it.first
+                    }.forEach { (typeId, category) ->
+                        item {
+                            Column {
+                                Texts.TitleSmall(
+                                    text = CategoryList.getTypeStringByTypeId(
+                                        typeId
                                     )
+                                )
+                                FlowRow(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    maxItemsInEachRow = 4,
+                                ) {
+                                    category.forEach {categoryState ->
+                                        val categoryNameRes = CategoryList.getCategoryDescriptionById(categoryState.categoryId)
+                                        CategoryItem(
+                                            modifier = Modifier.weight(1f),
+                                            isClicked = categoryState.isClick,
+                                            categoryUi = categoryState,
+                                            onItemClick = {
+                                                println("CategoryItem Click ${categoryState}")
+                                                addScreenModel.onEvent(
+                                                    AddEvent.OnItemSelected(
+                                                        categoryUi = categoryState,
+                                                        description = categoryNameRes
+                                                    )
+                                                )
+                                                scope.launch {
+                                                    bottomSheetScaffoldState.bottomSheetState.expand()
+                                                }
+                                            }
+                                        )
 
+                                    }
+                                    repeat(4 - category.size % 4) {
+                                        Spacer(modifier = Modifier.weight(1f))
+                                    }
                                 }
-                                repeat(4 - category.size % 4) {
-                                    Spacer(modifier = Modifier.weight(1f))
-                                }
+                                Spacer(modifier = Modifier.height(8.dp))
                             }
-                            Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
                 }
+
             }
 
         }
-
-        if (isShowBottomSheet){
-            ModalBottomSheet(
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .padding(horizontal = 8.dp)
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onTap = {
-                                scope.launch {
-                                    if (bottomSheetState.currentValue == SheetValue.Expanded) {
-                                        isShowBottomSheet = false
-                                    }
-                                }
-                            }
-                        )
-                    },
-                sheetState = bottomSheetState,
-                dragHandle = null,
-                scrimColor = Color.Transparent,
-                onDismissRequest = { isShowBottomSheet = false },
-                content = {
-                    currentCategoryUi?.let {
-                        CalculateLayout(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 8.dp)
-                                .padding(bottom = 16.dp)
-                            ,
-                            onItemClick = {
-                                addScreenModel.onEvent(
-                                    AddEvent.OnCostChange(it)
-                                )
-                            },
-                            onDelete = {
-                                addScreenModel.onEvent(
-                                    AddEvent.OnDeleteTextClick
-                                )
-                            },
-                            onOkClick = {
-                                addScreenModel.onEvent(
-                                    AddEvent.OnSaveClick
-                                )
-                            },
-                            onValueChange = {
-                                addScreenModel.onEvent(
-                                    AddEvent.OnDescriptionChange(it)
-                                )
-                            },
-                            onDateSelected = {
-                                addScreenModel.onEvent(
-                                    AddEvent.OnSelectedDate(it)
-                                )
-                            } ,
-                            month = state.monthNumber.toString(),
-                            day = state.dayOfMonth.toString(),
-                            state = state
-                        )
-
-                    }
-                }
-            )
-
-        }
-
-
-
     }
 
-
-}
-
-@Composable
-private fun AddTitleSection(
-    modifier: Modifier,
-    onCloseClick: () -> Unit
-) {
-    Row(
-        modifier = modifier
-    ) {
-        IconButton(
-            onClick = onCloseClick
-        ){
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = null
-            )
-        }
-    }
 }
 
 @Composable
