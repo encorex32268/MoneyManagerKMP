@@ -25,8 +25,10 @@ import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
@@ -57,7 +59,10 @@ import feature.core.presentation.components.CircleIcon
 import feature.core.presentation.model.CategoryUi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import moneymanagerkmp.composeapp.generated.resources.Res
+import moneymanagerkmp.composeapp.generated.resources.recently
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 
 @OptIn(
@@ -196,51 +201,45 @@ class AddScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp)
                 ){
-//                    if (state.recentlyCategoryItems.isNotEmpty()){
-//                        item {
-//                            Column {
-//                                Text(
-//                                    text = stringResource(Res.string.recently),
-//                                    style = MaterialTheme.typography.titleSmall
-//                                )
-//                                FlowRow(
-//                                    modifier = Modifier.fillMaxWidth(),
-//                                    maxItemsInEachRow = 4,
-//                                ) {
-//                                    state.recentlyItems.forEach { expense  ->
-//                                        CategoryItem(
-//                                            modifier = Modifier.weight(1f),
-//                                            isClicked = categoryState.isClick,
-//                                            categoryUi = categoryState,
-//                                            onItemClick = {
-//                                                onEvent(
-//                                                    AddNewExpenseEvent.OnRecentlyItemSelected(
-//                                                        category = categoryState.category,
-//                                                        description = categoryState.category.name.ifEmpty { "" }
-//                                                    )
-//                                                )
-//                                                addScreenModel.onEvent(
-//                                                    AddEvent.OnItemSelected(
-//                                                        categoryUi = categoryState,
-//                                                        description =
-//                                                    )
-//                                                )
-//                                                scope.launch {
-//                                                    bottomSheetScaffoldState.bottomSheetState.expand()
-//                                                }
-//                                            }
-//                                        )
-//
-//                                    }
-//                                    repeat(4 - state.recentlyCategories.size % 4) {
-//                                        Spacer(modifier = Modifier.weight(1f))
-//                                    }
-//                                }
-//                                Spacer(modifier = Modifier.height(spacer.normal))
-//                            }
-//                        }
-//                    }
+                    if (state.recentlyCategoryItems.isNotEmpty()){
+                        item {
+                            Column {
+                                Text(
+                                    text = stringResource(Res.string.recently),
+                                    style = MaterialTheme.typography.titleSmall
+                                )
+                                FlowRow(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    maxItemsInEachRow = 4,
+                                ) {
+                                    state.recentlyCategoryItems.forEach { categoryUi  ->
+                                        val categoryNameRes = CategoryList.getCategoryDescriptionById(categoryUi.categoryId)
+                                        CategoryItem(
+                                            modifier = Modifier.weight(1f),
+                                            isClicked = categoryUi.isClick,
+                                            categoryUi = categoryUi,
+                                            onItemClick = {
+                                                addScreenModel.onEvent(
+                                                    AddEvent.OnItemSelected(
+                                                        categoryUi = categoryUi,
+                                                        description = categoryUi.name?:categoryNameRes,
+                                                        isRecently = true
+                                                    )
+                                                )
+                                                scope.launch {
+                                                    bottomSheetScaffoldState.bottomSheetState.expand()
+                                                }
+                                            }
+                                        )
 
+                                    }
+                                    repeat(4 - state.recentlyCategoryItems.size % 4) {
+                                        Spacer(modifier = Modifier.weight(1f))
+                                    }
+                                }
+                            }
+                        }
+                    }
                     state.categoryItems.groupBy { it.typeId }.toList().sortedBy {
                         it.first
                     }.forEach { (typeId, category) ->
@@ -255,7 +254,7 @@ class AddScreen(
                                     modifier = Modifier.fillMaxWidth(),
                                     maxItemsInEachRow = 4,
                                 ) {
-                                    category.forEach {categoryState ->
+                                    category.forEach { categoryState ->
                                         val categoryNameRes = CategoryList.getCategoryDescriptionById(categoryState.categoryId)
                                         CategoryItem(
                                             modifier = Modifier.weight(1f),
@@ -319,7 +318,7 @@ private fun CategoryItem(
             },
         )
 
-        val description = CategoryList.getCategoryDescriptionById(
+        val description = categoryUi.name?:CategoryList.getCategoryDescriptionById(
                 categoryUi.categoryId
             )
         Texts.BodySmall(text = description )

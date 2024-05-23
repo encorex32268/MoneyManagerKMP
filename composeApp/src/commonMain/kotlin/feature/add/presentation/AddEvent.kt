@@ -22,7 +22,8 @@ sealed interface AddEvent {
 
     data class OnItemSelected(
         val categoryUi: CategoryUi,
-        val description : String = ""
+        val description : String = "",
+        val isRecently: Boolean = false
     ) : AddEvent
 
     data class OnTypeChange(

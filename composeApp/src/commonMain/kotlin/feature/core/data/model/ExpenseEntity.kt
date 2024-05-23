@@ -14,7 +14,7 @@ class ExpenseEntity(
     var description: String,
     var isIncome: Boolean,
     var cost: Long,
-    var timestamp: Long
+    var timestamp: Long,
 ) : RealmObject{
     constructor() : this(
         categoryId = 0,

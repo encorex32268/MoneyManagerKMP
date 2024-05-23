@@ -53,7 +53,7 @@ fun CircleIcon(
                     .padding(8.dp),
                 painter = image,
                 contentDescription = null,
-                tint =  if (backgroundColor.luminance() < 0.5f && isClicked) Color.White else Color.Black,
+                tint =  Color.Black,
             )
         }
     }

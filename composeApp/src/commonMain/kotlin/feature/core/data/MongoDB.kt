@@ -8,6 +8,7 @@ import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.asFlow
 import io.realm.kotlin.ext.query
+import io.realm.kotlin.query.Sort
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -107,4 +108,19 @@ class MongoDB{
             query = "id == $0", expense.id
         )?.first()?.find()?.toExpense()
     }
+
+    fun getExpenseLastEightItems() : Flow<List<Expense>> {
+       return realm?.query(
+           clazz = ExpenseEntity::class,
+           query = "categoryId != 0"
+       )
+            ?.sort("timestamp", Sort.DESCENDING)
+            ?.limit(8)
+            ?.find()?.asFlow()?.map {
+                it.list.toList().map {
+                    it.toExpense()
+                }
+            }?: flowOf(emptyList())
+    }
+
 }

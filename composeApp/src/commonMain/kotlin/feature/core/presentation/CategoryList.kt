@@ -182,28 +182,28 @@ object CategoryList {
 
     val items = kotlin.run {
         (1..21).map {
-            Category(categoryId = FOOD + it, typeId = FOOD)
+            Category(id = FOOD + it ,categoryId = FOOD + it, typeId = FOOD)
         } +
                 (1..14).map {
-                    Category(categoryId = TRAFFIC + it, typeId = TRAFFIC)
+                    Category(id = TRAFFIC + it, categoryId = TRAFFIC + it, typeId = TRAFFIC)
                 } +
                 (1..25).map {
-                    Category(categoryId = LIFE + it, typeId = LIFE)
+                    Category(id = LIFE + it ,categoryId = LIFE + it, typeId = LIFE)
                 } +
                 (1..10).map {
-                    Category(categoryId = HEALTH + it, typeId = HEALTH)
+                    Category(id = HEALTH + it ,categoryId = HEALTH + it, typeId = HEALTH)
                 } +
                 (1..17).map {
-                    Category(categoryId = SPORTS + it, typeId = SPORTS)
+                    Category(id = SPORTS + it ,categoryId = SPORTS + it, typeId = SPORTS)
                 } +
                 (1..13).map {
-                    Category(categoryId = WEAR + it, typeId = WEAR)
+                    Category(id = WEAR + it , categoryId = WEAR + it, typeId = WEAR)
                 } +
                 (1..17).map {
-                    Category(categoryId = SHOPPING + it, typeId = SHOPPING)
+                    Category(id = SHOPPING + it ,categoryId = SHOPPING + it, typeId = SHOPPING)
                 } +
                 (1..36).map {
-                    Category(categoryId = OTHER + it, typeId = OTHER)
+                    Category(id = OTHER + it ,categoryId = OTHER + it, typeId = OTHER)
                 }
 
     }
@@ -1462,14 +1462,14 @@ object CategoryList {
     fun getColorByCategory(id: Int): Color {
         return Color(
             when (id) {
-                FOOD -> 0xFFF9F871
-                TRAFFIC -> 0xFF0081CF
-                WEAR -> 0xFFFBEAFF
-                SPORTS -> 0xFFC4FCEF
-                SHOPPING -> 0xFFCA8EFF
-                HEALTH -> 0xFFC34A36
-                LIFE -> 0xFFFF9671
-                else -> 0xFFD5CABD
+                FOOD -> 0xFFFAFF92
+                TRAFFIC -> 0xFFD6FAFF
+                WEAR -> 0xFFEFD6FF
+                SPORTS -> 0xFFD6FFF9
+                SHOPPING -> 0xFFFFD6F8
+                HEALTH -> 0xFFFFD6D6
+                LIFE -> 0xFFFFE3D6
+                else -> 0xFFDFFFD6
             }
         )
     }

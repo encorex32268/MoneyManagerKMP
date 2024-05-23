@@ -11,6 +11,9 @@ import feature.core.presentation.model.CategoryUi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -33,36 +36,90 @@ class AddScreenModel(
         when(event){
             is AddEvent.SetupExpense -> {
                 if (event.expense != null){
-                    val expense = event.expense
-                    val localDateTime = DateConverter.getLocalDateTimeFromTimestamp(expense.timestamp)
-                    _state.update {
-                        it.copy(
-                            currentExpense = expense,
-                            year = localDateTime.year,
-                            monthNumber = localDateTime.monthNumber,
-                            dayOfMonth = localDateTime.dayOfMonth,
-                            nowLocalDateTime = DateConverter.getNowDate(),
-                            isIncome = expense.isIncome,
-                            cost = expense.cost.toString(),
-                            categoryUi = CategoryUi(
-                                typeId = expense.typeId,
-                                categoryId = expense.categoryId,
-                                isClick = true
-                            ),
-                            description = expense.description
-                        )
+                    screenModelScope.launch {
+                        val expense = event.expense
+                        val localDateTime = DateConverter.getLocalDateTimeFromTimestamp(expense.timestamp)
+                        val recentlyExpenses = mongoDB.getExpenseLastEightItems()
+                        recentlyExpenses.collectLatest {
+                            val recentlyCategories = it.map { expense ->
+                                CategoryUi(
+                                    id = CategoryList.RECENTLY + expense.id.hashCode(),
+                                    categoryId = expense.categoryId,
+                                    name = expense.description,
+                                    isClick = expense.id.hashCode() == event.expense.id.hashCode(),
+                                    typeId = expense.typeId
+                                )
+                            }
+                            val stateCategories = state.value.categoryItems
+                            val categories = if(recentlyCategories.any{ it.isClick }) {
+                                stateCategories.map {
+                                    it.copy(isClick = false, categoryId = it.categoryId , typeId =  it.typeId)
+                                }
+                            }else{
+                                stateCategories.map {
+                                    it.copy(
+                                        isClick = expense.categoryId == it.categoryId , categoryId = it.categoryId , typeId = it.typeId
+                                    )
+                                }
+                            }
+
+
+                            _state.update {
+                                it.copy(
+                                    currentExpense = expense,
+                                    year = localDateTime.year,
+                                    monthNumber = localDateTime.monthNumber,
+                                    dayOfMonth = localDateTime.dayOfMonth,
+                                    nowLocalDateTime = DateConverter.getNowDate(),
+                                    isIncome = expense.isIncome,
+                                    cost = expense.cost.toString(),
+                                    categoryUi = CategoryUi(
+                                        typeId = expense.typeId,
+                                        categoryId = expense.categoryId,
+                                        isClick = true
+                                    ),
+                                    description = expense.description,
+                                    recentlyCategoryItems = recentlyCategories,
+                                    categoryItems = categories
+                                )
+                            }
+
+                        }
+
                     }
+
                 }else{
-                    val localDateTime = DateConverter.getNowDate()
-                    _state.update {
-                        it.copy(
-                            year = localDateTime.year,
-                            monthNumber = localDateTime.monthNumber,
-                            dayOfMonth = localDateTime.dayOfMonth,
-                            nowLocalDateTime = localDateTime
-                        )
+                    screenModelScope.launch {
+                        val recentlyExpenses = mongoDB.getExpenseLastEightItems()
+                        recentlyExpenses.collectLatest {
+                            val recentlyCategories = it.map { expense ->
+                                CategoryUi(
+                                    id = CategoryList.RECENTLY + expense.id.hashCode(),
+                                    categoryId = expense.categoryId,
+                                    name = expense.description,
+                                    isClick = false,
+                                    typeId = CategoryList.RECENTLY
+                                )
+                            }
+                            val localDateTime = DateConverter.getNowDate()
+                            _state.update {
+                                it.copy(
+                                    year = localDateTime.year,
+                                    monthNumber = localDateTime.monthNumber,
+                                    dayOfMonth = localDateTime.dayOfMonth,
+                                    nowLocalDateTime = localDateTime,
+                                    recentlyCategoryItems = recentlyCategories,
+                                )
+                            }
+                        }
+
                     }
+
+
+
                 }
+
+
 
             }
             is AddEvent.OnDescriptionChange -> {
@@ -108,14 +165,14 @@ class AddScreenModel(
                 }
             }
             is AddEvent.OnItemSelected -> {
-                if(event.categoryUi.typeId == CategoryList.RECENTLY){
+                if(event.isRecently){
                     _state.update {
                         it.copy(
                             categoryItems = it.categoryItems.map {
                                 it.copy(isClick = false)
                             },
                             recentlyCategoryItems = it.recentlyCategoryItems.map {
-                                it.copy(isClick = it.categoryId == event.categoryUi.categoryId)
+                                it.copy(isClick = it.id == event.categoryUi.id)
                             }
                         )
                     }
@@ -123,7 +180,7 @@ class AddScreenModel(
                     _state.update {
                         it.copy(
                             categoryItems = it.categoryItems.map {
-                                it.copy(isClick = it.categoryId == event.categoryUi.categoryId)
+                                it.copy(isClick = it.id == event.categoryUi.id)
                             },
                             recentlyCategoryItems = it.recentlyCategoryItems.map {
                                 it.copy(isClick = false)
@@ -152,7 +209,7 @@ class AddScreenModel(
                             description = state.value.description,
                             isIncome = state.value.isIncome,
                             cost = state.value.cost.toLong(),
-                            timestamp = timestamp
+                            timestamp = timestamp,
                         )
                         mongoDB.insertExpense(
                             expense
