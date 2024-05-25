@@ -22,7 +22,6 @@ class HomeScreenModel(
         when(event){
             is HomeEvent.OnDatePick -> {
                 screenModelScope.launch {
-
                     val (startTime,endTime) = DateConverter.getMonthStartAndEndTime(
                         year =  event.year,
                         month = event.month

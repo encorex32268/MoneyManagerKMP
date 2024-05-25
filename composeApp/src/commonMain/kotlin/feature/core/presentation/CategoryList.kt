@@ -27,6 +27,14 @@ import moneymanagerkmp.composeapp.generated.resources.food_salad
 import moneymanagerkmp.composeapp.generated.resources.food_seafood
 import moneymanagerkmp.composeapp.generated.resources.food_vegetables
 import moneymanagerkmp.composeapp.generated.resources.food_wine
+import moneymanagerkmp.composeapp.generated.resources.header_clothes
+import moneymanagerkmp.composeapp.generated.resources.header_food
+import moneymanagerkmp.composeapp.generated.resources.header_heart
+import moneymanagerkmp.composeapp.generated.resources.header_other
+import moneymanagerkmp.composeapp.generated.resources.header_recently
+import moneymanagerkmp.composeapp.generated.resources.header_shopping
+import moneymanagerkmp.composeapp.generated.resources.header_sports
+import moneymanagerkmp.composeapp.generated.resources.header_traffic
 import moneymanagerkmp.composeapp.generated.resources.health
 import moneymanagerkmp.composeapp.generated.resources.health_doctor
 import moneymanagerkmp.composeapp.generated.resources.health_doctor2
@@ -402,9 +410,9 @@ object CategoryList {
                 painterResource(Res.drawable.life_money_income)
             }
 
-            LIFE + 13 -> {
-                painterResource(Res.drawable.life_rent)
-            }
+//            LIFE + 13 -> {
+//                painterResource(Res.drawable.life_rent)
+//            }
 
             LIFE + 14 -> {
                 painterResource(Res.drawable.life_salary)
@@ -1028,9 +1036,9 @@ object CategoryList {
                 stringResource(Res.string.life_money_income)
             }
 
-            LIFE + 13 -> {
-                stringResource(Res.string.life_rent)
-            }
+//            LIFE + 13 -> {
+//                stringResource(Res.string.life_rent)
+//            }
 
             LIFE + 14 -> {
                 stringResource(Res.string.life_salary)
@@ -1488,6 +1496,23 @@ object CategoryList {
             SHOPPING -> { stringResource(Res.string.shopping)  }
             OTHER -> { stringResource(Res.string.other)  }
             else -> ""
+        }
+    }
+
+    @OptIn(ExperimentalResourceApi::class)
+    @Composable
+    fun getTypeIconByTypeId(typeId: Int): Painter {
+        return when(typeId){
+            RECENTLY -> { painterResource(Res.drawable.header_recently) }
+            FOOD -> { painterResource(Res.drawable.header_food) }
+            TRAFFIC -> {  painterResource(Res.drawable.header_traffic) }
+            LIFE -> { painterResource(Res.drawable.life_rent)  }
+            HEALTH -> { painterResource(Res.drawable.header_heart)  }
+            SPORTS -> { painterResource(Res.drawable.header_sports)  }
+            WEAR -> { painterResource(Res.drawable.header_clothes) }
+            SHOPPING -> { painterResource(Res.drawable.header_shopping)  }
+            OTHER -> { painterResource(Res.drawable.header_other) }
+            else -> painterResource(Res.drawable.header_recently)
         }
     }
 }
