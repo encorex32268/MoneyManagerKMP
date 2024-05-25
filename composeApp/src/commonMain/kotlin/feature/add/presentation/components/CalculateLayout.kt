@@ -19,13 +19,18 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +45,12 @@ import androidx.compose.ui.unit.sp
 import feature.add.presentation.AddState
 import feature.core.domain.mapper.toCategory
 import feature.core.presentation.Texts
+import io.realm.kotlin.internal.interop.CoreLogLevel
+import moneymanagerkmp.composeapp.generated.resources.Res
+import moneymanagerkmp.composeapp.generated.resources.dialog_cancel_button
+import moneymanagerkmp.composeapp.generated.resources.dialog_ok_button
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(
     ExperimentalMaterial3Api::class
@@ -62,23 +72,56 @@ fun CalculateLayout(
 
     if (isShowDialog.value) {
         DatePickerDialog(
+            colors = DatePickerDefaults.colors(
+                containerColor = Color.White
+            ),
             onDismissRequest = { isShowDialog.value = false },
             confirmButton = {
                 TextButton(
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.Black,
+                        containerColor = Color.Transparent
+                    ),
                     onClick = {
                         onDateSelected(datePickerState.selectedDateMillis?:0L)
                         isShowDialog.value = false
                     }) {
-                    Text("Ok")
+                    Text(stringResource(Res.string.dialog_ok_button))
                 }
             },
             dismissButton = {
-                TextButton(onClick = { isShowDialog.value = false }) {
-                    Text("Cancel")
+                TextButton(
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.Black,
+                        containerColor = Color.Transparent
+                    ),
+                    onClick = { isShowDialog.value = false }) {
+                    Text(stringResource(Res.string.dialog_cancel_button))
                 }
             }
         ) {
-            DatePicker(state = datePickerState)
+            DatePicker(
+                state = datePickerState,
+                colors = DatePickerDefaults.colors(
+                    containerColor = Color.White,
+                    selectedDayContainerColor = Color.Black,
+                    dayContentColor = Color.Black,
+                    todayDateBorderColor = Color.Black,
+                    todayContentColor = Color.Black,
+                    selectedYearContainerColor = Color.Black,
+                    selectedYearContentColor = Color.White,
+                    yearContentColor = Color.Black,
+                    dateTextFieldColors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Black,
+                        focusedLabelColor = Color.Black,
+                        disabledLabelColor = Color.Black,
+                        cursorColor = Color.Black,
+                        focusedContainerColor = Color.White,
+                        disabledContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White
+                    )
+                )
+            )
         }
     }
 
@@ -189,7 +232,7 @@ private fun CalendarButton(
     month: Int = 1,
     day: Int = 6,
     onClick: () -> Unit = {},
-    textColor : Color = MaterialTheme.colorScheme.primary
+    textColor : Color = MaterialTheme.colorScheme.onSurface
 ){
     Box(
         modifier = modifier
@@ -235,7 +278,7 @@ private fun NumberButton(
     modifier: Modifier = Modifier,
     text: String,
     onClick: (String) -> Unit = {},
-    textColor: Color = MaterialTheme.colorScheme.primary
+    textColor: Color = MaterialTheme.colorScheme.onSurface
 ){
     Box(
         modifier = modifier,

@@ -75,9 +75,6 @@ class AddScreen(
     private val expense: Expense?
 ): Screen {
 
-    override val key: ScreenKey
-        get() = "AddScreen"
-
     @Composable
     override fun Content() {
 
@@ -201,49 +198,52 @@ class AddScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp)
                 ){
-                    if (state.recentlyCategoryItems.isNotEmpty()){
-                        item {
-                            Column {
-                                Text(
-                                    text = stringResource(Res.string.recently),
-                                    style = MaterialTheme.typography.titleSmall
-                                )
-                                FlowRow(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    maxItemsInEachRow = 4,
-                                ) {
-                                    state.recentlyCategoryItems.forEach { categoryUi  ->
-                                        val categoryNameRes = CategoryList.getCategoryDescriptionById(categoryUi.categoryId)
-                                        CategoryItem(
-                                            modifier = Modifier.weight(1f),
-                                            isClicked = categoryUi.isClick,
-                                            categoryUi = categoryUi,
-                                            onItemClick = {
-                                                addScreenModel.onEvent(
-                                                    AddEvent.OnItemSelected(
-                                                        categoryUi = categoryUi,
-                                                        description = categoryUi.name?:categoryNameRes,
-                                                        isRecently = true
-                                                    )
-                                                )
-                                                scope.launch {
-                                                    bottomSheetScaffoldState.bottomSheetState.expand()
-                                                }
-                                            }
-                                        )
 
-                                    }
-                                    repeat(4 - state.recentlyCategoryItems.size % 4) {
-                                        Spacer(modifier = Modifier.weight(1f))
+                        item {
+                            if (state.recentlyCategoryItems.isNotEmpty()){
+                                Column {
+                                    Text(
+                                        text = stringResource(Res.string.recently),
+                                        style = MaterialTheme.typography.titleSmall
+                                    )
+                                    FlowRow(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        maxItemsInEachRow = 4,
+                                    ) {
+                                        state.recentlyCategoryItems.forEach { categoryUi  ->
+                                            val categoryNameRes = CategoryList.getCategoryDescriptionById(categoryUi.categoryId)
+                                            CategoryItem(
+                                                modifier = Modifier.weight(1f),
+                                                isClicked = categoryUi.isClick,
+                                                categoryUi = categoryUi,
+                                                onItemClick = {
+                                                    addScreenModel.onEvent(
+                                                        AddEvent.OnItemSelected(
+                                                            categoryUi = categoryUi,
+                                                            description = categoryUi.name?:categoryNameRes,
+                                                            isRecently = true
+                                                        )
+                                                    )
+                                                    scope.launch {
+                                                        bottomSheetScaffoldState.bottomSheetState.expand()
+                                                    }
+                                                }
+                                            )
+
+                                        }
+                                        repeat(4 - state.recentlyCategoryItems.size % 4) {
+                                            Spacer(modifier = Modifier.weight(1f))
+                                        }
                                     }
                                 }
+
                             }
                         }
-                    }
-                    state.categoryItems.groupBy { it.typeId }.toList().sortedBy {
-                        it.first
-                    }.forEach { (typeId, category) ->
+
                         item {
+                            state.categoryItems.groupBy { it.typeId }.toList().sortedBy {
+                                it.first
+                            }.forEach { (typeId, category) ->
                             Column {
                                 Texts.TitleSmall(
                                     text = CategoryList.getTypeStringByTypeId(

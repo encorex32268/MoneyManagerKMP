@@ -2,6 +2,7 @@ package feature.di
 
 import feature.add.presentation.AddScreenModel
 import feature.chart.presentation.ChartScreenModel
+import feature.chart.presentation.chartdetail.ChartDetailScreenModel
 import feature.core.data.MongoDB
 import feature.edit.presentation.EditExpenseScreenModel
 import feature.home.presentation.HomeScreenModel
@@ -31,6 +32,9 @@ val appModule = module {
         ChartScreenModel(
             mongoDB = get()
         )
+    }
+    factory {
+        ChartDetailScreenModel()
     }
 }
 

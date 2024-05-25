@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,80 +46,81 @@ fun CostTypeSelect(
     onCloseClick: () -> Unit
 ){
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
             onClick = onCloseClick
         ){
             Icon(
-                imageVector = Icons.Default.Close,
+                imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
                 contentDescription = null
             )
         }
-
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .clickable { onTypeChange(false) }
-                .background(
-                    if (!isIncome) {
-                        light_ErrorColorContainer
-                    } else {
-                        light_onErrorColor
-                    },
+        Row {
+            Box(
+                modifier = Modifier
+                    .clickable { onTypeChange(false) }
+                    .background(
+                        if (!isIncome) {
+                            light_ErrorColorContainer
+                        } else {
+                            light_onErrorColor
+                        },
 //                    if (!isIncome) {
 //                        if (isSystemInDarkTheme()) dark_CorrectColorContainer else light_CorrectColorContainer
 //                    } else {
 //                        if (isSystemInDarkTheme()) md_theme_dark_outline else light_onCorrectColor
 //
 //                    },
-                    shape = shape
+                        shape = shape
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        shape = shape
+                    )
+                ,
+                contentAlignment = Alignment.Center){
+                Texts.BodyMedium(
+                    modifier = Modifier.padding(8.dp),
+                    text = stringResource(Res.string.expense)
                 )
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    shape = shape
-                )
-            ,
-            contentAlignment = Alignment.Center){
-            Texts.BodyMedium(
-                modifier = Modifier.padding(16.dp),
-                text = stringResource(Res.string.expense)
-            )
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .clickable {
-                    onTypeChange(true)
-                }
-                .background(
-                    if (isIncome) {
-                        light_CorrectColorContainer
-                    } else {
-                        light_onCorrectColor
-                    },
+            }
+            Spacer(modifier = Modifier.width(20.dp))
+            Box(
+                modifier = Modifier
+                    .clickable {
+                        onTypeChange(true)
+                    }
+                    .background(
+                        if (isIncome) {
+                            light_CorrectColorContainer
+                        } else {
+                            light_onCorrectColor
+                        },
 //                    if (isIncome) {
 //                        if (isSystemInDarkTheme()) dark_ErrorColorContainer else light_ErrorColorContainer
 //                    } else {
 //                        if (isSystemInDarkTheme()) md_theme_dark_outline else light_onErrorColor
 //                    },
-                    shape = shape
+                        shape = shape
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        shape = shape
+                    )
+                ,
+                contentAlignment = Alignment.Center
+            ){
+                Texts.BodyMedium(
+                    modifier = Modifier.padding(8.dp),
+                    text =  stringResource(Res.string.income),
+                    style = MaterialTheme.typography.bodyMedium,
                 )
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    shape = shape
-                )
-            ,
-            contentAlignment = Alignment.Center
-        ){
-            Texts.BodyMedium(
-                modifier = Modifier.padding(16.dp),
-                text =  stringResource(Res.string.income),
-                style = MaterialTheme.typography.bodyMedium,
-            )
+            }
         }
 
     }

@@ -36,77 +36,80 @@ fun ExpenseItem(
     items: List<Expense>,
     onItemClick: (Expense) -> Unit = {},
 ){
-    val total = mutableStateOf(
-        run {
-            val incomeItems = items.filter { it.isIncome }
-            val expenseItems = items.filterNot { it.isIncome }
-            val income = incomeItems.sumOf { it.cost }
-            val expense = expenseItems.sumOf { it.cost }
-            -expense + income
-        }
-    )
-    OutlinedCard(
-        modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(
-            width = 0.dp ,
-            color = MaterialTheme.colorScheme.outlineVariant
+    if (items.isNotEmpty()){
+        val total = mutableStateOf(
+            run {
+                val incomeItems = items.filter { it.isIncome }
+                val expenseItems = items.filterNot { it.isIncome }
+                val income = incomeItems.sumOf { it.cost }
+                val expense = expenseItems.sumOf { it.cost }
+                -expense + income
+            }
         )
-    ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
+        OutlinedCard(
+            modifier = modifier,
+            shape = RoundedCornerShape(16.dp),
+            border = BorderStroke(
+                width = 0.dp ,
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
         ) {
-            Row(
+
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Texts.BodyMedium(
-                    modifier = Modifier.weight(1f),
-                    text = kotlin.run {
-                        val localDateTime =DateConverter.getLocalDateTimeFromTimestamp(items[0].timestamp)
-                        "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} ${DateConverter.getDayOfWeekStringByDayOfWeek(localDateTime.dayOfWeek)}"
-                    }
-                )
-                Texts.BodyMedium(
-                    text = stringResource(
-                        Res.string.total_expense_item,
-                        total.value.toMoneyString()
-                    )
-                )
-            }
-            items.forEach {expense ->
-                println("expense ${expense}")
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .clickable {
-                            onItemClick(expense)
-                        }
-                    ,
-                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CircleIcon(
-                        modifier = Modifier.size(36.dp),
-                        isClicked = true,
-                        image = CategoryList.getCategoryIconById(expense.categoryId),
-                        backgroundColor = CategoryList.getColorByCategory(expense.typeId)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Texts.BodySmall(
+                    Texts.BodyMedium(
                         modifier = Modifier.weight(1f),
-                        text = expense.description,
+                        text = kotlin.run {
+                            val localDateTime =DateConverter.getLocalDateTimeFromTimestamp(items[0].timestamp)
+                            "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} ${DateConverter.getDayOfWeekStringByDayOfWeek(localDateTime.dayOfWeek)}"
+                        }
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Texts.BodySmall(
-                        text = if (expense.isIncome) expense.cost.toMoneyString() else "-${expense.cost.toMoneyString()}",
+                    Texts.BodyMedium(
+                        text = stringResource(
+                            Res.string.total_expense_item,
+                            total.value.toMoneyString()
+                        )
                     )
+                }
+                items.forEach {expense ->
+                    println("expense ${expense}")
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable {
+                                onItemClick(expense)
+                            }
+                        ,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        CircleIcon(
+                            modifier = Modifier.size(36.dp),
+                            isClicked = true,
+                            image = CategoryList.getCategoryIconById(expense.categoryId),
+                            backgroundColor = CategoryList.getColorByCategory(expense.typeId)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Texts.BodySmall(
+                            modifier = Modifier.weight(1f),
+                            text = expense.description,
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Texts.BodySmall(
+                            text = if (expense.isIncome) expense.cost.toMoneyString() else "-${expense.cost.toMoneyString()}",
+                        )
+                    }
                 }
             }
         }
+
     }
 }

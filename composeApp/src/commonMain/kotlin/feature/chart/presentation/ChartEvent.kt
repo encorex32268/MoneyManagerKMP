@@ -9,5 +9,7 @@ sealed interface ChartEvent {
         val month: Int?=null
     ): ChartEvent
 
-    data object OnChartClick: ChartEvent
+    data class OnTypeChange(
+        val isIncome: Boolean
+    ): ChartEvent
 }

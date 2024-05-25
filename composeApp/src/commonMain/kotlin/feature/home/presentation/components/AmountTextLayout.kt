@@ -101,7 +101,7 @@ fun AmountTextLayout(
 }
 
 @Composable
-private fun AmountText(
+fun AmountText(
     modifier: Modifier = Modifier,
     title: String,
     text: String,
