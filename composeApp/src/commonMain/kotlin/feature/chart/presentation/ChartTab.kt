@@ -1,6 +1,7 @@
 package feature.chart.presentation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
@@ -59,13 +61,35 @@ object ChartTab : CustomTab {
                 if(state.isIncomeShown) INCOME else EXPENSE
             }
         }
+        val items by remember {
+            derivedStateOf {
+                if (state.isIncomeShown)
+                    state.incomeTypeList
+                else state.expenseTypeList
+            }
+        }
+        val sumTotal by remember {
+            derivedStateOf {
+                kotlin.run {
+                    var sum = 0L
+                    items.forEach {
+                        it.expenseItems.forEach {
+                            sum += it.cost
+                        }
+                    }
+                    sum
+                }
+            }
+        }
         LaunchedEffect(Unit){
             chartScreenModel.onEvent(
                 ChartEvent.OnDatePick()
             )
         }
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
         ) {
             DatePicker(
                 year = state.nowDateYear.toIntOrNull()?:0,
@@ -79,10 +103,9 @@ object ChartTab : CustomTab {
                     )
                 }
             )
-
-            //TODO: TabRow?
-            androidx.compose.material3.TabRow(
+            TabRow(
                 selectedTabIndex = selectTabIndex,
+                containerColor = Color.White,
                 contentColor = Color.Black,
                 indicator = { tabPositions ->
                     TabRowDefaults.SecondaryIndicator(
@@ -129,43 +152,15 @@ object ChartTab : CustomTab {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    items = if (state.isIncomeShown)
-                        state.incomeTypeList
-                    else state.expenseTypeList,
-                    sumTotal = kotlin.run {
-                        val items = if (state.isIncomeShown)
-                            state.incomeTypeList
-                        else state.expenseTypeList
-
-                        var sum = 0L
-                        items.forEach {
-                            it.expenseItems.forEach {
-                                sum += it.cost
-                            }
-                        }
-                        sum
-                    }
+                    items = items,
+                    sumTotal = sumTotal
                 )
                 Spacer(Modifier.height(8.dp))
                 ExpenseDetailLayout(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    items = if (state.isIncomeShown)
-                        state.incomeTypeList
-                    else state.expenseTypeList,
-                    sumTotal = kotlin.run {
-                        val items = if (state.isIncomeShown)
-                            state.incomeTypeList
-                        else state.expenseTypeList
-
-                        var sum = 0L
-                        items.forEach {
-                            it.expenseItems.forEach {
-                                sum += it.cost
-                            }
-                        }
-                        sum
-                    },
+                    items = items,
+                    sumTotal = sumTotal,
                     onItemClick = {
                         navigator.parent?.push(
                             ChartDetailScreen(

@@ -97,6 +97,7 @@ class MongoDB{
                     }
                 }
             } catch (e: Exception) {
+                e.printStackTrace()
                 println(e)
             }
         }

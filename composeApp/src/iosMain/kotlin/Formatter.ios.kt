@@ -16,5 +16,6 @@ actual fun Long.toMoneyString(): String {
         locale = NSLocale.currentLocale
         maximumFractionDigits = 0U
     }
-    return formatter.stringFromNumber(NSNumber(this)) ?: ""
+    return formatter.stringFromNumber(
+        number = NSNumber(long = this)) ?: ""
 }

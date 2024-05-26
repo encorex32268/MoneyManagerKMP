@@ -10,12 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import feature.core.domain.model.Expense
 import feature.core.presentation.CategoryList
@@ -47,6 +49,9 @@ fun ExpenseItem(
             }
         )
         OutlinedCard(
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            ),
             modifier = modifier,
             shape = RoundedCornerShape(16.dp),
             border = BorderStroke(
@@ -80,7 +85,6 @@ fun ExpenseItem(
                     )
                 }
                 items.forEach {expense ->
-                    println("expense ${expense}")
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

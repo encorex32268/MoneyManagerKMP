@@ -45,8 +45,8 @@ kotlin {
 
 
             implementation(libs.library.base)
-            implementation(libs.library.sync) // If using Device Sync
-            implementation(libs.kotlinx.coroutines.core) // If using coroutines with the SDK
+            implementation(libs.library.sync)
+            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
 
             implementation(libs.voyager.navigator)
@@ -55,11 +55,6 @@ kotlin {
             implementation(libs.voyager.tabNavigator)
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.koin)
-
-            implementation(libs.cupertino)
-            implementation(libs.cupertino.native)
-            implementation(libs.cupertino.adaptive)
-            implementation(libs.cupertino.icons.extended)
 
             implementation(libs.kotlin.date.time)
 

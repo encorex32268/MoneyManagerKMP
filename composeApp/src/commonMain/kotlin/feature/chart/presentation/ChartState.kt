@@ -10,10 +10,4 @@ data class ChartState(
     val nowDateYear: String = "",
     val nowDateMonth: String = "",
     val isIncomeShown: Boolean = false
-
-//    val items: List<Chart> = emptyList(),
-
-//    val expensesTypeList:  List<Pair<Int, List<Expense>>> = emptyList(),
-//    val isIncomeShow: Boolean = false
-
 )

@@ -33,7 +33,7 @@ class RootScreen : Screen {
                     .navigationBarsPadding(),
                 bottomBar = {
                     NavigationBar(
-                        containerColor = Color.Transparent
+                        containerColor = Color.White
                     ) {
                         TabNavigationItem(HomeTab)
                         TabNavigationItem(ChartTab)

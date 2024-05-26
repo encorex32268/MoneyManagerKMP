@@ -98,7 +98,7 @@ fun ChartLayout(
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally),
                 colors = CardDefaults.outlinedCardColors(
-                    containerColor = Color.Transparent
+                    containerColor = Color.White
                 )
             ) {
                 Row(

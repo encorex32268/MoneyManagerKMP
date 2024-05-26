@@ -98,7 +98,7 @@ class AddScreenModel(
                                     categoryId = expense.categoryId,
                                     name = expense.description,
                                     isClick = false,
-                                    typeId = CategoryList.RECENTLY
+                                    typeId = expense.typeId
                                 )
                             }
                             val localDateTime = DateConverter.getNowDate()

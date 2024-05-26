@@ -3,19 +3,6 @@
 
     <string name="home">Home</string>
     <string name="chart">Chart</string>
-    <string name="profile">Profile</string>
-    <string name="analysis">Analysis</string>
-    <string name="profile_settings_fileout">FileOutput</string>
-    <string name="profile_settings_notification">Notification</string>
-    <string name="profile_settings_lightdark">LightDarkMode</string>
-
-    <string name="notification_title">Notify</string>
-    <string name="notification_content">Did you do your accounting today?</string>
-
-    <string name="timepickerdialog_ok">Confirm</string>
-    <string name="timepickerdialog_cancel">Cancel</string>
-    <string name="alaramaddbottomsheettimepicker">Select Time</string>
-
     <string name="total">Total</string>
     <string name="income">Income</string>
     <string name="expense">Expense</string>
@@ -35,13 +22,7 @@
     <string name="other">Other</string>
     <string name="life">Life</string>
 
-    <string name="no_data">Data is empty</string>
-    <string name="all">All</string>
-    <string name="defaultError">Error:101</string>
-    <string name="outputSuccess">Success : Check Download Folder</string>
     <string name="description">Description...</string>
-    <string name="alarm_permission">Need Alarm Permission</string>
-
     <string name="monday">Mon</string>
     <string name="tuesday">Tue</string>
     <string name="wednesday">Wed</string>
@@ -60,11 +41,11 @@
         <string name="food_coffee">Coffee</string>
         <string name="food_cookie">Cookie</string>
         <string name="food_drink">Drink</string>
-        <string name="food_fast_food">Fast Food</string>
+        <string name="food_fast_food">Fast　Food</string>
         <string name="food_food">Food</string>
         <string name="food_fruits">Fruits</string>
         <string name="food_hamburger">Hamburger</string>
-        <string name="food_hot_coffee">Hot Coffee</string>
+        <string name="food_hot_coffee">Hot　Coffee</string>
         <string name="food_hot_tea">Hot Tea</string>
         <string name="food_noodles">Noodles</string>
         <string name="food_pizza">Pizza</string>
@@ -90,7 +71,7 @@
         <string name="life_bank">Bank</string>
         <string name="life_car">Car</string>
         <string name="life_hammer">Hammer</string>
-        <string name="life_light_fee">Light Fee</string>
+        <string name="life_light_fee">ElectricityBill</string>
         <string name="life_money_income">Income</string>
         <string name="life_money_transfer">Transfer</string>
         <string name="life_music">Music</string>
@@ -100,7 +81,7 @@
         <string name="life_rent">Rent</string>
         <string name="life_salary">Salary</string>
         <string name="life_save_money">Save Money</string>
-        <string name="life_smart_phone_fee">Smart Phone Fee</string>
+        <string name="life_smart_phone_fee">PhoneBill</string>
         <string name="life_stock_decrease">Stock Decrease</string>
         <string name="life_stock_increase">Stock Increase</string>
         <string name="life_stocks">Stocks</string>
@@ -108,7 +89,7 @@
         <string name="life_taxes2">Taxes</string>
         <string name="life_taxes3">Taxes</string>
         <string name="life_video">Video</string>
-        <string name="life_water_fee">Water Fee</string>
+        <string name="life_water_fee">WaterBill</string>
         <string name="life_wifi_router">WiFi Router</string>
         <string name="life_wifi">WiFi</string>
 
@@ -127,7 +108,7 @@
         <string name="other_iphone">iPhone</string>
         <string name="other_job">Job</string>
         <string name="other_karaoke">Karaoke</string>
-        <string name="other_light_fee">Light Fee</string>
+        <string name="other_light_fee">Electricity</string>
         <string name="other_massage">Massage</string>
         <string name="other_money_exchange">Money Exchange</string>
         <string name="other_money_income">Income</string>
@@ -136,7 +117,7 @@
         <string name="other_music">Music</string>
         <string name="other_music2">Music</string>
         <string name="other_pet">Pet</string>
-        <string name="other_phone_fee">Phone Fee</string>
+        <string name="other_phone_fee">PhoneBill</string>
         <string name="other_repair">Repair</string>
         <string name="other_salary">Salary</string>
         <string name="other_save_money">Save Money</string>
@@ -146,7 +127,7 @@
         <string name="other_unknown">Unknown</string>
         <string name="other_video">Video</string>
         <string name="other_washing_machine">Washing Machine</string>
-        <string name="other_water_fee">Water Fee</string>
+        <string name="other_water_fee">Water</string>
 
         <!-- Shopping -->
         <string name="shopping_bag">Bag</string>
@@ -165,10 +146,10 @@
         <string name="shopping_plant2">Plant</string>
         <string name="shopping_ring">Ring</string>
         <string name="shopping_shopping">Shopping</string>
-        <string name="shopping_switch">Switch</string>
+        <string name="shopping_switch">Game</string>
 
         <!-- Sports -->
-        <string name="sports_8ball">8 Ball</string>
+        <string name="sports_8ball">Billiard</string>
         <string name="sports_baseball">Baseball</string>
         <string name="sports_basketball">Basketball</string>
         <string name="sports_bowling">Bowling</string>
@@ -182,7 +163,7 @@
         <string name="sports_sports">Sports</string>
         <string name="sports_swim">Swimming</string>
         <string name="sports_tennis">Tennis</string>
-        <string name="sports_usa_football">American Football</string>
+        <string name="sports_usa_football">Football</string>
         <string name="sports_volley">Volleyball</string>
         <string name="sports_yoga">Yoga</string>
 
@@ -199,11 +180,11 @@
         <string name="traffic_plane">Plane</string>
         <string name="traffic_ship">Ship</string>
         <string name="traffic_taxi">Taxi</string>
-        <string name="traffic_train_ticket">Train Ticket</string>
+        <string name="traffic_train_ticket">Ticket</string>
         <string name="traffic_train">Train</string>
 
         <!-- Wear -->
-        <string name="wear_baby">Baby</string>
+        <string name="wear_baby">BabyClothes</string>
         <string name="wear_bag">Bag</string>
         <string name="wear_bag2">Bag</string>
         <string name="wear_bag3">Bag</string>

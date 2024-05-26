@@ -1,35 +1,14 @@
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTheme
-import io.github.alexzhirkevich.cupertino.adaptive.ExperimentalAdaptiveApi
-import io.github.alexzhirkevich.cupertino.adaptive.Theme
-import io.github.alexzhirkevich.cupertino.theme.CupertinoTheme
-import io.github.alexzhirkevich.cupertino.theme.darkColorScheme
-import io.github.alexzhirkevich.cupertino.theme.lightColorScheme
+import feature.core.ui.lightScheme
 
 
-@OptIn(ExperimentalAdaptiveApi::class)
 @Composable
 fun AppTheme(
-    useDarkTheme: Boolean = isSystemInDarkTheme(),
-    theme: Theme = determineTheme(),
     content : @Composable () -> Unit
 ) {
-    AdaptiveTheme(
-        material = {
-            MaterialTheme(
-                colorScheme = androidx.compose.material3.lightColorScheme(),
-                content = it
-            )
-        },
-        cupertino = {
-            CupertinoTheme(
-                colorScheme = lightColorScheme(),
-                content = it
-            )
-        },
-        target = theme,
+    MaterialTheme(
+        colorScheme = lightScheme,
         content = content
     )
 

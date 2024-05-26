@@ -74,43 +74,4 @@ class HomeScreenModel(
             }
         }
     }
-
-
-
-
-//    fun insertTestExpense(){
-//        screenModelScope.launch {
-//            homeRepository.insertExpense(
-//                Expense(
-//                    category = Category(
-//                        id = 0,
-//                        nameResId = 0,
-//                        name = "",
-//                        resIdString = "",
-//                        typeId = 0
-//                    ),
-//                    description = "Test",
-//                    isIncome = false,
-//                    cost = 100,
-//                    timestamp = 50
-//                )
-//            )
-//        }
-//    }
-//
-//    fun getAll(){
-//        screenModelScope.launch {
-//            homeRepository.getExpenseByStartTimeAndEndTime(
-//                startTimeOfMonth = 0 , endTimeOfMonth = 100
-//            ).collectLatest {
-//                _state.update { state ->
-//                    state.copy(
-//                        items = it
-//                    )
-//                }
-//            }
-//        }
-//    }
-
-
 }

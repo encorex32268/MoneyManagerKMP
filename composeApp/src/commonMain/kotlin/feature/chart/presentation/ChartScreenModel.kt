@@ -25,25 +25,12 @@ class ChartScreenModel(
     fun onEvent(event: ChartEvent){
         when(event){
             is ChartEvent.OnTypeChange -> {
+                if (state.value.isIncomeShown == event.isIncome) return
                 _state.update {
                     it.copy(
                         isIncomeShown = event.isIncome
                     )
                 }
-//                val expensesTypeList  = dbExpenseState.value
-//                    .filter {
-//                        it.isIncome != state.value.isIncomeShow
-//                    }.groupBy {
-//                        it.typeId
-//                }.toList().sortedBy {
-//                    it.second.sumOf { it.cost }
-//                }
-//                _state.update {
-//                    it.copy(
-//                        isIncomeShow = !state.value.isIncomeShow,
-//                        expensesTypeList = expensesTypeList
-//                    )
-//                }
             }
             is ChartEvent.OnDatePick -> {
                 screenModelScope.launch {

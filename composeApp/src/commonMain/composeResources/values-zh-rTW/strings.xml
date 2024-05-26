@@ -3,9 +3,6 @@
     <string name="app_name">記帳</string>
     <string name="home">主頁</string>
     <string name="chart">圖表</string>
-    <string name="timepickerdialog_ok">確認</string>
-    <string name="timepickerdialog_cancel">取消</string>
-    <string name="alaramaddbottomsheettimepicker">選擇時間</string>
     <string name="total">總共</string>
     <string name="income">收入</string>
     <string name="expense">支出</string>
@@ -14,14 +11,6 @@
     <string name="dialog_cancel_button">取消</string>
     <string name="dialog_delete_title">刪除</string>
     <string name="dialog_delete_content">你要刪除嗎？</string>
-    <string name="recently">最近</string>
-    <string name="food">食物</string>
-    <string name="traffic">交通</string>
-    <string name="wear">衣服</string>
-    <string name="education">教育</string>
-    <string name="shopping">購物</string>
-    <string name="health">健康</string>
-    <string name="other">其他</string>
 
     <string name="recently">最近</string>
     <string name="food">食</string>
@@ -33,12 +22,7 @@
     <string name="other">其他</string>
     <string name="life">生活</string>
 
-    <string name="no_data">沒有資料</string>
-    <string name="all">全部</string>
-    <string name="defaultError">錯誤：101</string>
-    <string name="outputSuccess">成功：查看 下載 目錄</string>
     <string name="description">說明</string>
-
 
     <string name="monday">一</string>
     <string name="tuesday">二</string>
@@ -67,7 +51,7 @@
         <string name="food_hot_tea">熱茶</string>
         <string name="food_noodles">麵</string>
         <string name="food_pizza">披薩</string>
-        <string name="food_rice">米飯</string>
+        <string name="food_rice">飯</string>
         <string name="food_salad">沙拉</string>
         <string name="food_seafood">海鮮</string>
         <string name="food_vegetables">蔬菜</string>
@@ -99,14 +83,14 @@
         <string name="life_rent">房租</string>
         <string name="life_salary">薪水</string>
         <string name="life_save_money">存錢</string>
-        <string name="life_smart_phone_fee">智能手機費</string>
+        <string name="life_smart_phone_fee">手機費</string>
         <string name="life_stock_decrease">股票下跌</string>
         <string name="life_stock_increase">股票上漲</string>
         <string name="life_stocks">股票</string>
         <string name="life_taxes">稅</string>
         <string name="life_taxes2">稅</string>
         <string name="life_taxes3">稅</string>
-        <string name="life_video">視頻</string>
+        <string name="life_video">串流媒體</string>
         <string name="life_water_fee">水費</string>
         <string name="life_wifi_router">WiFi路由器</string>
         <string name="life_wifi">WiFi</string>
@@ -143,12 +127,12 @@
         <string name="other_stock_increase">股票上漲</string>
         <string name="other_toys">玩具</string>
         <string name="other_unknown">未知</string>
-        <string name="other_video">視頻</string>
+        <string name="other_video">影片</string>
         <string name="other_washing_machine">洗衣機</string>
         <string name="other_water_fee">水費</string>
 
         <!-- Shopping -->
-        <string name="shopping_bag">袋子</string>
+        <string name="shopping_bag">包包</string>
         <string name="shopping_camera">相機</string>
         <string name="shopping_flowers">花</string>
         <string name="shopping_gift">禮物</string>
@@ -164,10 +148,10 @@
         <string name="shopping_plant2">植物</string>
         <string name="shopping_ring">戒指</string>
         <string name="shopping_shopping">購物</string>
-        <string name="shopping_switch">開關</string>
+        <string name="shopping_switch">遊戲</string>
 
         <!-- Sports -->
-        <string name="sports_8ball">8球</string>
+        <string name="sports_8ball">撞球</string>
         <string name="sports_baseball">棒球</string>
         <string name="sports_basketball">籃球</string>
         <string name="sports_bowling">保齡球</string>
@@ -186,23 +170,23 @@
         <string name="sports_yoga">瑜伽</string>
 
         <!-- Traffic -->
-        <string name="traffic_bicycle">自行車</string>
+        <string name="traffic_bicycle">腳踏車</string>
         <string name="traffic_bus">巴士</string>
         <string name="traffic_cable_car">纜車</string>
         <string name="traffic_car">汽車</string>
-        <string name="traffic_city_train">城市火車</string>
+        <string name="traffic_city_train">電車</string>
         <string name="traffic_highspeed_train">高鐵</string>
         <string name="traffic_highway_bus">高速巴士</string>
-        <string name="traffic_motobike">摩托車</string>
+        <string name="traffic_motobike">機車</string>
         <string name="traffic_parking">停車</string>
         <string name="traffic_plane">飛機</string>
         <string name="traffic_ship">船</string>
         <string name="traffic_taxi">計程車</string>
-        <string name="traffic_train_ticket">火車票</string>
+        <string name="traffic_train_ticket">車票</string>
         <string name="traffic_train">火車</string>
 
         <!-- Wear -->
-        <string name="wear_baby">嬰兒</string>
+        <string name="wear_baby">嬰兒服</string>
         <string name="wear_bag">包包</string>
         <string name="wear_bag2">包包</string>
         <string name="wear_bag3">包包</string>

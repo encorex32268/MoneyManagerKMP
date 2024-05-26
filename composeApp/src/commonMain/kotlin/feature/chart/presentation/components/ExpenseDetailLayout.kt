@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +47,7 @@ fun ExpenseDetailLayout(
             ){
                 CircleIcon(
                     modifier = Modifier
-                        .padding(horizontal = 4.dp)
+                        .padding(horizontal = 8.dp)
                         .size(36.dp)
                     ,
                     backgroundColor =  CategoryList.getColorByCategory(it.typeId),
@@ -57,18 +58,16 @@ fun ExpenseDetailLayout(
                     },
                 )
                 Texts.TitleSmall(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 4.dp),
+                    modifier = Modifier.widthIn(40.dp , 100.dp),
                     text = CategoryList.getTypeStringByTypeId(it.typeId),
                 )
-                Spacer(Modifier.width(4.dp))
                 Texts.TitleSmall(
                     modifier = Modifier
                         .weight(2f)
                         .padding(start = 4.dp),
                     text = "${(percent * 100).toDouble().format(2)}%",
                 )
+                Spacer(Modifier.weight(1f))
                 Texts.TitleMedium(
                     modifier = Modifier
                         .padding(horizontal = 25.dp),
