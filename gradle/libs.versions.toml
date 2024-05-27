@@ -16,6 +16,7 @@ junit = "4.13.2"
 kotlin = "1.9.22"
 kotlinxCoroutinesCore = "1.7.0"
 libraryBase = "1.11.0"
+parcelize = "0.9.0"
 readmkotlin = "1.11.0"
 kotlin-corutines = "1.7.0"
 kotlinxSerializationJson = "1.6.1"
@@ -41,6 +42,7 @@ library-base = { module = "io.realm.kotlin:library-base", version.ref = "library
 library-sync = { module = "io.realm.kotlin:library-sync", version.ref = "libraryBase" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
+parcelize = { module = "dev.icerock.moko:parcelize", version.ref = "parcelize" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 voyager-bottomSheetNavigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
@@ -60,3 +62,4 @@ jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 readlkotlin = {id = "io.realm.kotlin" , version.ref = "readmkotlin"}
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }

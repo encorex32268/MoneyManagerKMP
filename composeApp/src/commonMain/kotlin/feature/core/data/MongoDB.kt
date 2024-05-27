@@ -39,9 +39,6 @@ class MongoDB{
         startTimeOfMonth: Long,
         endTimeOfMonth: Long
     ): Flow<List<Expense>> {
-//        val allRecords = realm?.query<ExpenseEntity>("TRUEPREDICATE")?.find()
-//        allRecords?.forEach {
-//            println(it) }
 
         return realm?.query(
             clazz = ExpenseEntity::class,

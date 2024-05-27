@@ -108,45 +108,51 @@ fun ChartLayout(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Box(modifier = Modifier
-                        .padding(24.dp)
-                        .size(200.dp)
-                        .drawBehind {
-                            items.forEachIndexed { index, item ->
-                                val typeSumCost = item.expenseItems.sumOf { it.cost }
-                                sweepAngle = 360f * typeSumCost / sumTotal
-                                if (index == 0) {
-                                    startAngle = -90f
-                                } else {
-                                    startAngle += 360f * items[index - 1].expenseItems.sumOf { it.cost } / sumTotal
-                                }
-                                drawArc(
-                                    color = CategoryList.getColorByCategory(item.typeId),
-                                    startAngle = startAngle * animation,
-                                    sweepAngle = sweepAngle * animation,
-                                    useCenter = false,
-                                    style = Stroke(
-                                        width = 40.dp.toPx()
-                                    )
-                                )
-                            }
-                        },
+                    Box(
+                        modifier = Modifier.weight(3f),
                         contentAlignment = Alignment.Center
-                    ) {
-                        AmountText(
-                            modifier = Modifier
-                                .padding(vertical = 4.dp),
-                            title = stringResource(Res.string.total),
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                textAlign = TextAlign.Center
-                            ),
-                            textColor = MaterialTheme.colorScheme.onBackground,
-                            text = sumTotal.toMoneyString(),
-                            textSize = 20.sp
-                        )
+                    ){
+                        Box(modifier = Modifier
+                            .padding(24.dp)
+                            .size(200.dp)
+                            .drawBehind {
+                                items.forEachIndexed { index, item ->
+                                    val typeSumCost = item.expenseItems.sumOf { it.cost }
+                                    sweepAngle = 360f * typeSumCost / sumTotal
+                                    if (index == 0) {
+                                        startAngle = -90f
+                                    } else {
+                                        startAngle += 360f * items[index - 1].expenseItems.sumOf { it.cost } / sumTotal
+                                    }
+                                    drawArc(
+                                        color = CategoryList.getColorByCategory(item.typeId),
+                                        startAngle = startAngle * animation,
+                                        sweepAngle = sweepAngle * animation,
+                                        useCenter = false,
+                                        style = Stroke(
+                                            width = 40.dp.toPx()
+                                        )
+                                    )
+                                }
+                            },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            AmountText(
+                                modifier = Modifier
+                                    .padding(vertical = 4.dp),
+                                title = stringResource(Res.string.total),
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    textAlign = TextAlign.Center
+                                ),
+                                textColor = MaterialTheme.colorScheme.onBackground,
+                                text = sumTotal.toMoneyString(),
+                                textSize = 20.sp
+                            )
+                        }
                     }
                     Spacer(Modifier.width(20.dp))
                     Column(
+                        modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         val sort = items.sortedByDescending {

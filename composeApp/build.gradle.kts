@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.readlkotlin)
     alias(libs.plugins.kotlinSerialization)
+    id("kotlin-parcelize")
 }
 
 kotlin {
@@ -59,6 +60,7 @@ kotlin {
             implementation(libs.kotlin.date.time)
 
             implementation(libs.koin.core)
+            implementation(libs.parcelize)
 
 
         }
@@ -81,7 +83,7 @@ android {
         applicationId = "com.lihan.moneymanager"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
+        versionCode = 8
         versionName = "1.0"
     }
     packaging {

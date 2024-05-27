@@ -200,13 +200,16 @@ class EditExpenseScreen(
                             )
                         }
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            CostTypeItem(
-                                modifier = Modifier.padding(horizontal = 20.dp),
-                                isIncome = expenseState.isIncome
-                            )
+                            Box(
+                                modifier = Modifier.weight(1f)
+                            ){
+                                CostTypeItem(
+                                    modifier = Modifier.padding(horizontal = 20.dp),
+                                    isIncome = expenseState.isIncome
+                                )
+                            }
                             IconButton(
                                 onClick = {
                                     navigator.push(
@@ -257,7 +260,6 @@ private fun CostTypeItem(
 ) {
     Box(
         modifier = modifier
-            .size(40.dp)
             .background(
                 color = if (isIncome) {
                     light_CorrectColorContainer

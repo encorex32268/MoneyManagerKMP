@@ -160,7 +160,8 @@ class AddScreenModel(
                     it.copy(
                         year = localDateTime.year,
                         monthNumber = localDateTime.monthNumber,
-                        dayOfMonth = localDateTime.dayOfMonth
+                        dayOfMonth = localDateTime.dayOfMonth,
+                        nowLocalDateTime = localDateTime
                     )
                 }
             }
@@ -208,7 +209,7 @@ class AddScreenModel(
                             categoryId = state.value.categoryUi?.categoryId?:0,
                             description = state.value.description,
                             isIncome = state.value.isIncome,
-                            cost = state.value.cost.toLong(),
+                            cost = state.value.cost.toLongOrNull()?:0L,
                             timestamp = timestamp,
                         )
                         mongoDB.insertExpense(
@@ -220,7 +221,7 @@ class AddScreenModel(
                             isIncome = state.value.isIncome,
                             typeId = state.value.categoryUi?.typeId?:0,
                             categoryId = state.value.categoryUi?.categoryId?:0,
-                            cost = state.value.cost.toLong(),
+                            cost = state.value.cost.toLongOrNull()?:0L,
                             id = state.value.currentExpense!!.id,
                             timestamp = timestamp
                         )
