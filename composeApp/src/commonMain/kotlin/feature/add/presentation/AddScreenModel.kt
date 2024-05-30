@@ -70,7 +70,7 @@ class AddScreenModel(
                                     year = localDateTime.year,
                                     monthNumber = localDateTime.monthNumber,
                                     dayOfMonth = localDateTime.dayOfMonth,
-                                    nowLocalDateTime = DateConverter.getNowDate(),
+                                    nowLocalDateTime = localDateTime,
                                     isIncome = expense.isIncome,
                                     cost = expense.cost.toString(),
                                     categoryUi = CategoryUi(
