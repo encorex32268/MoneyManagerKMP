@@ -1,14 +1,40 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Kotlin Multiplatform App - MoneyManager
+<a href="https://play.google.com/store/apps/details?id=com.lihan.moneymanager"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75">
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+### Screen Shots
+***
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+### Android 
+<p >
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/android_home.png" alt="Home" height="400" width="200"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/android_add.png" alt="Add" height="400" width="200"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/android_edit.png" alt="Edit" height="400" width="200"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/android_chart.png" alt="Chart" height="400" width="200"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/android_chart_detail.png" alt="ChartDetail" height="400" width="200"/>
+</p>
 
+***
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+### IOS 
+
+<p >
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/ios_home.png" alt="Home" height="400" width="200"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/ios_add.png" alt="Add" height="400" width="200"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/ios_edit.png" alt="Edit" height="400" width="200"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/ios_chart.png" alt="Chart" height="400" width="200"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/ios_chart_detail.png" alt="ChartDetail" height="400" width="200"/>
+</p>
+
+***
+
+### Technologies
+
+- [Compose Multiplatform](https://jb.gg/compose) UI
+- [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) for JSON handling
+- [Koin](https://github.com/InsertKoinIO/koin) for dependency injection
+- [Voyager](https://github.com/adrielcafe/voyager) for navigation and screen models
+- [Kotlinx-DateTime](https://github.com/Kotlin/kotlinx-datetime) for Timestamp
+- [Realm-Kotin](https://github.com/realm/realm-kotlin) for localDatabase
+  
+
+  
