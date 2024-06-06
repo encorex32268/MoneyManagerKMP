@@ -216,6 +216,11 @@ class AddScreen(
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onTap = {
+                                scope.launch {
+                                    if (bottomSheetScaffoldState.bottomSheetState.currentValue == SheetValue.Expanded) {
+                                        bottomSheetScaffoldState.bottomSheetState.hide()
+                                    }
+                                }
                                 keyboard?.hide()
                             }
                         )
