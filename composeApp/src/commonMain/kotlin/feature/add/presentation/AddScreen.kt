@@ -2,8 +2,10 @@
 
 package feature.add.presentation
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -67,7 +71,7 @@ class AddScreen(
 
     @Composable
     override fun Content() {
-
+        val keyboard = LocalSoftwareKeyboardController.current
         val navigator = LocalNavigator.currentOrThrow
         val addScreenModel = getScreenModel<AddScreenModel>()
         val state by addScreenModel.state.collectAsState()
@@ -134,9 +138,27 @@ class AddScreen(
                                     bottomSheetScaffoldState.bottomSheetState.hide()
                                 }
                             }
+                            keyboard?.hide()
                         }
                     )
-                },
+                }
+            ,
+            sheetDragHandle = {
+                 Box(
+                     modifier = Modifier
+                         .fillMaxWidth()
+                         .pointerInput(Unit){
+                             detectTapGestures(
+                                 onTap = {
+                                     keyboard?.hide()
+                                 }
+                             )
+                         },
+                     contentAlignment = Alignment.TopCenter
+                 ) {
+                     BottomSheetDefaults.DragHandle()
+                 }
+            },
             scaffoldState = bottomSheetScaffoldState,
             sheetPeekHeight = 0.dp,
             sheetContent = {
@@ -146,6 +168,13 @@ class AddScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp)
                             .padding(bottom = 16.dp)
+                            .pointerInput(Unit){
+                                detectTapGestures(
+                                    onTap = {
+                                        keyboard?.hide()
+                                    }
+                                )
+                            }
                         ,
                         onItemClick = {
                             addScreenModel.onEvent(
@@ -184,6 +213,13 @@ class AddScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onTap = {
+                                keyboard?.hide()
+                            }
+                        )
+                    }
             ) {
                 CostTypeSelect(
                     modifier = Modifier.padding(8.dp),

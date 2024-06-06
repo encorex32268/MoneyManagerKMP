@@ -5,6 +5,7 @@ package feature.add.presentation.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -69,7 +72,7 @@ fun CalculateLayout(
 ){
     val datePickerState = rememberDatePickerState()
     val isShowDialog = rememberSaveable { mutableStateOf(false) }
-
+    val keyboard = LocalSoftwareKeyboardController.current
     if (isShowDialog.value) {
         DatePickerDialog(
             colors = DatePickerDefaults.colors(
