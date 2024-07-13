@@ -15,9 +15,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import feature.chart.presentation.ChartTab
+import feature.presentation.chart.ChartTab
 import feature.core.navigation.CustomTab
-import feature.home.presentation.HomeTab
+import feature.presentation.home.HomeTab
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)

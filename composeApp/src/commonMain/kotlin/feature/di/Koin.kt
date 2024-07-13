@@ -1,11 +1,11 @@
 package feature.di
 
-import feature.add.presentation.AddScreenModel
-import feature.chart.presentation.ChartScreenModel
-import feature.chart.presentation.chartdetail.ChartDetailScreenModel
+import feature.presentation.add.AddScreenModel
+import feature.presentation.chart.ChartScreenModel
+import feature.presentation.chart.chartdetail.ChartDetailScreenModel
 import feature.core.data.MongoDB
-import feature.edit.presentation.EditExpenseScreenModel
-import feature.home.presentation.HomeScreenModel
+import feature.presentation.edit.EditExpenseScreenModel
+import feature.presentation.home.HomeScreenModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
