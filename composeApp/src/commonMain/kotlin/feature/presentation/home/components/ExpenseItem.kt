@@ -24,6 +24,7 @@ import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
 import feature.core.presentation.date.DateConverter
+import feature.presentation.noRippleClick
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.total_expense_item
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -88,7 +89,7 @@ fun ExpenseItem(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
-                            .clickable {
+                            .noRippleClick {
                                 onItemClick(expense)
                             }
                         ,

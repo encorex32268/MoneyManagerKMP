@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -16,6 +17,7 @@ import feature.core.domain.model.chart.Chart
 import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
+import feature.presentation.noRippleClick
 import format
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import toMoneyString
@@ -38,7 +40,7 @@ fun ExpenseDetailLayout(
             Row(
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
-                    .clickable {
+                    .noRippleClick {
                         onItemClick(it)
                     },
                 verticalAlignment = Alignment.CenterVertically
@@ -61,6 +63,7 @@ fun ExpenseDetailLayout(
                 )
                 Texts.TitleSmall(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .weight(2f)
                         .padding(start = 4.dp),
                     text = "${(percent * 100).toDouble().format(2)}%",

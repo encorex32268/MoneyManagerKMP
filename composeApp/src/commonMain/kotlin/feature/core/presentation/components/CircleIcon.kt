@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
+import feature.presentation.noRippleClick
 
 @Composable
 fun CircleIcon(
@@ -40,7 +41,7 @@ fun CircleIcon(
                     shape = CircleShape
                 )
                 .clip(CircleShape)
-                .clickable {
+                .noRippleClick {
                     id?.let {
                         onItemClick(it)
                     }

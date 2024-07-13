@@ -25,6 +25,7 @@ import feature.core.ui.light_CorrectColorContainer
 import feature.core.ui.light_ErrorColorContainer
 import feature.core.ui.light_onCorrectColor
 import feature.core.ui.light_onErrorColor
+import feature.presentation.noRippleClick
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.expense
 import moneymanagerkmp.composeapp.generated.resources.income
@@ -56,7 +57,7 @@ fun CostTypeSelect(
         Row {
             Box(
                 modifier = Modifier
-                    .clickable { onTypeChange(false) }
+                    .noRippleClick { onTypeChange(false) }
                     .background(
                         if (!isIncome) {
                             light_ErrorColorContainer
@@ -86,7 +87,7 @@ fun CostTypeSelect(
             Spacer(modifier = Modifier.width(20.dp))
             Box(
                 modifier = Modifier
-                    .clickable {
+                    .noRippleClick {
                         onTypeChange(true)
                     }
                     .background(

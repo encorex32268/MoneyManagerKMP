@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import feature.presentation.add.AddState
 import feature.core.presentation.Texts
+import feature.presentation.noRippleClick
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.dialog_cancel_button
 import moneymanagerkmp.composeapp.generated.resources.dialog_ok_button
@@ -239,7 +240,7 @@ private fun CalendarButton(
                 color = MaterialTheme.colorScheme.background,
                 shape = RoundedCornerShape(16.dp)
             )
-            .clickable { onClick() }
+            .noRippleClick { onClick() }
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.onBackground,
@@ -292,7 +293,7 @@ private fun NumberButton(
                     color = MaterialTheme.colorScheme.onBackground,
                     shape = CircleShape
                 )
-                .clickable { onClick(text) }
+                .noRippleClick { onClick(text) }
             ,
             contentAlignment = Alignment.Center,
         ){

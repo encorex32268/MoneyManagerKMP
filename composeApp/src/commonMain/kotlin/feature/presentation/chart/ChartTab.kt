@@ -1,5 +1,6 @@
 package feature.presentation.chart
 
+import RootScreen.Companion.TOTAL_PAGE
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,9 +21,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -33,6 +37,7 @@ import feature.presentation.chart.components.ExpenseDetailLayout
 import feature.core.navigation.CustomTab
 import feature.core.navigation.CustomTabOptions
 import feature.core.presentation.components.DatePicker
+import feature.presentation.customTabIndicatorOffset
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_pie_chart_24_filled
 import moneymanagerkmp.composeapp.generated.resources.baseline_pie_chart_24_outline
@@ -52,8 +57,17 @@ object ChartTab : CustomTab {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val density = LocalDensity.current
         val chartScreenModel = getScreenModel<ChartScreenModel>()
         val state by chartScreenModel.state.collectAsState()
+
+        val tabWidths = remember {
+            val tabWidthStateList = mutableStateListOf<Dp>()
+            repeat(TOTAL_PAGE){
+                tabWidthStateList.add(0.dp)
+            }
+            tabWidthStateList
+        }
         val selectTabIndex by remember {
             derivedStateOf {
                 if(state.isIncomeShown) INCOME else EXPENSE
@@ -107,8 +121,11 @@ object ChartTab : CustomTab {
                 contentColor = Color.Black,
                 indicator = { tabPositions ->
                     TabRowDefaults.SecondaryIndicator(
-                        color = Color.Black,
-                        modifier = Modifier.tabIndicatorOffset(tabPositions[selectTabIndex])
+                        modifier = Modifier.customTabIndicatorOffset(
+                            currentTabPosition = tabPositions[selectTabIndex],
+                            tabWidth = tabWidths[selectTabIndex]
+                        ),
+                        height = 2.dp
                     )
                 },
                 tabs = {
@@ -121,6 +138,13 @@ object ChartTab : CustomTab {
                         },
                         text = {
                             Text(
+                                onTextLayout = {
+                                    tabWidths[0] = with(
+                                        density
+                                    ){
+                                        it.size.width.toDp() + 10.dp
+                                    }
+                                },
                                 text = stringResource(Res.string.expense)
                             )
                         }
@@ -134,6 +158,13 @@ object ChartTab : CustomTab {
                         },
                         text = {
                             Text(
+                                onTextLayout = {
+                                    tabWidths[1] = with(
+                                        density
+                                    ){
+                                        it.size.width.toDp() + 10.dp
+                                    }
+                                },
                                 text = stringResource(Res.string.income)
                             )
                         }

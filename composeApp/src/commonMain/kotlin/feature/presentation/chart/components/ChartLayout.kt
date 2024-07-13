@@ -11,11 +11,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CardDefaults
@@ -92,7 +95,12 @@ fun ChartLayout(
                     ){
                         Box(modifier = Modifier
                             .padding(24.dp)
-                            .size(200.dp)
+                            .sizeIn(
+                                minWidth = 150.dp,
+                                minHeight = 150.dp,
+                                maxWidth = 200.dp,
+                                maxHeight = 200.dp
+                            )
                             .drawBehind {
                                 items.forEachIndexed { index, item ->
                                     val typeSumCost = item.expenseItems.sumOf { it.cost }
@@ -108,7 +116,7 @@ fun ChartLayout(
                                         sweepAngle = sweepAngle * animation,
                                         useCenter = false,
                                         style = Stroke(
-                                            width = 40.dp.toPx()
+                                            width = 30.dp.toPx()
                                         )
                                     )
                                 }

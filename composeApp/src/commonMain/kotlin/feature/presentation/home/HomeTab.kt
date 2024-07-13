@@ -28,13 +28,16 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import feature.presentation.add.AddScreen
 import feature.core.navigation.CustomTab
 import feature.core.navigation.CustomTabOptions
 import feature.core.presentation.components.DatePicker
+import feature.presentation.chart.ChartTab
 import feature.presentation.edit.EditExpenseScreen
 import feature.presentation.home.components.AmountTextLayout
 import feature.presentation.home.components.ExpenseItem
+import feature.presentation.noRippleClick
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_receipt_24_filled
 import moneymanagerkmp.composeapp.generated.resources.baseline_receipt_24_outline
@@ -47,6 +50,7 @@ object HomeTab : CustomTab {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val navigatorTab = LocalTabNavigator.current
         val homeScreenModel = getScreenModel<HomeScreenModel>()
         val state by homeScreenModel.state.collectAsState()
         LaunchedEffect(Unit){
@@ -93,7 +97,12 @@ object HomeTab : CustomTab {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 AmountTextLayout(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .noRippleClick {
+                            navigatorTab.current = ChartTab
+                        }
+                    ,
                     income = state.income,
                     expense = state.expense,
                     total = state.totalAmount

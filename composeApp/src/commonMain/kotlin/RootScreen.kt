@@ -27,8 +27,13 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 @OptIn(ExperimentalResourceApi::class)
 class RootScreen : Screen {
 
+    companion object{
+        const val TOTAL_PAGE = 2
+    }
+
     @Composable
     override fun Content() {
+
         TabNavigator(HomeTab) {
             Scaffold(
                 modifier = Modifier

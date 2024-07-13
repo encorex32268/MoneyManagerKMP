@@ -52,7 +52,7 @@ object Texts {
     @Composable
     fun TitleMedium(
         modifier : Modifier = Modifier,
-        fonSize: TextUnit = 24.sp,
+        fonSize: TextUnit = 16.sp,
         style : TextStyle = TextStyle(
             fontFamily = FontFamily(Font(Res.font.nunitosans_10pt_bold)),
             fontSize = fonSize
