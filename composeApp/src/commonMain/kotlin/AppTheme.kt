@@ -11,5 +11,4 @@ fun AppTheme(
         colorScheme = lightScheme,
         content = content
     )
-
 }

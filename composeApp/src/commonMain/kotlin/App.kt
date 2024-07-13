@@ -11,14 +11,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
-
     AppTheme {
         Navigator(RootScreen()){
             SlideTransition(
                 navigator = it
             )
         }
-
     }
 }
 
