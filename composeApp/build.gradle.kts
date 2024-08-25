@@ -1,4 +1,5 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -6,15 +7,15 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.readlkotlin)
     alias(libs.plugins.kotlinSerialization)
-    id("kotlin-parcelize")
+    alias(libs.plugins.compose.compiler)
+
 }
 
 kotlin {
     androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "11"
-            }
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
         }
     }
     
@@ -32,8 +33,9 @@ kotlin {
     sourceSets {
         
         androidMain.dependencies {
-            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.android)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -44,23 +46,21 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
-
             implementation(libs.library.base)
             implementation(libs.library.sync)
+            
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
-
-            implementation(libs.voyager.navigator)
-            implementation(libs.voyager.screenModel)
-            implementation(libs.voyager.bottomSheetNavigator)
-            implementation(libs.voyager.tabNavigator)
-            implementation(libs.voyager.transitions)
-            implementation(libs.voyager.koin)
-
             implementation(libs.kotlin.date.time)
 
             implementation(libs.koin.core)
-            implementation(libs.parcelize)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+
+            implementation(libs.androidx.navigation)
+            implementation(libs.uri.kmp)
+            implementation(libs.lifecycle.viewmodel.compose)
+
 
 
         }
@@ -97,13 +97,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
-
-
-    dependencies {
-        debugImplementation(libs.compose.ui.tooling)
+    buildFeatures {
+        compose = true
     }
 }
 

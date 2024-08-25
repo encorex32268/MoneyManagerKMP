@@ -29,7 +29,6 @@ fun TwoButtonDialog(
         confirmButton = {
            TextButton(onClick = {
                onConfirmButtonClick()
-               onDismissRequest()
            }) {
                Text(text = stringResource(Res.string.dialog_ok_button))
            }
