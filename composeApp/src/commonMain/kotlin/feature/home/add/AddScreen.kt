@@ -100,19 +100,17 @@ fun AddScreen(
     )
     val scope = rememberCoroutineScope()
 
-    val correctList = remember {
-        derivedStateOf {
-            state.categoryItems
-                .groupBy { it.typeId }
-                .toList()
-                .sortedBy {
-                    it.first
-                }
-        }
+    val correctList = remember(state) {
+        state.categoryItems
+            .groupBy { it.typeId }
+            .toList()
+            .sortedBy {
+                it.first
+            }
     }
 
-    val bottomSheetControl by remember {
-        derivedStateOf { state.categoryUi }
+    val bottomSheetControl = remember(state) {
+        state.categoryUi
     }
 
     LaunchedEffect(bottomSheetControl){
@@ -282,7 +280,7 @@ fun AddScreen(
 
                 }
 
-                correctList.value.forEach { (typeId, category) ->
+                correctList.forEach { (typeId, category) ->
                     Column {
                         Texts.TitleSmall(
                             text = CategoryList.getTypeStringByTypeId(
