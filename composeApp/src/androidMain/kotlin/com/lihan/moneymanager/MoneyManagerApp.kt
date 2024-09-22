@@ -1,11 +1,18 @@
 package com.lihan.moneymanager
 
 import android.app.Application
-import feature.di.initKoin
+import feature.di.appModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class MoneyManagerApp: Application() {
     override fun onCreate() {
         super.onCreate()
-        initKoin()
+        startKoin {
+            androidContext(this@MoneyManagerApp)
+            modules(
+                appModule
+            )
+        }
     }
 }

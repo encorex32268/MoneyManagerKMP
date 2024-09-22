@@ -21,16 +21,19 @@ class EditExpenseViewModel(
             is EditExpenseEvent.GetExpense    -> {
                 _state.update {
                     it.copy(
-                        currentExpense = mongoDB.getExpense(event.expense)
+                        currentExpense = event.expense
                     )
                 }
             }
-            is EditExpenseEvent.DeleteExpense -> {
-                viewModelScope.launch {
-                    mongoDB.deleteExpense(event.expense)
-                }
+            EditExpenseEvent.OnDelete -> {
+                state.value.currentExpense?.let {
+                    viewModelScope.launch {
+                        mongoDB.deleteExpense(
+                            it
+                        )
+                    }
+                }?: return
             }
-            else -> Unit
         }
     }
 }

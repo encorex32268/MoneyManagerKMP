@@ -6,7 +6,7 @@ import org.mongodb.kbson.ObjectId
 
 @Serializable
 data class Expense(
-    @Transient val id: ObjectId = ObjectId(),
+    val id: ObjectId = ObjectId(),
     val idString: String = id.toHexString(),
     val categoryId: Int,
     val typeId: Int,

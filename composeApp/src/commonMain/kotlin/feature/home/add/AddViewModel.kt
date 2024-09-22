@@ -171,7 +171,7 @@ class AddViewModel(
                                 it.copy(isClick = false)
                             },
                             recentlyCategoryItems = it.recentlyCategoryItems.map {
-                                it.copy(isClick = it.id == event.categoryUi.id)
+                                it.copy(isClick = it.id == event.categoryUi?.id)
                             }
                         )
                     }
@@ -179,7 +179,7 @@ class AddViewModel(
                     _state.update {
                         it.copy(
                             categoryItems = it.categoryItems.map {
-                                it.copy(isClick = it.id == event.categoryUi.id)
+                                it.copy(isClick = it.id == event.categoryUi?.id)
                             },
                             recentlyCategoryItems = it.recentlyCategoryItems.map {
                                 it.copy(isClick = false)

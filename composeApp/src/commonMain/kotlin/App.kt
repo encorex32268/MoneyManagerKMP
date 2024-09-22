@@ -1,4 +1,7 @@
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +25,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLink
@@ -66,7 +71,11 @@ fun App() {
                 .systemBarsPadding()
                 .navigationBarsPadding(),
             bottomBar = {
-                if (currentDestination in bottomNavigationItems.map { it.name }){
+                AnimatedVisibility(
+                    visible = isMainCurrentDestination(currentDestination),
+                    enter = slideInVertically(),
+                    exit = slideOutVertically(),
+                ){
                     NavigationBar(
                         modifier = Modifier.height(56.dp),
                         containerColor = Color.White
@@ -96,12 +105,15 @@ fun App() {
                             )
                         }
                     }
-
                 }
             }
         ){
             NavHost(
-                modifier = Modifier.padding(bottom = 56.dp),
+                modifier = Modifier.padding(
+                    bottom = if (isMainCurrentDestination(currentDestination))
+                        56.dp
+                    else 0.dp
+                ),
                 navController = navController,
                 startDestination = Home
             ){
@@ -116,13 +128,13 @@ fun App() {
                             )
                         },
                         onGotoChartScreen = {
-                            navController.navigate("Chart")
+                            itemSelectedIndex = 1
+                            navController.navigate(Chart)
                         },
                         onGotoEditScreen = {
                             navController.navigate(
-                                HomeAdd(
-                                    expense = it,
-                                    isAddNew = false
+                                HomeEdit(
+                                    expense = it
                                 )
                             )
                         }
@@ -147,7 +159,7 @@ fun App() {
                         typeOf<Expense>() to ExpenseNavType
                     )
                 ){
-                    val expense = it.toRoute<Expense>()
+                    val expense = it.toRoute<HomeEdit>().expense
                     EditExpenseScreenRoot(
                         expense = expense,
                         onGoBack = {
@@ -191,5 +203,11 @@ fun App() {
         }
     }
 }
+
+fun isMainCurrentDestination(currentDestination: String?): Boolean{
+    return (currentDestination in bottomNavigationItems.map { it.name })
+}
+
+
 
 

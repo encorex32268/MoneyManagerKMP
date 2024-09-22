@@ -60,7 +60,7 @@ kotlin {
             implementation(libs.androidx.navigation)
             implementation(libs.uri.kmp)
             implementation(libs.lifecycle.viewmodel.compose)
-
+            implementation(libs.compose.colorpicker)
 
 
         }

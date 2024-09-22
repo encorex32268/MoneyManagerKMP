@@ -21,7 +21,7 @@ sealed interface AddEvent {
     data object OnSaveClick: AddEvent
 
     data class OnItemSelected(
-        val categoryUi: CategoryUi,
+        val categoryUi: CategoryUi?,
         val description : String = "",
         val isRecently: Boolean = false
     ) : AddEvent

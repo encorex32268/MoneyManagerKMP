@@ -29,6 +29,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import feature.core.domain.model.Expense
 import feature.core.presentation.CategoryList
+import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
 import feature.core.presentation.components.TwoButtonDialog
 import feature.core.presentation.date.DateConverter
@@ -82,171 +86,154 @@ fun EditExpenseScreen(
     onGoBack: () -> Unit = {},
     onGotoAddScreen: () -> Unit = {}
 ) {
-    if (state.currentExpense == null){
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.TopStart
-        ){
-            IconButton(
-                onClick = onGoBack
+
+    var isShowDeleteDialog by remember {
+        mutableStateOf(false)
+    }
+    state.currentExpense?.let {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                    contentDescription = null
-                )
+                IconButton(
+                    onClick = onGoBack
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                        contentDescription = null
+                    )
+                }
+
+                IconButton(
+                    onClick = {
+                        isShowDeleteDialog = true
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Delete,
+                        contentDescription = null
+                    )
+                }
+
             }
-        }
-    }else{
-        with(state.currentExpense){
-            Column(
-                modifier = Modifier.fillMaxSize()
+            OutlinedCard(
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+                shape = RoundedCornerShape(16.dp)
             ) {
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
                 ) {
-                    IconButton(
-                        onClick = onGoBack
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                            contentDescription = null
-                        )
-                    }
-
-                    IconButton(
-                        onClick = {
-                            onEvent(EditExpenseEvent.ShowDeleteDialog)
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Delete,
-                            contentDescription = null
-                        )
-                    }
-
-                }
-                OutlinedCard(
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Column(
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
+                            .padding(horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            CircleIcon(
-                                modifier = Modifier.size(48.dp),
-                                isClicked = true,
-                                image = CategoryList.getCategoryIconById(categoryId),
-                                backgroundColor = CategoryList.getColorByCategory(typeId)
+                        CircleIcon(
+                            modifier = Modifier.size(48.dp),
+                            isClicked = true,
+                            image = CategoryList.getCategoryIconById(it.categoryId),
+                            backgroundColor = CategoryList.getColorByCategory(it.typeId)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Texts.TitleSmall(
+                            modifier = Modifier.weight(1f),
+                            text = it.description
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            modifier = Modifier.size(24.dp),
+                            imageVector = Icons.Outlined.DateRange,
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(
+                                color = MaterialTheme.colorScheme.onSurface
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                modifier = Modifier.weight(1f),
-                                text = description,
-                                style = MaterialTheme.typography.bodySmall
+                        )
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = DateConverter.getStringDateFromLong(it.timestamp),
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                letterSpacing = 1.sp
+                            )
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.baseline_attach_money_24),
+                            modifier = Modifier.size(24.dp),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = if (it.isIncome) it.cost.toMoneyString() else "-${it.cost.toMoneyString()}",
+                            style = MaterialTheme.typography.titleSmall
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Box(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            CostTypeItem(
+                                modifier = Modifier.padding(horizontal = 20.dp),
+                                isIncome = it.isIncome
                             )
                         }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                modifier = Modifier.size(24.dp),
-                                imageVector = Icons.Outlined.DateRange,
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            )
-                            Spacer(modifier = Modifier.width(20.dp))
-                            Text(
-                                modifier = Modifier.weight(1f),
-                                text = DateConverter.getStringDateFromLong(timestamp),
-                                style = MaterialTheme.typography.bodySmall.copy(
-                                    letterSpacing = 1.sp
-                                )
-                            )
-                        }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        IconButton(
+                            onClick = onGotoAddScreen
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.baseline_attach_money_24),
-                                modifier = Modifier.size(24.dp),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurface
+                                imageVector = Icons.Rounded.Edit,
+                                contentDescription = null
                             )
-                            Spacer(modifier = Modifier.width(20.dp))
-                            Text(
-                                modifier = Modifier.weight(1f),
-                                text = if (isIncome) cost.toMoneyString() else "-${cost.toMoneyString()}",
-                                style = MaterialTheme.typography.titleSmall
-                            )
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Box(
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                CostTypeItem(
-                                    modifier = Modifier.padding(horizontal = 20.dp),
-                                    isIncome = isIncome
-                                )
-                            }
-                            IconButton(
-                                onClick = onGotoAddScreen
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Edit,
-                                    contentDescription = null
-                                )
-                            }
-
                         }
 
                     }
+
                 }
             }
-
         }
 
     }
-    if (state.isShowDeleteDialog){
+    if (isShowDeleteDialog){
         TwoButtonDialog(
             title = stringResource(Res.string.dialog_delete_title),
             content = stringResource(Res.string.dialog_delete_content),
             onConfirmButtonClick = {
-                //TODO: Delete
-//                onEvent(
-//                    EditExpenseEvent.DeleteExpense(expense)
-//                )
-//                navigator.pop()
+                onEvent(EditExpenseEvent.OnDelete)
+                onGoBack()
             },
             onDismissRequest = {
-                onEvent(EditExpenseEvent.CloseDeleteDialog)
+                isShowDeleteDialog = false
             }
         )
     }

@@ -26,7 +26,11 @@ koinMultiplatform = "1.2.0-Beta4"
 uriKmpVersion = "0.0.18"
 lifecycleViewmodelCompose = "2.8.0"
 
+colorpicker = "1.1.2"
+
+
 [libraries]
+compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
 
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 

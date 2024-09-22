@@ -3,6 +3,7 @@
 package feature.chart.chartdetail.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -39,15 +40,16 @@ import toMoneyString
 @Composable
 fun ExpenseTypeTotal(
     modifier: Modifier = Modifier,
-    total: Long,
     typeId: Int,
     onBackClick: () -> Unit
 ) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
+    Box(
+        modifier = modifier
     ) {
         IconButton(
+            modifier = Modifier.align(
+                Alignment.CenterStart
+            ),
             onClick = onBackClick
         ){
             Icon(
@@ -56,61 +58,21 @@ fun ExpenseTypeTotal(
             )
         }
         Row(
-            modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            modifier = Modifier.align(Alignment.Center),
+            verticalAlignment = Alignment.CenterVertically
         ){
             CircleIcon(
-                modifier = Modifier
-                    .padding(horizontal = 4.dp)
-                    .size(36.dp)
-                ,
+                modifier = Modifier.size(36.dp),
                 backgroundColor =  CategoryList.getColorByCategory(typeId),
                 image = CategoryList.getTypeIconByTypeId(typeId),
                 isClicked = true
             )
+            Spacer(modifier = Modifier.width(8.dp))
             Texts.TitleSmall(
-                modifier = Modifier
-                    .padding(start = 4.dp),
                 text = CategoryList.getTypeStringByTypeId(typeId),
             )
-            Spacer(Modifier.width(8.dp))
-            AutoSizeText(
-                modifier = Modifier
-                    .padding(horizontal = 25.dp),
-                text = total.toMoneyString(),
-                style = TextStyle(
-                    fontFamily = FontFamily(Font(Res.font.nunitosans_10pt_bold))
-                )
-            )
+
         }
     }
 }
 
-@Composable
-private fun AutoSizeText(
-    modifier: Modifier = Modifier,
-    text: String,
-    textColor: Color = MaterialTheme.colorScheme.onSurface,
-    style: TextStyle,
-    textSize: TextUnit = 24.sp
-){
-    var dynamicTextSize by remember {
-        mutableStateOf(textSize)
-    }
-    Texts.TitleSmall(
-        modifier = modifier,
-        text = text,
-        style = style.copy(
-            fontSize = dynamicTextSize
-        ),
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        color = textColor,
-        onTextLayout = {
-            if (it.hasVisualOverflow && dynamicTextSize > 9.sp){
-                dynamicTextSize = (dynamicTextSize.value - 1.0F).sp
-            }
-        }
-    )
-}

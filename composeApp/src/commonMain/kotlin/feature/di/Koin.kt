@@ -20,10 +20,3 @@ val appModule = module {
     viewModelOf(::DetailViewModel)
 }
 
-fun initKoin() {
-    startKoin {
-        modules(
-            appModule
-        )
-    }
-}

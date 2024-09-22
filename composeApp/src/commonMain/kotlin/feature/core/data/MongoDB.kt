@@ -48,7 +48,10 @@ class MongoDB{
         )?.asFlow()
             ?.map {
                 it.list.toList().map {
-                    expenseEntity -> expenseEntity.toExpense()
+                    expenseEntity ->
+                    println("Data ${expenseEntity.toExpense()}")
+                    expenseEntity.toExpense()
+
                 }
             }
             ?: flowOf(emptyList())
@@ -82,17 +85,23 @@ class MongoDB{
     }
 
     suspend fun deleteExpense(expense: Expense) {
-        val expenseEntity = expense.toExpenseEntity()
         realm?.write {
             try {
-                val queriedExpenseEntity = query<ExpenseEntity>(query = "id == $0", expenseEntity.id)
+                val queriedExpenseEntity = query<ExpenseEntity>(query = "id == $0", expense.id)
                     .first()
                     .find()
+
+                println("Delete ${expense}")
+                println("Delete ${queriedExpenseEntity}")
+
                 queriedExpenseEntity?.let {
                     findLatest(it)?.let { currentExpense ->
                         delete(currentExpense)
                     }
                 }
+
+
+
             } catch (e: Exception) {
                 e.printStackTrace()
                 println(e)
