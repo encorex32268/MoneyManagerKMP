@@ -63,13 +63,12 @@ fun ExpenseTypeTotal(
         ){
             CircleIcon(
                 modifier = Modifier.size(36.dp),
-                backgroundColor =  CategoryList.getColorByCategory(typeId),
-                image = CategoryList.getTypeIconByTypeId(typeId),
+                backgroundColor =  CategoryList.getColorByTypeId(typeId.toLong()),
                 isClicked = true
             )
             Spacer(modifier = Modifier.width(8.dp))
             Texts.TitleSmall(
-                text = CategoryList.getTypeStringByTypeId(typeId),
+                text = CategoryList.getTypeStringByTypeId(typeId.toLong()),
             )
 
         }

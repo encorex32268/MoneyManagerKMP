@@ -173,45 +173,46 @@ import moneymanagerkmp.composeapp.generated.resources.wear_skirt
 import moneymanagerkmp.composeapp.generated.resources.wear_socks
 import moneymanagerkmp.composeapp.generated.resources.wear_trousers
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 object CategoryList {
 
-    const val RECENTLY = 9010
-    private const val FOOD = 10010
-    private const val TRAFFIC = 20010
-    private const val LIFE = 30010
-    private const val HEALTH = 40010
-    private const val SPORTS = 50010
-    private const val WEAR = 60010
-    private const val SHOPPING = 70010
-    private const val OTHER = 80010
+    const val RECENTLY = 9010L
+    const val FOOD = 10010L
+    private const val TRAFFIC = 20010L
+    private const val LIFE = 30010L
+    private const val HEALTH = 40010L
+    private const val SPORTS = 50010L
+    private const val WEAR = 60010L
+    private const val SHOPPING = 70010L
+    private const val OTHER = 80010L
 
     val items = kotlin.run {
         (1..21).map {
-            Category(id = FOOD + it ,categoryId = FOOD + it, typeId = FOOD)
+            Category(id = (FOOD + it).toInt(), typeId = FOOD)
         } +
                 (1..14).map {
-                    Category(id = TRAFFIC + it, categoryId = TRAFFIC + it, typeId = TRAFFIC)
+                    Category(id = (TRAFFIC + it).toInt(), typeId = TRAFFIC)
                 } +
                 (1..25).map {
-                    Category(id = LIFE + it ,categoryId = LIFE + it, typeId = LIFE)
+                    Category(id = (LIFE + it).toInt(), typeId = LIFE)
                 } +
                 (1..10).map {
-                    Category(id = HEALTH + it ,categoryId = HEALTH + it, typeId = HEALTH)
+                    Category(id = (HEALTH + it).toInt(), typeId = HEALTH)
                 } +
                 (1..17).map {
-                    Category(id = SPORTS + it ,categoryId = SPORTS + it, typeId = SPORTS)
+                    Category(id = (SPORTS + it).toInt(), typeId = SPORTS)
                 } +
                 (1..13).map {
-                    Category(id = WEAR + it , categoryId = WEAR + it, typeId = WEAR)
+                    Category(id = (WEAR + it).toInt(), typeId = WEAR)
                 } +
                 (1..17).map {
-                    Category(id = SHOPPING + it ,categoryId = SHOPPING + it, typeId = SHOPPING)
+                    Category(id = (SHOPPING + it).toInt(), typeId = SHOPPING)
                 } +
                 (1..36).map {
-                    Category(id = OTHER + it ,categoryId = OTHER + it, typeId = OTHER)
+                    Category(id = (OTHER + it).toInt(), typeId = OTHER)
                 }
 
     }
@@ -219,7 +220,7 @@ object CategoryList {
     @OptIn(ExperimentalResourceApi::class)
     @Composable
     fun getCategoryIconById(
-        id: Int
+        id: Long
     ): Painter {
         return when (id) {
             FOOD + 1 -> {
@@ -845,7 +846,7 @@ object CategoryList {
     @OptIn(ExperimentalResourceApi::class)
     @Composable
     fun getCategoryDescriptionById(
-        id: Int
+        id: Long
     ): String {
         return when (id) {
             FOOD + 1 -> {
@@ -1467,7 +1468,631 @@ object CategoryList {
         }
     }
 
-    fun getColorByCategory(id: Int): Color {
+
+    suspend fun getCategoryNameById(
+        id: Long
+    ): String {
+        return when (id) {
+            FOOD + 1 -> {
+                getString(Res.string.food_food)
+            }
+
+            FOOD + 2 -> {
+                getString(Res.string.food_fast_food)
+            }
+
+            FOOD + 3 -> {
+                getString(Res.string.food_rice)
+            }
+
+            FOOD + 4 -> {
+                getString(Res.string.food_noodles)
+            }
+
+            FOOD + 5 -> {
+                getString(Res.string.food_fruits)
+            }
+
+            FOOD + 6 -> {
+                getString(Res.string.food_salad)
+            }
+
+            FOOD + 7 -> {
+                getString(Res.string.food_seafood)
+            }
+
+            FOOD + 8 -> {
+                getString(Res.string.food_buy_food)
+            }
+
+            FOOD + 9 -> {
+                getString(Res.string.food_pizza)
+            }
+
+            FOOD + 10 -> {
+                getString(Res.string.food_hamburger)
+            }
+
+            FOOD + 11 -> {
+                getString(Res.string.food_buy_food2)
+            }
+
+            FOOD + 12 -> {
+                getString(Res.string.food_vegetables)
+            }
+
+            FOOD + 13 -> {
+                getString(Res.string.food_cake)
+            }
+
+            FOOD + 14 -> {
+                getString(Res.string.food_cookie)
+            }
+
+            FOOD + 15 -> {
+                getString(Res.string.food_bread)
+            }
+
+            FOOD + 16 -> {
+                getString(Res.string.food_beer)
+            }
+
+            FOOD + 17 -> {
+                getString(Res.string.food_drink)
+            }
+
+            FOOD + 18 -> {
+                getString(Res.string.food_wine)
+            }
+
+            FOOD + 19 -> {
+                getString(Res.string.food_coffee)
+            }
+
+            FOOD + 20 -> {
+                getString(Res.string.food_hot_coffee)
+            }
+
+            FOOD + 21 -> {
+                getString(Res.string.food_hot_tea)
+            }
+
+            TRAFFIC + 1 -> {
+                getString(Res.string.traffic_train)
+            }
+
+            TRAFFIC + 2 -> {
+                getString(Res.string.traffic_city_train)
+            }
+
+            TRAFFIC + 3 -> {
+                getString(Res.string.traffic_highspeed_train)
+            }
+
+            TRAFFIC + 4 -> {
+                getString(Res.string.traffic_bus)
+            }
+
+            TRAFFIC + 5 -> {
+                getString(Res.string.traffic_highway_bus)
+            }
+
+            TRAFFIC + 6 -> {
+                getString(Res.string.traffic_bicycle)
+            }
+
+            TRAFFIC + 7 -> {
+                getString(Res.string.traffic_motobike)
+            }
+
+            TRAFFIC + 8 -> {
+                getString(Res.string.traffic_car)
+            }
+
+            TRAFFIC + 9 -> {
+                getString(Res.string.traffic_taxi)
+            }
+
+            TRAFFIC + 10 -> {
+                getString(Res.string.traffic_cable_car)
+            }
+
+            TRAFFIC + 11 -> {
+                getString(Res.string.traffic_train_ticket)
+            }
+
+            TRAFFIC + 12 -> {
+                getString(Res.string.traffic_ship)
+            }
+
+            TRAFFIC + 13 -> {
+                getString(Res.string.traffic_parking)
+            }
+
+            TRAFFIC + 14 -> {
+                getString(Res.string.traffic_plane)
+            }
+
+            LIFE + 1 -> {
+                getString(Res.string.life_rent)
+            }
+
+            LIFE + 2 -> {
+                getString(Res.string.life_car)
+            }
+
+            LIFE + 3 -> {
+                getString(Res.string.life_bank)
+            }
+
+            LIFE + 4 -> {
+                getString(Res.string.life_light_fee)
+            }
+
+            LIFE + 5 -> {
+                getString(Res.string.life_water_fee)
+            }
+
+            LIFE + 6 -> {
+                getString(Res.string.life_phone_fee)
+            }
+
+            LIFE + 7 -> {
+                getString(Res.string.life_smart_phone_fee)
+            }
+
+            LIFE + 8 -> {
+                getString(Res.string.life_network_fee)
+            }
+
+            LIFE + 9 -> {
+                getString(Res.string.life_wifi)
+            }
+
+            LIFE + 10 -> {
+                getString(Res.string.life_wifi_router)
+            }
+
+            LIFE + 11 -> {
+                getString(Res.string.life_money_transfer)
+            }
+
+            LIFE + 12 -> {
+                getString(Res.string.life_money_income)
+            }
+
+//            LIFE + 13 -> {
+//                getString(Res.string.life_rent)
+//            }
+
+            LIFE + 14 -> {
+                getString(Res.string.life_salary)
+            }
+
+            LIFE + 15 -> {
+                getString(Res.string.life_music)
+            }
+
+            LIFE + 16 -> {
+                getString(Res.string.life_save_money)
+            }
+
+            LIFE + 17 -> {
+                getString(Res.string.life_stock_increase)
+            }
+
+            LIFE + 18 -> {
+                getString(Res.string.life_stock_decrease)
+            }
+
+            LIFE + 19 -> {
+                getString(Res.string.life_stocks)
+            }
+
+            LIFE + 20 -> {
+                getString(Res.string.life_taxes)
+            }
+
+            LIFE + 21 -> {
+                getString(Res.string.life_taxes2)
+            }
+
+            LIFE + 22 -> {
+                getString(Res.string.life_taxes3)
+            }
+
+            LIFE + 23 -> {
+                getString(Res.string.life_video)
+            }
+
+            LIFE + 24 -> {
+                getString(Res.string.life_paint)
+            }
+
+            LIFE + 25 -> {
+                getString(Res.string.life_hammer)
+            }
+
+            HEALTH + 1 -> {
+                getString(Res.string.health_doctor2)
+            }
+
+            HEALTH + 2 -> {
+                getString(Res.string.health_doctor)
+            }
+
+            HEALTH + 3 -> {
+                getString(Res.string.health_sick)
+            }
+
+            HEALTH + 4 -> {
+                getString(Res.string.health_pill)
+            }
+
+            HEALTH + 5 -> {
+                getString(Res.string.health_health)
+            }
+
+            HEALTH + 6 -> {
+                getString(Res.string.health_tooth)
+            }
+
+            HEALTH + 7 -> {
+                getString(Res.string.health_help)
+            }
+
+            HEALTH + 8 -> {
+                getString(Res.string.health_hospital)
+            }
+
+            HEALTH + 9 -> {
+                getString(Res.string.health_hospital2)
+            }
+
+            HEALTH + 10 -> {
+                getString(Res.string.health_massage)
+            }
+
+            SPORTS + 1 -> {
+                getString(Res.string.sports_sports)
+            }
+
+            SPORTS + 2 -> {
+                getString(Res.string.sports_boxing)
+            }
+
+            SPORTS + 3 -> {
+                getString(Res.string.sports_basketball)
+            }
+
+            SPORTS + 4 -> {
+                getString(Res.string.sports_baseball)
+            }
+
+            SPORTS + 5 -> {
+                getString(Res.string.sports_gym)
+            }
+
+            SPORTS + 6 -> {
+                getString(Res.string.sports_8ball)
+            }
+
+            SPORTS + 7 -> {
+                getString(Res.string.sports_tennis)
+            }
+
+            SPORTS + 8 -> {
+                getString(Res.string.sports_usa_football)
+            }
+
+            SPORTS + 9 -> {
+                getString(Res.string.sports_football)
+            }
+
+            SPORTS + 10 -> {
+                getString(Res.string.sports_yoga)
+            }
+
+            SPORTS + 11 -> {
+                getString(Res.string.sports_volley)
+            }
+
+            SPORTS + 12 -> {
+                getString(Res.string.sports_golf)
+            }
+
+            SPORTS + 13 -> {
+                getString(Res.string.sports_pingpong)
+            }
+
+            SPORTS + 14 -> {
+                getString(Res.string.sports_skiing)
+            }
+
+            SPORTS + 15 -> {
+                getString(Res.string.sports_bowling)
+            }
+
+            SPORTS + 16 -> {
+                getString(Res.string.sports_swim)
+            }
+
+            SPORTS + 17 -> {
+                getString(Res.string.sports_camp)
+            }
+
+            WEAR + 1 -> {
+                getString(Res.string.wear_shirts)
+            }
+
+            WEAR + 2 -> {
+                getString(Res.string.wear_shorts)
+            }
+
+            WEAR + 3 -> {
+                getString(Res.string.wear_dress)
+            }
+
+            WEAR + 4 -> {
+                getString(Res.string.wear_skirt)
+            }
+
+            WEAR + 5 -> {
+                getString(Res.string.wear_shoes)
+            }
+
+            WEAR + 6 -> {
+                getString(Res.string.wear_socks)
+            }
+
+            WEAR + 7 -> {
+                getString(Res.string.wear_trousers)
+            }
+
+            WEAR + 8 -> {
+                getString(Res.string.wear_cap)
+            }
+
+            WEAR + 9 -> {
+                getString(Res.string.wear_hat)
+            }
+
+            WEAR + 10 -> {
+                getString(Res.string.wear_baby)
+            }
+
+            WEAR + 11 -> {
+                getString(Res.string.wear_bag)
+            }
+
+            WEAR + 12 -> {
+                getString(Res.string.wear_bag2)
+            }
+
+            WEAR + 13 -> {
+                getString(Res.string.wear_bag3)
+            }
+
+            SHOPPING + 1 -> {
+                getString(Res.string.shopping_shopping)
+            }
+
+            SHOPPING + 2 -> {
+                getString(Res.string.shopping_gift)
+            }
+
+            SHOPPING + 3 -> {
+                getString(Res.string.shopping_glasses)
+            }
+
+            SHOPPING + 4 -> {
+                getString(Res.string.shopping_flowers)
+            }
+
+            SHOPPING + 5 -> {
+                getString(Res.string.shopping_makeup)
+            }
+
+            SHOPPING + 6 -> {
+                getString(Res.string.shopping_makeup2)
+            }
+
+            SHOPPING + 7 -> {
+                getString(Res.string.shopping_makeup3)
+            }
+
+            SHOPPING + 8 -> {
+                getString(Res.string.shopping_makeup_brush)
+            }
+
+            SHOPPING + 9 -> {
+                getString(Res.string.shopping_necklace)
+            }
+
+            SHOPPING + 10 -> {
+                getString(Res.string.shopping_ring)
+            }
+
+            SHOPPING + 11 -> {
+                getString(Res.string.shopping_pc)
+            }
+
+            SHOPPING + 12 -> {
+                getString(Res.string.shopping_phone)
+            }
+
+            SHOPPING + 13 -> {
+                getString(Res.string.shopping_camera)
+            }
+
+            SHOPPING + 14 -> {
+                getString(Res.string.shopping_switch)
+            }
+
+            SHOPPING + 15 -> {
+                getString(Res.string.shopping_bag)
+            }
+
+            SHOPPING + 16 -> {
+                getString(Res.string.shopping_plant)
+            }
+
+            SHOPPING + 17 -> {
+                getString(Res.string.shopping_plant2)
+            }
+
+            OTHER + 1 -> {
+                getString(Res.string.other_save_money)
+            }
+
+            OTHER + 2 -> {
+                getString(Res.string.other_washing_machine)
+            }
+
+            OTHER + 3 -> {
+                getString(Res.string.other_bill)
+            }
+
+            OTHER + 4 -> {
+                getString(Res.string.other_book)
+            }
+
+            OTHER + 5 -> {
+                getString(Res.string.other_book2)
+            }
+
+            OTHER + 6 -> {
+                getString(Res.string.other_car_repair)
+            }
+
+            OTHER + 7 -> {
+                getString(Res.string.other_car_wash)
+            }
+
+            OTHER + 8 -> {
+                getString(Res.string.other_car_fee)
+            }
+
+            OTHER + 9 -> {
+                getString(Res.string.other_card_fee)
+            }
+
+            OTHER + 10 -> {
+                getString(Res.string.other_creditcard)
+            }
+
+            OTHER + 11 -> {
+                getString(Res.string.other_light_fee)
+            }
+
+            OTHER + 12 -> {
+                getString(Res.string.other_water_fee)
+            }
+
+            OTHER + 13 -> {
+                getString(Res.string.other_book2)
+            }
+
+            OTHER + 14 -> {
+                getString(Res.string.other_pet)
+            }
+
+            OTHER + 15 -> {
+                getString(Res.string.other_phone_fee)
+            }
+
+            OTHER + 16 -> {
+                getString(Res.string.other_bill)
+            }
+
+            OTHER + 17 -> {
+                getString(Res.string.other_music)
+            }
+
+            OTHER + 18 -> {
+                getString(Res.string.other_music2)
+            }
+
+            OTHER + 19 -> {
+                getString(Res.string.other_unknown)
+            }
+
+            OTHER + 20 -> {
+                getString(Res.string.other_video)
+            }
+
+            OTHER + 21 -> {
+                getString(Res.string.other_toys)
+            }
+
+            OTHER + 22 -> {
+                getString(Res.string.other_repair)
+            }
+
+            OTHER + 23 -> {
+                getString(Res.string.other_salary)
+            }
+
+            OTHER + 24 -> {
+                getString(Res.string.other_stock_decrease)
+            }
+
+            OTHER + 25 -> {
+                getString(Res.string.other_stock_increase)
+            }
+
+            OTHER + 26 -> {
+                getString(Res.string.other_movie_theater)
+            }
+
+            OTHER + 27 -> {
+                getString(Res.string.other_money_transfer)
+            }
+
+            OTHER + 28 -> {
+                getString(Res.string.other_money_income)
+            }
+
+            OTHER + 29 -> {
+                getString(Res.string.other_money_exchange)
+            }
+
+            OTHER + 30 -> {
+                getString(Res.string.other_massage)
+            }
+
+            OTHER + 31 -> {
+                getString(Res.string.other_cuthair)
+            }
+
+            OTHER + 32 -> {
+                getString(Res.string.other_gamble)
+            }
+
+            OTHER + 33 -> {
+                getString(Res.string.other_game)
+            }
+
+            OTHER + 34 -> {
+                getString(Res.string.other_iphone)
+            }
+
+            OTHER + 35 -> {
+                getString(Res.string.other_job)
+            }
+
+            OTHER + 36 -> {
+                getString(Res.string.other_karaoke)
+            }
+
+
+            else -> {
+                ""
+            }
+        }
+    }
+
+    fun getColorByTypeId(id: Long): Color {
         return Color(
             when (id) {
                 FOOD -> 0xFFFAFF92
@@ -1484,7 +2109,7 @@ object CategoryList {
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
-    fun getTypeStringByTypeId(typeId: Int): String {
+    fun getTypeStringByTypeId(typeId: Long): String {
         return when(typeId){
             RECENTLY -> { stringResource(Res.string.recently) }
             FOOD -> { stringResource(Res.string.food)  }
@@ -1499,20 +2124,19 @@ object CategoryList {
         }
     }
 
-    @OptIn(ExperimentalResourceApi::class)
-    @Composable
-    fun getTypeIconByTypeId(typeId: Int): Painter {
+    suspend fun getTypeStringById(typeId: Long): String {
         return when(typeId){
-            RECENTLY -> { painterResource(Res.drawable.header_recently) }
-            FOOD -> { painterResource(Res.drawable.header_food) }
-            TRAFFIC -> {  painterResource(Res.drawable.header_traffic) }
-            LIFE -> { painterResource(Res.drawable.life_rent)  }
-            HEALTH -> { painterResource(Res.drawable.header_heart)  }
-            SPORTS -> { painterResource(Res.drawable.header_sports)  }
-            WEAR -> { painterResource(Res.drawable.header_clothes) }
-            SHOPPING -> { painterResource(Res.drawable.header_shopping)  }
-            OTHER -> { painterResource(Res.drawable.header_other) }
-            else -> painterResource(Res.drawable.header_recently)
+            RECENTLY -> { getString(Res.string.recently) }
+            FOOD -> { getString(Res.string.food)  }
+            TRAFFIC -> {  getString(Res.string.traffic)  }
+            LIFE -> { getString(Res.string.life)  }
+            HEALTH -> { getString(Res.string.health)  }
+            SPORTS -> { getString(Res.string.sports)  }
+            WEAR -> { getString(Res.string.wear)  }
+            SHOPPING -> { getString(Res.string.shopping)  }
+            OTHER -> { getString(Res.string.other)  }
+            else -> ""
         }
     }
+    
 }

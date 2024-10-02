@@ -11,7 +11,8 @@ val CorrectColor = Color(0xFF00DEA6)
 val ErrorColor = Color(0xFFFFAAB5)
 
 val light_onCorrectColor = Color(0xFFFFFFFF)
-val light_CorrectColorContainer = Color(0xFF4BFEC3)
+//val light_CorrectColorContainer = Color(0xFF4BFEC3)
+val light_CorrectColorContainer = Color(69, 230, 0, 59)
 
 val dark_CorrectColorContainer = Color(0xFF00513B)
 

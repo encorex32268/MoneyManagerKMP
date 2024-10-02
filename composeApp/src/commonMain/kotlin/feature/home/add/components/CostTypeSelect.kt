@@ -13,12 +13,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import feature.core.presentation.Texts
 import feature.core.ui.light_CorrectColorContainer
@@ -27,10 +29,13 @@ import feature.core.ui.light_onCorrectColor
 import feature.core.ui.light_onErrorColor
 import feature.presentation.noRippleClick
 import moneymanagerkmp.composeapp.generated.resources.Res
+import moneymanagerkmp.composeapp.generated.resources.baseline_edit_note_24
 import moneymanagerkmp.composeapp.generated.resources.expense
 import moneymanagerkmp.composeapp.generated.resources.income
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -39,22 +44,41 @@ fun CostTypeSelect(
     isIncome: Boolean = false,
     onTypeChange: (Boolean) -> Unit = {},
     shape: RoundedCornerShape = RoundedCornerShape(8.dp),
-    onCloseClick: () -> Unit
+    onCloseClick: () -> Unit,
+    onGoToCategoryEditClick: () -> Unit = {}
 ){
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(
-            onClick = onCloseClick
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ){
-            Icon(
-                imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                contentDescription = null
-            )
+            IconButton(
+                onClick = onCloseClick
+            ){
+                Icon(
+                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                    contentDescription = null
+                )
+            }
+            IconButton(
+                onClick = onGoToCategoryEditClick
+            ){
+                Icon(
+                    imageVector = vectorResource(Res.drawable.baseline_edit_note_24),
+                    contentDescription = null
+                )
+            }
         }
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Box(
                 modifier = Modifier
                     .noRippleClick { onTypeChange(false) }
@@ -64,12 +88,6 @@ fun CostTypeSelect(
                         } else {
                             light_onErrorColor
                         },
-//                    if (!isIncome) {
-//                        if (isSystemInDarkTheme()) dark_CorrectColorContainer else light_CorrectColorContainer
-//                    } else {
-//                        if (isSystemInDarkTheme()) md_theme_dark_outline else light_onCorrectColor
-//
-//                    },
                         shape = shape
                     )
                     .border(
@@ -84,7 +102,7 @@ fun CostTypeSelect(
                     text = stringResource(Res.string.expense)
                 )
             }
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(16.dp))
             Box(
                 modifier = Modifier
                     .noRippleClick {
@@ -96,11 +114,6 @@ fun CostTypeSelect(
                         } else {
                             light_onCorrectColor
                         },
-//                    if (isIncome) {
-//                        if (isSystemInDarkTheme()) dark_ErrorColorContainer else light_ErrorColorContainer
-//                    } else {
-//                        if (isSystemInDarkTheme()) md_theme_dark_outline else light_onErrorColor
-//                    },
                         shape = shape
                     )
                     .border(
@@ -118,6 +131,5 @@ fun CostTypeSelect(
                 )
             }
         }
-
     }
 }

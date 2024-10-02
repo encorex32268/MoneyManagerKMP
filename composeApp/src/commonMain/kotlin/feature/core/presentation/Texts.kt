@@ -151,7 +151,9 @@ object Texts {
             text = text,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurface,
-            fontFamily = FontFamily(Font(font))
+            fontFamily = FontFamily(Font(font)),
+            maxLines = 2,
+            overflow = TextOverflow.Clip
 
         )
     }

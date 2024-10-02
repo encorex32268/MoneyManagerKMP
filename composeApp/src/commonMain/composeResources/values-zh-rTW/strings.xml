@@ -7,6 +7,7 @@
     <string name="income">收入</string>
     <string name="expense">支出</string>
     <string name="total_expense_item">總共：%1$s</string>
+    <string name="save_snackbar">已儲存</string>
     <string name="dialog_ok_button">確認</string>
     <string name="dialog_cancel_button">取消</string>
     <string name="dialog_delete_title">刪除</string>

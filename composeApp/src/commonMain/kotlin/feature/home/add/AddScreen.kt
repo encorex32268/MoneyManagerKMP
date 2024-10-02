@@ -1,44 +1,36 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class,
-    ExperimentalLayoutApi::class, KoinExperimentalAPI::class
+    ExperimentalLayoutApi::class, KoinExperimentalAPI::class, ExperimentalMaterial3Api::class
 )
 
 package feature.home.add
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.BottomSheetDefaults.DragHandle
 import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.BottomSheetScaffoldState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,7 +45,7 @@ import feature.core.presentation.Texts
 import feature.home.add.components.CalculateLayout
 import feature.home.add.components.CategoryItem
 import feature.home.add.components.CostTypeSelect
-import feature.presentation.noRippleClick
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
@@ -68,7 +60,8 @@ import org.koin.core.annotation.KoinExperimentalAPI
 fun AddScreenRoot(
     viewModel: AddViewModel = koinViewModel(),
     expense: Expense?=null,
-    onGoBack: () -> Unit = {}
+    onGoBack: () -> Unit = {},
+    onGoToCategoryEditClick: () -> Unit = {}
 ){
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit){
@@ -86,11 +79,11 @@ fun AddScreenRoot(
             }
         }
     }
-    println("CategoryUI ${state.categoryUi}")
     AddScreen(
         state = state,
         onEvent = viewModel::onEvent,
-        onGoBack = onGoBack
+        onGoBack = onGoBack,
+        onGoToCategoryEditClick = onGoToCategoryEditClick
     )
 }
 
@@ -99,19 +92,12 @@ fun AddScreenRoot(
 fun AddScreen(
     state: AddState,
     onEvent: (AddEvent) -> Unit = {},
-    onGoBack: () -> Unit = {}
+    onGoBack: () -> Unit = {},
+    onGoToCategoryEditClick: () -> Unit = {}
 ){
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    val correctList = remember(state) {
-        state.categoryItems
-            .groupBy { it.typeId }
-            .toList()
-            .sortedBy {
-                it.first
-            }
-    }
 
     val bottomSheetState = rememberStandardBottomSheetState(
         skipHiddenState = false,
@@ -146,6 +132,7 @@ fun AddScreen(
                             }
                         }
                         keyboard?.hide()
+                        focusManager.clearFocus(true)
                     }
                 )
             }
@@ -158,6 +145,7 @@ fun AddScreen(
                         detectTapGestures(
                             onTap = {
                                 keyboard?.hide()
+                                focusManager.clearFocus(true)
                             }
                         )
                     },
@@ -178,6 +166,7 @@ fun AddScreen(
                         detectTapGestures(
                             onTap = {
                                 keyboard?.hide()
+                                focusManager.clearFocus(true)
                             }
                         )
                     }
@@ -226,96 +215,114 @@ fun AddScreen(
                         AddEvent.OnTypeChange(it)
                     )
                 },
-                onCloseClick = onGoBack
+                onCloseClick = onGoBack,
+                onGoToCategoryEditClick = onGoToCategoryEditClick
             )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-            ) {
-                if (state.recentlyCategoryItems.isNotEmpty()) {
-                    Column {
-                        Text(
-                            text = stringResource(Res.string.recently),
-                            style = MaterialTheme.typography.titleSmall
-                        )
-                        FlowRow(
-                            modifier = Modifier.fillMaxWidth(),
-                            maxItemsInEachRow = 4,
-                        ) {
-                            state.recentlyCategoryItems.forEach { categoryUi ->
-                                val categoryNameRes =
-                                    CategoryList.getCategoryDescriptionById(categoryUi.categoryId)
-                                CategoryItem(
-                                    modifier = Modifier.weight(1f),
-                                    isClicked = categoryUi.isClick,
-                                    categoryUi = categoryUi,
-                                    onItemClick = {
-                                        onEvent(
-                                            AddEvent.OnItemSelected(
-                                                categoryUi = categoryUi,
-                                                description = categoryUi.name
-                                                    ?: categoryNameRes,
-                                                isRecently = true
-                                            )
-                                        )
-                                        scope.launch {
-                                            bottomSheetScaffoldState.bottomSheetState.expand()
-                                        }
-                                    }
-                                )
-
-                            }
-                            repeat(4 - state.recentlyCategoryItems.size % 4) {
-                                Spacer(modifier = Modifier.weight(1f))
-                            }
-                        }
-                    }
-
+            if (state.isLoading){
+                Box(
+                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    contentAlignment = Alignment.Center
+                ){
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(36.dp),
+                        color = Color.Black
+                    )
                 }
+            }else{
+                ItemSection(state, onEvent, scope, bottomSheetScaffoldState)
+            }
 
-                correctList.forEach { (typeId, category) ->
-                    Column {
-                        Texts.TitleSmall(
-                            text = CategoryList.getTypeStringByTypeId(
-                                typeId
-                            )
-                        )
-                        FlowRow(
-                            modifier = Modifier.fillMaxWidth(),
-                            maxItemsInEachRow = 4,
-                        ) {
-                            category.forEach { categoryState ->
-                                val categoryNameRes =
-                                    CategoryList.getCategoryDescriptionById(categoryState.categoryId)
-                                CategoryItem(
-                                    modifier = Modifier.weight(1f),
-                                    isClicked = categoryState.isClick,
-                                    categoryUi = categoryState,
-                                    onItemClick = {
-                                        onEvent(
-                                            AddEvent.OnItemSelected(
-                                                categoryUi = categoryState,
-                                                description = categoryNameRes
-                                            )
-                                        )
-                                        scope.launch {
-                                            bottomSheetScaffoldState.bottomSheetState.expand()
-                                        }
-                                    }
+        }
+    }
+}
+
+@Composable
+private fun ItemSection(
+    state: AddState,
+    onEvent: (AddEvent) -> Unit,
+    scope: CoroutineScope,
+    bottomSheetScaffoldState: BottomSheetScaffoldState
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+    ) {
+        if (state.recentlyItems.isNotEmpty()) {
+            Column {
+                Text(
+                    text = stringResource(Res.string.recently),
+                    style = MaterialTheme.typography.titleSmall
+                )
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    maxItemsInEachRow = 4,
+                ) {
+                    val categories = state.recentlyItems.first().categories
+                    categories.forEach { categoryUi ->
+                        val categoryNameRes =
+                            CategoryList.getCategoryDescriptionById(categoryUi.id.toLong())
+                        CategoryItem(
+                            modifier = Modifier.weight(1f),
+                            isClicked = categoryUi.isClick,
+                            categoryUi = categoryUi,
+                            onItemClick = {
+                                onEvent(
+                                    AddEvent.OnItemSelected(
+                                        categoryUi = categoryUi,
+                                        description = categoryUi.name.ifEmpty { categoryNameRes },
+                                        isRecently = true
+                                    )
                                 )
-
+                                scope.launch {
+                                    bottomSheetScaffoldState.bottomSheetState.expand()
+                                }
                             }
-                            repeat(4 - category.size % 4) {
-                                Spacer(modifier = Modifier.weight(1f))
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        )
                     }
-
+                    repeat(4 - categories.size % 4) {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
                 }
             }
 
         }
+        state.types.forEach {
+            Column {
+                Texts.TitleSmall(
+                    text = it.name
+                )
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    maxItemsInEachRow = 4,
+                ) {
+                    it.categories.forEach { categoryUi ->
+                        CategoryItem(
+                            modifier = Modifier.weight(1f),
+                            isClicked = categoryUi.isClick,
+                            categoryUi = categoryUi,
+                            onItemClick = {
+                                onEvent(
+                                    AddEvent.OnItemSelected(
+                                        categoryUi = categoryUi,
+                                        description = categoryUi.name
+                                    )
+                                )
+                                scope.launch {
+                                    bottomSheetScaffoldState.bottomSheetState.expand()
+                                }
+                            }
+                        )
+
+                    }
+                    repeat(4 - it.categories.size % 4) {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+        }
+
     }
 }

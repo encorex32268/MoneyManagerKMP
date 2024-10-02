@@ -109,7 +109,7 @@ fun ChartLayout(
                                         startAngle += 360f * items[index - 1].expenseItems.sumOf { it.cost } / sumTotal
                                     }
                                     drawArc(
-                                        color = CategoryList.getColorByCategory(item.typeId),
+                                        color = CategoryList.getColorByTypeId(item.typeId.toLong()),
                                         startAngle = startAngle * animation,
                                         sweepAngle = sweepAngle * animation,
                                         useCenter = false,
@@ -149,13 +149,13 @@ fun ChartLayout(
                                         .size(12.dp)
                                         .clip(CircleShape)
                                         .background(
-                                            color = CategoryList.getColorByCategory(it.typeId),
+                                            color = CategoryList.getColorByTypeId(it.typeId.toLong()),
                                             shape = CircleShape
                                         )
                                 )
                                 Spacer(Modifier.width(8.dp))
                                 Texts.BodySmall(
-                                    text = CategoryList.getTypeStringByTypeId(it.typeId)
+                                    text = CategoryList.getTypeStringByTypeId(it.typeId.toLong())
                                 )
                             }
                         }

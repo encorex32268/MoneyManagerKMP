@@ -2,13 +2,17 @@ package feature.home.add
 
 import feature.core.domain.mapper.toCategoryUi
 import feature.core.domain.model.Expense
+import feature.core.domain.model.Type
 import feature.core.presentation.CategoryList
 import feature.core.presentation.model.CategoryUi
+import feature.home.add.type.TypeUi
 import kotlinx.datetime.LocalDateTime
 
+
 data class AddState(
-    val categoryItems: List<CategoryUi> = CategoryList.items.map { it.toCategoryUi() },
-    val recentlyCategoryItems: List<CategoryUi> = emptyList(),
+    val isLoading: Boolean = false,
+    val types: List<TypeUi> = emptyList(),
+    val recentlyItems: List<TypeUi> = emptyList(),
     val currentExpense: Expense?=null,
     val categoryUi: CategoryUi?=null,
     val description: String = "",

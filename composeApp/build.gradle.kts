@@ -61,8 +61,7 @@ kotlin {
             implementation(libs.uri.kmp)
             implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.compose.colorpicker)
-
-
+            implementation(libs.keysettings.kmp)
         }
         commonTest.dependencies {
             implementation(libs.koin.test)

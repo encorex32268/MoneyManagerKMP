@@ -22,7 +22,7 @@ import feature.presentation.noRippleClick
 @Composable
 fun CircleIcon(
     modifier: Modifier = Modifier,
-    image: Painter,
+    image: Painter?=null,
     isClicked: Boolean = false,
     id: Int?=null,
     onItemClick: (Int) -> Unit = {},
@@ -48,14 +48,16 @@ fun CircleIcon(
                 },
             contentAlignment = Alignment.Center
         ){
-            Icon(
-                modifier = Modifier
-                    .size(50.dp)
-                    .padding(8.dp),
-                painter = image,
-                contentDescription = null,
-                tint =  Color.Black,
-            )
+            image?.let {
+                Icon(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .padding(8.dp),
+                    painter = image,
+                    contentDescription = null,
+                    tint =  Color.Black,
+                )
+            }
         }
     }
 

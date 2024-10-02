@@ -6,6 +6,16 @@ import io.realm.kotlin.types.annotations.Ignore
 import io.realm.kotlin.types.annotations.PrimaryKey
 import org.mongodb.kbson.ObjectId
 
+/**
+   Example:
+    categoryId =
+    typeId =
+    description = FastFood
+    isIncome = true or false
+    cost = $100
+    timestamp = 12345678
+ */
+
 class ExpenseEntity(
     @PrimaryKey
     var id: ObjectId = ObjectId(),

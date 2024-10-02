@@ -4,13 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import feature.core.data.MongoDB
 import feature.core.domain.model.Expense
+import feature.core.domain.repository.ExpenseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class EditExpenseViewModel(
-    private val mongoDB: MongoDB
+    private val repository: ExpenseRepository
 ): ViewModel() {
 
     private val _state = MutableStateFlow(EditExpenseState())
@@ -26,13 +27,12 @@ class EditExpenseViewModel(
                 }
             }
             EditExpenseEvent.OnDelete -> {
-                state.value.currentExpense?.let {
-                    viewModelScope.launch {
-                        mongoDB.deleteExpense(
-                            it
-                        )
-                    }
-                }?: return
+                if(state.value.currentExpense == null) return
+                viewModelScope.launch {
+                    repository.delete(
+                        expense = state.value.currentExpense!!
+                    )
+                }
             }
         }
     }

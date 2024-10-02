@@ -23,11 +23,11 @@ val bottomNavigationItems = listOf(
     BottomNavigationItem(
         selectedIcon = Res.drawable.baseline_receipt_24_filled,
         unSelectedIcon = Res.drawable.baseline_receipt_24_outline,
-        name = "Home"
+        name = "Route.Home"
     ),
     BottomNavigationItem(
         selectedIcon = Res.drawable.baseline_pie_chart_24_filled,
         unSelectedIcon = Res.drawable.baseline_pie_chart_24_outline,
-        name = "Chart"
+        name = "Route.Chart"
     )
 )

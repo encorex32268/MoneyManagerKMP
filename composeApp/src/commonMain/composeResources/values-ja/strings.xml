@@ -7,6 +7,7 @@
     <string name="income">収入</string>
     <string name="expense">支出</string>
     <string name="total_expense_item">合計：%1$s</string>
+    <string name="save_snackbar">保存しました</string>
     <string name="dialog_ok_button">OK</string>
     <string name="dialog_cancel_button">キャンセル</string>
     <string name="dialog_delete_title">削除</string>

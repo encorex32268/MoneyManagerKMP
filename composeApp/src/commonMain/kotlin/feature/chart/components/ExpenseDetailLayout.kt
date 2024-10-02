@@ -49,8 +49,7 @@ fun ExpenseDetailLayout(
                         .padding(horizontal = 8.dp)
                         .size(36.dp)
                     ,
-                    backgroundColor =  CategoryList.getColorByCategory(it.typeId),
-                    image = CategoryList.getTypeIconByTypeId(it.typeId),
+                    backgroundColor =  CategoryList.getColorByTypeId(it.typeId.toLong()),
                     isClicked = true,
                     onItemClick = {
 
@@ -58,7 +57,7 @@ fun ExpenseDetailLayout(
                 )
                 Texts.TitleSmall(
                     modifier = Modifier.widthIn(40.dp , 100.dp),
-                    text = CategoryList.getTypeStringByTypeId(it.typeId),
+                    text = CategoryList.getTypeStringByTypeId(it.typeId.toLong()),
                 )
                 Texts.TitleSmall(
                     modifier = Modifier

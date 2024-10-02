@@ -21,7 +21,7 @@ fun CategoryItem(
     modifier: Modifier = Modifier,
     categoryUi: CategoryUi,
     isClicked: Boolean,
-    onItemClick: () -> Unit = {}
+    onItemClick: (() -> Unit)? = null
 ){
     Column(
         modifier = modifier,
@@ -34,19 +34,26 @@ fun CategoryItem(
                 .padding(top = 8.dp)
                 .size(48.dp)
             ,
-            backgroundColor = CategoryList.getColorByCategory(categoryUi.typeId),
-            image = CategoryList.getCategoryIconById(categoryUi.categoryId),
+            backgroundColor = CategoryList.getColorByTypeId(categoryUi.typeId?.toLong()?:0),
+            image = CategoryList.getCategoryIconById(categoryUi.id.toLong()),
             isClicked = isClicked,
-            id = categoryUi.categoryId,
+            id = categoryUi.id,
             onItemClick = {
-                onItemClick()
+                onItemClick?.let {
+                    onItemClick()
+                }
             },
         )
 
-        val description = categoryUi.name?: CategoryList.getCategoryDescriptionById(
-            categoryUi.categoryId
+        val description = categoryUi.name.ifEmpty {
+            CategoryList.getCategoryDescriptionById(
+                categoryUi.id.toLong()
+            )
+        }
+        Texts.BodySmall(
+            text = description ,
+
         )
-        Texts.BodySmall(text = description )
 
     }
 }

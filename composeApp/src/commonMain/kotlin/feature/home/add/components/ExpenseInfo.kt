@@ -34,8 +34,8 @@ fun ExpenseInfo(
     ) {
         CircleIcon(
             modifier = Modifier.size(48.dp),
-            backgroundColor = CategoryList.getColorByCategory(categoryUi?.typeId?:0),
-            image = CategoryList.getCategoryIconById(categoryUi?.categoryId?:0),
+            backgroundColor = CategoryList.getColorByTypeId(categoryUi?.typeId?.toInt()?.toLong()?:0),
+            image = CategoryList.getCategoryIconById(categoryUi?.id?.toLong()?:0),
             isClicked = true,
         )
         Spacer(modifier = Modifier.width(8.dp))

@@ -146,8 +146,8 @@ fun EditExpenseScreen(
                         CircleIcon(
                             modifier = Modifier.size(48.dp),
                             isClicked = true,
-                            image = CategoryList.getCategoryIconById(it.categoryId),
-                            backgroundColor = CategoryList.getColorByCategory(it.typeId)
+                            image = CategoryList.getCategoryIconById(it.categoryId.toLong()),
+                            backgroundColor = CategoryList.getColorByTypeId(it.typeId.toLong())
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Texts.TitleSmall(

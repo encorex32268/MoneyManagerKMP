@@ -35,6 +35,12 @@ object DateConverter {
         return localDateTime
     }
 
+    fun getNowDateTimestamp(): Long {
+        return localDateTimeToTimestamp(
+            getNowDate()
+        )
+    }
+
     fun getMonthStartAndEndTime(
         year: Int?= null,
         month: Int? = null

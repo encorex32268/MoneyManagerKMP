@@ -27,7 +27,9 @@ uriKmpVersion = "0.0.18"
 lifecycleViewmodelCompose = "2.8.0"
 
 colorpicker = "1.1.2"
+jetbrainsKotlinJvm = "1.9.0"
 
+keysettings = "1.2.0"
 
 [libraries]
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
@@ -51,6 +53,8 @@ androidx-navigation = { module= "org.jetbrains.androidx.navigation:navigation-co
 uri-kmp = { module = "com.eygraber:uri-kmp" , version.ref = "uriKmpVersion"}
 lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 
+keysettings-kmp  = { module = "com.russhwolf:multiplatform-settings-no-arg" , version.ref = "keysettings"}
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
@@ -59,3 +63,4 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 readlkotlin = {id = "io.realm.kotlin" , version.ref = "readmkotlin"}
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }

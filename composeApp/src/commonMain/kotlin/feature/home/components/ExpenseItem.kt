@@ -98,8 +98,8 @@ fun ExpenseItem(
                         CircleIcon(
                             modifier = Modifier.size(36.dp),
                             isClicked = true,
-                            image = CategoryList.getCategoryIconById(expense.categoryId),
-                            backgroundColor = CategoryList.getColorByCategory(expense.typeId)
+                            image = CategoryList.getCategoryIconById(expense.categoryId.toLong()),
+                            backgroundColor = CategoryList.getColorByTypeId(expense.typeId.toLong())
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Texts.BodySmall(

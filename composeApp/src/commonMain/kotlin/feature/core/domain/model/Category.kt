@@ -1,7 +1,12 @@
 package feature.core.domain.model
 
+import kotlinx.serialization.Serializable
+
+
+@Serializable
 data class Category(
-    val id: Int?=null,
-    val categoryId: Int,
-    val typeId: Int,
+    var id: Int,
+    var name: String="",
+    var order: Int?=null,
+    var typeId: Long?=null
 )

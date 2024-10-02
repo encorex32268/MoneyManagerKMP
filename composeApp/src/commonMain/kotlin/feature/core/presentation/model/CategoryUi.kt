@@ -1,9 +1,11 @@
 package feature.core.presentation.model
 
+
 data class CategoryUi(
-    val id: Int?=null,
-    val categoryId: Int,
-    val typeId: Int,
+    val id: Int,
+    val name: String,
+    val order: Int,
+    var typeId: Long?=null,
     val isClick: Boolean,
-    val name: String?=null
+    val colorArgb: Int? = null
 )
