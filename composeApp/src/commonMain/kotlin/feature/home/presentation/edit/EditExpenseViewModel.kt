@@ -1,0 +1,37 @@
+package feature.home.presentation.edit
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import feature.core.domain.repository.ExpenseRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+class EditExpenseViewModel(
+    private val repository: ExpenseRepository
+): ViewModel() {
+
+    private val _state = MutableStateFlow(EditExpenseState())
+    val state = _state.asStateFlow()
+
+    fun onEvent(event: EditExpenseEvent){
+        when(event){
+            is EditExpenseEvent.GetExpense    -> {
+                _state.update {
+                    it.copy(
+                        currentExpense = event.expense
+                    )
+                }
+            }
+            EditExpenseEvent.OnDelete -> {
+                if(state.value.currentExpense == null) return
+                viewModelScope.launch {
+                    repository.delete(
+                        expense = state.value.currentExpense!!
+                    )
+                }
+            }
+        }
+    }
+}

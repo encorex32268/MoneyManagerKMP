@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import feature.presentation.noRippleClick
+import feature.core.presentation.noRippleClick
 
 @Composable
 fun CircleIcon(

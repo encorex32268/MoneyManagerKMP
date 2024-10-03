@@ -2,7 +2,7 @@ package feature.core.domain.mapper
 
 import feature.core.data.model.TypeEntity
 import feature.core.domain.model.Type
-import feature.home.add.type.TypeUi
+import feature.home.presentation.add.type.TypeUi
 import io.realm.kotlin.ext.toRealmList
 
 fun TypeEntity.toType(): Type {
