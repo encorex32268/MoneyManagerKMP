@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import feature.core.data.MongoDB
 import feature.core.domain.repository.ExpenseRepository
+import feature.core.domain.repository.TypeRepository
 import feature.core.presentation.date.DateConverter
 import feature.core.presentation.date.DateConverter.getNowDate
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,14 +14,25 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val repository: ExpenseRepository
+    private val repository: ExpenseRepository,
+    private val typeRepository: TypeRepository
 ): ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
 
     init {
-        onEvent(HomeEvent.OnDatePick(isInit = true))
+        viewModelScope.launch {
+            typeRepository.getTypes().collectLatest { types ->
+                _state.update {
+                    it.copy(
+                        typesItem = types
+                    )
+                }
+                onEvent(HomeEvent.OnDatePick(isInit = true))
+            }
+        }
+
     }
 
     fun onEvent(event: HomeEvent){
@@ -46,8 +58,6 @@ class HomeViewModel(
                             .toList()
                         val incomeItems = data.filter { it.isIncome }
                         val expenseItems = data.filterNot { it.isIncome }
-
-                        println(">> ${expenseItems.map { it.id.toHexString() }}")
                         val income = incomeItems.sumOf { it.cost }
                         val expense = expenseItems.sumOf { it.cost }
                         val total = -expense + income

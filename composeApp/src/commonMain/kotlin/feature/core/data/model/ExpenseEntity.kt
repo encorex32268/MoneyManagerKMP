@@ -6,21 +6,12 @@ import io.realm.kotlin.types.annotations.Ignore
 import io.realm.kotlin.types.annotations.PrimaryKey
 import org.mongodb.kbson.ObjectId
 
-/**
-   Example:
-    categoryId =
-    typeId =
-    description = FastFood
-    isIncome = true or false
-    cost = $100
-    timestamp = 12345678
- */
 
 class ExpenseEntity(
     @PrimaryKey
     var id: ObjectId = ObjectId(),
     var categoryId: Int,
-    var typeId: Int,
+    var typeId: Long,
     var description: String,
     var isIncome: Boolean,
     var cost: Long,
@@ -28,7 +19,7 @@ class ExpenseEntity(
 ) : RealmObject{
     constructor() : this(
         categoryId = 0,
-        typeId = 0,
+        typeId = 0L,
         description = "",
         isIncome = false,
         cost = 0 , timestamp =0

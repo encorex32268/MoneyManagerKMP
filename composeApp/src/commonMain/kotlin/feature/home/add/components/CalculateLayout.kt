@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import feature.core.presentation.Texts
+import feature.core.ui.light_ErrorColorContainer
 import feature.home.add.AddState
 import feature.presentation.noRippleClick
 import kotlinx.coroutines.flow.Flow
@@ -231,7 +232,8 @@ private fun CalculateKeyboard(
                 icon = vectorResource(Res.drawable.baseline_remove),
                 contentDescription = "remove button",
                 onClick = onDelete,
-                backgroundColor = Color(245, 11, 11, 62)
+//                backgroundColor = Color(245, 11, 11, 62)
+                backgroundColor = light_ErrorColorContainer
             )
             CalendarButton(
                 modifier = Modifier.aspectRatio(aspectRatio / 2),

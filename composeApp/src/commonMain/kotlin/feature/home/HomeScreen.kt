@@ -135,15 +135,13 @@ fun HomeScreen(
             ){
                 items(
                     items = state.items,
-                    key = {
-                        it
-                    }
+                    key = { it }
                 ) {(_ , expenses) ->
                     ExpenseItem(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         items = expenses,
-                        onItemClick = onGotoEditScreen
+                        onItemClick = onGotoEditScreen,
+                        types = state.typesItem
                     )
                 }
                 item {

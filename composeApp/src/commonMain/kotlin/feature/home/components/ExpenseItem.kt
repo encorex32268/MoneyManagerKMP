@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import feature.core.domain.model.Expense
+import feature.core.domain.model.Type
 import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
@@ -36,6 +37,7 @@ import toMoneyString
 fun ExpenseItem(
     modifier: Modifier = Modifier,
     items: List<Expense>,
+    types: List<Type> = emptyList(),
     onItemClick: (Expense) -> Unit = {},
 ){
     if (items.isNotEmpty()){
@@ -95,11 +97,16 @@ fun ExpenseItem(
                         ,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        val findType = types.find {
+                            it.typeIdTimestamp == expense.typeId.toLong()
+                        }
+                        println("Debug ${findType}")
+                        println("Debug ${findType?.typeIdTimestamp }}")
                         CircleIcon(
                             modifier = Modifier.size(36.dp),
                             isClicked = true,
                             image = CategoryList.getCategoryIconById(expense.categoryId.toLong()),
-                            backgroundColor = CategoryList.getColorByTypeId(expense.typeId.toLong())
+                            backgroundColor = if (findType == null) CategoryList.getColorByTypeId(expense.typeId.toLong()) else Color(findType.colorArgb)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Texts.BodySmall(

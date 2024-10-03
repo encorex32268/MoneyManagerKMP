@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
@@ -34,7 +35,7 @@ fun ExpenseInfo(
     ) {
         CircleIcon(
             modifier = Modifier.size(48.dp),
-            backgroundColor = CategoryList.getColorByTypeId(categoryUi?.typeId?.toInt()?.toLong()?:0),
+            backgroundColor = if (categoryUi?.colorArgb == null) CategoryList.getColorByTypeId(categoryUi?.typeId?:0) else Color(categoryUi.colorArgb),
             image = CategoryList.getCategoryIconById(categoryUi?.id?.toLong()?:0),
             isClicked = true,
         )

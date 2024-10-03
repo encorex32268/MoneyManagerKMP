@@ -5,10 +5,6 @@ import feature.core.presentation.model.CategoryUi
 
 sealed interface AddEvent {
 
-    data class SetupExpense(
-        val expense: Expense?=null
-    ): AddEvent
-
     data class OnCostChange(
         val text: String
     ): AddEvent

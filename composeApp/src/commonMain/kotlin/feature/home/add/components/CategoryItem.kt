@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
@@ -34,7 +35,7 @@ fun CategoryItem(
                 .padding(top = 8.dp)
                 .size(48.dp)
             ,
-            backgroundColor = CategoryList.getColorByTypeId(categoryUi.typeId?.toLong()?:0),
+            backgroundColor = if (categoryUi.colorArgb == null) CategoryList.getColorByTypeId(categoryUi.typeId?:0) else Color(categoryUi.colorArgb),
             image = CategoryList.getCategoryIconById(categoryUi.id.toLong()),
             isClicked = isClicked,
             id = categoryUi.id,
@@ -51,8 +52,7 @@ fun CategoryItem(
             )
         }
         Texts.BodySmall(
-            text = description ,
-
+            text = description
         )
 
     }

@@ -6,15 +6,15 @@ import feature.core.domain.model.Expense
 
 fun Expense.toExpenseEntity() : ExpenseEntity {
 
-    return ExpenseEntity().apply {
-        id = this@toExpenseEntity.id
-        timestamp = this@toExpenseEntity.timestamp
-        typeId = this@toExpenseEntity.typeId
-        categoryId = this@toExpenseEntity.categoryId
-        description = this@toExpenseEntity.description
-        isIncome = this@toExpenseEntity.isIncome
-        cost = this@toExpenseEntity.cost
-    }
+    return ExpenseEntity(
+        id = id,
+        typeId = typeId,
+        categoryId = categoryId,
+        description = description,
+        isIncome = isIncome,
+        cost = cost,
+        timestamp = timestamp
+    )
 }
 
 fun ExpenseEntity.toExpense() : Expense {

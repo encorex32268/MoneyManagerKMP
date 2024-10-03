@@ -4,18 +4,24 @@
 
 package feature.home.add
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetDefaults.DragHandle
 import androidx.compose.material3.BottomSheetScaffold
@@ -34,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -42,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import feature.core.domain.model.Expense
 import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
+import feature.core.presentation.components.CircleIcon
 import feature.home.add.components.CalculateLayout
 import feature.home.add.components.CategoryItem
 import feature.home.add.components.CostTypeSelect
@@ -54,21 +62,19 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.core.parameter.parametersOf
 
 
 @Composable
 fun AddScreenRoot(
-    viewModel: AddViewModel = koinViewModel(),
     expense: Expense?=null,
+    viewModel: AddViewModel = koinViewModel {
+        parametersOf(expense)
+    },
     onGoBack: () -> Unit = {},
     onGoToCategoryEditClick: () -> Unit = {}
 ){
     val state by viewModel.state.collectAsState()
-    LaunchedEffect(Unit){
-        viewModel.onEvent(
-            AddEvent.SetupExpense(expense)
-        )
-    }
     LaunchedEffect(viewModel){
         viewModel.uiEvent.collectLatest {
             when(it){
@@ -121,6 +127,7 @@ fun AddScreen(
     BottomSheetScaffold(
         containerColor = Color.White,
         sheetContainerColor = Color.White,
+        sheetShadowElevation = 8.dp,
         modifier = Modifier
             .padding(horizontal = 8.dp)
             .pointerInput(Unit) {
@@ -205,7 +212,6 @@ fun AddScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
         ) {
             CostTypeSelect(
                 modifier = Modifier.padding(8.dp),
@@ -218,18 +224,15 @@ fun AddScreen(
                 onCloseClick = onGoBack,
                 onGoToCategoryEditClick = onGoToCategoryEditClick
             )
-            if (state.isLoading){
-                Box(
-                    modifier = Modifier.fillMaxWidth().weight(1f),
-                    contentAlignment = Alignment.Center
-                ){
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(36.dp),
-                        color = Color.Black
-                    )
-                }
-            }else{
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                ,
+                contentAlignment = Alignment.Center
+            ){
                 ItemSection(state, onEvent, scope, bottomSheetScaffoldState)
+
             }
 
         }
@@ -248,7 +251,7 @@ private fun ItemSection(
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
     ) {
-        if (state.recentlyItems.isNotEmpty()) {
+        if (state.recentlyItems?.categories?.isNotEmpty() == true) {
             Column {
                 Text(
                     text = stringResource(Res.string.recently),
@@ -258,7 +261,7 @@ private fun ItemSection(
                     modifier = Modifier.fillMaxWidth(),
                     maxItemsInEachRow = 4,
                 ) {
-                    val categories = state.recentlyItems.first().categories
+                    val categories = state.recentlyItems.categories
                     categories.forEach { categoryUi ->
                         val categoryNameRes =
                             CategoryList.getCategoryDescriptionById(categoryUi.id.toLong())
@@ -289,9 +292,23 @@ private fun ItemSection(
         }
         state.types.forEach {
             Column {
-                Texts.TitleSmall(
-                    text = it.name
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Box(
+                        modifier = Modifier.size(24.dp).background(
+                            color = Color(it.colorArgb),
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Texts.TitleSmall(
+                        modifier = Modifier.weight(1f),
+                        text = it.name
+                    )
+
+                }
                 FlowRow(
                     modifier = Modifier.fillMaxWidth(),
                     maxItemsInEachRow = 4,

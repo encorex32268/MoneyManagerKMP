@@ -28,7 +28,7 @@ class DetailViewModel : ViewModel() {
             it.copy(
                 items = dataGroup,
                 total = items.sumOf { it.cost },
-                typeId = if (items.isEmpty()) 0 else items[0].typeId
+                typeId = if (items.isEmpty()) 0 else items[0].typeId.toInt()
             )
         }
     }

@@ -10,6 +10,7 @@ import feature.core.data.RealmFactory
 import feature.core.data.repository.ExpenseRepositoryImpl
 import feature.core.data.repository.TypeRepositoryImpl
 import feature.core.domain.KeySettings
+import feature.core.domain.model.Expense
 import feature.core.domain.repository.ExpenseRepository
 import feature.core.domain.repository.TypeRepository
 import feature.home.HomeViewModel
@@ -42,7 +43,13 @@ val appModule = module {
     viewModelOf(::AppViewModel)
 
     viewModelOf(::HomeViewModel)
-    viewModelOf(::AddViewModel)
+    viewModel { (expense: Expense) ->
+        AddViewModel(
+            expense = expense,
+            repository = get(),
+            typeRepository = get()
+        )
+    }
     viewModelOf(::EditExpenseViewModel)
     viewModelOf(::ChartViewModel)
     viewModelOf(::DetailViewModel)

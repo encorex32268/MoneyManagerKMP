@@ -45,9 +45,11 @@ class TypeCategoryEditViewModel(
                             val updateData = state.value.typeUi.copy(
                                 categories = state.value.typeUi.categories.mapIndexed { index, categoryUi ->
                                     categoryUi.copy(
-                                        order = index
+                                        order = index,
+                                        typeId = state.value.typeUi.typeIdTimestamp,
+                                        colorArgb = state.value.typeUi.colorArgb
                                     )
-                                }
+                                },
                             )
                             repository.update(
                                 type =updateData.toType()
@@ -56,6 +58,24 @@ class TypeCategoryEditViewModel(
                     }
                     _uiEvent.send(TypeCategoryEditUiEvent.OnBack)
                 }
+            }
+            TypeCategoryEditEvent.OnSaveClick   -> {
+                val updateData = state.value.typeUi.copy(
+                    categories = state.value.typeUi.categories.mapIndexed { index, categoryUi ->
+                        categoryUi.copy(
+                            order = index,
+                            typeId = state.value.typeUi.typeIdTimestamp,
+                            colorArgb = state.value.typeUi.colorArgb
+                        )
+                    }
+                )
+                viewModelScope.launch {
+                    repository.update(
+                        type =updateData.toType()
+                    )
+                    _uiEvent.send(TypeCategoryEditUiEvent.OnSavedShow)
+                }
+
             }
             is TypeCategoryEditEvent.OnItemAdd ->{
                 if (event.categoryUi.name.trim().isEmpty()) return
@@ -98,33 +118,17 @@ class TypeCategoryEditViewModel(
                 }
                 _state.update {
                     it.copy(
-                        typeUi = typeUi.copy(
+                        typeUi = state.value.typeUi.copy(
                             categories = newItems
                         )
                     )
                 }
             }
 
-            TypeCategoryEditEvent.OnSaveClick   -> {
-                val updateData = state.value.typeUi.copy(
-                    categories = state.value.typeUi.categories.mapIndexed { index, categoryUi ->
-                        categoryUi.copy(
-                            order = index
-                        )
-                    }
-                )
-                viewModelScope.launch {
-                    repository.update(
-                        type =updateData.toType()
-                    )
-                    _uiEvent.send(TypeCategoryEditUiEvent.OnSavedShow)
-                }
-
-            }
             is TypeCategoryEditEvent.OnTypeEdit -> {
                 _state.update {
                     it.copy(
-                        typeUi = it.typeUi.copy(
+                        typeUi = state.value.typeUi.copy(
                             name = event.name,
                             colorArgb = event.colorArgb
                         )

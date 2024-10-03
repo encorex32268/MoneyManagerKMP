@@ -14,7 +14,6 @@ class AppViewModel(
     private val typeRepository: TypeRepository
 ): ViewModel() {
     init {
-        println("AppViewModel Created")
         viewModelScope.launch {
             if (!keySettings.getIsSetDefaultTypes()){
                 val types = mutableListOf<Type>()
@@ -23,6 +22,7 @@ class AppViewModel(
                     val typeId = entry.key?:0
                     val typeName = CategoryList.getTypeStringById(typeId = typeId)
                     val typeColor = CategoryList.getColorByTypeId(id = typeId).toArgb()
+                    println("Debug AppViewModel Init ${typeName} / ${typeColor}")
                     types.add(
                         Type(
                             typeIdTimestamp = typeId,
@@ -30,8 +30,10 @@ class AppViewModel(
                             colorArgb = typeColor,
                             order = index,
                             categories = entry.value.mapIndexed { index, category ->
+                                val description = CategoryList.getCategoryNameById(category.id.toLong())
                                 category.copy(
-                                    order = index
+                                    order = index,
+                                    name = description
                                 )
                             }
                         )

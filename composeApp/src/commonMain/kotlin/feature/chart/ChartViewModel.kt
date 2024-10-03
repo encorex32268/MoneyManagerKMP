@@ -50,7 +50,7 @@ class ChartViewModel(
                         }
                         val expenseChartList = expenseTypeList.map {
                             Chart(
-                                typeId = it.key,
+                                typeId = it.key.toInt(),
                                 expenseItems = it.value.sortedByDescending {
                                     it.cost
                                 }
@@ -65,7 +65,7 @@ class ChartViewModel(
                         }
                         val incomeChartList = incomeTypeList.map {
                             Chart(
-                                typeId = it.key,
+                                typeId = it.key.toInt(),
                                 expenseItems = it.value.sortedByDescending {
                                     it.cost
                                 }
