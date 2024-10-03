@@ -8,8 +8,10 @@ import feature.core.domain.mapper.toType
 import feature.core.domain.mapper.toTypeUi
 import feature.core.domain.model.Category
 import feature.core.domain.model.Type
+import feature.core.domain.repository.ExpenseRepository
 import feature.core.domain.repository.TypeRepository
 import feature.core.presentation.CategoryList
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,6 +23,7 @@ import kotlinx.coroutines.launch
 
 class TypeViewModel(
     private val repository: TypeRepository,
+    private val expenseRepository: ExpenseRepository
 ): ViewModel() {
 
     private val _state = MutableStateFlow(TypesState())
@@ -37,12 +40,13 @@ class TypeViewModel(
             repository.getTypes()
                 .filter { !isCancel.value }
                 .collectLatest { data ->
-                val mappedData = data.map { it.toTypeUi() }.filter { it.isShow }
-                val items = mappedData.sortedBy { it.order }
+                val items = data.map { it.toTypeUi() }.filter { it.isShow }.sortedBy { it.order }
+                val itemsNotShowing = data.map { it.toTypeUi() }.filter { !it.isShow }.sortedBy { it.order }
 
                 _state.update {
                     it.copy(
                         items = items,
+                        itemsNotShowing = itemsNotShowing
                     )
                 }
                 if (currentItems.isEmpty()){
@@ -75,20 +79,12 @@ class TypeViewModel(
             }
 
             is TypeEvent.OnHide        -> {
-                val newItems = state.value.items.toMutableList().apply {
-                    remove(event.type)
-                }
                 viewModelScope.launch {
                     repository.update(
                         type = event.type.copy(
                             isShow = false
                         ).toType()
                     )
-                    _state.update {
-                        it.copy(
-                            items = newItems
-                        )
-                    }
                 }
             }
 
@@ -110,6 +106,37 @@ class TypeViewModel(
                         }
                     }
                     _uiEvent.send(TypeUiEvent.OnBack)
+                }
+            }
+
+            is TypeEvent.OnDelete      -> {
+                viewModelScope.launch {
+                    val deleteTypeJob = this.launch {
+                        repository.delete(event.type.toType())
+                    }
+
+                    val deleteExpenseJob = this.launch {
+                        expenseRepository.getExpenseByTypeId(event.type.typeIdTimestamp)
+                            .collectLatest { items ->
+                                items.forEach {
+                                    expenseRepository.delete(it)
+                                }
+                                this.cancel()
+                            }
+                    }
+                    deleteTypeJob.join()
+                    deleteExpenseJob.join()
+                }
+
+            }
+
+            is TypeEvent.OnShow        -> {
+                viewModelScope.launch {
+                    repository.update(
+                        type = event.type.copy(
+                            isShow = true
+                        ).toType()
+                    )
                 }
             }
         }

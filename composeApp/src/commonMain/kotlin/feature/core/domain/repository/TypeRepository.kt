@@ -7,4 +7,5 @@ interface TypeRepository {
     fun getTypes(): Flow<List<Type>>
     suspend fun update(type: Type)
     suspend fun insert(type: Type)
+    suspend fun delete(type: Type)
 }

@@ -292,6 +292,7 @@ private fun ItemSection(
         }
         state.types.forEach {
             Column {
+                Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -336,10 +337,9 @@ private fun ItemSection(
                         Spacer(modifier = Modifier.weight(1f))
                     }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
             }
 
         }
-
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }

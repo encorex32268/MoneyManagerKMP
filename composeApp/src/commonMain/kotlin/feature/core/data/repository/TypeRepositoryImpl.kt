@@ -1,5 +1,6 @@
 package feature.core.data.repository
 
+import feature.core.data.model.ExpenseEntity
 import feature.core.data.model.TypeEntity
 import feature.core.domain.mapper.toCategoryEntity
 import feature.core.domain.mapper.toType
@@ -50,6 +51,20 @@ class TypeRepositoryImpl(
     override suspend fun insert(type: Type) {
         realm.write {
             copyToRealm(type.toTypeEntity())
+        }
+    }
+
+    override suspend fun delete(type: Type) {
+        realm.write {
+            val queriedTypeEntity = query<TypeEntity>(
+                query = "id == $0", type.id
+            )
+                .first()
+                .find()
+            if (queriedTypeEntity == null) return@write
+            findLatest(queriedTypeEntity)?.let { currentType ->
+                delete(currentType)
+            }
         }
     }
 }

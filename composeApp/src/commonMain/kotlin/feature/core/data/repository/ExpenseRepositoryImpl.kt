@@ -46,6 +46,17 @@ class ExpenseRepositoryImpl(
             }
     }
 
+    override fun getExpenseByTypeId(typeId: Long): Flow<List<Expense>> {
+        return realm.query(
+            clazz = ExpenseEntity::class,
+            query = "typeId == $0",typeId
+        ).asFlow().map {
+            it.list.map {
+                it.toExpense()
+            }
+        }
+    }
+
     override suspend fun delete(expense: Expense) {
         realm.write {
             val queriedExpenseEntity = query<ExpenseEntity>(

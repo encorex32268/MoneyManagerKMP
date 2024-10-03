@@ -12,6 +12,10 @@ interface ExpenseRepository {
 
     fun getRecentlyExpenses() : Flow<List<Expense>>
 
+    fun getExpenseByTypeId(
+        typeId: Long
+    ): Flow<List<Expense>>
+
     suspend fun delete(expense: Expense)
     suspend fun update(expense: Expense)
     suspend fun insert(expense: Expense)
