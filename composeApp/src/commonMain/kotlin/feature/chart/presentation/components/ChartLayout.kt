@@ -37,6 +37,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import feature.chart.presentation.ChartState
+import feature.core.domain.model.Expense
 import feature.core.domain.model.chart.Chart
 import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
@@ -51,7 +53,7 @@ import toMoneyString
 @Composable
 fun ChartLayout(
     modifier: Modifier = Modifier,
-    items: List<Chart> = emptyList(),
+    state: ChartState,
     sumTotal: Long = 0L
 ) {
     var isStart by remember {
@@ -100,16 +102,22 @@ fun ChartLayout(
                                 maxHeight = 200.dp
                             )
                             .drawBehind {
-                                items.forEachIndexed { index, item ->
-                                    val typeSumCost = item.expenseItems.sumOf { it.cost }
+                                state.items.forEachIndexed { index, item ->
+                                    val typeSumCost = if (state.isIncomeShown)
+                                        item.itemsIncome.sumOf { it.cost }
+                                    else {
+                                        item.itemsNotIncome.sumOf { it.cost }
+                                    }
                                     sweepAngle = 360f * typeSumCost / sumTotal
                                     if (index == 0) {
                                         startAngle = -90f
                                     } else {
-                                        startAngle += 360f * items[index - 1].expenseItems.sumOf { it.cost } / sumTotal
+                                        val chart = state.items[index - 1]
+                                        val countList = if (state.isIncomeShown) chart.itemsIncome else chart.itemsNotIncome
+                                        startAngle += 360f * countList.sumOf { it.cost } / sumTotal
                                     }
                                     drawArc(
-                                        color = CategoryList.getColorByTypeId(item.typeId.toLong()),
+                                        color = Color(item.type.colorArgb),
                                         startAngle = startAngle * animation,
                                         sweepAngle = sweepAngle * animation,
                                         useCenter = false,
@@ -139,24 +147,38 @@ fun ChartLayout(
                         modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        val sort = items.sortedByDescending {
-                            it.expenseItems.sumOf { it.cost }
+                        val sort = state.items.sortedByDescending {
+                            if (state.isIncomeShown){
+                                it.itemsIncome.sumOf { it.cost }
+                            }else{
+                                it.itemsNotIncome.sumOf { it.cost }
+                            }
                         }
-                        sort.forEach {
-                            Row {
-                                Box(
-                                    modifier = Modifier
-                                        .size(12.dp)
-                                        .clip(CircleShape)
-                                        .background(
-                                            color = CategoryList.getColorByTypeId(it.typeId.toLong()),
-                                            shape = CircleShape
-                                        )
-                                )
-                                Spacer(Modifier.width(8.dp))
-                                Texts.BodySmall(
-                                    text = CategoryList.getTypeStringByTypeId(it.typeId.toLong())
-                                )
+                        sort.forEach { chart ->
+                            val checkTotal = if (state.isIncomeShown) {
+                                chart.itemsIncome.sumOf { it.cost }
+                            }else{
+                                chart.itemsNotIncome.sumOf { it.cost }
+                            }
+                            if (checkTotal != 0L){
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ){
+                                    Box(
+                                        modifier = Modifier
+                                            .size(12.dp)
+                                            .clip(CircleShape)
+                                            .background(
+                                                color = Color(chart.type.colorArgb),
+                                                shape = CircleShape
+                                            )
+                                    )
+                                    Spacer(Modifier.width(8.dp))
+                                    Texts.BodySmall(
+                                        text = chart.type.name
+                                    )
+                                }
+
                             }
                         }
                     }
@@ -170,6 +192,9 @@ fun ChartLayout(
 
 
         }
+
+    }
+    if (sumTotal != 0L){
 
     }
 

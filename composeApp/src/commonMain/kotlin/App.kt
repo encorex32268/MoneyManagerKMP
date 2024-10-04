@@ -200,10 +200,11 @@ fun App(
                 }
                 composable<Route.Chart>{
                     ChartScreenRoot(
-                        onGotoDetail = {
+                        onGotoDetail = { items , type ->
                             navController.navigate(
                                 Route.ChartDetail(
-                                    items = it.expenseItems
+                                    items = items,
+                                    type = type
                                 ),
                                 navOptions = navOptions {
                                     launchSingleTop = true
@@ -214,12 +215,14 @@ fun App(
                 }
                 composable<Route.ChartDetail>(
                     typeMap = mapOf(
-                        typeOf<List<Expense>>() to ExpenseListNavType
+                        typeOf<List<Expense>>() to ExpenseListNavType,
+                        typeOf<Type>() to TypeNavType
                     )
                 ){
                     val chartDetail = it.toRoute<Route.ChartDetail>()
                     DetailScreenRoot(
                         items = chartDetail.items,
+                        type = chartDetail.type,
                         onBack = {
                             navController.navigateUp()
                         }

@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import feature.chart.presentation.chartdetail.components.ExpenseTypeTotal
 import feature.core.domain.model.Expense
+import feature.core.domain.model.Type
 import feature.core.presentation.Texts
 import feature.home.presentation.components.ExpenseItem
 import moneymanagerkmp.composeapp.generated.resources.Res
@@ -37,20 +38,20 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.core.parameter.parametersOf
 import toMoneyString
 
 @Composable
 fun DetailScreenRoot(
-    viewModel: DetailViewModel = koinViewModel(),
     items: List<Expense> = emptyList(),
-    onBack: () -> Unit = {}
+    type: Type,
+    viewModel: DetailViewModel = koinViewModel{
+      parametersOf(items, type)
+    },
+    onBack: () -> Unit = {},
 ){
     val state by viewModel.state.collectAsState()
-    LaunchedEffect(Unit){
-        viewModel.setupDetail(
-            items = items
-        )
-    }
+
     DetailScreen(
         state = state,
         onBack = onBack
@@ -72,7 +73,7 @@ fun DetailScreen(
         ExpenseTypeTotal(
             modifier = Modifier
                 .fillMaxWidth(),
-            typeId = state.typeId,
+            type = state.type,
             onBackClick = onBack
         )
         Spacer(modifier = Modifier.height(8.dp))

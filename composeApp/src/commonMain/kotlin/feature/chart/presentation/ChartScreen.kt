@@ -33,6 +33,8 @@ import feature.core.presentation.components.DatePicker
 
 import feature.chart.presentation.components.ChartLayout
 import feature.chart.presentation.components.ExpenseDetailLayout
+import feature.core.domain.model.Expense
+import feature.core.domain.model.Type
 import feature.core.domain.model.chart.Chart
 import feature.core.presentation.customTabIndicatorOffset
 import moneymanagerkmp.composeapp.generated.resources.Res
@@ -49,7 +51,7 @@ private const val INCOME = 1
 @Composable
 fun ChartScreenRoot(
     viewModel: ChartViewModel = koinViewModel(),
-    onGotoDetail: (Chart) -> Unit = {}
+    onGotoDetail: (List<Expense>,Type) -> Unit = { _ , _->}
 ){
 
     val state by viewModel.state.collectAsState()
@@ -69,7 +71,7 @@ fun ChartScreenRoot(
 fun ChartScreen(
     state: ChartState,
     onEvent: (ChartEvent) -> Unit = {},
-    onGotoDetail: (Chart) -> Unit = {}
+    onGotoDetail: (List<Expense>,Type) -> Unit = { _ , _->}
 ){
     val density = LocalDensity.current
     val tabWidths = remember {
@@ -83,19 +85,23 @@ fun ChartScreen(
         if(state.isIncomeShown) INCOME else EXPENSE
     }
 
-    val items = remember(state) {
-        if (state.isIncomeShown)
-            state.incomeTypeList
-        else state.expenseTypeList
-    }
     val sumTotal = remember(state) {
         run {
             var sum = 0L
-            items.forEach {
-                it.expenseItems.forEach {
-                    sum += it.cost
+            if (state.isIncomeShown){
+                state.items.forEach { chart ->
+                    chart.itemsIncome.forEach {
+                        sum += it.cost
+                    }
+                }
+            }else{
+                state.items.forEach {chart ->
+                    chart.itemsNotIncome.forEach {
+                        sum += it.cost
+                    }
                 }
             }
+
             sum
         }
     }
@@ -183,16 +189,25 @@ fun ChartScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                items = items,
+                state = state,
                 sumTotal = sumTotal
             )
             Spacer(Modifier.height(8.dp))
             ExpenseDetailLayout(
                 modifier = Modifier
                     .fillMaxWidth(),
-                items = items,
+                state = state,
                 sumTotal = sumTotal,
-                onItemClick = onGotoDetail
+                onItemClick = {
+                    onGotoDetail(
+                        if (state.isIncomeShown){
+                            it.itemsIncome
+                        }else {
+                            it.itemsNotIncome
+                        },
+                        it.type
+                    )
+                }
             )
 
         }

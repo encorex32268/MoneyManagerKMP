@@ -15,5 +15,6 @@ data class Expense(
     val cost: Long = 0,
     val timestamp: Long = 0
 ){
+    var colorArgb: Int? = null
     constructor(): this(categoryId = 0 , typeId = 0L , description = "")
 }

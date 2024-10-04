@@ -43,43 +43,11 @@ class ChartViewModel(
                         endTimeOfMonth = endTime
                     )
                     result.collectLatest { resultData ->
-                        val expenseTypeList = resultData.filter {
-                            !it.isIncome
-                        }.groupBy {
-                            it.typeId
-                        }
-                        val expenseChartList = expenseTypeList.map {
-                            Chart(
-                                typeId = it.key.toInt(),
-                                expenseItems = it.value.sortedByDescending {
-                                    it.cost
-                                }
-                            )
-                        }.sortedByDescending {
-                            it.expenseItems.sumOf { it.cost }
-                        }
-                        val incomeTypeList = resultData.filter {
-                            it.isIncome
-                        }.groupBy {
-                            it.typeId
-                        }
-                        val incomeChartList = incomeTypeList.map {
-                            Chart(
-                                typeId = it.key.toInt(),
-                                expenseItems = it.value.sortedByDescending {
-                                    it.cost
-                                }
-                            )
-                        }.sortedByDescending {
-                            it.expenseItems.sumOf { it.cost }
-                        }
-
                         val nowDateYear = event.year ?: DateConverter.getNowDate().year
                         val nowDateMonth = event.month ?: DateConverter.getNowDate().monthNumber
                         _state.update {
                             it.copy(
-                                expenseTypeList = expenseChartList,
-                                incomeTypeList = incomeChartList,
+                                items = resultData,
                                 nowDateYear = nowDateYear.toString(),
                                 nowDateMonth = nowDateMonth.toString()
                             )

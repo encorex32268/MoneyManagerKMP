@@ -1,7 +1,10 @@
 package feature.chart.data.repository
 
+import androidx.collection.mutableIntListOf
 import feature.chart.domain.repository.ChartRepository
 import feature.core.domain.model.Expense
+import feature.core.domain.model.Type
+import feature.core.domain.model.chart.Chart
 import feature.core.domain.repository.ExpenseRepository
 import feature.core.domain.repository.TypeRepository
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +18,7 @@ class ChartRepositoryImpl(
     override suspend fun getExpenseByTime(
         startTimeOfMonth: Long,
         endTimeOfMonth: Long
-    ): Flow<List<Expense>> {
+    ): Flow<List<Chart>> {
 
         val getExpenseFlow = expenseRepository.getExpenseByTime(
             startTimeOfMonth = startTimeOfMonth,
@@ -24,10 +27,23 @@ class ChartRepositoryImpl(
         val getTypeFlow = typeRepository.getTypes()
 
         return combine(getExpenseFlow , getTypeFlow ){ expenseList , typeList ->
-            val isShowType = typeList.filter { it.isShow }.map { it.typeIdTimestamp }
-            expenseList.filter {
-                it.typeId in isShowType
+            val showTypes = typeList.filter { it.isShow }
+            val chartItems = mutableListOf<Chart>()
+            showTypes.forEach { type ->
+               val expenses = expenseList.filter {
+                   type.typeIdTimestamp == it.typeId
+               }
+               if (expenses.isNotEmpty()){
+                   chartItems.add(
+                       Chart(
+                       type = type,
+                       items = expenses
+                    )
+                   )
+               }
             }
+            chartItems
+
         }
 
     }

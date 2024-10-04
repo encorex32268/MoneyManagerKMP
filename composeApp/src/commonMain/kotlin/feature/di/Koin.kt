@@ -41,25 +41,6 @@ val appModule = module {
 
     viewModelOf(::AppViewModel)
 
-    viewModelOf(::HomeViewModel)
-    viewModel { (expense: Expense) ->
-        AddViewModel(
-            expense = expense,
-            repository = get(),
-            typeRepository = get()
-        )
-    }
-    viewModelOf(::EditExpenseViewModel)
-    viewModelOf(::ChartViewModel)
-    viewModelOf(::DetailViewModel)
-    viewModelOf(::TypeViewModel)
-    viewModel { (typeUi: TypeUi) ->
-        TypeCategoryEditViewModel(
-            typeUi = get { parametersOf(typeUi) },
-            repository = get()
-        )
-    }
-
 
 }
 

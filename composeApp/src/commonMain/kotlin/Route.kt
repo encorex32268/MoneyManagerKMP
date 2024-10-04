@@ -30,7 +30,8 @@ sealed interface Route  {
 
     @Serializable
     data class  ChartDetail(
-        val items: List<Expense>
+        val items: List<Expense>,
+        val type: Type
     )
 }
 
