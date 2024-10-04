@@ -21,11 +21,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import androidx.navigation.toRoute
 import feature.chart.presentation.ChartScreenRoot
 import feature.chart.presentation.chartdetail.DetailScreenRoot
@@ -52,8 +54,9 @@ import kotlin.reflect.typeOf
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 @Preview
-fun App() {
-    val appViewModel = koinViewModel<AppViewModel>()
+fun App(
+    appViewModel:AppViewModel = koinViewModel<AppViewModel>()
+) {
     AppTheme {
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -84,7 +87,12 @@ fun App() {
                                 selected = (itemSelectedIndex == index),
                                 onClick = {
                                     itemSelectedIndex = index
-                                    navController.navigate(bottomNavigationItem.name)
+                                    navController.navigate(
+                                        bottomNavigationItem.name,
+                                        navOptions = navOptions {
+                                            launchSingleTop = true
+                                        }
+                                    )
                                 },
                                 icon = {
                                     Icon(
@@ -120,18 +128,29 @@ fun App() {
                                 Route.HomeAdd(
                                     expense = Expense(),
                                     isAddNew = true
-                                )
+                                ),
+                                navOptions = navOptions {
+                                    launchSingleTop = true
+                                }
                             )
                         },
                         onGotoChartScreen = {
                             itemSelectedIndex = 1
-                            navController.navigate(Route.Chart)
+                            navController.navigate(
+                                Route.Chart,
+                                navOptions = navOptions {
+                                    launchSingleTop = true
+                                }
+                            )
                         },
                         onGotoEditScreen = {
                             navController.navigate(
                                 Route.HomeEdit(
                                     expense = it
-                                )
+                                ),
+                                navOptions = navOptions {
+                                    launchSingleTop = true
+                                }
                             )
                         }
                     )
@@ -146,10 +165,15 @@ fun App() {
                     AddScreenRoot(
                         expense = if(homeAdd.isAddNew) null else homeAdd.expense,
                         onGoBack = {
-                            navController.popBackStack()
+                            navController.navigateUp()
                         },
                         onGoToCategoryEditClick = {
-                            navController.navigate(Route.Types)
+                            navController.navigate(
+                                route = Route.Types,
+                                navOptions = navOptions {
+                                    launchSingleTop = true
+                                }
+                            )
                         }
                     )
                 }
@@ -162,7 +186,7 @@ fun App() {
                     EditExpenseScreenRoot(
                         expense = expense,
                         onGoBack = {
-                            navController.popBackStack()
+                            navController.navigateUp()
                         },
                         onGotoAddScreen = {
                             navController.navigate(
@@ -180,7 +204,10 @@ fun App() {
                             navController.navigate(
                                 Route.ChartDetail(
                                     items = it.expenseItems
-                                )
+                                ),
+                                navOptions = navOptions {
+                                    launchSingleTop = true
+                                }
                             )
                         }
                     )
@@ -194,7 +221,7 @@ fun App() {
                     DetailScreenRoot(
                         items = chartDetail.items,
                         onBack = {
-                            navController.popBackStack()
+                            navController.navigateUp()
                         }
                     )
                 }
@@ -206,11 +233,14 @@ fun App() {
                 ){
                     TypesScreenRoot(
                         onBack = {
-                            navController.popBackStack()
+                            navController.navigateUp()
                         },
                         navigateToTypeCategoryEdit = {
                             navController.navigate(
-                                Route.TypeCategoryEdit(it.toType())
+                                Route.TypeCategoryEdit(it.toType()),
+                                navOptions = navOptions {
+                                    launchSingleTop = true
+                                }
                             )
                         }
                     )
@@ -225,7 +255,7 @@ fun App() {
                     TypeCategoryEditScreenRoot(
                         typeUi = typeUi,
                         onBack = {
-                            navController.popBackStack()
+                            navController.navigateUp()
                         }
                     )
                 }
