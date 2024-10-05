@@ -291,52 +291,55 @@ private fun ItemSection(
 
         }
         state.types.forEach {
-            Column {
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    Box(
-                        modifier = Modifier.size(24.dp).background(
-                            color = Color(it.colorArgb),
-                            shape = RoundedCornerShape(8.dp)
+            if (it.categories.isNotEmpty()){
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Box(
+                            modifier = Modifier.size(24.dp).background(
+                                color = Color(it.colorArgb),
+                                shape = RoundedCornerShape(8.dp)
+                            )
                         )
-                    )
-                    Spacer(Modifier.width(4.dp))
-                    Texts.TitleSmall(
-                        modifier = Modifier.weight(1f),
-                        text = it.name
-                    )
-
-                }
-                FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    maxItemsInEachRow = 4,
-                ) {
-                    it.categories.forEach { categoryUi ->
-                        CategoryItem(
+                        Spacer(Modifier.width(4.dp))
+                        Texts.TitleSmall(
                             modifier = Modifier.weight(1f),
-                            isClicked = categoryUi.isClick,
-                            categoryUi = categoryUi,
-                            onItemClick = {
-                                onEvent(
-                                    AddEvent.OnItemSelected(
-                                        categoryUi = categoryUi,
-                                        description = categoryUi.name
-                                    )
-                                )
-                                scope.launch {
-                                    bottomSheetScaffoldState.bottomSheetState.expand()
-                                }
-                            }
+                            text = it.name
                         )
 
                     }
-                    repeat(4 - it.categories.size % 4) {
-                        Spacer(modifier = Modifier.weight(1f))
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        maxItemsInEachRow = 4,
+                    ) {
+                        it.categories.forEach { categoryUi ->
+                            CategoryItem(
+                                modifier = Modifier.weight(1f),
+                                isClicked = categoryUi.isClick,
+                                categoryUi = categoryUi,
+                                onItemClick = {
+                                    onEvent(
+                                        AddEvent.OnItemSelected(
+                                            categoryUi = categoryUi,
+                                            description = categoryUi.name
+                                        )
+                                    )
+                                    scope.launch {
+                                        bottomSheetScaffoldState.bottomSheetState.expand()
+                                    }
+                                }
+                            )
+
+                        }
+                        repeat(4 - it.categories.size % 4) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
                     }
                 }
+
             }
 
         }

@@ -33,7 +33,7 @@ fun CategoryItem(
             modifier = Modifier
                 .padding(horizontal = 4.dp)
                 .padding(top = 8.dp)
-                .size(48.dp)
+                .size(42.dp)
             ,
             backgroundColor = if (categoryUi.colorArgb == null) CategoryList.getColorByTypeId(categoryUi.typeId?:0) else Color(categoryUi.colorArgb),
             image = CategoryList.getCategoryIconById(categoryUi.id.toLong()),

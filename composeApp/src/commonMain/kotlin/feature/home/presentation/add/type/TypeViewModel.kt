@@ -40,7 +40,9 @@ class TypeViewModel(
             repository.getTypes()
                 .filter { !isCancel.value }
                 .collectLatest { data ->
-                val items = data.map { it.toTypeUi() }.filter { it.isShow }.sortedBy { it.order }
+                val items = data.map {
+                    it.toTypeUi()
+                }.filter { it.isShow }.sortedBy { it.order }
                 val itemsNotShowing = data.map { it.toTypeUi() }.filter { !it.isShow }.sortedBy { it.order }
 
                 _state.update {

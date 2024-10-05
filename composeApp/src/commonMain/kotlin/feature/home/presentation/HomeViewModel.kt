@@ -1,8 +1,10 @@
 package feature.home.presentation
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import feature.core.domain.repository.ExpenseRepository
+import feature.core.domain.repository.TypeRepository
 import feature.core.presentation.date.DateConverter
 import feature.core.presentation.date.DateConverter.getNowDate
 import feature.home.domain.repository.HomeRepository
@@ -13,14 +15,24 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val repository: HomeRepository
+    private val repository: HomeRepository,
+    private val typeRepository: TypeRepository
 ): ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
 
     init {
-        onEvent(HomeEvent.OnDatePick(isInit = true))
+        viewModelScope.launch {
+            typeRepository.getTypes().collectLatest { data ->
+                _state.update {
+                    it.copy(
+                        typesItem = data
+                    )
+                }
+                onEvent(HomeEvent.OnDatePick(isInit = true))
+            }
+        }
     }
 
     fun onEvent(event: HomeEvent){

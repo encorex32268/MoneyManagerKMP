@@ -34,7 +34,7 @@ fun ExpenseInfo(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CircleIcon(
-            modifier = Modifier.size(48.dp),
+            modifier = Modifier.size(36.dp),
             backgroundColor = if (categoryUi?.colorArgb == null) CategoryList.getColorByTypeId(categoryUi?.typeId?:0) else Color(categoryUi.colorArgb),
             image = CategoryList.getCategoryIconById(categoryUi?.id?.toLong()?:0),
             isClicked = true,

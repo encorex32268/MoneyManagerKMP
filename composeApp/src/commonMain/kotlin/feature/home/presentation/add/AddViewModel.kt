@@ -1,5 +1,6 @@
 package feature.home.presentation.add
 
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -58,6 +59,7 @@ class AddViewModel(
             val recentlyExpense = repository.getRecentlyExpenses()
             val types = typeRepository.getTypes()
             combine(recentlyExpense,types){ recentlyExpenseFlow , typeFlow ->
+
                 var isIconClicked = false
                 val recentlyType = TypeUi(
                     typeIdTimestamp = -1,
@@ -66,6 +68,11 @@ class AddViewModel(
                     isShow = true,
                     order = 0,
                     categories = recentlyExpenseFlow.mapIndexed { index, recentlyExpense ->
+                        val findType = typeFlow.find { type ->
+                            type.typeIdTimestamp == recentlyExpense.typeId
+                        }
+                        val colorArgb = findType?.colorArgb ?:CategoryList.getColorByTypeId(recentlyExpense.typeId).toArgb()
+
                         val isSameIconFound = recentlyExpense.idString == expense?.idString
                         if (isSameIconFound){
                             isIconClicked = true
@@ -76,7 +83,7 @@ class AddViewModel(
                             order = index,
                             typeId = recentlyExpense.typeId.toLong(),
                             isClick = recentlyExpense.idString == expense?.idString,
-                            colorArgb = CategoryList.getColorByTypeId(recentlyExpense.typeId.toLong()).toArgb()
+                            colorArgb = colorArgb
                         )
                     }
                 )
@@ -86,7 +93,7 @@ class AddViewModel(
                             it.toCategoryUi().copy(
                                 typeId = type.typeIdTimestamp,
                                 colorArgb = type.colorArgb,
-                                isClick = if (isIconClicked) false else expense?.typeId?.toLong() == it.typeId && expense?.categoryId == it.id
+                                isClick = if (isIconClicked) false else expense?.typeId == it.typeId && expense?.categoryId == it.id
                             )
 
                         }
@@ -104,12 +111,17 @@ class AddViewModel(
                         isIncome = expense?.isIncome?:false,
                         cost = expense?.let { expense.cost.toString() }?:"0",
                         categoryUi = expense?.let {
+                            val findType = typeFlow.find { type ->
+                                type.typeIdTimestamp == it.typeId
+                            }
+                            val colorArgb = findType?.colorArgb ?:CategoryList.getColorByTypeId(it.typeId).toArgb()
                             CategoryUi(
-                                typeId = expense.typeId.toLong(),
+                                typeId = expense.typeId,
                                 id = expense.categoryId,
                                 isClick = true,
                                 order = 0,
-                                name = expense.description
+                                name = expense.description,
+                                colorArgb = colorArgb
                             )
                         },
                         description = expense?.description?:""

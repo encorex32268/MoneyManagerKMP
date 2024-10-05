@@ -46,7 +46,10 @@ fun ExpenseDetailLayout(
                     val percent = sum / sumTotal.toFloat()
                     Row(
                         modifier = Modifier
-                            .padding(horizontal = 8.dp)
+                            .padding(
+                                start = 24.dp,
+                                end = 8.dp
+                            )
                             .noRippleClick {
                                 onItemClick(it)
                             },

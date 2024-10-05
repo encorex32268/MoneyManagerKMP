@@ -31,7 +31,6 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import toMoneyString
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ExpenseItem(
     modifier: Modifier = Modifier,
@@ -99,8 +98,6 @@ fun ExpenseItem(
                         val findType = types.find {
                             it.typeIdTimestamp == expense.typeId.toLong()
                         }
-                        println("Debug ${findType}")
-                        println("Debug ${findType?.typeIdTimestamp }}")
                         CircleIcon(
                             modifier = Modifier.size(36.dp),
                             isClicked = true,
