@@ -82,8 +82,8 @@ android {
         applicationId = "com.lihan.moneymanager"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 8
-        versionName = "1.0"
+        versionCode = 10
+        versionName = "1.5-beta"
     }
     packaging {
         resources {
@@ -103,6 +103,5 @@ android {
         compose = true
     }
 }
-
 task("testClasses")
 
