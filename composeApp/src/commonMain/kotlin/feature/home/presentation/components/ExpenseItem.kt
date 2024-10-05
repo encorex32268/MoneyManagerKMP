@@ -37,6 +37,7 @@ fun ExpenseItem(
     items: List<Expense>,
     types: List<Type> = emptyList(),
     onItemClick: (Expense) -> Unit = {},
+    isClick: Boolean = true
 ){
     if (items.isNotEmpty()){
         val total = mutableStateOf(
@@ -100,7 +101,7 @@ fun ExpenseItem(
                         }
                         CircleIcon(
                             modifier = Modifier.size(36.dp),
-                            isClicked = true,
+                            isClicked = isClick,
                             image = CategoryList.getCategoryIconById(expense.categoryId.toLong()),
                             backgroundColor = if (findType == null) CategoryList.getColorByTypeId(expense.typeId.toLong()) else Color(findType.colorArgb)
                         )

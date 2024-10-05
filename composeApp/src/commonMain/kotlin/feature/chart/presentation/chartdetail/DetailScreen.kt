@@ -92,7 +92,8 @@ fun DetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                items = it.second
+                items = it.second,
+                isClick = false
             )
         }
     }
