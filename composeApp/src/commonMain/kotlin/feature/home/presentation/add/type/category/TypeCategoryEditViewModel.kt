@@ -81,10 +81,6 @@ class TypeCategoryEditViewModel(
                 if (event.categoryUi.name.trim().isEmpty()) return
                 val newItems = state.value.typeUi.categories.toMutableList().apply {
                     add(event.categoryUi)
-                }.mapIndexed { index, categoryUi ->
-                    categoryUi.copy(
-                        order = index
-                    )
                 }
                 _state.update {
                     it.copy(
@@ -98,10 +94,6 @@ class TypeCategoryEditViewModel(
             is TypeCategoryEditEvent.OnItemRemove ->{
                 val newItems = state.value.typeUi.categories.toMutableList().apply {
                     remove(event.categoryUi)
-                }.mapIndexed { index, categoryUi ->
-                    categoryUi.copy(
-                        order = index
-                    )
                 }
                 _state.update {
                     it.copy(

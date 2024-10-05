@@ -411,9 +411,9 @@ object CategoryList {
                 painterResource(Res.drawable.life_money_income)
             }
 
-//            LIFE + 13 -> {
-//                painterResource(Res.drawable.life_rent)
-//            }
+            LIFE + 13 -> {
+                painterResource(Res.drawable.life_rent)
+            }
 
             LIFE + 14 -> {
                 painterResource(Res.drawable.life_salary)
@@ -1036,11 +1036,9 @@ object CategoryList {
             LIFE + 12 -> {
                 stringResource(Res.string.life_money_income)
             }
-
-//            LIFE + 13 -> {
-//                stringResource(Res.string.life_rent)
-//            }
-
+            LIFE + 13 -> {
+                stringResource(Res.string.life_rent)
+            }
             LIFE + 14 -> {
                 stringResource(Res.string.life_salary)
             }
@@ -1660,11 +1658,9 @@ object CategoryList {
             LIFE + 12 -> {
                 getString(Res.string.life_money_income)
             }
-
-//            LIFE + 13 -> {
-//                getString(Res.string.life_rent)
-//            }
-
+            LIFE + 13 -> {
+                getString(Res.string.life_rent)
+            }
             LIFE + 14 -> {
                 getString(Res.string.life_salary)
             }
@@ -2087,7 +2083,7 @@ object CategoryList {
 
 
             else -> {
-                ""
+                "?"
             }
         }
     }

@@ -22,7 +22,8 @@ fun CategoryItem(
     modifier: Modifier = Modifier,
     categoryUi: CategoryUi,
     isClicked: Boolean,
-    onItemClick: (() -> Unit)? = null
+    onItemClick: (() -> Unit)? = null,
+    isVisibilityText: Boolean = true
 ){
     Column(
         modifier = modifier,
@@ -46,14 +47,16 @@ fun CategoryItem(
             },
         )
 
-        val description = categoryUi.name.ifEmpty {
-            CategoryList.getCategoryDescriptionById(
-                categoryUi.id.toLong()
+        if (isVisibilityText){
+            val description = categoryUi.name.ifEmpty {
+                CategoryList.getCategoryDescriptionById(
+                    categoryUi.id.toLong()
+                )
+            }
+            Texts.BodySmall(
+                text = description
             )
         }
-        Texts.BodySmall(
-            text = description
-        )
 
     }
 }

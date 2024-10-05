@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -117,6 +118,8 @@ fun TypeCategoryEditScreen(
     var isShowAddDialog by remember {
         mutableStateOf(false)
     }
+    val gridState = rememberLazyGridState()
+
     val reorderState = rememberReorderableLazyGridState(
         onMove = { from , to ->
             onEvent(
@@ -209,6 +212,7 @@ fun TypeCategoryEditScreen(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .weight(1f)
                         .padding(16.dp)
                         .border(
                             1.dp,
@@ -219,16 +223,17 @@ fun TypeCategoryEditScreen(
                 ) {
                     items(
                         items = state.typeUi.categories,
-                        key = { it.hashCode() }
+                        key = {
+                            it.id
+                        }
                     )
                     { item ->
                         ReorderableItem(
                             modifier = Modifier
                                 .padding(8.dp)
-                                .detectReorderAfterLongPress(reorderState)
-                            ,
+                                .detectReorderAfterLongPress(reorderState),
                             reorderableState = reorderState,
-                            key = item.hashCode()
+                            key = item.id
                         ) { isDragging ->
                             Icon(
                                 modifier = Modifier
@@ -254,13 +259,15 @@ fun TypeCategoryEditScreen(
                 LazyVerticalGrid(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .weight(1f)
                         .padding(16.dp)
                         .border(
                             1.dp,
                             color = Color.Black,
                             shape = RoundedCornerShape(16.dp)
                         ),
-                    columns = GridCells.Fixed(4)
+                    columns = GridCells.Fixed(4),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(
                         state.categories
@@ -271,7 +278,8 @@ fun TypeCategoryEditScreen(
                             onItemClick = {
                                 currentCategoryUi = item
                                 isShowAddDialog = true
-                            }
+                            },
+                            isVisibilityText = false
                         )
                     }
 
