@@ -45,9 +45,16 @@ class ChartViewModel(
                     result.collectLatest { resultData ->
                         val nowDateYear = event.year ?: DateConverter.getNowDate().year
                         val nowDateMonth = event.month ?: DateConverter.getNowDate().monthNumber
+                        val sortedItems = resultData.sortedByDescending {
+                            if (state.value.isIncomeShown){
+                                it.itemsIncome.sumOf { it.cost }
+                            }else{
+                                it.itemsNotIncome.sumOf { it.cost }
+                            }
+                        }
                         _state.update {
                             it.copy(
-                                items = resultData,
+                                items = sortedItems,
                                 nowDateYear = nowDateYear.toString(),
                                 nowDateMonth = nowDateMonth.toString()
                             )

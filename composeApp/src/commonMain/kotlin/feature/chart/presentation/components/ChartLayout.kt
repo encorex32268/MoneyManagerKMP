@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -74,6 +76,7 @@ fun ChartLayout(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(16.dp))
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -90,7 +93,9 @@ fun ChartLayout(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Box(
-                        modifier = Modifier.weight(3f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(3f),
                         contentAlignment = Alignment.Center
                     ){
                         Box(modifier = Modifier
@@ -142,23 +147,20 @@ fun ChartLayout(
                             )
                         }
                     }
-                    Spacer(Modifier.width(20.dp))
+                    Spacer(Modifier.width(12.dp))
                     Column(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        val sort = state.items.sortedByDescending {
-                            if (state.isIncomeShown){
-                                it.itemsIncome.sumOf { it.cost }
-                            }else{
-                                it.itemsNotIncome.sumOf { it.cost }
-                            }
-                        }
-                        sort.forEach { chart ->
-                            val checkTotal = if (state.isIncomeShown) {
-                                chart.itemsIncome.sumOf { it.cost }
-                            }else{
-                                chart.itemsNotIncome.sumOf { it.cost }
+                        state.items.forEach { chart ->
+                            val checkTotal =  remember(state.isIncomeShown){
+                                if (state.isIncomeShown) {
+                                    chart.itemsIncome.sumOf { it.cost }
+                                }else{
+                                    chart.itemsNotIncome.sumOf { it.cost }
+                                }
                             }
                             if (checkTotal != 0L){
                                 Row(
@@ -189,13 +191,7 @@ fun ChartLayout(
             }
             Spacer(modifier = Modifier.height(8.dp))
 
-
-
         }
-
-    }
-    if (sumTotal != 0L){
-
     }
 
 }

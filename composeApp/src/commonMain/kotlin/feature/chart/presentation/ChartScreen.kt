@@ -47,6 +47,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 private const val EXPENSE = 0
 private const val INCOME = 1
+private const val TAB_SIZE = 2
 
 @Composable
 fun ChartScreenRoot(
@@ -76,7 +77,7 @@ fun ChartScreen(
     val density = LocalDensity.current
     val tabWidths = remember {
         val tabWidthStateList = mutableStateListOf<Dp>()
-        repeat(2){
+        repeat(TAB_SIZE){
             tabWidthStateList.add(0.dp)
         }
         tabWidthStateList
@@ -86,24 +87,21 @@ fun ChartScreen(
     }
 
     val sumTotal = remember(state) {
-        run {
-            var sum = 0L
-            if (state.isIncomeShown){
-                state.items.forEach { chart ->
-                    chart.itemsIncome.forEach {
-                        sum += it.cost
-                    }
-                }
-            }else{
-                state.items.forEach {chart ->
-                    chart.itemsNotIncome.forEach {
-                        sum += it.cost
-                    }
+        var sum = 0L
+        if (state.isIncomeShown){
+            state.items.forEach { chart ->
+                chart.itemsIncome.forEach {
+                    sum += it.cost
                 }
             }
-
-            sum
+        }else{
+            state.items.forEach {chart ->
+                chart.itemsNotIncome.forEach {
+                    sum += it.cost
+                }
+            }
         }
+        sum
     }
 
     Column(
