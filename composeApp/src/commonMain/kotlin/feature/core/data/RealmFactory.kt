@@ -5,6 +5,7 @@ import feature.core.data.model.ExpenseEntity
 import feature.core.data.model.TypeEntity
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
+import migration_0_to_1
 
 class RealmFactory{
 
@@ -20,6 +21,8 @@ class RealmFactory{
                 )
             )
                 .compactOnLaunch()
+                .migration(migration_0_to_1)
+                .schemaVersion(1)
                 .build()
             realm = Realm.open(config)
         }

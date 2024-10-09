@@ -38,12 +38,18 @@ class TypeViewModel(
     init {
         viewModelScope.launch {
             repository.getTypes()
-                .filter { !isCancel.value }
+                .filter {
+                    !isCancel.value
+                }
                 .collectLatest { data ->
-                val items = data.map {
-                    it.toTypeUi()
-                }.filter { it.isShow }.sortedBy { it.order }
-                val itemsNotShowing = data.map { it.toTypeUi() }.filter { !it.isShow }.sortedBy { it.order }
+
+                val items = data.map { it.toTypeUi() }
+                    .filter { it.isShow }
+                    .sortedBy { it.order }
+
+                val itemsNotShowing = data.map { it.toTypeUi() }
+                    .filter { !it.isShow }
+                    .sortedBy { it.order }
 
                 _state.update {
                     it.copy(
@@ -73,13 +79,13 @@ class TypeViewModel(
             }
             is TypeEvent.OnNew         -> {
                 val typeUi = event.type
+                if (typeUi.name.isEmpty() || typeUi.colorArgb ==0) return
                 viewModelScope.launch {
                     repository.insert(
-                        typeUi.toType()
+                        type = typeUi.toType()
                     )
                 }
             }
-
             is TypeEvent.OnHide        -> {
                 viewModelScope.launch {
                     repository.update(
@@ -89,7 +95,6 @@ class TypeViewModel(
                     )
                 }
             }
-
             TypeEvent.OnBackClick      -> {
                 viewModelScope.launch {
                     isCancel.update { true }

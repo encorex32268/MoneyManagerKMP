@@ -100,7 +100,9 @@ fun TypesScreen(
         }
     )
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ){
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -157,9 +159,7 @@ fun TypesScreen(
                         Row (
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(
-                                    MaterialTheme.colorScheme.surface
-                                )
+                                .background(Color.White)
                             ,
                             verticalAlignment = Alignment.CenterVertically
                         ){
@@ -280,9 +280,7 @@ private fun OnHideTypeItem(
     Row (
         modifier = modifier
             .fillMaxWidth()
-            .background(
-                MaterialTheme.colorScheme.surface
-            )
+            .background(Color.White)
         ,
         verticalAlignment = Alignment.CenterVertically
     ){

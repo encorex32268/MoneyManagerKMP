@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -26,9 +27,10 @@ import feature.core.presentation.components.CircleIcon
 import feature.core.presentation.date.DateConverter
 import feature.core.presentation.noRippleClick
 import moneymanagerkmp.composeapp.generated.resources.Res
+import moneymanagerkmp.composeapp.generated.resources.baseline_sticky_note_24
 import moneymanagerkmp.composeapp.generated.resources.total_expense_item
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import toMoneyString
 
 @Composable
@@ -106,10 +108,23 @@ fun ExpenseItem(
                             backgroundColor = if (findType == null) CategoryList.getColorByTypeId(expense.typeId.toLong()) else Color(findType.colorArgb)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Texts.BodySmall(
+                        Row(
                             modifier = Modifier.weight(1f),
-                            text = expense.description,
-                        )
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            Texts.BodySmall(
+                                text = expense.description,
+                            )
+                            if (expense.content.trim().isNotEmpty()){
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Icon(
+                                    modifier = Modifier.size(12.dp),
+                                    imageVector = vectorResource(Res.drawable.baseline_sticky_note_24),
+                                    contentDescription = null,
+                                    tint = Color.Gray
+                                )
+                            }
+                        }
                         Spacer(modifier = Modifier.width(8.dp))
                         Texts.BodySmall(
                             text = if (expense.isIncome) expense.cost.toMoneyString() else "-${expense.cost.toMoneyString()}",

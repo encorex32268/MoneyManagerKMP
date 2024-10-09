@@ -7,27 +7,35 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +46,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import feature.core.domain.model.Expense
@@ -47,14 +60,21 @@ import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
 import feature.core.presentation.components.TwoButtonDialog
 import feature.core.presentation.date.DateConverter
+import feature.core.presentation.noRippleClick
 import feature.home.presentation.edit.components.CostTypeItem
+import kotlinx.coroutines.flow.collectLatest
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_attach_money_24
+import moneymanagerkmp.composeapp.generated.resources.baseline_sticky_note_24
+import moneymanagerkmp.composeapp.generated.resources.description
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_content
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_title
+import moneymanagerkmp.composeapp.generated.resources.nunitosans_10pt_regular
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
@@ -70,10 +90,16 @@ fun EditExpenseScreenRoot(
     onGotoAddScreen: () -> Unit = {}
 ){
     val state by viewModel.state.collectAsState()
+    LaunchedEffect(viewModel){
+        viewModel.uiEvent.collectLatest {
+            when(it){
+                EditExpenseUiEvent.OnBack -> onGoBack()
+            }
+        }
+    }
     EditExpenseScreen(
         state = state,
         onEvent = viewModel::onEvent,
-        onGoBack = onGoBack,
         onGotoAddScreen = onGotoAddScreen
     )
 }
@@ -83,9 +109,10 @@ fun EditExpenseScreenRoot(
 fun EditExpenseScreen(
     state: EditExpenseState,
     onEvent: (EditExpenseEvent) -> Unit = {},
-    onGoBack: () -> Unit = {},
     onGotoAddScreen: () -> Unit = {}
 ) {
+    val keyboard = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     var isShowDeleteDialog by remember {
         mutableStateOf(false)
@@ -100,18 +127,28 @@ fun EditExpenseScreen(
             type?.colorArgb ?:CategoryList.getColorByTypeId(it.typeId).toArgb()
         }
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .noRippleClick {
+                    keyboard?.hide()
+                    focusManager.clearFocus()
+                }
+            ,
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .background(Color.White),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier.weight(1f)
                 ){
                     IconButton(
-                        onClick = onGoBack
+                        onClick = {
+                            onEvent(EditExpenseEvent.OnBackClick)
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
@@ -142,6 +179,7 @@ fun EditExpenseScreen(
                 }
 
             }
+
             OutlinedCard(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 colors = CardDefaults.cardColors(
@@ -160,6 +198,9 @@ fun EditExpenseScreen(
                         iconId = it.categoryId,
                         colorArgb = colorArgb,
                         description = it.description
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.padding(8.dp)
                     )
                     Column(
                         modifier = Modifier.fillMaxWidth()
@@ -182,6 +223,15 @@ fun EditExpenseScreen(
                     }
                 }
             }
+            Spacer(modifier = Modifier.height(16.dp))
+            ContentSection(
+                content = state.currentExpense.content,
+                onValueChange = {
+                    onEvent(
+                        EditExpenseEvent.OnContentChange(it)
+                    )
+                }
+            )
         }
 
     }
@@ -191,7 +241,6 @@ fun EditExpenseScreen(
             content = stringResource(Res.string.dialog_delete_content),
             onConfirmButtonClick = {
                 onEvent(EditExpenseEvent.OnDelete)
-                onGoBack()
             },
             onDismissRequest = {
                 isShowDeleteDialog = false
@@ -316,3 +365,62 @@ private fun IconSection(
     }
 
 }
+
+@Composable
+private fun ContentSection(
+    modifier: Modifier = Modifier,
+    content: String = "",
+    onValueChange: (String) -> Unit,
+    textStyle: TextStyle = TextStyle(
+        fontFamily = FontFamily(Font(Res.font.nunitosans_10pt_regular)),
+        fontSize = 12.sp
+    )
+){
+    OutlinedCard(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp)
+                .padding(horizontal = 24.dp)
+        ){
+            Icon(
+                modifier = Modifier.size(16.dp),
+                imageVector = vectorResource(Res.drawable.baseline_sticky_note_24),
+                contentDescription = null,
+                tint = Color.Black
+            )
+            BasicTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Max)
+                    .padding(16.dp),
+                value = content,
+                onValueChange = onValueChange,
+                decorationBox = { it ->
+                    if (content.trim().isEmpty()){
+                        Text(
+                            text = stringResource(Res.string.description),
+                            style = textStyle,
+                            color = Color.LightGray
+                        )
+                    }
+                    it()
+                },
+                textStyle = textStyle,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                )
+            )
+
+        }
+    }
+}
+

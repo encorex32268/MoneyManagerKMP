@@ -118,8 +118,6 @@ fun TypeCategoryEditScreen(
     var isShowAddDialog by remember {
         mutableStateOf(false)
     }
-    val gridState = rememberLazyGridState()
-
     val reorderState = rememberReorderableLazyGridState(
         onMove = { from , to ->
             onEvent(
@@ -130,10 +128,15 @@ fun TypeCategoryEditScreen(
         }
     )
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+            ,
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -171,9 +174,7 @@ fun TypeCategoryEditScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 8.dp)
-                    .background(
-                        MaterialTheme.colorScheme.surface
-                    )
+                    .background(Color.White)
                     .noRippleClick {
                         isShowColorPicker = true
                     }
@@ -201,7 +202,10 @@ fun TypeCategoryEditScreen(
             }
 
             Column(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .background(Color.White)
+                ,
                 verticalArrangement = Arrangement.SpaceBetween
             ){
                 LazyVerticalGrid(
@@ -224,16 +228,18 @@ fun TypeCategoryEditScreen(
                     items(
                         items = state.typeUi.categories,
                         key = {
-                            it.id
+                            it.uuid
                         }
                     )
                     { item ->
                         ReorderableItem(
                             modifier = Modifier
                                 .padding(8.dp)
-                                .detectReorderAfterLongPress(reorderState),
+                                .detectReorderAfterLongPress(reorderState)
+                                .background(Color.White)
+                            ,
                             reorderableState = reorderState,
-                            key = item.id
+                            key = item.uuid
                         ) { isDragging ->
                             Icon(
                                 modifier = Modifier
@@ -270,7 +276,10 @@ fun TypeCategoryEditScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(
-                        state.categories
+                        state.categories,
+                        key = {
+                            it.id
+                        }
                     ) { item ->
                         CategoryItem(
                             categoryUi = item,

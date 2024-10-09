@@ -1,7 +1,10 @@
 package feature.home.presentation.edit
 
-import feature.core.domain.model.Expense
 
 sealed interface EditExpenseEvent {
+    data object OnBackClick: EditExpenseEvent
     data object OnDelete: EditExpenseEvent
+    data class OnContentChange(
+        val text: String
+    ): EditExpenseEvent
 }

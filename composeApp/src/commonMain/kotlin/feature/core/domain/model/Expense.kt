@@ -13,7 +13,8 @@ data class Expense(
     val description: String,
     val isIncome: Boolean=false,
     val cost: Long = 0,
-    val timestamp: Long = 0
+    val timestamp: Long = 0,
+    val content: String = ""
 ){
     constructor(): this(categoryId = 0 , typeId = 0L , description = "")
 }

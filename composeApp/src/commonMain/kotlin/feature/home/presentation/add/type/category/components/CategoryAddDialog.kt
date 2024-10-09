@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import feature.core.presentation.CategoryList
 import feature.core.presentation.model.CategoryUi
+import feature.core.presentation.noRippleClick
 
 @Composable
 fun CategoryAddDialog(
@@ -43,7 +44,7 @@ fun CategoryAddDialog(
 ) {
 
     var currentCategoryUi by remember {
-        mutableStateOf<CategoryUi>(categoryUi)
+        mutableStateOf(categoryUi)
     }
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -53,7 +54,7 @@ fun CategoryAddDialog(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {
+                    .noRippleClick {
                         keyboard?.hide()
                         focusManager.clearFocus(true)
                     }
@@ -104,7 +105,6 @@ fun CategoryAddDialog(
                     IconButton(
                         onClick = {
                             onDone(currentCategoryUi)
-                            println("Add ${currentCategoryUi}")
                             onDismissRequest()
                         }) {
                         Icon(

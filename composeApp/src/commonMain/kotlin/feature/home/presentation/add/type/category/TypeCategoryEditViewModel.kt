@@ -1,11 +1,13 @@
 package feature.home.presentation.add.type.category
 
+import UUID
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import feature.core.domain.mapper.toType
 import feature.core.domain.model.Type
 import feature.core.domain.repository.TypeRepository
+import feature.core.presentation.model.CategoryUi
 import feature.home.presentation.add.type.TypeUi
 import feature.home.presentation.add.type.TypeUiEvent
 import kotlinx.coroutines.channels.Channel
@@ -78,9 +80,20 @@ class TypeCategoryEditViewModel(
 
             }
             is TypeCategoryEditEvent.OnItemAdd ->{
-                if (event.categoryUi.name.trim().isEmpty()) return
+                val eventItem = event.categoryUi
+                if (eventItem.name.trim().isEmpty()) return
+                val newItem = CategoryUi(
+                    id = eventItem.id,
+                    name = eventItem.name,
+                    order = eventItem.order,
+                    typeId = eventItem.typeId,
+                    isClick = eventItem.isClick,
+                    colorArgb = typeUi.colorArgb,
+                    uuid = UUID().generateUUIDInt()
+
+                )
                 val newItems = state.value.typeUi.categories.toMutableList().apply {
-                    add(event.categoryUi)
+                    add(newItem)
                 }
                 _state.update {
                     it.copy(

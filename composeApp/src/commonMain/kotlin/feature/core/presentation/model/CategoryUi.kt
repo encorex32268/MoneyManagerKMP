@@ -1,5 +1,7 @@
 package feature.core.presentation.model
 
+import UUID
+
 
 data class CategoryUi(
     val id: Int,
@@ -7,5 +9,6 @@ data class CategoryUi(
     val order: Int,
     var typeId: Long?=null,
     val isClick: Boolean,
-    val colorArgb: Int? = null
+    val colorArgb: Int? = null,
+    val uuid: Int = UUID().generateUUIDInt()
 )

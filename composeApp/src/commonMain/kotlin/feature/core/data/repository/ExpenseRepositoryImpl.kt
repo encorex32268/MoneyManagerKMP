@@ -86,6 +86,7 @@ class ExpenseRepositoryImpl(
                     typeId = expense.typeId
                     isIncome = expense.isIncome
                     timestamp = expense.timestamp
+                    content = expense.content
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

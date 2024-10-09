@@ -129,7 +129,6 @@ fun AddScreen(
         sheetContainerColor = Color.White,
         sheetShadowElevation = 8.dp,
         modifier = Modifier
-            .padding(horizontal = 8.dp)
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
@@ -214,7 +213,7 @@ fun AddScreen(
                 .fillMaxSize()
         ) {
             CostTypeSelect(
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(end = 8.dp),
                 isIncome =  state.isIncome,
                 onTypeChange = {
                     onEvent(
@@ -228,13 +227,9 @@ fun AddScreen(
                 modifier = Modifier
                     .weight(1f)
                     .verticalScroll(rememberScrollState())
-                ,
-                contentAlignment = Alignment.Center
             ){
                 ItemSection(state, onEvent, scope, bottomSheetScaffoldState)
-
             }
-
         }
     }
 }

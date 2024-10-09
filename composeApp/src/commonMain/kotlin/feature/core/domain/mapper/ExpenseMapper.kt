@@ -13,7 +13,9 @@ fun Expense.toExpenseEntity() : ExpenseEntity {
         description = description,
         isIncome = isIncome,
         cost = cost,
-        timestamp = timestamp)
+        timestamp = timestamp,
+        content = content
+    )
 }
 
 fun ExpenseEntity.toExpense() : Expense {
@@ -24,5 +26,7 @@ fun ExpenseEntity.toExpense() : Expense {
         description = description,
         isIncome = isIncome,
         cost = cost,
-        timestamp = timestamp)
+        timestamp = timestamp,
+        content = content
+    )
 }
