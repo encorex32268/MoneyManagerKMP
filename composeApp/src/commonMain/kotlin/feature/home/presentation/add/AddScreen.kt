@@ -19,6 +19,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -223,13 +228,8 @@ fun AddScreen(
                 onCloseClick = onGoBack,
                 onGoToCategoryEditClick = onGoToCategoryEditClick
             )
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-            ){
-                ItemSection(state, onEvent, scope, bottomSheetScaffoldState)
-            }
+            ItemSection(state, onEvent, scope, bottomSheetScaffoldState)
+
         }
     }
 }
@@ -241,13 +241,12 @@ private fun ItemSection(
     scope: CoroutineScope,
     bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-    ) {
-        if (state.recentlyItems?.categories?.isNotEmpty() == true) {
-            Column {
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize().padding(8.dp)
+    ){
+        item{
+            if (state.recentlyItems?.categories?.isNotEmpty() == true){
                 Text(
                     text = stringResource(Res.string.recently),
                     style = MaterialTheme.typography.titleSmall
@@ -256,7 +255,7 @@ private fun ItemSection(
                     modifier = Modifier.fillMaxWidth(),
                     maxItemsInEachRow = 4,
                 ) {
-                    val categories = state.recentlyItems.categories
+                    val categories = state.recentlyItems?.categories?: emptyList()
                     categories.forEach { categoryUi ->
                         val categoryNameRes =
                             CategoryList.getCategoryDescriptionById(categoryUi.id.toLong())
@@ -283,11 +282,18 @@ private fun ItemSection(
                     }
                 }
             }
-
         }
-        state.types.forEach {
+
+        items(
+            items = state.types,
+            key = {
+                it.typeIdTimestamp
+            }
+        ){
             if (it.categories.isNotEmpty()){
-                Column {
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ){
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -332,12 +338,13 @@ private fun ItemSection(
                         repeat(4 - it.categories.size % 4) {
                             Spacer(modifier = Modifier.weight(1f))
                         }
+
                     }
+
                 }
 
             }
-
         }
-        Spacer(modifier = Modifier.height(8.dp))
-    }
+        }
+
 }
