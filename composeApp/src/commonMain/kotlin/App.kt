@@ -188,10 +188,10 @@ fun App(
                         onGoBack = {
                             navController.navigateUp()
                         },
-                        onGotoAddScreen = {
+                        onGotoAddScreen = { toAddExpense ->
                             navController.navigate(
                                 Route.HomeAdd(
-                                    expense = expense,
+                                    expense = toAddExpense,
                                     isAddNew = false
                                 )
                             )

@@ -9,6 +9,7 @@ import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.query.Sort
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
@@ -54,6 +55,15 @@ class ExpenseRepositoryImpl(
             it.list.map {
                 it.toExpense()
             }
+        }
+    }
+
+    override fun getExpense(expense: Expense): Flow<Expense> {
+        return realm.query(
+            clazz = ExpenseEntity::class,
+            query = "id == $0",expense.id
+        ).find().asFlow().map {
+            it.list.first().toExpense()
         }
     }
 

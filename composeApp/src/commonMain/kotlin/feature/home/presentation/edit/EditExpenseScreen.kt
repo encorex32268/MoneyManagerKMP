@@ -87,20 +87,24 @@ fun EditExpenseScreenRoot(
         parametersOf(expense)
     },
     onGoBack: () -> Unit = {},
-    onGotoAddScreen: () -> Unit = {}
+    onGotoAddScreen: (Expense) -> Unit = {}
 ){
     val state by viewModel.state.collectAsState()
     LaunchedEffect(viewModel){
         viewModel.uiEvent.collectLatest {
             when(it){
                 EditExpenseUiEvent.OnBack -> onGoBack()
+                is EditExpenseUiEvent.OnGoAddScreen -> {
+                    onGotoAddScreen(
+                        it.expense
+                    )
+                }
             }
         }
     }
     EditExpenseScreen(
         state = state,
         onEvent = viewModel::onEvent,
-        onGotoAddScreen = onGotoAddScreen
     )
 }
 
@@ -108,8 +112,7 @@ fun EditExpenseScreenRoot(
 @Composable
 fun EditExpenseScreen(
     state: EditExpenseState,
-    onEvent: (EditExpenseEvent) -> Unit = {},
-    onGotoAddScreen: () -> Unit = {}
+    onEvent: (EditExpenseEvent) -> Unit = {}
 ) {
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -158,7 +161,9 @@ fun EditExpenseScreen(
                 }
                 Row {
                     IconButton(
-                        onClick = onGotoAddScreen
+                        onClick = {
+                            onEvent(EditExpenseEvent.OnGoAddScreenClick)
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.Edit,

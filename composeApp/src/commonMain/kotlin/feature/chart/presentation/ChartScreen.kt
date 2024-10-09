@@ -180,7 +180,7 @@ fun ChartScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp)
+                .padding(vertical = 4.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             ChartLayout(

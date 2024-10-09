@@ -9,8 +9,11 @@ import feature.core.domain.repository.TypeRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.internal.ChannelFlow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,14 +26,16 @@ class EditExpenseViewModel(
 
     init {
         viewModelScope.launch {
-            typeRepository.getTypes().collectLatest { data ->
+            val types = typeRepository.getTypes()
+            val expenseById = repository.getExpense(expense)
+            combine(types , expenseById){ dataTypes , dataExpense ->
                 _state.update {
                     it.copy(
-                        typeItems = data,
-                        currentExpense = expense
+                        currentExpense = dataExpense,
+                        typeItems = dataTypes
                     )
                 }
-            }
+            }.launchIn(this)
         }
     }
     private val _state = MutableStateFlow(
@@ -40,6 +45,9 @@ class EditExpenseViewModel(
 
     private val _uiEvent = Channel<EditExpenseUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
+
+    private val currentText = MutableStateFlow(expense.content)
+
 
     fun onEvent(event: EditExpenseEvent){
         when(event){
@@ -56,27 +64,40 @@ class EditExpenseViewModel(
             }
 
             is EditExpenseEvent.OnContentChange -> {
-                val currentExpense = state.value.currentExpense
-                currentExpense?.let {
-                    _state.update {
-                        it.copy(
-                            currentExpense = currentExpense.copy(
-                                content = event.text
-                            )
+                _state.update {
+                    it.copy(
+                        currentExpense = state.value.currentExpense?.copy(
+                            content = event.text
                         )
-                    }
-                }?:return
+                    )
+                }
             }
 
             EditExpenseEvent.OnBackClick        -> {
                 viewModelScope.launch {
                     state.value.currentExpense?.let {
-                        repository.update(
-                            expense = it
-                        )
+                        if (currentText.value != it.content){
+                            repository.update(
+                                expense = it
+                            )
+                        }
                     }
                     _uiEvent.send(EditExpenseUiEvent.OnBack)
                 }
+            }
+
+            EditExpenseEvent.OnGoAddScreenClick -> {
+                state.value.currentExpense?.let {
+                    viewModelScope.launch {
+                        if (currentText.value != it.content) {
+                            repository.update(
+                                expense = it
+                            )
+                        }
+                        _uiEvent.send(EditExpenseUiEvent.OnGoAddScreen(it))
+                    }
+                }?:return
+
             }
         }
     }

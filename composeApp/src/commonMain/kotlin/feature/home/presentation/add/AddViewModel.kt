@@ -81,7 +81,7 @@ class AddViewModel(
                             id = recentlyExpense.categoryId,
                             name = recentlyExpense.description,
                             order = index,
-                            typeId = recentlyExpense.typeId.toLong(),
+                            typeId = recentlyExpense.typeId,
                             isClick = recentlyExpense.idString == expense?.idString,
                             colorArgb = colorArgb
                         )
@@ -245,7 +245,7 @@ class AddViewModel(
                             description = state.value.description,
                             isIncome = state.value.isIncome,
                             cost = state.value.cost.toLongOrNull()?:0L,
-                            timestamp = timestamp,
+                            timestamp = timestamp
                         )
                         repository.insert(
                             expense
@@ -258,7 +258,8 @@ class AddViewModel(
                             categoryId = state.value.categoryUi?.id?:0,
                             cost = state.value.cost.toLongOrNull()?:0L,
                             id = state.value.currentExpense!!.id,
-                            timestamp = timestamp
+                            timestamp = timestamp,
+                            content = state.value.currentExpense?.content?:""
                         )
                         repository.update(
                             updateExpense
