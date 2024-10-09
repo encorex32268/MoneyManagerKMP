@@ -11,12 +11,16 @@ import feature.core.domain.model.Type
 import feature.core.domain.repository.ExpenseRepository
 import feature.core.domain.repository.TypeRepository
 import feature.core.presentation.CategoryList
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -28,9 +32,6 @@ class TypeViewModel(
 
     private val _state = MutableStateFlow(TypesState())
     val state = _state.asStateFlow()
-
-    private val _uiEvent = Channel<TypeUiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
 
     private var currentItems = emptyList<TypeUi>()
     private var isCancel = MutableStateFlow(false)
@@ -95,27 +96,6 @@ class TypeViewModel(
                     )
                 }
             }
-            TypeEvent.OnBackClick      -> {
-                viewModelScope.launch {
-                    isCancel.update { true }
-                    val items = state.value.items
-                    val dataOrder = items.map { it.order }.toTypedArray()
-                    val itemsOrder = currentItems.map { it.order }.toTypedArray()
-
-                    if (!dataOrder.contentEquals(itemsOrder)){
-                        val sortedList = state.value.items.mapIndexed { index, typeUi ->
-                            typeUi.copy(
-                                order = index
-                            )
-                        }
-                        sortedList.forEach {
-                            repository.update(it.toType())
-                        }
-                    }
-                    _uiEvent.send(TypeUiEvent.OnBack)
-                }
-            }
-
             is TypeEvent.OnDelete      -> {
                 viewModelScope.launch {
                     val deleteTypeJob = this.launch {
@@ -143,6 +123,16 @@ class TypeViewModel(
                         type = event.type.copy(
                             isShow = true
                         ).toType()
+                    )
+                }
+            }
+
+            is TypeEvent.OnDragEnd     -> {
+                viewModelScope.launch {
+                    repository.updateAllSortedTypes(
+                        state.value.items.mapIndexed { index, typeUi ->
+                            typeUi.copy(order = index).toType()
+                        }
                     )
                 }
             }

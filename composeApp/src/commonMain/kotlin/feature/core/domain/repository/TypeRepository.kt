@@ -8,4 +8,5 @@ interface TypeRepository {
     suspend fun update(type: Type)
     suspend fun insert(type: Type)
     suspend fun delete(type: Type)
+    suspend fun updateAllSortedTypes(types: List<Type>)
 }

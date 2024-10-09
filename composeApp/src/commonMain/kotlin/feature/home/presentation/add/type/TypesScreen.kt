@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -63,15 +64,11 @@ fun TypesScreenRoot(
     navigateToTypeCategoryEdit: (TypeUi) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsState()
-    LaunchedEffect(viewModel){
-        viewModel.uiEvent.collectLatest {
-            onBack()
-        }
-    }
     TypesScreen(
         state = state,
         onEvent = viewModel::onEvent,
-        navigateToTypeCategoryEdit = navigateToTypeCategoryEdit
+        navigateToTypeCategoryEdit = navigateToTypeCategoryEdit,
+        onBack = onBack
     )
 
 }
@@ -81,6 +78,7 @@ fun TypesScreenRoot(
 fun TypesScreen(
     state: TypesState,
     onEvent: (TypeEvent) -> Unit ={},
+    onBack: () -> Unit ={},
     navigateToTypeCategoryEdit: (TypeUi) -> Unit = {}
 ) {
     var isShowColorPicker by remember {
@@ -97,6 +95,13 @@ fun TypesScreen(
                     from,to
                 )
             )
+        },
+        onDragEnd = { startIndex, endIndex ->
+            onEvent(
+                TypeEvent.OnDragEnd(
+                    startIndex, endIndex
+                )
+            )
         }
     )
     Column(
@@ -111,9 +116,7 @@ fun TypesScreen(
         ){
             IconButton(
                 onClick = {
-                    onEvent(
-                        TypeEvent.OnBackClick
-                    )
+                    onBack()
                 }
             ){
                 Icon(
@@ -140,6 +143,7 @@ fun TypesScreen(
                 state = listState.listState,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1f)
                     .padding(horizontal = 8.dp)
                     .reorderable(listState)
                     .detectReorderAfterLongPress(listState),
@@ -213,10 +217,15 @@ fun TypesScreen(
             }
 
             LazyColumn(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
             ){
                 items(
-                    state.itemsNotShowing
+                    items = state.itemsNotShowing,
+                    key = {
+                        it.typeIdTimestamp
+                    }
                 ){
                     OnHideTypeItem(
                         modifier = Modifier.padding(4.dp),
@@ -238,6 +247,14 @@ fun TypesScreen(
         }
 
 
+    }
+    if (state.isSaving){
+        Box(
+            modifier = Modifier.fillMaxSize() ,
+            contentAlignment = Alignment.Center
+        ){
+            CircularProgressIndicator()
+        }
     }
     if (isShowColorPicker){
         ColorPickerDialog(

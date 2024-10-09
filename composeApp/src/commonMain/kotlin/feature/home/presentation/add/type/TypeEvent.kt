@@ -20,9 +20,12 @@ sealed interface TypeEvent {
         val toItemPosition: ItemPosition
     ): TypeEvent
 
-    data object OnBackClick: TypeEvent
-
     data class OnDelete(
         val type: TypeUi
+    ): TypeEvent
+
+    data class OnDragEnd(
+        val startIndex: Int,
+        val endIndex: Int
     ): TypeEvent
 }

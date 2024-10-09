@@ -67,4 +67,25 @@ class TypeRepositoryImpl(
             }
         }
     }
+
+    override suspend fun updateAllSortedTypes(types: List<Type>) {
+        realm.writeBlocking {
+            types.map { type ->
+                val queriedTask = query<TypeEntity>(
+                    query = "id == $0",type.id
+                )
+                    .find()
+                    .first()
+                queriedTask.apply {
+                    name = type.name
+                    colorArgb = type.colorArgb
+                    order = type.order
+                    isShow = type.isShow
+                    categories = type.categories.map { it.toCategoryEntity() }.toRealmList()
+                }
+            }
+        }
+    }
+
+
 }
