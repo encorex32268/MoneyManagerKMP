@@ -31,14 +31,17 @@
 
 ***
 
-### Technologies
+### Technology
 
 - [Compose Multiplatform](https://jb.gg/compose) UI
 - [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) for JSON handling
 - [Koin](https://github.com/InsertKoinIO/koin) for dependency injection
-- [Voyager](https://github.com/adrielcafe/voyager) for navigation and screen models
+- [NavigationCompose](https://developer.android.com/jetpack/compose/navigation/) Navigation
 - [Kotlinx-DateTime](https://github.com/Kotlin/kotlinx-datetime) for Timestamp
 - [Realm-Kotin](https://github.com/realm/realm-kotlin) for localDatabase
+- [KeySetting](https://github.com/russhwolf/multiplatform-settings) for key value save
+- [UriKMP](https://github.com/eygraber/uri-kmp) use uri to transfor json and object
+- [ColorPickerCompose](https://github.com/skydoves/colorpicker-compose) colorpicker
   
 
   
