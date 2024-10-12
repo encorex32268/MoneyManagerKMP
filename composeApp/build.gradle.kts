@@ -35,7 +35,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
-
+            implementation(libs.core.splashscreen)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -82,8 +82,8 @@ android {
         applicationId = "com.lihan.moneymanager"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 10
-        versionName = "1.5-beta"
+        versionCode = 11
+        versionName = "1.5-beta-2"
     }
     packaging {
         resources {

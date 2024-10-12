@@ -30,6 +30,7 @@ colorpicker = "1.1.2"
 jetbrainsKotlinJvm = "1.9.0"
 
 keysettings = "1.2.0"
+core-splashscreen = "1.0.1"
 
 [libraries]
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
@@ -54,6 +55,7 @@ uri-kmp = { module = "com.eygraber:uri-kmp" , version.ref = "uriKmpVersion"}
 lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 
 keysettings-kmp  = { module = "com.russhwolf:multiplatform-settings-no-arg" , version.ref = "keysettings"}
+core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

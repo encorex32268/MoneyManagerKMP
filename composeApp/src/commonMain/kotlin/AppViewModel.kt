@@ -22,7 +22,6 @@ class AppViewModel(
                     val typeId = entry.key?:0
                     val typeName = CategoryList.getTypeStringById(typeId = typeId)
                     val typeColor = CategoryList.getColorByTypeId(id = typeId).toArgb()
-                    println("Debug AppViewModel Init ${typeName} / ${typeColor}")
                     types.add(
                         Type(
                             typeIdTimestamp = typeId,
