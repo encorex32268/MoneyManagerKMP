@@ -18,7 +18,7 @@ interface ExpenseRepository {
 
     fun getExpense(
         expense: Expense
-    ): Flow<Expense>
+    ): Flow<Expense?>
 
     suspend fun delete(expense: Expense)
     suspend fun update(expense: Expense)

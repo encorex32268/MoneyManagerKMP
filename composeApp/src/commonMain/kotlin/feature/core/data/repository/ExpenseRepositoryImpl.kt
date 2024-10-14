@@ -9,8 +9,6 @@ import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.query.Sort
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 class ExpenseRepositoryImpl(
@@ -27,9 +25,13 @@ class ExpenseRepositoryImpl(
             endTimeOfMonth,
             startTimeOfMonth
         ).asFlow().map {
-           it.list.toList().map { expenseEntity ->
-             expenseEntity.toExpense()
-          }
+           if (it.list.isEmpty()){
+               emptyList()
+           }else{
+               it.list.toList().map { expenseEntity ->
+                   expenseEntity.toExpense()
+               }
+           }
         }
     }
 
@@ -52,18 +54,26 @@ class ExpenseRepositoryImpl(
             clazz = ExpenseEntity::class,
             query = "typeId == $0",typeId
         ).asFlow().map {
-            it.list.map {
-                it.toExpense()
+            if (it.list.isEmpty()){
+                emptyList()
+            }else{
+                it.list.map {
+                    it.toExpense()
+                }
             }
         }
     }
 
-    override fun getExpense(expense: Expense): Flow<Expense> {
+    override fun getExpense(expense: Expense): Flow<Expense?> {
         return realm.query(
             clazz = ExpenseEntity::class,
             query = "id == $0",expense.id
         ).find().asFlow().map {
-            it.list.first().toExpense()
+           if (it.list.isEmpty()){
+               null
+           }else{
+               it.list.first().toExpense()
+           }
         }
     }
 

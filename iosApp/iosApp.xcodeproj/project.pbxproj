@@ -124,9 +124,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				"zh-Hant",
 				ja,
-				Base,
+				"zh-Hant",
 			);
 			mainGroup = 7555FF72242A565900829871;
 			productRefGroup = 7555FF7C242A565900829871 /* Products */;
