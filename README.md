@@ -1,6 +1,6 @@
 # Kotlin Multiplatform App - MoneyManager
 
-### Screen Shots
+### Screenshots
 ***
 
 ### Android 
