@@ -8,11 +8,8 @@
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="105"></a>
 
 <p >
-<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/android_home.png" alt="Home" height="400" width="200"/>
-<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/android_add.png" alt="Add" height="400" width="200"/>
-<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/android_edit.png" alt="Edit" height="400" width="200"/>
-<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/android_chart.png" alt="Chart" height="400" width="200"/>
-<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/android_chart_detail.png" alt="ChartDetail" height="400" width="200"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/home_android.png" alt="Home" height="400" width="200"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/expense_android.png" alt="Expense" height="400" width="200"/>
 </p>
 
 ***
@@ -22,11 +19,8 @@
 <img src="https://developer.apple.com/news/images/download-on-the-app-store-badge.png" height="80"></a>
 <br></br>
 <p>
-<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/ios_home.png" alt="Home" height="400" width="200"/>
-<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/ios_add.png" alt="Add" height="400" width="200"/>
-<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/ios_edit.png" alt="Edit" height="400" width="200"/>
-<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/ios_chart.png" alt="Chart" height="400" width="200"/>
-<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/ios_chart_detail.png" alt="ChartDetail" height="400" width="200"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/home-portrait-ios.png" alt="Home" height="400" width="200"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/expense-portrait-ios.png" alt="Add" height="400" width="200"/>
 </p>
 
 ***
