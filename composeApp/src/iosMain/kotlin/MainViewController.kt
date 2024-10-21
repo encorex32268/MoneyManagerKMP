@@ -3,7 +3,14 @@ import feature.chart.di.chartModule
 import feature.di.appModule
 import feature.home.di.homeModule
 import org.koin.core.context.startKoin
-import org.koin.dsl.module
+import platform.UIKit.UIViewController
+
+lateinit var IOSBanner: (String) -> UIViewController
+
+fun generateIOSBanner(adUnitId: String): UIViewController {
+    return IOSBanner(adUnitId)
+}
+
 
 fun MainViewController() = ComposeUIViewController(
     configure = {

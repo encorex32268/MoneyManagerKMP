@@ -1,5 +1,7 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import com.codingfeline.buildkonfig.compiler.FieldSpec
+import org.jetbrains.compose.internal.utils.localPropertiesFile
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -8,14 +10,18 @@ plugins {
     alias(libs.plugins.readlkotlin)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.konfigplugin)
 
 }
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+        compilations.all {
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.JVM_11)
+                }
+            }
         }
     }
     
@@ -36,6 +42,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
             implementation(libs.core.splashscreen)
+            implementation(libs.google.playServices.ads)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -91,8 +98,25 @@ android {
         }
     }
     buildTypes {
+        val properties = Properties()
+        properties.load(
+            project.rootProject.localPropertiesFile.inputStream()
+        )
+
+        getByName("debug"){
+            resValue(
+                type = "string",
+                name = "appId",
+                value = properties.getProperty("Ad_Android_ID_Debug")
+            )
+        }
         getByName("release") {
             isMinifyEnabled = false
+            resValue(
+                type = "string",
+                name = "appId",
+                value = properties.getProperty("Ad_Android_ID_Release")
+            )
         }
     }
     compileOptions {
@@ -103,5 +127,40 @@ android {
         compose = true
     }
 }
+
+buildkonfig {
+    packageName = "com.lihan.moneymanager"
+    val properties = Properties()
+    properties.load(
+        project.rootProject.localPropertiesFile.inputStream()
+    )
+    defaultConfigs {
+        buildConfigField(
+            type = FieldSpec.Type.STRING,
+            name = "AdUnitID",
+            value = properties.getProperty("AdUnitID_Android_Debug")
+        )
+        buildConfigField(
+            type = FieldSpec.Type.STRING,
+            name = "AdUnitID_iOS",
+            value = properties.getProperty("AdUnitID_iOS")
+        )
+    }
+    defaultConfigs("release"){
+        buildConfigField(
+            type = FieldSpec.Type.STRING,
+            name = "AdUnitID",
+            value = properties.getProperty("AdUnitID_Android_Release")
+        )
+        buildConfigField(
+            type = FieldSpec.Type.STRING,
+            name = "AdUnitID_iOS",
+            value = properties.getProperty("AdUnitID_iOS")
+        )
+    }
+}
+
 task("testClasses")
+
+
 

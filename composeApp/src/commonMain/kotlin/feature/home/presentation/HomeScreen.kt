@@ -2,6 +2,7 @@
 
 package feature.home.presentation
 
+import AdMobBanner
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -108,6 +109,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(16.dp))
             LazyColumn(
                 modifier = Modifier
+                    .weight(1f)
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -126,7 +128,9 @@ fun HomeScreen(
                 item {
                     Spacer(modifier = Modifier.height(100.dp))
                 }
+
             }
+            AdMobBanner(Modifier.fillMaxWidth())
         }
     }
 

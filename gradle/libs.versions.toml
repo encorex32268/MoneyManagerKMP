@@ -32,7 +32,13 @@ jetbrainsKotlinJvm = "1.9.0"
 keysettings = "1.2.0"
 core-splashscreen = "1.0.1"
 
+google-play-services = "23.4.0"
+konfig = "0.15.1"
+
 [libraries]
+
+google-playServices-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "google-play-services" }
+
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
 
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -66,3 +72,4 @@ readlkotlin = {id = "io.realm.kotlin" , version.ref = "readmkotlin"}
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+konfigplugin = { id = "com.codingfeline.buildkonfig" , version.ref = "konfig"}

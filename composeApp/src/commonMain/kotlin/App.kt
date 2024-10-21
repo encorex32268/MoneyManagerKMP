@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.navigation.toRoute
+import com.lihan.moneymanager.BuildKonfig
 import feature.chart.presentation.ChartScreenRoot
 import feature.chart.presentation.chartdetail.DetailScreenRoot
 import feature.core.domain.mapper.toType
@@ -82,7 +84,7 @@ fun App(
                         bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
                             NavigationBarItem(
                                 colors = NavigationBarItemDefaults.colors(
-                                    indicatorColor = Color.Transparent
+                                    indicatorColor = Color.LightGray.copy(alpha = 0.3f)
                                 ),
                                 selected = (itemSelectedIndex == index),
                                 onClick = {

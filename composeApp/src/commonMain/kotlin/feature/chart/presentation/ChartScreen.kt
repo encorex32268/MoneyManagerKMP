@@ -4,6 +4,7 @@
 
 package feature.chart.presentation
 
+import AdMobBanner
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -181,33 +182,41 @@ fun ChartScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            ChartLayout(
+        ){
+            Column(
                 modifier = Modifier
+                    .weight(1f)
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                state = state,
-                sumTotal = sumTotal
+                    .verticalScroll(rememberScrollState())
+            ) {
+                ChartLayout(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    state = state,
+                    sumTotal = sumTotal
+                )
+                Spacer(Modifier.height(8.dp))
+                ExpenseDetailLayout(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    state = state,
+                    sumTotal = sumTotal,
+                    onItemClick = {
+                        onGotoDetail(
+                            if (state.isIncomeShown){
+                                it.itemsIncome
+                            }else {
+                                it.itemsNotIncome
+                            },
+                            it.type
+                        )
+                    }
+                )
+            }
+            AdMobBanner(
+                modifier = Modifier.fillMaxWidth()
             )
-            Spacer(Modifier.height(8.dp))
-            ExpenseDetailLayout(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                state = state,
-                sumTotal = sumTotal,
-                onItemClick = {
-                    onGotoDetail(
-                        if (state.isIncomeShown){
-                            it.itemsIncome
-                        }else {
-                            it.itemsNotIncome
-                        },
-                        it.type
-                    )
-                }
-            )
-
         }
     }
 
