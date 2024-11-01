@@ -4,6 +4,7 @@
 
 package feature.home.presentation.add
 
+import AdMobBanner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -245,6 +246,9 @@ private fun ItemSection(
     LazyColumn(
         modifier = Modifier.fillMaxSize().padding(8.dp)
     ){
+        item {
+            AdMobBanner(Modifier.fillMaxWidth())
+        }
         item{
             if (state.recentlyItems?.categories?.isNotEmpty() == true){
                 Text(
