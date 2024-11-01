@@ -41,10 +41,8 @@ fun ExpenseDetailLayout(
             modifier = modifier,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            state.items.forEach {
-                val sum =  remember(state.isIncomeShown){
-                    if (state.isIncomeShown) it.itemsIncome.sumOf { it.cost } else it.itemsNotIncome.sumOf { it.cost }
-                }
+            state.items.forEach { chart ->
+                val sum =  if (state.isIncomeShown) chart.itemsIncome.sumOf { it.cost } else chart.itemsNotIncome.sumOf { it.cost }
                 if (sum != 0L){
                     val percent = sum / sumTotal.toFloat()
                     Row(
@@ -54,20 +52,20 @@ fun ExpenseDetailLayout(
                                 end = 8.dp
                             )
                             .noRippleClick {
-                                onItemClick(it)
+                                onItemClick(chart)
                             },
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Box(
                             modifier = Modifier.size(24.dp).background(
-                                color = Color(it.type.colorArgb),
+                                color = Color(chart.type.colorArgb),
                                 shape = RoundedCornerShape(8.dp)
                             )
                         )
                         Spacer(Modifier.width(8.dp))
                         Texts.TitleSmall(
                             modifier = Modifier.widthIn(40.dp , 100.dp),
-                            text = it.type.name
+                            text = chart.type.name
                         )
                         Texts.TitleSmall(
                             modifier = Modifier

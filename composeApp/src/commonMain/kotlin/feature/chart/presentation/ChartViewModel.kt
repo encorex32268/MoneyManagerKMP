@@ -20,7 +20,11 @@ class ChartViewModel(
     private val _state = MutableStateFlow(ChartState())
     val state = _state.asStateFlow()
 
-    private val _dbExpenseState = MutableStateFlow(listOf<Expense>())
+    init {
+        onEvent(
+            ChartEvent.OnDatePick()
+        )
+    }
 
     fun onEvent(event: ChartEvent){
         when(event){
@@ -38,11 +42,10 @@ class ChartViewModel(
                         year =  event.year,
                         month = event.month
                     )
-                    val result = repository.getExpenseByTime(
+                    repository.getExpenseByTime(
                         startTimeOfMonth = startTime,
                         endTimeOfMonth = endTime
-                    )
-                    result.collectLatest { resultData ->
+                    ).collectLatest { resultData ->
                         val nowDateYear = event.year ?: DateConverter.getNowDate().year
                         val nowDateMonth = event.month ?: DateConverter.getNowDate().monthNumber
                         val sortedItems = resultData.sortedByDescending {

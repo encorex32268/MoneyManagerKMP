@@ -57,11 +57,6 @@ fun ChartScreenRoot(
 ){
 
     val state by viewModel.state.collectAsState()
-    LaunchedEffect(Unit){
-        viewModel.onEvent(
-            ChartEvent.OnDatePick()
-        )
-    }
     ChartScreen(
         state = state,
         onEvent = viewModel::onEvent,
