@@ -272,6 +272,7 @@ class AddViewModel(
 
                 }
             }
+            else -> Unit
         }
     }
 }

@@ -53,6 +53,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
 import feature.core.presentation.CategoryList
@@ -89,7 +90,7 @@ fun EditExpenseScreenRoot(
     onGoBack: () -> Unit = {},
     onGotoAddScreen: (Expense) -> Unit = {}
 ){
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel){
         viewModel.uiEvent.collectLatest {
             when(it){

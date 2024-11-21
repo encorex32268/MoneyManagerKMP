@@ -89,6 +89,7 @@ class HomeViewModel(
                     }
                 }
             }
+            else -> Unit
         }
     }
 

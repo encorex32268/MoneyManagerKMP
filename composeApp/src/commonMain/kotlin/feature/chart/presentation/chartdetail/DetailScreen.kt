@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.chart.presentation.chartdetail.components.ExpenseTypeTotal
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
@@ -50,7 +51,7 @@ fun DetailScreenRoot(
     },
     onBack: () -> Unit = {},
 ){
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     DetailScreen(
         state = state,

@@ -13,7 +13,7 @@ class HomeRepositoryImpl(
     private val typeRepository: TypeRepository
 ): HomeRepository {
 
-    override suspend fun getExpenseByTime(
+    override fun getExpenseByTime(
         startTimeOfMonth: Long,
         endTimeOfMonth: Long
     ): Flow<List<Expense>> {

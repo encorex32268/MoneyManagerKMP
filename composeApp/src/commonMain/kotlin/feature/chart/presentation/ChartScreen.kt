@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.core.presentation.components.DatePicker
 
 import feature.chart.presentation.components.ChartLayout
@@ -56,11 +57,18 @@ fun ChartScreenRoot(
     onGotoDetail: (List<Expense>,Type) -> Unit = { _ , _->}
 ){
 
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     ChartScreen(
         state = state,
-        onEvent = viewModel::onEvent,
-        onGotoDetail = onGotoDetail
+        onEvent = { event ->
+            when(event){
+                is ChartEvent.OnGotoDetail ->{
+                    onGotoDetail(event.expenses , event.type)
+                }
+                else -> Unit
+            }
+            viewModel.onEvent(event)
+        }
     )
 }
 
@@ -68,7 +76,6 @@ fun ChartScreenRoot(
 fun ChartScreen(
     state: ChartState,
     onEvent: (ChartEvent) -> Unit = {},
-    onGotoDetail: (List<Expense>,Type) -> Unit = { _ , _->}
 ){
     val density = LocalDensity.current
     val tabWidths = remember {
@@ -198,13 +205,15 @@ fun ChartScreen(
                     state = state,
                     sumTotal = sumTotal,
                     onItemClick = {
-                        onGotoDetail(
-                            if (state.isIncomeShown){
-                                it.itemsIncome
-                            }else {
-                                it.itemsNotIncome
-                            },
-                            it.type
+                        onEvent(
+                            ChartEvent.OnGotoDetail(
+                                expenses = if (state.isIncomeShown){
+                                    it.itemsIncome
+                                }else {
+                                    it.itemsNotIncome
+                                },
+                                type = it.type
+                            )
                         )
                     }
                 )

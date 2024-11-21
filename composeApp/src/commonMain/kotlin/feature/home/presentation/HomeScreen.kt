@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.core.domain.model.Expense
 import feature.core.presentation.components.DatePicker
 import feature.home.presentation.components.AmountTextLayout
@@ -41,14 +42,21 @@ fun HomeScreenRoot(
     onGotoChartScreen: () -> Unit = {},
     onGotoEditScreen: (Expense) -> Unit  = {},
 ){
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     HomeScreen(
         state = state,
-        onEvent = viewModel::onEvent,
-        onGotoAddScreen = onGotoAddScreen,
-        onGotoChartScreen = onGotoChartScreen,
-        onGotoEditScreen = onGotoEditScreen
+        onEvent = { event ->
+            when(event){
+                HomeEvent.OnGotoAddScreen   -> onGotoAddScreen()
+                HomeEvent.OnGotoChartScreen -> onGotoChartScreen()
+                is HomeEvent.OnGotoEditScreen  -> {
+                    onGotoEditScreen(event.expense)
+                }
+                else -> Unit
+            }
+            viewModel.onEvent(event)
+        }
     )
 }
 
@@ -56,17 +64,16 @@ fun HomeScreenRoot(
 @Composable
 fun HomeScreen(
     state: HomeState,
-    onEvent: (HomeEvent) -> Unit,
-    onGotoAddScreen: () -> Unit = {},
-    onGotoChartScreen: () -> Unit = {},
-    onGotoEditScreen: (Expense) -> Unit  = {}
+    onEvent: (HomeEvent) -> Unit
 ){
     Scaffold(
         containerColor = Color.White,
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onGotoAddScreen,
+                onClick = {
+                    onEvent(HomeEvent.OnGotoAddScreen)
+                },
                 containerColor = MaterialTheme.colorScheme.onBackground
             ) {
                 Icon(
@@ -99,7 +106,9 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .noRippleClick(
-                        onClick = onGotoChartScreen
+                        onClick = {
+                            onEvent(HomeEvent.OnGotoChartScreen)
+                        }
                     )
                 ,
                 income = state.income,
@@ -121,7 +130,9 @@ fun HomeScreen(
                     ExpenseItem(
                         modifier = Modifier.fillMaxWidth(),
                         items = expenses,
-                        onItemClick = onGotoEditScreen,
+                        onItemClick = { expense ->
+                            onEvent(HomeEvent.OnGotoEditScreen(expense = expense))
+                        },
                         types = state.typesItem
                     )
                 }

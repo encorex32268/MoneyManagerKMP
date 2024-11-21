@@ -52,6 +52,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.core.domain.model.Expense
 import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
@@ -80,7 +81,7 @@ fun AddScreenRoot(
     onGoBack: () -> Unit = {},
     onGoToCategoryEditClick: () -> Unit = {}
 ){
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel){
         viewModel.uiEvent.collectLatest {
             when(it){
@@ -93,9 +94,14 @@ fun AddScreenRoot(
     }
     AddScreen(
         state = state,
-        onEvent = viewModel::onEvent,
-        onGoBack = onGoBack,
-        onGoToCategoryEditClick = onGoToCategoryEditClick
+        onEvent = { event ->
+            when(event){
+                AddEvent.OnBack                  -> onGoBack()
+                AddEvent.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
+                else -> Unit
+            }
+            viewModel.onEvent(event)
+        }
     )
 }
 
@@ -103,9 +109,7 @@ fun AddScreenRoot(
 @Composable
 fun AddScreen(
     state: AddState,
-    onEvent: (AddEvent) -> Unit = {},
-    onGoBack: () -> Unit = {},
-    onGoToCategoryEditClick: () -> Unit = {}
+    onEvent: (AddEvent) -> Unit = {}
 ){
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -226,8 +230,12 @@ fun AddScreen(
                         AddEvent.OnTypeChange(it)
                     )
                 },
-                onCloseClick = onGoBack,
-                onGoToCategoryEditClick = onGoToCategoryEditClick
+                onCloseClick = {
+                    onEvent(AddEvent.OnBack)
+                },
+                onGoToCategoryEditClick = {
+                    onEvent(AddEvent.OnGoToCategoryEditClick)
+                }
             )
             ItemSection(state, onEvent, scope, bottomSheetScaffoldState)
 
