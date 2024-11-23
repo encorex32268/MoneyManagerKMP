@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.lihan.moneymanager.BuildKonfig
 import feature.core.domain.model.Expense
 import feature.core.presentation.components.DatePicker
 import feature.home.presentation.components.AmountTextLayout
@@ -64,7 +65,8 @@ fun HomeScreenRoot(
 @Composable
 fun HomeScreen(
     state: HomeState,
-    onEvent: (HomeEvent) -> Unit
+    onEvent: (HomeEvent) -> Unit,
+    isDebug: Boolean = false
 ){
     Scaffold(
         containerColor = Color.White,
@@ -139,9 +141,11 @@ fun HomeScreen(
                 item {
                     Spacer(modifier = Modifier.height(100.dp))
                 }
-
             }
-            AdMobBanner(Modifier.fillMaxWidth())
+            if (!isDebug){
+                AdMobBanner(Modifier.fillMaxWidth())
+            }
+
         }
     }
 

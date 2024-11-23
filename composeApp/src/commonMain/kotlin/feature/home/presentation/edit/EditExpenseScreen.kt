@@ -70,7 +70,7 @@ import moneymanagerkmp.composeapp.generated.resources.baseline_sticky_note_24
 import moneymanagerkmp.composeapp.generated.resources.description
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_content
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_title
-import moneymanagerkmp.composeapp.generated.resources.nunitosans_10pt_regular
+import moneymanagerkmp.composeapp.generated.resources.notosanslao_regular
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -378,7 +378,7 @@ private fun ContentSection(
     content: String = "",
     onValueChange: (String) -> Unit,
     textStyle: TextStyle = TextStyle(
-        fontFamily = FontFamily(Font(Res.font.nunitosans_10pt_regular)),
+        fontFamily = FontFamily(Font(Res.font.notosanslao_regular)),
         fontSize = 12.sp
     )
 ){

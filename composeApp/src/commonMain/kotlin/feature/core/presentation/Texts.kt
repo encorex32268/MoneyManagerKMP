@@ -8,14 +8,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import moneymanagerkmp.composeapp.generated.resources.Res
-import moneymanagerkmp.composeapp.generated.resources.nunitosans_10pt_bold
-import moneymanagerkmp.composeapp.generated.resources.nunitosans_10pt_regular
+import moneymanagerkmp.composeapp.generated.resources.notosanslao_bold
+import moneymanagerkmp.composeapp.generated.resources.notosanslao_regular
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.FontResource
@@ -38,7 +37,7 @@ object Texts {
         modifier: Modifier = Modifier,
         text : String,
         textAlign : TextAlign = TextAlign.Start,
-        font: FontResource = Res.font.nunitosans_10pt_bold,
+        font: FontResource = Res.font.notosanslao_bold,
     ){
         Text(
             modifier = modifier,
@@ -54,7 +53,7 @@ object Texts {
         modifier : Modifier = Modifier,
         fonSize: TextUnit = 16.sp,
         style : TextStyle = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunitosans_10pt_bold)),
+            fontFamily = FontFamily(Font(Res.font.notosanslao_bold)),
             fontSize = fonSize
         ),
         text : String,
@@ -87,7 +86,7 @@ object Texts {
         overflow: TextOverflow = TextOverflow.Ellipsis,
         color : Color = MaterialTheme.colorScheme.onSurface,
         onTextLayout: (TextLayoutResult) -> Unit = {},
-        font: FontResource = Res.font.nunitosans_10pt_bold
+        font: FontResource = Res.font.notosanslao_bold
     ){
         Text(
             modifier = modifier,
@@ -106,7 +105,7 @@ object Texts {
     fun BodyLarge(
         modifier: Modifier = Modifier,
         text : String,
-        font: FontResource = Res.font.nunitosans_10pt_regular
+        font: FontResource = Res.font.notosanslao_regular
     ){
         Text(
             modifier = modifier,
@@ -125,7 +124,7 @@ object Texts {
         text : String,
         style : TextStyle = MaterialTheme.typography.bodyMedium,
         color : Color = MaterialTheme.colorScheme.onSurface,
-        font: FontResource = Res.font.nunitosans_10pt_regular
+        font: FontResource = Res.font.notosanslao_regular
     ){
         Text(
             modifier = modifier,
@@ -143,7 +142,7 @@ object Texts {
     fun BodySmall(
         modifier: Modifier = Modifier,
         text: String,
-        font: FontResource = Res.font.nunitosans_10pt_regular
+        font: FontResource = Res.font.notosanslao_regular
 
     ){
         Text(

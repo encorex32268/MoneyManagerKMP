@@ -51,6 +51,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.isDebugInspectorInfoEnabled
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.core.domain.model.Expense
@@ -109,7 +110,8 @@ fun AddScreenRoot(
 @Composable
 fun AddScreen(
     state: AddState,
-    onEvent: (AddEvent) -> Unit = {}
+    onEvent: (AddEvent) -> Unit = {},
+    isDebug: Boolean = false
 ){
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -237,7 +239,13 @@ fun AddScreen(
                     onEvent(AddEvent.OnGoToCategoryEditClick)
                 }
             )
-            ItemSection(state, onEvent, scope, bottomSheetScaffoldState)
+            ItemSection(
+                state = state,
+                onEvent = onEvent,
+                scope = scope,
+                bottomSheetScaffoldState = bottomSheetScaffoldState,
+                isDebug = isDebug
+            )
 
         }
     }
@@ -248,14 +256,17 @@ private fun ItemSection(
     state: AddState,
     onEvent: (AddEvent) -> Unit,
     scope: CoroutineScope,
-    bottomSheetScaffoldState: BottomSheetScaffoldState
+    bottomSheetScaffoldState: BottomSheetScaffoldState,
+    isDebug: Boolean = false
 ) {
 
     LazyColumn(
         modifier = Modifier.fillMaxSize().padding(8.dp)
     ){
         item {
-            AdMobBanner(Modifier.fillMaxWidth())
+            if (!isDebug){
+                AdMobBanner(Modifier.fillMaxWidth())
+            }
         }
         item{
             if (state.recentlyItems?.categories?.isNotEmpty() == true){

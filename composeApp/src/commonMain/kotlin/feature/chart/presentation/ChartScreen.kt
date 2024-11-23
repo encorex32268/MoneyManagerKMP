@@ -76,6 +76,7 @@ fun ChartScreenRoot(
 fun ChartScreen(
     state: ChartState,
     onEvent: (ChartEvent) -> Unit = {},
+    isDebug: Boolean = false
 ){
     val density = LocalDensity.current
     val tabWidths = remember {
@@ -202,7 +203,8 @@ fun ChartScreen(
                 ExpenseDetailLayout(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    state = state,
+                    items = state.items,
+                    isIncomeShown = state.isIncomeShown,
                     sumTotal = sumTotal,
                     onItemClick = {
                         onEvent(
@@ -218,9 +220,12 @@ fun ChartScreen(
                     }
                 )
             }
-            AdMobBanner(
-                modifier = Modifier.fillMaxWidth()
-            )
+            if (!isDebug){
+                AdMobBanner(
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+            }
         }
     }
 

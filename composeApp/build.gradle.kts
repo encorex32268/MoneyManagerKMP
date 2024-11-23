@@ -35,6 +35,7 @@ kotlin {
             isStatic = true
         }
     }
+    jvm("desktop")
     
     sourceSets {
         
@@ -43,6 +44,10 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.core.splashscreen)
             implementation(libs.google.playServices.ads)
+            implementation(compose.preview)
+            implementation(compose.components.resources)
+            implementation(compose.material3)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -158,6 +163,10 @@ buildkonfig {
             value = properties.getProperty("AdUnitID_iOS")
         )
     }
+}
+
+dependencies {
+    debugImplementation(compose.uiTooling)
 }
 
 task("testClasses")

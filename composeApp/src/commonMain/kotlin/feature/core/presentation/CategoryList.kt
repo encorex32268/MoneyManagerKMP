@@ -181,13 +181,13 @@ object CategoryList {
 
     const val RECENTLY = 9010L
     const val FOOD = 10010L
-    private const val TRAFFIC = 20010L
-    private const val LIFE = 30010L
-    private const val HEALTH = 40010L
-    private const val SPORTS = 50010L
-    private const val WEAR = 60010L
-    private const val SHOPPING = 70010L
-    private const val OTHER = 80010L
+    const val TRAFFIC = 20010L
+    const val LIFE = 30010L
+    const val HEALTH = 40010L
+    const val SPORTS = 50010L
+    const val WEAR = 60010L
+    const val SHOPPING = 70010L
+    const val OTHER = 80010L
 
     val items = kotlin.run {
         (1..21).map {

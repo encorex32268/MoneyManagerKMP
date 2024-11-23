@@ -34,7 +34,7 @@ import feature.core.domain.model.Type
 import feature.core.presentation.Texts
 import feature.home.presentation.components.ExpenseItem
 import moneymanagerkmp.composeapp.generated.resources.Res
-import moneymanagerkmp.composeapp.generated.resources.nunitosans_10pt_bold
+import moneymanagerkmp.composeapp.generated.resources.notosanslao_bold
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 import org.koin.compose.viewmodel.koinViewModel
@@ -84,7 +84,7 @@ fun DetailScreen(
                 .padding(horizontal = 25.dp),
             text = state.total.toMoneyString(),
             style = TextStyle(
-                fontFamily = FontFamily(Font(Res.font.nunitosans_10pt_bold))
+                fontFamily = FontFamily(Font(Res.font.notosanslao_bold))
             )
         )
 

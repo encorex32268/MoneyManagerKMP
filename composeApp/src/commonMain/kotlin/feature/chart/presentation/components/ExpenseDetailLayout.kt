@@ -4,9 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,7 +34,8 @@ import toMoneyString
 @Composable
 fun ExpenseDetailLayout(
     modifier: Modifier = Modifier,
-    state: ChartState,
+    items: List<Chart> = emptyList(),
+    isIncomeShown: Boolean = false,
     sumTotal: Long,
     onItemClick: (Chart) -> Unit
 ) {
@@ -41,50 +44,66 @@ fun ExpenseDetailLayout(
             modifier = modifier,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            state.items.forEach { chart ->
-                val sum =  if (state.isIncomeShown) chart.itemsIncome.sumOf { it.cost } else chart.itemsNotIncome.sumOf { it.cost }
+            items.forEach { chart ->
+                val sum =  if (isIncomeShown) chart.itemsIncome.sumOf { it.cost } else chart.itemsNotIncome.sumOf { it.cost }
                 if (sum != 0L){
-                    val percent = sum / sumTotal.toFloat()
-                    Row(
-                        modifier = Modifier
-                            .padding(
-                                start = 24.dp,
-                                end = 8.dp
-                            )
-                            .noRippleClick {
-                                onItemClick(chart)
-                            },
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Box(
-                            modifier = Modifier.size(24.dp).background(
-                                color = Color(chart.type.colorArgb),
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Texts.TitleSmall(
-                            modifier = Modifier.widthIn(40.dp , 100.dp),
-                            text = chart.type.name
-                        )
-                        Texts.TitleSmall(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(2f)
-                                .padding(start = 4.dp),
-                            text = "${(percent * 100).toDouble().format(2)}%",
-                        )
-                        Spacer(Modifier.weight(1f))
-                        Texts.TitleMedium(
-                            modifier = Modifier
-                                .padding(horizontal = 25.dp),
-                            text = sum.toMoneyString(),
-                        )
-                    }
+                    ExpenseDetailItem(
+                        onItemClick = onItemClick,
+                        chart = chart,
+                        percent = sum / sumTotal.toFloat(),
+                        sum = sum
+                    )
 
                 }
             }
         }
 
+    }
+}
+
+@Composable
+fun ExpenseDetailItem(
+    onItemClick: (Chart) -> Unit = {},
+    chart: Chart,
+    percent: Float,
+    sum: Long
+) {
+
+    Row(
+        modifier = Modifier
+            .height(IntrinsicSize.Max)
+            .padding(
+                start = 24.dp,
+                end = 8.dp
+            )
+            .noRippleClick {
+                onItemClick(chart)
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier.size(24.dp).background(
+                color = Color(chart.type.colorArgb),
+                shape = RoundedCornerShape(8.dp)
+            )
+        )
+        Spacer(Modifier.width(8.dp))
+        Texts.TitleSmall(
+            modifier = Modifier.widthIn(40.dp, 100.dp),
+            text = chart.type.name
+        )
+        Texts.TitleSmall(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(2f)
+                .padding(start = 4.dp),
+            text = "${(percent * 100).toDouble().format(1)}%",
+        )
+        Spacer(Modifier.weight(1f))
+        Texts.TitleMedium(
+            modifier = Modifier
+                .padding(horizontal = 25.dp),
+            text = sum.toMoneyString(),
+        )
     }
 }
