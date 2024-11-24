@@ -23,7 +23,8 @@ val homeModule = module {
         AddViewModel(
             expense = expense,
             repository = get(),
-            typeRepository = get()
+            typeRepository = get(),
+            keySettings = get()
         )
     }
 

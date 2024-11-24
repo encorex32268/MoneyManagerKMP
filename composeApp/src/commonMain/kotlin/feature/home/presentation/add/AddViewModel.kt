@@ -1,9 +1,11 @@
 package feature.home.presentation.add
 
+import AdMobBannerController
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import feature.core.data.DefaultKeySettings
 import feature.core.data.MongoDB
 import feature.core.domain.KeySettings
 import feature.core.domain.mapper.toCategoryUi
@@ -36,11 +38,14 @@ import kotlin.math.exp
 class AddViewModel(
     private val repository: ExpenseRepository,
     private val typeRepository: TypeRepository,
-    private val expense: Expense?=null
+    private val expense: Expense?=null,
+    private val keySettings: DefaultKeySettings
 ): ViewModel() {
 
     companion object{
         private const val COST_MAX_LENGTH = 10
+        private const val CLOSE_AD = "moneymanagerclose"
+        private const val OPEN_AD = "moneymanageropen"
     }
 
     private val _state = MutableStateFlow(AddState(currentExpense = expense))
@@ -136,6 +141,16 @@ class AddViewModel(
     fun onEvent(event: AddEvent){
         when(event){
             is AddEvent.OnDescriptionChange -> {
+                when(event.description){
+                    CLOSE_AD -> {
+                        keySettings.setCloseAdBanner(true)
+                        AdMobBannerController.setCloseAdMobBanner(true)
+                    }
+                    OPEN_AD -> {
+                        keySettings.setCloseAdBanner(false)
+                        AdMobBannerController.setCloseAdMobBanner(false)
+                    }
+                }
                 _state.update {
                     it.copy(
                         description = event.description
@@ -166,6 +181,7 @@ class AddViewModel(
                         isIncome = event.isClicked
                     )
                 }
+
             }
             is AddEvent.OnSelectedDate      -> {
                 val localDateTime = DateConverter.getLocalDateTimeFromTimestamp(event.timestamp)

@@ -2,7 +2,6 @@
 
 package feature.home.presentation
 
-import AdMobBanner
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -143,7 +142,9 @@ fun HomeScreen(
                 }
             }
             if (!isDebug){
-                AdMobBanner(Modifier.fillMaxWidth())
+                AdMobBannerController.AdMobBannerCompose(
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
 
         }

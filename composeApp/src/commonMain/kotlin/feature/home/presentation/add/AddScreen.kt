@@ -4,9 +4,7 @@
 
 package feature.home.presentation.add
 
-import AdMobBanner
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -265,7 +263,9 @@ private fun ItemSection(
     ){
         item {
             if (!isDebug){
-                AdMobBanner(Modifier.fillMaxWidth())
+                AdMobBannerController.AdMobBannerCompose(
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
         item{

@@ -44,6 +44,11 @@ class AppViewModel(
                 keySettings.setIsSetDefaultTypes(true)
             }
 
+            AdMobBannerController.setCloseAdMobBanner(
+                isClose = keySettings.getCloseAdBanner()
+            )
+
+
         }
 
     }
