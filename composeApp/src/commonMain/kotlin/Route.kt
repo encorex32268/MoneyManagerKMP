@@ -6,6 +6,9 @@ import kotlinx.serialization.Serializable
 
 sealed interface Route  {
     @Serializable
+    data object HomeGraph
+
+    @Serializable
     data object Home
 
     @Serializable
@@ -25,6 +28,11 @@ sealed interface Route  {
     data class  HomeEdit(
         val expense: Expense
     )
+
+    @Serializable
+    data object ChartGraph
+
+
     @Serializable
     data object Chart
 

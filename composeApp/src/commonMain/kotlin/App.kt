@@ -22,6 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -29,6 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.lihan.moneymanager.BuildKonfig
 import feature.chart.presentation.ChartScreenRoot
@@ -121,151 +124,173 @@ fun App(
                     else 0.dp
                 ),
                 navController = navController,
-                startDestination = Route.Home
+                startDestination = Route.HomeGraph
             ){
-                composable<Route.Home>{
-                    HomeScreenRoot(
-                        onGotoAddScreen = {
-                            navController.navigate(
-                                Route.HomeAdd(
-                                    expense = Expense(),
-                                    isAddNew = true
-                                ),
-                                navOptions = navOptions {
-                                    launchSingleTop = true
-                                }
-                            )
-                        },
-                        onGotoChartScreen = {
-                            itemSelectedIndex = 1
-                            navController.navigate(
-                                Route.Chart,
-                                navOptions = navOptions {
-                                    launchSingleTop = true
-                                }
-                            )
-                        },
-                        onGotoEditScreen = {
-                            navController.navigate(
-                                Route.HomeEdit(
-                                    expense = it
-                                ),
-                                navOptions = navOptions {
-                                    launchSingleTop = true
-                                }
-                            )
-                        }
-                    )
-                }
-                composable<Route.HomeAdd>(
-                    typeMap = mapOf(
-                        typeOf<Expense>() to ExpenseNavType,
-                        typeOf<Boolean>() to NavType.BoolType
-                    )
-                ) {
-                    val homeAdd = it.toRoute<Route.HomeAdd>()
-                    AddScreenRoot(
-                        expense = if(homeAdd.isAddNew) null else homeAdd.expense,
-                        onGoBack = {
-                            navController.navigateUp()
-                        },
-                        onGoToCategoryEditClick = {
-                            navController.navigate(
-                                route = Route.Types,
-                                navOptions = navOptions {
-                                    launchSingleTop = true
-                                }
-                            )
-                        }
-                    )
-                }
-                composable<Route.HomeEdit>(
-                    typeMap = mapOf(
-                        typeOf<Expense>() to ExpenseNavType
-                    )
-                ){
-                    val expense = it.toRoute<Route.HomeEdit>().expense
-                    EditExpenseScreenRoot(
-                        expense = expense,
-                        onGoBack = {
-                            navController.navigateUp()
-                        },
-                        onGotoAddScreen = { toAddExpense ->
-                            navController.navigate(
-                                Route.HomeAdd(
-                                    expense = toAddExpense,
-                                    isAddNew = false
-                                )
-                            )
-                        }
-                    )
-                }
-                composable<Route.Chart>{
-                    ChartScreenRoot(
-                        onGotoDetail = { items , type ->
-                            navController.navigate(
-                                Route.ChartDetail(
-                                    items = items,
-                                    type = type
-                                ),
-                                navOptions = navOptions {
-                                    launchSingleTop = true
-                                }
-                            )
-                        }
-                    )
-                }
-                composable<Route.ChartDetail>(
-                    typeMap = mapOf(
-                        typeOf<List<Expense>>() to ExpenseListNavType,
-                        typeOf<Type>() to TypeNavType
-                    )
-                ){
-                    val chartDetail = it.toRoute<Route.ChartDetail>()
-                    DetailScreenRoot(
-                        items = chartDetail.items,
-                        type = chartDetail.type,
-                        onBack = {
-                            navController.navigateUp()
-                        }
-                    )
-                }
 
-                composable<Route.Types>(
-                    typeMap = mapOf(
-                        typeOf<Type>() to TypeNavType
-                    )
-                ){
-                    TypesScreenRoot(
-                        onBack = {
-                            navController.navigateUp()
-                        },
-                        navigateToTypeCategoryEdit = {
-                            navController.navigate(
-                                Route.TypeCategoryEdit(it.toType()),
-                                navOptions = navOptions {
-                                    launchSingleTop = true
-                                }
-                            )
-                        }
-                    )
-                }
-
-                composable<Route.TypeCategoryEdit>(
-                    typeMap = mapOf(
-                        typeOf<Type>() to TypeNavType
-                    )
-                ){
-                    val typeUi = it.toRoute<Route.TypeCategoryEdit>().type.toTypeUi()
-                    TypeCategoryEditScreenRoot(
-                        typeUi = typeUi,
-                        onBack = {
-                            navController.navigateUp()
-                        }
-                    )
-                }
+                homeGraph(navController, itemSelectedIndex)
+                chartGraph(navController)
             }
         }
+    }
+}
+
+private fun NavGraphBuilder.chartGraph(navController: NavHostController) {
+    navigation<Route.ChartGraph>(
+        startDestination = Route.Chart
+    ) {
+        composable<Route.Chart> {
+            ChartScreenRoot(
+                onGotoDetail = { items, type ->
+                    navController.navigate(
+                        Route.ChartDetail(
+                            items = items,
+                            type = type
+                        ),
+                        navOptions = navOptions {
+                            launchSingleTop = true
+                        }
+                    )
+                }
+            )
+        }
+        composable<Route.ChartDetail>(
+            typeMap = mapOf(
+                typeOf<List<Expense>>() to ExpenseListNavType,
+                typeOf<Type>() to TypeNavType
+            )
+        ) {
+            val chartDetail = it.toRoute<Route.ChartDetail>()
+            DetailScreenRoot(
+                items = chartDetail.items,
+                type = chartDetail.type,
+                onBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+    }
+}
+
+private fun NavGraphBuilder.homeGraph(
+    navController: NavHostController,
+    itemSelectedIndex: Int
+) {
+    var itemSelectedIndex1 = itemSelectedIndex
+    navigation<Route.HomeGraph>(
+        startDestination = Route.Home
+    ) {
+        composable<Route.Home> {
+            HomeScreenRoot(
+                onGotoAddScreen = {
+                    navController.navigate(
+                        Route.HomeAdd(
+                            expense = Expense(),
+                            isAddNew = true
+                        ),
+                        navOptions = navOptions {
+                            launchSingleTop = true
+                        }
+                    )
+                },
+                onGotoChartScreen = {
+                    itemSelectedIndex1 = 1
+                    navController.navigate(
+                        Route.Chart,
+                        navOptions = navOptions {
+                            launchSingleTop = true
+                        }
+                    )
+                },
+                onGotoEditScreen = {
+                    navController.navigate(
+                        Route.HomeEdit(
+                            expense = it
+                        ),
+                        navOptions = navOptions {
+                            launchSingleTop = true
+                        }
+                    )
+                }
+            )
+        }
+        composable<Route.HomeAdd>(
+            typeMap = mapOf(
+                typeOf<Expense>() to ExpenseNavType,
+                typeOf<Boolean>() to NavType.BoolType
+            )
+        ) {
+            val homeAdd = it.toRoute<Route.HomeAdd>()
+            AddScreenRoot(
+                expense = if (homeAdd.isAddNew) null else homeAdd.expense,
+                onGoBack = {
+                    navController.navigateUp()
+                },
+                onGoToCategoryEditClick = {
+                    navController.navigate(
+                        route = Route.Types,
+                        navOptions = navOptions {
+                            launchSingleTop = true
+                        }
+                    )
+                }
+            )
+        }
+        composable<Route.HomeEdit>(
+            typeMap = mapOf(
+                typeOf<Expense>() to ExpenseNavType
+            )
+        ) {
+            val expense = it.toRoute<Route.HomeEdit>().expense
+            EditExpenseScreenRoot(
+                expense = expense,
+                onGoBack = {
+                    navController.navigateUp()
+                },
+                onGotoAddScreen = { toAddExpense ->
+                    navController.navigate(
+                        Route.HomeAdd(
+                            expense = toAddExpense,
+                            isAddNew = false
+                        )
+                    )
+                }
+            )
+        }
+        composable<Route.Types>(
+            typeMap = mapOf(
+                typeOf<Type>() to TypeNavType
+            )
+        ) {
+            TypesScreenRoot(
+                onBack = {
+                    navController.navigateUp()
+                },
+                navigateToTypeCategoryEdit = {
+                    navController.navigate(
+                        Route.TypeCategoryEdit(it.toType()),
+                        navOptions = navOptions {
+                            launchSingleTop = true
+                        }
+                    )
+                }
+            )
+        }
+
+        composable<Route.TypeCategoryEdit>(
+            typeMap = mapOf(
+                typeOf<Type>() to TypeNavType
+            )
+        ) {
+            val typeUi = it.toRoute<Route.TypeCategoryEdit>().type.toTypeUi()
+            TypeCategoryEditScreenRoot(
+                typeUi = typeUi,
+                onBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
     }
 }
 
