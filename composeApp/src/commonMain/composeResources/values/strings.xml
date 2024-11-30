@@ -4,6 +4,7 @@
 
     <string name="home">Home</string>
     <string name="chart">Chart</string>
+    <string name="analytics">Analytics</string>
     <string name="total">Total</string>
     <string name="income">Income</string>
     <string name="expense">Expense</string>

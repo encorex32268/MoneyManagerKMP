@@ -1,20 +1,37 @@
-@file:OptIn(KoinExperimentalAPI::class)
+@file:OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3WindowSizeClassApi::class)
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,7 +41,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,7 +49,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
-import com.lihan.moneymanager.BuildKonfig
+import feature.analytics.presentation.backup.BackupScreenRoot
 import feature.chart.presentation.ChartScreenRoot
 import feature.chart.presentation.chartdetail.DetailScreenRoot
 import feature.core.domain.mapper.toType
@@ -41,20 +57,40 @@ import feature.core.domain.mapper.toTypeUi
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
 import feature.core.presentation.navigation.bottomNavigationItems
+import feature.home.domain.navigation.ExpenseListNavType
+import feature.home.domain.navigation.ExpenseNavType
+import feature.home.domain.navigation.TypeNavType
 import feature.home.presentation.HomeScreenRoot
 import feature.home.presentation.add.AddScreenRoot
 import feature.home.presentation.add.type.TypesScreenRoot
 import feature.home.presentation.add.type.category.TypeCategoryEditScreenRoot
 import feature.home.presentation.edit.EditExpenseScreenRoot
-import feature.home.domain.navigation.ExpenseListNavType
-import feature.home.domain.navigation.ExpenseNavType
-import feature.home.domain.navigation.TypeNavType
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import kotlin.reflect.typeOf
+
+@Immutable
+private enum class NavigationLayoutType {
+    BOTTOM_NAVIGATION,
+    NAVIGATION_RAIL,
+    FULL_SCREEN,
+}
+
+private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?): NavigationLayoutType {
+    return when (widthSizeClass) {
+        WindowWidthSizeClass.Compact -> {
+            NavigationLayoutType.BOTTOM_NAVIGATION
+        }
+
+        else -> {
+            NavigationLayoutType.NAVIGATION_RAIL
+        }
+    }
+}
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -69,19 +105,23 @@ fun App(
         var itemSelectedIndex by remember {
             mutableStateOf(0)
         }
+
+        val windowSizeClass = calculateWindowSizeClass()
+        val navigationLayoutType = windowSizeClass.calculateNavigationLayout(
+            currentRoute = currentDestination,
+        )
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .systemBarsPadding()
-                .navigationBarsPadding(),
+                .navigationBarsPadding()
+                .systemBarsPadding(),
             bottomBar = {
                 AnimatedVisibility(
-                    visible = isMainCurrentDestination(currentDestination),
+                    visible = isMainCurrentDestination(currentDestination) && (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION),
                     enter = slideInVertically(),
                     exit = slideOutVertically(),
                 ){
                     NavigationBar(
-                        modifier = Modifier.height(56.dp),
                         containerColor = Color.White
                     ) {
                         bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
@@ -110,6 +150,11 @@ fun App(
                                         ),
                                         contentDescription = bottomNavigationItem.name,
                                     )
+                                },
+                                label = {
+                                    Text(
+                                        text = stringResource(bottomNavigationItem.title)
+                                    )
                                 }
                             )
                         }
@@ -117,21 +162,97 @@ fun App(
                 }
             }
         ){
-            NavHost(
-                modifier = Modifier.padding(
-                    bottom = if (isMainCurrentDestination(currentDestination))
-                        56.dp
-                    else 0.dp
-                ),
-                navController = navController,
-                startDestination = Route.HomeGraph
-            ){
+            paddingValues ->
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+            ) {
+                AnimatedVisibility(
+                    visible = (navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL),
+                    enter = slideInHorizontally(initialOffsetX = { -it }),
+                    exit = shrinkHorizontally() + fadeOut(),
+                ) {
+                    Row {
+                        NavigationRail(
+                            contentColor = Color.White
+                        ) {
+                            bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
+                                NavigationRailItem(
+                                    colors = NavigationRailItemDefaults.colors(
+                                        indicatorColor = Color.LightGray.copy(alpha = 0.3f)
+                                    ),
+                                    selected = (itemSelectedIndex == index),
+                                    onClick = {
+                                        itemSelectedIndex = index
+                                        navController.navigate(
+                                            bottomNavigationItem.name,
+                                            navOptions = navOptions {
+                                                launchSingleTop = true
+                                            }
+                                        )
+                                    },
+                                    icon = {
+                                        Icon(
+                                            painter = painterResource(
+                                                if (itemSelectedIndex == index){
+                                                    bottomNavigationItem.selectedIcon
+                                                }else{
+                                                    bottomNavigationItem.unSelectedIcon
+                                                }
+                                            ),
+                                            contentDescription = bottomNavigationItem.name,
+                                        )
+                                    },
+                                    label = {
+                                        Text(
+                                            text = stringResource(bottomNavigationItem.title)
+                                        )
+                                    }
 
-                homeGraph(navController, itemSelectedIndex)
-                chartGraph(navController)
+                                )
+                            }
+                        }
+                        VerticalDivider(
+                            modifier = Modifier.fillMaxHeight()
+                                .wrapContentWidth(),
+                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                        )
+                    }
+                }
+                NavHost(
+                    navController = navController,
+                    startDestination = Route.HomeGraph
+                ){
+
+                    homeGraph(
+                        navController = navController,
+                        onChartClick = {
+                            itemSelectedIndex = 1
+                        }
+                    )
+                    chartGraph(navController)
+                    analyticsGraph(navController)
+                }
             }
+
         }
     }
+}
+
+private fun NavGraphBuilder.analyticsGraph(navController: NavHostController) {
+    navigation<Route.AnalyticsGraph>(
+        startDestination = Route.Analytics
+    ){
+        composable<Route.Analytics> {
+            BackupScreenRoot(
+                onBackClick = {
+                    navController.navigateUp()
+                }
+            )
+        }
+    }
+
 }
 
 private fun NavGraphBuilder.chartGraph(navController: NavHostController) {
@@ -174,9 +295,8 @@ private fun NavGraphBuilder.chartGraph(navController: NavHostController) {
 
 private fun NavGraphBuilder.homeGraph(
     navController: NavHostController,
-    itemSelectedIndex: Int
+    onChartClick: () -> Unit = {}
 ) {
-    var itemSelectedIndex1 = itemSelectedIndex
     navigation<Route.HomeGraph>(
         startDestination = Route.Home
     ) {
@@ -194,7 +314,7 @@ private fun NavGraphBuilder.homeGraph(
                     )
                 },
                 onGotoChartScreen = {
-                    itemSelectedIndex1 = 1
+                    onChartClick()
                     navController.navigate(
                         Route.Chart,
                         navOptions = navOptions {

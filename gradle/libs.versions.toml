@@ -13,26 +13,38 @@ libraryBase = "2.1.0"
 readmkotlin = "2.1.0"
 kotlinxSerializationJson = "1.6.1"
 
+#KotlinDateTime
 kotlinxDateTime = "0.6.0-RC.2"
-
+#Koin
 koin = "3.5.6"
 koinCompose = "1.1.5"
 koinComposeViewModel = "1.2.0-Beta4"
 
-
+#Navigation
 navigationCompose = "2.8.0-alpha08"
-koinMultiplatform = "1.2.0-Beta4"
 
+#Uri
 uriKmpVersion = "0.0.18"
 lifecycleViewmodelCompose = "2.8.0"
 
-colorpicker = "1.1.2"
 jetbrainsKotlinJvm = "1.9.0"
-
+#ColorPicker
+colorpicker = "1.1.2"
+#KeySettings
 keysettings = "1.2.0"
+#Splash
 core-splashscreen = "1.0.1"
+#Ads
 google-play-services = "23.4.0"
+#Konfig
 konfig = "0.15.1"
+#Csv
+csv = "0.12"
+#FileKit
+filekit = "0.8.2"
+
+material3WindowSizeClassMultiplatform = "0.5.0"
+
 
 [libraries]
 
@@ -56,11 +68,23 @@ koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinComp
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinComposeViewModel" }
 
 androidx-navigation = { module= "org.jetbrains.androidx.navigation:navigation-compose" , version.ref= "navigationCompose"}
+
 uri-kmp = { module = "com.eygraber:uri-kmp" , version.ref = "uriKmpVersion"}
 lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 
 keysettings-kmp  = { module = "com.russhwolf:multiplatform-settings-no-arg" , version.ref = "keysettings"}
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
+
+csv = { module = "de.halfbit:csv", version.ref = "csv" }
+filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
+filekit-compose = { module = "io.github.vinceglb:filekit-compose", version.ref = "filekit" }
+
+
+material3-windowsizeclass-multiplatform = { group = "dev.chrisbanes.material3", name = "material3-window-size-class-multiplatform", version.ref = "material3WindowSizeClassMultiplatform" }
+
+
+
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

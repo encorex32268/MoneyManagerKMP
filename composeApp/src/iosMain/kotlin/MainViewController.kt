@@ -1,7 +1,5 @@
 import androidx.compose.ui.window.ComposeUIViewController
-import feature.chart.di.chartModule
-import feature.di.appModule
-import feature.home.di.homeModule
+import feature.di.sharedModules
 import org.koin.core.context.startKoin
 import platform.UIKit.UIViewController
 
@@ -16,9 +14,7 @@ fun MainViewController() = ComposeUIViewController(
     configure = {
         startKoin {
             modules(
-                appModule,
-                homeModule,
-                chartModule
+                sharedModules
             )
         }
     }

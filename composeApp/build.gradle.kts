@@ -74,6 +74,15 @@ kotlin {
             implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.compose.colorpicker)
             implementation(libs.keysettings.kmp)
+
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.compose)
+            implementation(libs.csv)
+
+            implementation(libs.material3.windowsizeclass.multiplatform)
+
+
+
         }
         commonTest.dependencies {
             implementation(libs.koin.test)

@@ -41,6 +41,16 @@ sealed interface Route  {
         val items: List<Expense>,
         val type: Type
     )
+
+    @Serializable
+    data object AnalyticsGraph
+
+    @Serializable
+    data object Analytics
+
+    @Serializable
+    data object Backup
+
 }
 
 

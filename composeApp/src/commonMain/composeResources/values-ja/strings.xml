@@ -3,6 +3,7 @@
     <string name="app_name">家計簿</string>
     <string name="home">ホーム</string>
     <string name="chart">チャート</string>
+    <string name="analytics">分析</string>
     <string name="total">合計</string>
     <string name="income">収入</string>
     <string name="expense">支出</string>

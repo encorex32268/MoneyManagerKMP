@@ -3,6 +3,7 @@
     <string name="app_name">記帳</string>
     <string name="home">主頁</string>
     <string name="chart">圖表</string>
+    <string name="analytics">分析</string>
     <string name="total">總共</string>
     <string name="income">收入</string>
     <string name="expense">支出</string>
