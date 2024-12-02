@@ -6,6 +6,8 @@ import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -121,44 +123,19 @@ fun App(
                     enter = slideInVertically(),
                     exit = slideOutVertically(),
                 ){
-                    NavigationBar(
-                        containerColor = Color.White
-                    ) {
-                        bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
-                            NavigationBarItem(
-                                colors = NavigationBarItemDefaults.colors(
-                                    indicatorColor = Color.LightGray.copy(alpha = 0.3f)
-                                ),
-                                selected = (itemSelectedIndex == index),
-                                onClick = {
-                                    itemSelectedIndex = index
-                                    navController.navigate(
-                                        bottomNavigationItem.name,
-                                        navOptions = navOptions {
-                                            launchSingleTop = true
-                                        }
-                                    )
-                                },
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(
-                                            if (itemSelectedIndex == index){
-                                                bottomNavigationItem.selectedIcon
-                                            }else{
-                                                bottomNavigationItem.unSelectedIcon
-                                            }
-                                        ),
-                                        contentDescription = bottomNavigationItem.name,
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        text = stringResource(bottomNavigationItem.title)
-                                    )
+                    AppNavigationBar(
+                        itemSelectedIndex = itemSelectedIndex,
+                        onBarItemClick = { index , name ->
+                            itemSelectedIndex = index
+                            navController.navigate(
+                                route = name,
+                                navOptions = navOptions {
+                                    launchSingleTop = true
                                 }
                             )
+
                         }
-                    }
+                    )
                 }
             }
         ){
@@ -174,45 +151,18 @@ fun App(
                     exit = shrinkHorizontally() + fadeOut(),
                 ) {
                     Row {
-                        NavigationRail(
-                            contentColor = Color.White
-                        ) {
-                            bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
-                                NavigationRailItem(
-                                    colors = NavigationRailItemDefaults.colors(
-                                        indicatorColor = Color.LightGray.copy(alpha = 0.3f)
-                                    ),
-                                    selected = (itemSelectedIndex == index),
-                                    onClick = {
-                                        itemSelectedIndex = index
-                                        navController.navigate(
-                                            bottomNavigationItem.name,
-                                            navOptions = navOptions {
-                                                launchSingleTop = true
-                                            }
-                                        )
-                                    },
-                                    icon = {
-                                        Icon(
-                                            painter = painterResource(
-                                                if (itemSelectedIndex == index){
-                                                    bottomNavigationItem.selectedIcon
-                                                }else{
-                                                    bottomNavigationItem.unSelectedIcon
-                                                }
-                                            ),
-                                            contentDescription = bottomNavigationItem.name,
-                                        )
-                                    },
-                                    label = {
-                                        Text(
-                                            text = stringResource(bottomNavigationItem.title)
-                                        )
+                        AppNavigationRail(
+                            itemSelectedIndex = itemSelectedIndex,
+                            onBarItemClick = { index, name ->
+                                itemSelectedIndex = index
+                                navController.navigate(
+                                    route = name,
+                                    navOptions = navOptions {
+                                        launchSingleTop = true
                                     }
-
                                 )
                             }
-                        }
+                        )
                         VerticalDivider(
                             modifier = Modifier.fillMaxHeight()
                                 .wrapContentWidth(),
@@ -239,6 +189,9 @@ fun App(
         }
     }
 }
+
+
+
 
 private fun NavGraphBuilder.analyticsGraph(navController: NavHostController) {
     navigation<Route.AnalyticsGraph>(
@@ -323,6 +276,7 @@ private fun NavGraphBuilder.homeGraph(
                     )
                 },
                 onGotoEditScreen = {
+                    println("onGotoEditScreen ${it.description}/${it.cost}")
                     navController.navigate(
                         Route.HomeEdit(
                             expense = it
@@ -414,8 +368,90 @@ private fun NavGraphBuilder.homeGraph(
     }
 }
 
-fun isMainCurrentDestination(currentDestination: String?): Boolean{
+private fun isMainCurrentDestination(currentDestination: String?): Boolean{
     return (currentDestination in bottomNavigationItems.map { it.name })
+}
+
+@Composable
+private fun AppNavigationRail(
+    itemSelectedIndex: Int,
+    onBarItemClick: (Int,String) -> Unit = { _ , _-> }
+) {
+    NavigationRail(
+        containerColor = Color.White
+    ) {
+        bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
+            NavigationRailItem(
+                colors = NavigationRailItemDefaults.colors(
+                    indicatorColor = Color.LightGray.copy(alpha = 0.3f)
+                ),
+                selected = (itemSelectedIndex == index),
+                onClick = {
+                    onBarItemClick(
+                        index,
+                        bottomNavigationItem.name
+                    )
+                },
+                icon = {
+                    Icon(
+                        painter = painterResource(
+                            if (itemSelectedIndex == index) {
+                                bottomNavigationItem.selectedIcon
+                            } else {
+                                bottomNavigationItem.unSelectedIcon
+                            }
+                        ),
+                        contentDescription = bottomNavigationItem.name,
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(bottomNavigationItem.title)
+                    )
+                }
+
+            )
+        }
+    }
+}
+
+@Composable
+private fun AppNavigationBar(
+    itemSelectedIndex: Int,
+    onBarItemClick: (Int,String) -> Unit = { _ , _-> }
+) {
+    NavigationBar(
+        containerColor = Color.White
+    ) {
+        bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
+            NavigationBarItem(
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = Color.LightGray.copy(alpha = 0.3f)
+                ),
+                selected = (itemSelectedIndex == index),
+                onClick = {
+                    onBarItemClick(index , bottomNavigationItem.name)
+                },
+                icon = {
+                    Icon(
+                        painter = painterResource(
+                            if (itemSelectedIndex == index) {
+                                bottomNavigationItem.selectedIcon
+                            } else {
+                                bottomNavigationItem.unSelectedIcon
+                            }
+                        ),
+                        contentDescription = bottomNavigationItem.name,
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(bottomNavigationItem.title)
+                    )
+                }
+            )
+        }
+    }
 }
 
 

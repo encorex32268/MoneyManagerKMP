@@ -1,9 +1,6 @@
 package feature.chart.data.repository
 
-import androidx.collection.mutableIntListOf
 import feature.chart.domain.repository.ChartRepository
-import feature.core.domain.model.Expense
-import feature.core.domain.model.Type
 import feature.core.domain.model.chart.Chart
 import feature.core.domain.repository.ExpenseRepository
 import feature.core.domain.repository.TypeRepository
@@ -15,7 +12,7 @@ class ChartRepositoryImpl(
     private val typeRepository: TypeRepository
 ): ChartRepository {
 
-    override suspend fun getExpenseByTime(
+    override fun getExpenseByTime(
         startTimeOfMonth: Long,
         endTimeOfMonth: Long
     ): Flow<List<Chart>> {

@@ -8,13 +8,16 @@ import feature.core.domain.repository.ExpenseRepository
 import feature.core.domain.repository.TypeRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.internal.ChannelFlow
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -24,29 +27,31 @@ class EditExpenseViewModel(
     private val typeRepository: TypeRepository
 ): ViewModel() {
 
-    init {
-        viewModelScope.launch {
-            val types = typeRepository.getTypes()
-            val expenseById = repository.getExpense(expense)
-            combine(types , expenseById){ dataTypes , dataExpense ->
-                _state.update {
-                    it.copy(
-                        currentExpense = dataExpense,
-                        typeItems = dataTypes
-                    )
+    private val _state = MutableStateFlow(EditExpenseState())
+    val state = _state
+        .onStart {
+                viewModelScope.launch {
+                    val types = typeRepository.getTypes()
+                    val expenseById = repository.getExpense(expense)
+                    combine(types , expenseById){ dataTypes , dataExpense ->
+                        _state.update {
+                            it.copy(
+                                currentExpense = dataExpense,
+                                typeItems = dataTypes
+                            )
+                        }
+                    }
                 }
-            }.launchIn(this)
-        }
-    }
-    private val _state = MutableStateFlow(
-        EditExpenseState()
-    )
-    val state = _state.asStateFlow()
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            _state.value
+        )
 
     private val _uiEvent = Channel<EditExpenseUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    private val currentText = MutableStateFlow(expense.content)
+    private val currentText = expense.content
 
 
     fun onEvent(event: EditExpenseEvent){
@@ -76,7 +81,7 @@ class EditExpenseViewModel(
             EditExpenseEvent.OnBackClick        -> {
                 viewModelScope.launch {
                     state.value.currentExpense?.let {
-                        if (currentText.value != it.content){
+                        if (currentText != it.content){
                             repository.update(
                                 expense = it
                             )
@@ -89,7 +94,7 @@ class EditExpenseViewModel(
             EditExpenseEvent.OnGoAddScreenClick -> {
                 state.value.currentExpense?.let {
                     viewModelScope.launch {
-                        if (currentText.value != it.content) {
+                        if (currentText != it.content) {
                             repository.update(
                                 expense = it
                             )
@@ -99,6 +104,8 @@ class EditExpenseViewModel(
                 }?:return
 
             }
+
+            else                                -> Unit
         }
     }
 }

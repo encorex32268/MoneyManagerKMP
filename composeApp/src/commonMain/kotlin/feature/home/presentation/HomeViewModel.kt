@@ -7,10 +7,14 @@ import feature.core.domain.repository.ExpenseRepository
 import feature.core.domain.repository.TypeRepository
 import feature.core.presentation.date.DateConverter
 import feature.core.presentation.date.DateConverter.getNowDate
+import feature.core.presentation.date.toDayString
 import feature.home.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -20,9 +24,7 @@ class HomeViewModel(
 ): ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
-    val state = _state.asStateFlow()
-
-    init {
+    val state = _state.onStart {
         viewModelScope.launch {
             typeRepository.getTypes().collectLatest { data ->
                 _state.update {
@@ -33,7 +35,11 @@ class HomeViewModel(
                 onEvent(HomeEvent.OnDatePick(isInit = true))
             }
         }
-    }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000L),
+        _state.value
+    )
 
     fun onEvent(event: HomeEvent){
         when(event){
@@ -53,7 +59,7 @@ class HomeViewModel(
                                 it.timestamp
                             }
                             .groupBy {
-                                DateConverter.getDayStringDefault(it.timestamp)
+                                it.timestamp.toDayString()
                             }
                             .toList()
                         val incomeItems = data.filter { it.isIncome }

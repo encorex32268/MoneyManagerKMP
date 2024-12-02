@@ -16,12 +16,15 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -31,12 +34,7 @@ class TypeViewModel(
 ): ViewModel() {
 
     private val _state = MutableStateFlow(TypesState())
-    val state = _state.asStateFlow()
-
-    private var currentItems = emptyList<TypeUi>()
-    private var isCancel = MutableStateFlow(false)
-
-    init {
+    val state = _state.onStart {
         viewModelScope.launch {
             repository.getTypes()
                 .filter {
@@ -44,26 +42,33 @@ class TypeViewModel(
                 }
                 .collectLatest { data ->
 
-                val items = data.map { it.toTypeUi() }
-                    .filter { it.isShow }
-                    .sortedBy { it.order }
+                    val items = data.map { it.toTypeUi() }
+                        .filter { it.isShow }
+                        .sortedBy { it.order }
 
-                val itemsNotShowing = data.map { it.toTypeUi() }
-                    .filter { !it.isShow }
-                    .sortedBy { it.order }
+                    val itemsNotShowing = data.map { it.toTypeUi() }
+                        .filter { !it.isShow }
+                        .sortedBy { it.order }
 
-                _state.update {
-                    it.copy(
-                        items = items,
-                        itemsNotShowing = itemsNotShowing
-                    )
+                    _state.update {
+                        it.copy(
+                            items = items,
+                            itemsNotShowing = itemsNotShowing
+                        )
+                    }
+                    if (currentItems.isEmpty()){
+                        currentItems = items
+                    }
                 }
-                if (currentItems.isEmpty()){
-                    currentItems = items
-                }
-            }
         }
-    }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000L),
+        _state.value
+    )
+
+    private var currentItems = emptyList<TypeUi>()
+    private var isCancel = MutableStateFlow(false)
 
     fun onEvent(event: TypeEvent){
         when(event){

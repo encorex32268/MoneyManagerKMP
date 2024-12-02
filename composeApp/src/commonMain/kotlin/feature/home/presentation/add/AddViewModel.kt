@@ -16,17 +16,22 @@ import feature.core.domain.repository.ExpenseRepository
 import feature.core.domain.repository.TypeRepository
 import feature.core.presentation.CategoryList
 import feature.core.presentation.date.DateConverter
+import feature.core.presentation.date.toLocalDateTime
+import feature.core.presentation.date.toTimestamp
 import feature.core.presentation.model.CategoryUi
 import feature.home.presentation.add.type.TypeUi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
@@ -48,23 +53,16 @@ class AddViewModel(
         private const val OPEN_AD = "moneymanageropen"
     }
 
-    private val _state = MutableStateFlow(AddState(currentExpense = expense))
-    val state = _state.asStateFlow()
-
     private val _uiEvent = Channel<AddUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    init {
+    private val _state = MutableStateFlow(AddState(currentExpense = expense))
+    val state = _state.onStart {
         viewModelScope.launch {
-            val localDateTime = if (expense == null) {
-                DateConverter.getNowDate()
-            }else{
-                DateConverter.getLocalDateTimeFromTimestamp(expense.timestamp)
-            }
+            val localDateTime = expense?.timestamp?.toLocalDateTime() ?: DateConverter.getNowDate()
             val recentlyExpense = repository.getRecentlyExpenses()
             val types = typeRepository.getTypes()
             combine(recentlyExpense,types){ recentlyExpenseFlow , typeFlow ->
-
                 var isIconClicked = false
                 val recentlyType = TypeUi(
                     typeIdTimestamp = -1,
@@ -132,11 +130,15 @@ class AddViewModel(
                         description = expense?.description?:""
                     )
                 }
-            }.launchIn(this)
-
+            }
         }
-
     }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            _state.value
+        )
+
 
     fun onEvent(event: AddEvent){
         when(event){
@@ -184,7 +186,7 @@ class AddViewModel(
 
             }
             is AddEvent.OnSelectedDate      -> {
-                val localDateTime = DateConverter.getLocalDateTimeFromTimestamp(event.timestamp)
+                val localDateTime = event.timestamp.toLocalDateTime()
                 _state.update {
                     it.copy(
                         year = localDateTime.year,
@@ -251,9 +253,7 @@ class AddViewModel(
             }
             AddEvent.OnSaveClick            -> {
                 viewModelScope.launch {
-                    val timestamp = DateConverter.localDateTimeToTimestamp(
-                        localDateTime = state.value.nowLocalDateTime
-                    )
+                    val timestamp = state.value.nowLocalDateTime.toTimestamp()
                     if(state.value.currentExpense == null){
                         val expense = Expense(
                             typeId = state.value.categoryUi?.typeId?:0,

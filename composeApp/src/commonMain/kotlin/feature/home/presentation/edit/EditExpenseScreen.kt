@@ -61,6 +61,8 @@ import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
 import feature.core.presentation.components.TwoButtonDialog
 import feature.core.presentation.date.DateConverter
+import feature.core.presentation.date.toDayOfWeekStringResource
+import feature.core.presentation.date.toLocalDateTime
 import feature.core.presentation.noRippleClick
 import feature.home.presentation.edit.components.CostTypeItem
 import kotlinx.coroutines.flow.collectLatest
@@ -121,7 +123,10 @@ fun EditExpenseScreen(
     var isShowDeleteDialog by remember {
         mutableStateOf(false)
     }
+    println(">>${state.currentExpense?.description}")
     state.currentExpense?.let {
+        println(">>${it.cost}")
+
         val type = remember {
             state.typeItems.find { type ->
                 type.typeIdTimestamp == it.typeId
@@ -298,6 +303,11 @@ private fun CostSection(
 private fun TimestampSection(
     timestamp: Long
 ) {
+    val dayOfWeek = stringResource(timestamp.toLocalDateTime().toDayOfWeekStringResource())
+    val date = remember(timestamp){
+        val localDateTime = timestamp.toLocalDateTime()
+        "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} ${dayOfWeek}"
+    }
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -313,7 +323,7 @@ private fun TimestampSection(
         Spacer(modifier = Modifier.width(16.dp))
         Texts.TitleSmall(
             modifier = Modifier.weight(1f),
-            text = DateConverter.getStringDateFromLong(timestamp),
+            text = date,
             style = MaterialTheme.typography.bodySmall.copy(
                 letterSpacing = 1.sp
             )

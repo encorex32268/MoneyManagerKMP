@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +26,8 @@ import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
 import feature.core.presentation.date.DateConverter
+import feature.core.presentation.date.toDayOfWeekStringResource
+import feature.core.presentation.date.toLocalDateTime
 import feature.core.presentation.noRippleClick
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_sticky_note_24
@@ -42,15 +45,20 @@ fun ExpenseItem(
     isClick: Boolean = true
 ){
     if (items.isNotEmpty()){
-        val total = mutableStateOf(
-            run {
-                val incomeItems = items.filter { it.isIncome }
-                val expenseItems = items.filterNot { it.isIncome }
-                val income = incomeItems.sumOf { it.cost }
-                val expense = expenseItems.sumOf { it.cost }
-                -expense + income
-            }
-        )
+        val total = remember(items){
+            val incomeItems = items.filter { it.isIncome }
+            val expenseItems = items.filterNot { it.isIncome }
+            val income = incomeItems.sumOf { it.cost }
+            val expense = expenseItems.sumOf { it.cost }
+            -expense + income
+        }
+        val localDateTime  = remember(items){
+            (items.firstOrNull()?.timestamp?:0L).toLocalDateTime()
+        }
+        val dayOfWeekString = stringResource(localDateTime.toDayOfWeekStringResource())
+        val date = remember(localDateTime){
+            "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} $dayOfWeekString"
+        }
         OutlinedCard(
             colors = CardDefaults.cardColors(
                 containerColor = Color.White
@@ -75,15 +83,12 @@ fun ExpenseItem(
                 ) {
                     Texts.BodyMedium(
                         modifier = Modifier.weight(1f),
-                        text = kotlin.run {
-                            val localDateTime =DateConverter.getLocalDateTimeFromTimestamp(items[0].timestamp)
-                            "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} ${DateConverter.getDayOfWeekStringByDayOfWeek(localDateTime.dayOfWeek)}"
-                        }
+                        text = date
                     )
                     Texts.BodyMedium(
                         text = stringResource(
                             Res.string.total_expense_item,
-                            total.value.toMoneyString()
+                            total.toMoneyString()
                         )
                     )
                 }

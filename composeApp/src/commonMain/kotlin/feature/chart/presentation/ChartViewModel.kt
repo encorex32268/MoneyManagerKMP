@@ -8,8 +8,11 @@ import feature.core.domain.model.chart.Chart
 import feature.core.domain.repository.ExpenseRepository
 import feature.core.presentation.date.DateConverter
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -18,13 +21,19 @@ class ChartViewModel(
 ): ViewModel() {
 
     private val _state = MutableStateFlow(ChartState())
-    val state = _state.asStateFlow()
+    val state =
+        _state
+            .onStart {
+                onEvent(
+                    ChartEvent.OnDatePick()
+                )
+            }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000L),
+                _state.value
+            )
 
-    init {
-        onEvent(
-            ChartEvent.OnDatePick()
-        )
-    }
 
     fun onEvent(event: ChartEvent){
         when(event){
