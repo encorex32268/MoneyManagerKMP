@@ -120,4 +120,16 @@ class ExpenseRepositoryImpl(
             copyToRealm(expense.toExpenseEntity())
         }
     }
+
+    override fun getAll(): Flow<List<Expense>> {
+        return realm.query<ExpenseEntity>().asFlow().map {
+            if (it.list.isEmpty()){
+                emptyList()
+            }else{
+                it.list.toList().map { expenseEntity ->
+                    expenseEntity.toExpense()
+                }
+            }
+        }
+    }
 }

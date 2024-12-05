@@ -30,18 +30,16 @@ class EditExpenseViewModel(
     private val _state = MutableStateFlow(EditExpenseState())
     val state = _state
         .onStart {
-                viewModelScope.launch {
-                    val types = typeRepository.getTypes()
-                    val expenseById = repository.getExpense(expense)
-                    combine(types , expenseById){ dataTypes , dataExpense ->
-                        _state.update {
-                            it.copy(
-                                currentExpense = dataExpense,
-                                typeItems = dataTypes
-                            )
-                        }
-                    }
+            val types = typeRepository.getTypes()
+            val expenseById = repository.getExpense(expense)
+            combine(types , expenseById){ dataTypes , dataExpense ->
+                _state.update {
+                    it.copy(
+                        currentExpense = dataExpense,
+                        typeItems = dataTypes
+                    )
                 }
+            }.launchIn(viewModelScope)
         }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000L),

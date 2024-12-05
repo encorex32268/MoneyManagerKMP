@@ -65,6 +65,11 @@ object DateConverter {
     }
 }
 
+fun LocalDate.toEpochMilliseconds(): Long {
+    val timeZone = TimeZone.currentSystemDefault()
+    return this.atStartOfDayIn(timeZone).toEpochMilliseconds()
+}
+
 fun Long.toDayString(): String {
     val timezone = TimeZone.currentSystemDefault()
     val localDateTime = Instant.fromEpochMilliseconds(this).toLocalDateTime(timezone)
@@ -82,9 +87,15 @@ fun Long.toLocalDateTime(): LocalDateTime {
 
 fun Long.toStringDateByTimestamp(): String{
     val localDateTime = this.toLocalDateTime()
-    return "${localDateTime.year}.${localDateTime.monthNumber}.${localDateTime.dayOfMonth}"
+    return "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} \n ${localDateTime.year}"
 
 }
+fun Long.toStringDateMDByTimestamp(): String{
+    val localDateTime = this.toLocalDateTime()
+    return "${localDateTime.monthNumber}/${localDateTime.dayOfMonth}"
+
+}
+
 
 fun LocalDateTime.toDayOfWeekStringResource(): StringResource {
     return when(this.dayOfWeek){

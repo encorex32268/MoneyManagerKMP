@@ -1,4 +1,6 @@
-@file:OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3WindowSizeClassApi::class)
+@file:OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3WindowSizeClassApi::class,
+    ExperimentalMaterial3WindowSizeClassApi::class
+)
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeOut
@@ -51,6 +53,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import feature.analytics.presentation.AnalyticsScreenRoot
 import feature.analytics.presentation.backup.BackupScreenRoot
 import feature.chart.presentation.ChartScreenRoot
 import feature.chart.presentation.chartdetail.DetailScreenRoot
@@ -198,6 +201,15 @@ private fun NavGraphBuilder.analyticsGraph(navController: NavHostController) {
         startDestination = Route.Analytics
     ){
         composable<Route.Analytics> {
+            AnalyticsScreenRoot(
+                onBackupClick = {
+                    navController.navigate(
+                        Route.Backup
+                    )
+                }
+            )
+        }
+        composable<Route.Backup> {
             BackupScreenRoot(
                 onBackClick = {
                     navController.navigateUp()
@@ -276,7 +288,6 @@ private fun NavGraphBuilder.homeGraph(
                     )
                 },
                 onGotoEditScreen = {
-                    println("onGotoEditScreen ${it.description}/${it.cost}")
                     navController.navigate(
                         Route.HomeEdit(
                             expense = it

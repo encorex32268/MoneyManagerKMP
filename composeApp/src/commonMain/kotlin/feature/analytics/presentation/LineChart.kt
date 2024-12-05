@@ -1,7 +1,7 @@
 package feature.analytics.presentation
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
@@ -15,15 +15,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.PathMeasure
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import feature.analytics.presentation.model.DataPoint
 import feature.analytics.presentation.model.LineChartStyle
 import feature.analytics.presentation.model.ValueLabel
+import moneymanagerkmp.composeapp.generated.resources.Res
+import moneymanagerkmp.composeapp.generated.resources.notosanslao_medium
+import org.jetbrains.compose.resources.Font
+import toMoneyString
 import kotlin.math.roundToInt
 
 
@@ -31,27 +38,23 @@ import kotlin.math.roundToInt
 fun LineChart(
     dataPoints: List<DataPoint>,
     style: LineChartStyle,
-    visibleDataPointsIndices: IntRange,
-    unit: String,
     modifier: Modifier = Modifier,
     selectedDataPoint: DataPoint? = null,
     onSelectedDataPoint: (DataPoint) -> Unit = {},
     onXLabelWidthChange: (Float) -> Unit = {},
-    showHelperLines: Boolean = true
+    showHelperLines: Boolean = false,
+    animationProgress: Float = 1f
 ) {
     val textStyle = LocalTextStyle.current.copy(
-        fontSize = style.labelFontSize
+        fontSize = style.labelFontSize,
+        fontFamily = FontFamily(Font(Res.font.notosanslao_medium)),
     )
 
-    val visibleDataPoints = remember(dataPoints, visibleDataPointsIndices) {
-        dataPoints.slice(visibleDataPointsIndices)
+    val maxYValue = remember(dataPoints) {
+        dataPoints.maxOfOrNull { it.y } ?: 0f
     }
-
-    val maxYValue = remember(visibleDataPoints) {
-        visibleDataPoints.maxOfOrNull { it.y } ?: 0f
-    }
-    val minYValue = remember(visibleDataPoints) {
-        visibleDataPoints.minOfOrNull { it.y } ?: 0f
+    val minYValue = remember(dataPoints) {
+        dataPoints.minOfOrNull { it.y } ?: 0f
     }
 
     val measurer = rememberTextMeasurer()
@@ -69,24 +72,17 @@ fun LineChart(
     var drawPoints by remember {
         mutableStateOf(listOf<DataPoint>())
     }
-    var isShowingDataPoints by remember {
-        mutableStateOf(selectedDataPoint != null)
-    }
-
     Canvas(
         modifier = modifier
             .fillMaxSize()
             .pointerInput(drawPoints, xLabelWidth) {
-                detectHorizontalDragGestures { change, _ ->
+                detectTapGestures { change ->
                     val newSelectedDataPointIndex = getSelectedDataPointIndex(
-                        touchOffsetX = change.position.x,
+                        touchOffsetX = change.x,
                         triggerWidth = xLabelWidth,
                         drawPoints = drawPoints
                     )
-                    isShowingDataPoints =
-                        (newSelectedDataPointIndex + visibleDataPointsIndices.first) in
-                                visibleDataPointsIndices
-                    if (isShowingDataPoints) {
+                    if (newSelectedDataPointIndex in dataPoints.indices) {
                         onSelectedDataPoint(dataPoints[newSelectedDataPointIndex])
                     }
                 }
@@ -97,7 +93,7 @@ fun LineChart(
         val horizontalPaddingPx = style.horizontalPadding.toPx()
         val xAxisLabelSpacingPx = style.xAxisLabelSpacing.toPx()
 
-        val xLabelTextLayoutResults = visibleDataPoints.map {
+        val xLabelTextLayoutResults = dataPoints.map {
             measurer.measure(
                 text = it.xLabel,
                 style = textStyle.copy(textAlign = TextAlign.Center)
@@ -123,13 +119,13 @@ fun LineChart(
 
         val yLabels = (0..labelCountExcludingLastLabel).map {
             ValueLabel(
-                value = maxYValue - (valueIncrement * it)
+                value = (maxYValue - (valueIncrement * it)).toLong()
             )
         }
 
         val yLabelTextLayoutResults = yLabels.map {
             measurer.measure(
-                text = it.value.toString(),
+                text = it.value.toMoneyString(),
                 style = textStyle
             )
         }
@@ -176,17 +172,18 @@ fun LineChart(
 
             if(selectedDataPointIndex == index) {
                 val valueLabel = ValueLabel(
-                    value = visibleDataPoints[index].y,
+                    value = (dataPoints[index].y).toLong(),
                 )
                 val valueResult = measurer.measure(
-                    text = valueLabel.toString(),
+                    text = valueLabel.value.toMoneyString(),
                     style = textStyle.copy(
-                        color = style.selectedColor
+                        color = style.selectedColor,
+                        textAlign = TextAlign.Center
                     ),
                     maxLines = 1
                 )
-                val textPositionX = if(selectedDataPointIndex == visibleDataPointsIndices.last) {
-                    x - valueResult.size.width
+                val textPositionX = if(selectedDataPointIndex == dataPoints.lastIndex) {
+                    x - valueResult.size.width / 2f
                 } else {
                     x - valueResult.size.width / 2f
                 } + result.size.width / 2f
@@ -239,17 +236,14 @@ fun LineChart(
             }
         }
 
-        // visibleDataPointsIndices = 5..20
-        drawPoints = visibleDataPointsIndices.map {
-            val x = viewPortLeftX + (it - visibleDataPointsIndices.first) *
-                    xLabelWidth + xLabelWidth / 2f
-            // [minYValue; maxYValue] -> [0; 1]
-            val ratio = (dataPoints[it].y - minYValue) / (maxYValue - minYValue)
+        drawPoints = dataPoints.mapIndexed { index, point ->
+            val x = viewPortLeftX + index * xLabelWidth + xLabelWidth / 2f
+            val ratio = (point.y - minYValue) / (maxYValue - minYValue)
             val y = viewPortBottomY - (ratio * viewPortHeightPx)
             DataPoint(
                 x = x,
                 y = y,
-                xLabel = dataPoints[it].xLabel
+                xLabel = point.xLabel
             )
         }
 
@@ -283,8 +277,19 @@ fun LineChart(
                 }
             }
         }
+
+        val pathMeasure =  PathMeasure()
+        pathMeasure.setPath(path = linePath,forceClosed = false)
+        val animatedPath = Path()
+        pathMeasure.getSegment(
+            startDistance = 0f,
+            stopDistance = pathMeasure.length * animationProgress,
+            destination = animatedPath,
+            startWithMoveTo = true
+        )
+
         drawPath(
-            path = linePath,
+            path = animatedPath,
             color = style.chartLineColor,
             style = Stroke(
                 width = 5f,
@@ -293,32 +298,42 @@ fun LineChart(
         )
 
         drawPoints.forEachIndexed { index, point ->
-            if(isShowingDataPoints) {
-                val circleOffset = Offset(
-                    x = point.x,
-                    y = point.y
+            val circleOffset = Offset(
+                x = point.x,
+                y = point.y
+            )
+            drawCircle(
+                color = style.selectedColor,
+                radius = 10f,
+                center = circleOffset
+            )
+
+            if(selectedDataPointIndex == index) {
+                drawLine(
+                    color = style.selectedColor,
+                    start = Offset(
+                        point.x,viewPortBottomY
+                    ),
+                    end = Offset(
+                        point.x , point.y + 7.5f
+                    ),
+                    strokeWidth = 5f,
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f,5f),0f)
+                )
+                drawCircle(
+                    color = Color.White,
+                    radius = 15f,
+                    center = circleOffset
                 )
                 drawCircle(
                     color = style.selectedColor,
-                    radius = 10f,
-                    center = circleOffset
+                    radius = 15f,
+                    center = circleOffset,
+                    style = Stroke(
+                        width = 3f
+                    )
                 )
 
-                if(selectedDataPointIndex == index) {
-                    drawCircle(
-                        color = Color.White,
-                        radius = 15f,
-                        center = circleOffset
-                    )
-                    drawCircle(
-                        color = style.selectedColor,
-                        radius = 15f,
-                        center = circleOffset,
-                        style = Stroke(
-                            width = 3f
-                        )
-                    )
-                }
             }
         }
     }

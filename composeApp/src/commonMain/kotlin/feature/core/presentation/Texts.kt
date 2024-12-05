@@ -38,6 +38,7 @@ object Texts {
         text : String,
         textAlign : TextAlign = TextAlign.Start,
         font: FontResource = Res.font.notosanslao_bold,
+        overflow: TextOverflow = TextOverflow.Ellipsis,
     ){
         Text(
             modifier = modifier,
@@ -45,7 +46,8 @@ object Texts {
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = textAlign,
-            fontFamily = FontFamily(Font(font))
+            fontFamily = FontFamily(Font(font)),
+            overflow = overflow
         )
     }
     @Composable
@@ -142,7 +144,8 @@ object Texts {
     fun BodySmall(
         modifier: Modifier = Modifier,
         text: String,
-        font: FontResource = Res.font.notosanslao_regular
+        font: FontResource = Res.font.notosanslao_regular,
+        maxLines: Int = 2
 
     ){
         Text(
@@ -151,7 +154,7 @@ object Texts {
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurface,
             fontFamily = FontFamily(Font(font)),
-            maxLines = 2,
+            maxLines = maxLines,
             overflow = TextOverflow.Clip
 
         )

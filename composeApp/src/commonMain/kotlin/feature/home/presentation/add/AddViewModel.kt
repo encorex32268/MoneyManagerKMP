@@ -17,6 +17,7 @@ import feature.core.domain.repository.TypeRepository
 import feature.core.presentation.CategoryList
 import feature.core.presentation.date.DateConverter
 import feature.core.presentation.date.toLocalDateTime
+import feature.core.presentation.date.toStringDateMDByTimestamp
 import feature.core.presentation.date.toTimestamp
 import feature.core.presentation.model.CategoryUi
 import feature.home.presentation.add.type.TypeUi
@@ -58,80 +59,78 @@ class AddViewModel(
 
     private val _state = MutableStateFlow(AddState(currentExpense = expense))
     val state = _state.onStart {
-        viewModelScope.launch {
-            val localDateTime = expense?.timestamp?.toLocalDateTime() ?: DateConverter.getNowDate()
-            val recentlyExpense = repository.getRecentlyExpenses()
-            val types = typeRepository.getTypes()
-            combine(recentlyExpense,types){ recentlyExpenseFlow , typeFlow ->
-                var isIconClicked = false
-                val recentlyType = TypeUi(
-                    typeIdTimestamp = -1,
-                    name = getString(Res.string.recently),
-                    colorArgb = -1,
-                    isShow = true,
-                    order = 0,
-                    categories = recentlyExpenseFlow.mapIndexed { index, recentlyExpense ->
-                        val findType = typeFlow.find { type ->
-                            type.typeIdTimestamp == recentlyExpense.typeId
-                        }
-                        val colorArgb = findType?.colorArgb ?:CategoryList.getColorByTypeId(recentlyExpense.typeId).toArgb()
+        val localDateTime = expense?.timestamp?.toLocalDateTime() ?: DateConverter.getNowDate()
+        val recentlyExpense = repository.getRecentlyExpenses()
+        val types = typeRepository.getTypes()
+        combine(recentlyExpense,types){ recentlyExpenseFlow , typeFlow ->
+            var isIconClicked = false
+            val recentlyType = TypeUi(
+                typeIdTimestamp = -1,
+                name = getString(Res.string.recently),
+                colorArgb = -1,
+                isShow = true,
+                order = 0,
+                categories = recentlyExpenseFlow.mapIndexed { index, recentlyExpense ->
+                    val findType = typeFlow.find { type ->
+                        type.typeIdTimestamp == recentlyExpense.typeId
+                    }
+                    val colorArgb = findType?.colorArgb ?:CategoryList.getColorByTypeId(recentlyExpense.typeId).toArgb()
 
-                        val isSameIconFound = recentlyExpense.idString == expense?.idString
-                        if (isSameIconFound){
-                            isIconClicked = true
-                        }
-                        CategoryUi(
-                            id = recentlyExpense.categoryId,
-                            name = recentlyExpense.description,
-                            order = index,
-                            typeId = recentlyExpense.typeId,
-                            isClick = recentlyExpense.idString == expense?.idString,
-                            colorArgb = colorArgb
+                    val isSameIconFound = recentlyExpense.idString == expense?.idString
+                    if (isSameIconFound){
+                        isIconClicked = true
+                    }
+                    CategoryUi(
+                        id = recentlyExpense.categoryId,
+                        name = recentlyExpense.description,
+                        order = index,
+                        typeId = recentlyExpense.typeId,
+                        isClick = recentlyExpense.idString == expense?.idString,
+                        colorArgb = colorArgb
+                    )
+                }
+            )
+            val typeFlowResult =  typeFlow.filter { it.isShow }.mapIndexed { _, type ->
+                type.toTypeUi().copy(
+                    categories = type.categories.map {
+                        it.toCategoryUi().copy(
+                            typeId = type.typeIdTimestamp,
+                            colorArgb = type.colorArgb,
+                            isClick = if (isIconClicked) false else expense?.typeId == it.typeId && expense?.categoryId == it.id
                         )
+
                     }
                 )
-                val typeFlowResult =  typeFlow.filter { it.isShow }.mapIndexed { _, type ->
-                    type.toTypeUi().copy(
-                        categories = type.categories.map {
-                            it.toCategoryUi().copy(
-                                typeId = type.typeIdTimestamp,
-                                colorArgb = type.colorArgb,
-                                isClick = if (isIconClicked) false else expense?.typeId == it.typeId && expense?.categoryId == it.id
-                            )
-
-                        }
-                    )
-                }
-                _state.update {
-                    it.copy(
-                        types = typeFlowResult.sortedBy { it.order },
-                        recentlyItems = recentlyType,
-                        year = localDateTime.year,
-                        monthNumber = localDateTime.monthNumber,
-                        dayOfMonth = localDateTime.dayOfMonth,
-                        nowLocalDateTime = localDateTime,
-                        currentExpense = expense,
-                        isIncome = expense?.isIncome?:false,
-                        cost = expense?.let { expense.cost.toString() }?:"0",
-                        categoryUi = expense?.let {
-                            val findType = typeFlow.find { type ->
-                                type.typeIdTimestamp == it.typeId
-                            }
-                            val colorArgb = findType?.colorArgb ?:CategoryList.getColorByTypeId(it.typeId).toArgb()
-                            CategoryUi(
-                                typeId = expense.typeId,
-                                id = expense.categoryId,
-                                isClick = true,
-                                order = 0,
-                                name = expense.description,
-                                colorArgb = colorArgb
-                            )
-                        },
-                        description = expense?.description?:""
-                    )
-                }
             }
-        }
+            _state.update {
+                it.copy(
+                    types = typeFlowResult.sortedBy { it.order },
+                    recentlyItems = recentlyType,
+                    year = localDateTime.year,
+                    monthNumber = localDateTime.monthNumber,
+                    dayOfMonth = localDateTime.dayOfMonth,
+                    nowLocalDateTime = localDateTime,
+                    currentExpense = expense,
+                    isIncome = expense?.isIncome?:false,
+                    cost = expense?.let { expense.cost.toString() }?:"0",
+                    categoryUi = expense?.let {
+                        val findType = typeFlow.find { type ->
+                            type.typeIdTimestamp == it.typeId
+                        }
+                        val colorArgb = findType?.colorArgb ?:CategoryList.getColorByTypeId(it.typeId).toArgb()
+                        CategoryUi(
+                            typeId = expense.typeId,
+                            id = expense.categoryId,
+                            isClick = true,
+                            order = 0,
+                            name = expense.description,
+                            colorArgb = colorArgb
+                        )
+                    },
+                    description = expense?.description?:""
+                )
+            }
+        }.launchIn(viewModelScope)
     }
         .stateIn(
             viewModelScope,
@@ -254,6 +253,7 @@ class AddViewModel(
             AddEvent.OnSaveClick            -> {
                 viewModelScope.launch {
                     val timestamp = state.value.nowLocalDateTime.toTimestamp()
+                    println("Debug onSave ${timestamp.toStringDateMDByTimestamp()}")
                     if(state.value.currentExpense == null){
                         val expense = Expense(
                             typeId = state.value.categoryUi?.typeId?:0,

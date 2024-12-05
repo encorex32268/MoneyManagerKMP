@@ -24,4 +24,6 @@ interface ExpenseRepository {
     suspend fun update(expense: Expense)
     suspend fun insert(expense: Expense)
 
+    fun getAll(): Flow<List<Expense>>
+
 }
