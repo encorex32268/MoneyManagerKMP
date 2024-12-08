@@ -9,6 +9,7 @@ import feature.core.presentation.date.DateConverter
 import feature.core.presentation.date.toDayString
 import feature.core.presentation.date.toEpochMilliseconds
 import feature.core.presentation.date.toStringDateByTimestamp
+import feature.core.presentation.date.toStringDateMByTimestamp
 import feature.core.presentation.date.toStringDateMDByTimestamp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -111,7 +112,7 @@ class AnalyticsViewModel(
             DateFilter.ALL -> {
                 val filteredItems = items
                     .sortedBy { it.timestamp }
-                    .groupBy { it.timestamp.toStringDateByTimestamp() }
+                    .groupBy { it.timestamp.toStringDateMByTimestamp() }
 
                 filteredItems.map {
                     DataPoint(
@@ -126,7 +127,16 @@ class AnalyticsViewModel(
                     it.timestamp in getTimestampRangeByDateFilter(dateFilter)
                 }
                     .sortedBy { it.timestamp }
-                    .groupBy { it.timestamp.toStringDateMDByTimestamp() }
+                    .groupBy {
+                        when(dateFilter){
+                            DateFilter.SEVEN_DAYS   -> it.timestamp.toStringDateMDByTimestamp()
+                            DateFilter.ONE_MONTH   -> it.timestamp.toStringDateMDByTimestamp()
+                            DateFilter.THREE_MONTHS -> it.timestamp.toStringDateMByTimestamp()
+                            DateFilter.SIX_MONTHS -> it.timestamp.toStringDateMByTimestamp()
+                            DateFilter.ONE_YEAR     -> it.timestamp.toStringDateMByTimestamp()
+                            else -> it.timestamp.toStringDateByTimestamp()
+                        }
+                    }
 
                 filteredItems.map {
                     DataPoint(
@@ -157,21 +167,28 @@ class AnalyticsViewModel(
                     DatePeriod(
                         days = 7)
                 ).toEpochMilliseconds()
-                println("SEVEN_DAYS ${sevenDaysBefore.toStringDateMDByTimestamp()} / ${startDayOfMonth.toStringDateMDByTimestamp()}")
                 LongRange(sevenDaysBefore , startDayOfMonth)
             }
-            DateFilter.ONE_MONTHS   -> {
+            DateFilter.ONE_MONTH   -> {
                 val pair = DateConverter.getMonthStartAndEndTime(
                     year = nowDate.year,
                     month = nowDate.monthNumber
                 )
-                println("ONE_MONTHS ${pair.first.toStringDateMDByTimestamp()} / ${pair.second.toStringDateMDByTimestamp()}")
-
                 LongRange(pair.first , pair.second)
             }
             DateFilter.THREE_MONTHS -> {
                 val startDayOfMonth = nowDate.toEpochMilliseconds()
                 val minus2MonthsLocalDate = nowDate.minus(DatePeriod(months = 3))
+                val endDay = LocalDate(
+                    year = minus2MonthsLocalDate.year,
+                    monthNumber = minus2MonthsLocalDate.monthNumber,
+                    dayOfMonth = 1
+                ).toEpochMilliseconds()
+                LongRange(endDay , startDayOfMonth)
+            }
+            DateFilter.SIX_MONTHS -> {
+                val startDayOfMonth = nowDate.toEpochMilliseconds()
+                val minus2MonthsLocalDate = nowDate.minus(DatePeriod(months = 6))
                 val endDay = LocalDate(
                     year = minus2MonthsLocalDate.year,
                     monthNumber = minus2MonthsLocalDate.monthNumber,
@@ -190,7 +207,7 @@ class AnalyticsViewModel(
                 LongRange(endDate , startDayOfMonth)
             }
             DateFilter.ALL          -> {
-                LongRange(1000L , 1999L)
+                LongRange(1 , 1)
             }
         }
 

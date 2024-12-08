@@ -34,6 +34,12 @@
     <string name="saturday">六</string>
     <string name="sunday">日</string>
 
+    <string name="error">錯誤</string>
+    <string name="backup_error_downloads_path_empty">沒有下載資料夾的目錄</string>
+    <string name="backup_error_csv_data_empty">匯入的檔案沒有資料</string>
+    <string name="backup_error_restore_exception">匯入檔案發生錯誤</string>
+    <string name="backup_error_json_parse">分析時發生錯誤</string>
+
 
 
         <!-- Food -->

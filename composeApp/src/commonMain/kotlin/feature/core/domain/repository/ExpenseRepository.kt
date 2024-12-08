@@ -26,4 +26,6 @@ interface ExpenseRepository {
 
     fun getAll(): Flow<List<Expense>>
 
+    suspend fun restore(expenseList: List<Expense>)
+
 }

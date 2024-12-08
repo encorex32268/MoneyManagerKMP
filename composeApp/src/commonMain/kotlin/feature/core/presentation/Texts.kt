@@ -43,32 +43,32 @@ object Texts {
         Text(
             modifier = modifier,
             text = text,
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontFamily = FontFamily(Font(font)),
+            ),
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = textAlign,
-            fontFamily = FontFamily(Font(font)),
             overflow = overflow
         )
     }
     @Composable
     fun TitleMedium(
         modifier : Modifier = Modifier,
-        fonSize: TextUnit = 16.sp,
-        style : TextStyle = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.notosanslao_bold)),
-            fontSize = fonSize
-        ),
         text : String,
         textAlign : TextAlign = TextAlign.Start,
         overflow : TextOverflow = TextOverflow.Ellipsis,
         onTextLayout : (TextLayoutResult) -> Unit = {},
         maxLines : Int = Int.MAX_VALUE,
         color : Color = MaterialTheme.colorScheme.onSurface,
+        fontSize: TextUnit = 16.sp
         ){
         Text(
             modifier = modifier,
             text = text,
-            style = style,
+            style =  TextStyle(
+                fontFamily = FontFamily(Font(Res.font.notosanslao_bold)),
+                fontSize = fontSize
+            ),
             color = color,
             textAlign = textAlign,
             overflow = overflow,
@@ -83,23 +83,25 @@ object Texts {
         modifier : Modifier = Modifier,
         textAlign: TextAlign = TextAlign.Start,
         text : String,
-        style : TextStyle = MaterialTheme.typography.titleSmall,
         maxLines : Int = Int.MAX_VALUE,
         overflow: TextOverflow = TextOverflow.Ellipsis,
         color : Color = MaterialTheme.colorScheme.onSurface,
         onTextLayout: (TextLayoutResult) -> Unit = {},
-        font: FontResource = Res.font.notosanslao_bold
+        font: FontResource = Res.font.notosanslao_bold,
+        fontSize: TextUnit = 12.sp
     ){
         Text(
             modifier = modifier,
             textAlign = textAlign,
             text = text,
-            style = style,
+            style = MaterialTheme.typography.titleSmall.copy(
+                fontSize = fontSize,
+                fontFamily = FontFamily(Font(font))
+            ),
             color = color,
             maxLines = maxLines,
             overflow = overflow,
-            onTextLayout = onTextLayout,
-            fontFamily = FontFamily(Font(font))
+            onTextLayout = onTextLayout
         )
     }
 
@@ -112,9 +114,10 @@ object Texts {
         Text(
             modifier = modifier,
             text = text,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontFamily = FontFamily(Font(font))
+            style = MaterialTheme.typography.bodyLarge.copy(
+                fontFamily = FontFamily(Font(font))
+            ),
+            color = MaterialTheme.colorScheme.onSurface
 
         )
     }
@@ -124,7 +127,6 @@ object Texts {
         modifier : Modifier = Modifier,
         textAlign: TextAlign = TextAlign.Start,
         text : String,
-        style : TextStyle = MaterialTheme.typography.bodyMedium,
         color : Color = MaterialTheme.colorScheme.onSurface,
         font: FontResource = Res.font.notosanslao_regular
     ){
@@ -132,9 +134,10 @@ object Texts {
             modifier = modifier,
             textAlign = textAlign,
             text = text,
-            style = style,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontFamily =  FontFamily(Font(font))
+            ),
             color = color,
-            fontFamily = FontFamily(Font(font))
 
         )
     }
@@ -151,9 +154,10 @@ object Texts {
         Text(
             modifier = modifier,
             text = text,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontFamily = FontFamily(Font(font)),
+            ),
             color = MaterialTheme.colorScheme.onSurface,
-            fontFamily = FontFamily(Font(font)),
             maxLines = maxLines,
             overflow = TextOverflow.Clip
 

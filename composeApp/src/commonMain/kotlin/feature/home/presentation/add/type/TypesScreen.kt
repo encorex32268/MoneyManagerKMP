@@ -154,7 +154,7 @@ fun TypesScreen(
                 items(
                     items = state.items,
                     key = {
-                        it.typeIdTimestamp
+                        it.typeIdHex
                     }
                 ) { item ->
                     ReorderableItem(
@@ -233,7 +233,7 @@ fun TypesScreen(
                 items(
                     items = state.itemsNotShowing,
                     key = {
-                        it.typeIdTimestamp
+                        it.typeIdHex
                     }
                 ){
                     OnHideTypeItem(

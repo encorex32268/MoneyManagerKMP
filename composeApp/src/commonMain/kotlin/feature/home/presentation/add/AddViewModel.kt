@@ -253,7 +253,6 @@ class AddViewModel(
             AddEvent.OnSaveClick            -> {
                 viewModelScope.launch {
                     val timestamp = state.value.nowLocalDateTime.toTimestamp()
-                    println("Debug onSave ${timestamp.toStringDateMDByTimestamp()}")
                     if(state.value.currentExpense == null){
                         val expense = Expense(
                             typeId = state.value.categoryUi?.typeId?:0,

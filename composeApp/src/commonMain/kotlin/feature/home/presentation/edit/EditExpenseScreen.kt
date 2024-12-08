@@ -57,6 +57,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
 import feature.core.presentation.CategoryList
+import feature.core.presentation.ObserveAsEvents
 import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
 import feature.core.presentation.components.TwoButtonDialog
@@ -93,15 +94,16 @@ fun EditExpenseScreenRoot(
     onGotoAddScreen: (Expense) -> Unit = {}
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
-    LaunchedEffect(viewModel){
-        viewModel.uiEvent.collectLatest {
-            when(it){
-                EditExpenseUiEvent.OnBack -> onGoBack()
-                is EditExpenseUiEvent.OnGoAddScreen -> {
-                    onGotoAddScreen(
-                        it.expense
-                    )
-                }
+    ObserveAsEvents(
+        events = viewModel.uiEvent,
+        key1 = viewModel
+    ){
+        when(it){
+            EditExpenseUiEvent.OnBack -> onGoBack()
+            is EditExpenseUiEvent.OnGoAddScreen -> {
+                onGotoAddScreen(
+                    it.expense
+                )
             }
         }
     }
@@ -123,10 +125,7 @@ fun EditExpenseScreen(
     var isShowDeleteDialog by remember {
         mutableStateOf(false)
     }
-    println(">>${state.currentExpense?.description}")
     state.currentExpense?.let {
-        println(">>${it.cost}")
-
         val type = remember {
             state.typeItems.find { type ->
                 type.typeIdTimestamp == it.typeId
@@ -293,8 +292,7 @@ private fun CostSection(
         Texts.TitleSmall(
             modifier = Modifier
                 .weight(1f),
-            text = if (isIncome) cost.toMoneyString() else "-${cost.toMoneyString()}",
-            style = MaterialTheme.typography.titleSmall
+            text = if (isIncome) cost.toMoneyString() else "-${cost.toMoneyString()}"
         )
     }
 }
@@ -323,10 +321,7 @@ private fun TimestampSection(
         Spacer(modifier = Modifier.width(16.dp))
         Texts.TitleSmall(
             modifier = Modifier.weight(1f),
-            text = date,
-            style = MaterialTheme.typography.bodySmall.copy(
-                letterSpacing = 1.sp
-            )
+            text = date
         )
     }
 }

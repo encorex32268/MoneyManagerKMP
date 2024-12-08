@@ -3,8 +3,11 @@ package feature.core.data.repository
 import feature.core.data.model.ExpenseEntity
 import feature.core.data.model.TypeEntity
 import feature.core.domain.mapper.toCategoryEntity
+import feature.core.domain.mapper.toExpense
+import feature.core.domain.mapper.toExpenseEntity
 import feature.core.domain.mapper.toType
 import feature.core.domain.mapper.toTypeEntity
+import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
 import feature.core.domain.repository.TypeRepository
 import io.realm.kotlin.Realm
@@ -84,6 +87,26 @@ class TypeRepositoryImpl(
                     categories = type.categories.map { it.toCategoryEntity() }.toRealmList()
                 }
             }
+        }
+    }
+
+    override suspend fun restore(types: List<Type>) {
+        realm.writeBlocking {
+            val dbTypes = this.query<TypeEntity>().find().map { it.toType() }
+            val dbTypesIdStringList = dbTypes.map { it.typeIdHex }
+            val restoreExpenses = mutableListOf<Type>()
+
+            types.forEach {
+                if (it.typeIdHex !in dbTypesIdStringList){
+                    restoreExpenses.add(it)
+                }
+            }
+            restoreExpenses.forEach {
+                this.copyToRealm(
+                    instance = it.toTypeEntity(),
+                )
+            }
+
         }
     }
 

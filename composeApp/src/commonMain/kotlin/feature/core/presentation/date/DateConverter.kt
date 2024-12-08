@@ -90,9 +90,22 @@ fun Long.toStringDateByTimestamp(): String{
     return "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} \n ${localDateTime.year}"
 
 }
+
+fun Long.toStringDateYMDByTimestamp(): String{
+    val localDateTime = this.toLocalDateTime()
+    return " ${localDateTime.year}/${localDateTime.monthNumber}/${localDateTime.dayOfMonth}"
+
+}
 fun Long.toStringDateMDByTimestamp(): String{
     val localDateTime = this.toLocalDateTime()
     return "${localDateTime.monthNumber}/${localDateTime.dayOfMonth}"
+
+}
+
+fun Long.toStringDateMByTimestamp(): String{
+    val localDateTime = this.toLocalDateTime()
+    return "${localDateTime.monthNumber} \n" +
+            " ${localDateTime.year}"
 
 }
 

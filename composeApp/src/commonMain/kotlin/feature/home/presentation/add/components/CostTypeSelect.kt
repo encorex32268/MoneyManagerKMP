@@ -125,8 +125,7 @@ fun CostTypeSelect(
             ){
                 Texts.BodyMedium(
                     modifier = Modifier.padding(8.dp),
-                    text =  stringResource(Res.string.income),
-                    style = MaterialTheme.typography.bodyMedium,
+                    text =  stringResource(Res.string.income)
                 )
             }
         }

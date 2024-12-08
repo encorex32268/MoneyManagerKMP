@@ -138,9 +138,7 @@ fun ChartLayout(
                                 modifier = Modifier
                                     .padding(vertical = 4.dp),
                                 title = stringResource(Res.string.total),
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    textAlign = TextAlign.Center
-                                ),
+                                textAlign =  TextAlign.Center,
                                 textColor = MaterialTheme.colorScheme.onBackground,
                                 text = sumTotal.toMoneyString(),
                                 textSize = 20.sp

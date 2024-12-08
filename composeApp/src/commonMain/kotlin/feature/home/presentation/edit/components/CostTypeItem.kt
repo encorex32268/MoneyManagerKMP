@@ -43,7 +43,7 @@ fun CostTypeItem(
             modifier = Modifier
                 .padding(8.dp),
             text =  stringResource(if (isIncome) Res.string.income else Res.string.expense),
-            style = MaterialTheme.typography.bodyMedium,
+
         )
     }
 }

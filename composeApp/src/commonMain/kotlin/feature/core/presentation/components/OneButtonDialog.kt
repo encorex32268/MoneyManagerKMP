@@ -8,14 +8,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import feature.core.presentation.Texts
 import moneymanagerkmp.composeapp.generated.resources.Res
-import moneymanagerkmp.composeapp.generated.resources.dialog_cancel_button
 import moneymanagerkmp.composeapp.generated.resources.dialog_ok_button
 import moneymanagerkmp.composeapp.generated.resources.notosanslao_bold
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun TwoButtonDialog(
+fun OneButtonDialog(
     title : String,
     content : String,
     onDismissRequest : () -> Unit = {},
@@ -34,15 +33,6 @@ fun TwoButtonDialog(
                    font = Res.font.notosanslao_bold
                )
            }
-        },
-        dismissButton = {
-            TextButton(onClick = {
-                onDismissRequest()
-            }) {
-                Texts.BodyMedium(
-                    text = stringResource(Res.string.dialog_cancel_button)
-                )
-            }
         },
         title = {
             Texts.TitleMedium(

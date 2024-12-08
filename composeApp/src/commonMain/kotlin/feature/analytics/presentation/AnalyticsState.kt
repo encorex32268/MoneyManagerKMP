@@ -16,8 +16,9 @@ data class AnalyticsState(
 
 enum class DateFilter(val text: String) {
     SEVEN_DAYS("7D"),
-    ONE_MONTHS("1M"),
+    ONE_MONTH("1M"),
     THREE_MONTHS("3M"),
+    SIX_MONTHS("6M"),
     ONE_YEAR("1Y"),
     ALL("All")
 }

@@ -66,9 +66,6 @@ fun AmountTextLayout(
                     .weight(1f)
                     .padding(vertical = 4.dp),
                 title = stringResource(Res.string.total),
-                style = MaterialTheme.typography.titleMedium.copy(
-                    textAlign = TextAlign.Center
-                ),
                 textColor = MaterialTheme.colorScheme.onBackground,
                 text = total.toMoneyString(),
                 textSize = 20.sp
@@ -79,10 +76,7 @@ fun AmountTextLayout(
                     .padding(vertical = 4.dp),
                 title = stringResource(Res.string.income),
                 text = income.toMoneyString(),
-                textColor = CorrectColor,
-                style = MaterialTheme.typography.titleSmall.copy(
-                    fontSize = 14.sp
-                )
+                textColor = CorrectColor
             )
             AmountText(
                 modifier = Modifier
@@ -90,10 +84,7 @@ fun AmountTextLayout(
                     .padding(vertical = 4.dp),
                 title = stringResource(Res.string.expense),
                 text = expense.toMoneyString(),
-                textColor = ErrorColor,
-                style = MaterialTheme.typography.titleSmall.copy(
-                    fontSize = 14.sp
-                )
+                textColor = ErrorColor
             )
         }
 
@@ -106,8 +97,8 @@ fun AmountText(
     title: String,
     text: String,
     textColor: Color,
-    style: TextStyle,
-    textSize: TextUnit = 14.sp
+    textSize: TextUnit = 14.sp,
+    textAlign: TextAlign = TextAlign.Start
 ){
     var dynamicTextSize by remember {
         mutableStateOf(textSize)
@@ -120,10 +111,9 @@ fun AmountText(
         Texts.BodySmall(text = title)
         Spacer(modifier = Modifier.width(20.dp))
         Texts.TitleSmall(
+            textAlign = textAlign,
             text = text,
-            style = style.copy(
-                fontSize = dynamicTextSize
-            ),
+            fontSize = dynamicTextSize,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             color = textColor,

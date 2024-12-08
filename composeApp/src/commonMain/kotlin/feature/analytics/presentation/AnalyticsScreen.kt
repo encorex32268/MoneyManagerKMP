@@ -113,7 +113,9 @@ private fun AnalyticsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.1f)
-                .padding(16.dp),
+                .padding(vertical = 8.dp)
+                .padding(start = 16.dp)
+            ,
             verticalAlignment = Alignment.CenterVertically
         ){
             Row(
@@ -123,7 +125,7 @@ private fun AnalyticsScreen(
             ){
                 DateFilter.entries.forEach { dateFilter ->
                     FilterChip(
-                        modifier = Modifier.size(50.dp),
+                        modifier = Modifier.size(36.dp),
                         dateFilter = dateFilter,
                         onClick = {
                             onEvent(AnalyticsEvent.OnDateFilterChange(dateFilter))
@@ -177,7 +179,7 @@ private fun AnalyticsScreen(
                     axisLinesThicknessPx = 5f,
                     labelFontSize = 14.sp,
                     minYLabelSpacing = 25.dp,
-                    verticalPadding = 16.dp,
+                    verticalPadding = 12.dp,
                     horizontalPadding = 8.dp,
                     xAxisLabelSpacing = 16.dp
                 ),
@@ -223,7 +225,7 @@ private fun AnalyticsScreen(
                     axisLinesThicknessPx = 5f,
                     labelFontSize = 14.sp,
                     minYLabelSpacing = 25.dp,
-                    verticalPadding = 16.dp,
+                    verticalPadding = 12.dp,
                     horizontalPadding = 8.dp,
                     xAxisLabelSpacing = 16.dp
                 ),

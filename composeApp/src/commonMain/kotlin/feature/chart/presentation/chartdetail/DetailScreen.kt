@@ -117,9 +117,7 @@ private fun AutoSizeText(
     Texts.TitleSmall(
         modifier = modifier,
         text = text,
-        style = style.copy(
-            fontSize = dynamicTextSize
-        ),
+        fontSize = dynamicTextSize,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         color = textColor,

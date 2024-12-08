@@ -358,7 +358,7 @@ private fun NumberButton(
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             color = textColor,
-            fonSize = 24.sp
+            fontSize = 24.sp
         )
 
     }

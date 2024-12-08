@@ -6,8 +6,11 @@ import feature.core.domain.mapper.toExpenseEntity
 import feature.core.domain.model.Expense
 import feature.core.domain.repository.ExpenseRepository
 import io.realm.kotlin.Realm
+import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
+import io.realm.kotlin.mongodb.ext.insert
 import io.realm.kotlin.query.Sort
+import io.realm.kotlin.query.find
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -117,12 +120,16 @@ class ExpenseRepositoryImpl(
 
     override suspend fun insert(expense: Expense) {
         realm.write {
-            copyToRealm(expense.toExpenseEntity())
+            copyToRealm(
+                instance = expense.toExpenseEntity(),
+            )
         }
     }
 
+
+
     override fun getAll(): Flow<List<Expense>> {
-        return realm.query<ExpenseEntity>().asFlow().map {
+       return realm.query<ExpenseEntity>().find().asFlow().map {
             if (it.list.isEmpty()){
                 emptyList()
             }else{
@@ -130,6 +137,29 @@ class ExpenseRepositoryImpl(
                     expenseEntity.toExpense()
                 }
             }
+        }
+
+    }
+
+    override suspend fun restore(
+        expenseList: List<Expense>
+    ) {
+        realm.writeBlocking {
+            val dbExpenses = this.query<ExpenseEntity>().find().map { it.toExpense() }
+            val dbExpensesIdStringList = dbExpenses.map { it.idString }
+            val restoreExpenses = mutableListOf<Expense>()
+
+            expenseList.forEach {
+                if (it.idString !in dbExpensesIdStringList){
+                    restoreExpenses.add(it)
+                }
+            }
+            restoreExpenses.forEach {
+                this.copyToRealm(
+                    instance = it.toExpenseEntity(),
+                )
+            }
+
         }
     }
 }

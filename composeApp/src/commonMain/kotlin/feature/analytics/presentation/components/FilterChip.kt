@@ -24,12 +24,12 @@ fun FilterChip(
 ) {
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(24.dp))
+            .clip(RoundedCornerShape(16.dp))
             .clickable {
                 onClick()
             }
             .background(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(16.dp),
                 color = if (isSelected) {
                     Color.Black
                 }else{
@@ -39,7 +39,7 @@ fun FilterChip(
         ,
         contentAlignment = Alignment.Center
     ){
-        Texts.TitleMedium(
+        Texts.TitleSmall(
             text = dateFilter.text,
             color = if (!isSelected) {
                 Color.Black
