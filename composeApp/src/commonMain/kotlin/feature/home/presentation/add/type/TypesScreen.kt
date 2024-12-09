@@ -6,12 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,8 +25,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,13 +45,11 @@ import feature.core.presentation.reorderable.detectReorderAfterLongPress
 import feature.core.presentation.reorderable.rememberReorderableLazyListState
 import feature.core.presentation.reorderable.reorderable
 import feature.home.presentation.add.type.components.ColorPickerDialog
-import kotlinx.coroutines.flow.collectLatest
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_visibility_24
 import moneymanagerkmp.composeapp.generated.resources.baseline_visibility_off_24
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_content
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_title
-import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -183,12 +179,13 @@ fun TypesScreen(
                                     )
                                     .size(24.dp)
                             )
-                            Texts.TitleMedium(
+                            Text(
                                 modifier = Modifier
                                     .weight(1f)
                                     .padding(horizontal = 8.dp)
                                 ,
-                                text = item.name
+                                text = item.name,
+                                style = MaterialTheme.typography.bodyMedium
                             )
                             IconButton(
                                 onClick = {
@@ -325,13 +322,15 @@ private fun OnHideTypeItem(
                 )
                 .size(24.dp)
         )
-        Texts.TitleMedium(
+        Text(
             modifier = Modifier
                 .weight(1f)
                 .padding(horizontal = 8.dp)
             ,
             text = item.name,
-            color = Color.LightGray
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = Color.LightGray
+            )
         )
         IconButton(
             onClick = {

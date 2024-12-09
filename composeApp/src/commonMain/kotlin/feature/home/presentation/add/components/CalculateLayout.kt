@@ -231,7 +231,6 @@ private fun CalculateKeyboard(
                 icon = vectorResource(Res.drawable.baseline_remove),
                 contentDescription = "remove button",
                 onClick = onDelete,
-//                backgroundColor = Color(245, 11, 11, 62)
                 backgroundColor = light_ErrorColorContainer
             )
             CalendarButton(

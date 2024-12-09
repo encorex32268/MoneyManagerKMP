@@ -3,9 +3,11 @@
 package feature.core.presentation.components
 
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.sp
 import feature.core.presentation.Texts
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.dialog_cancel_button
@@ -29,9 +31,11 @@ fun TwoButtonDialog(
                onConfirmButtonClick()
                onDismissRequest()
            }) {
-               Texts.BodyMedium(
+               Text(
                    text = stringResource(Res.string.dialog_ok_button),
-                   font = Res.font.notosanslao_bold
+                   style = MaterialTheme.typography.labelLarge.copy(
+                       fontSize = 14.sp
+                   )
                )
            }
         },
@@ -39,19 +43,24 @@ fun TwoButtonDialog(
             TextButton(onClick = {
                 onDismissRequest()
             }) {
-                Texts.BodyMedium(
-                    text = stringResource(Res.string.dialog_cancel_button)
+                Text(
+                    text = stringResource(Res.string.dialog_cancel_button),
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        fontSize = 14.sp
+                    )
                 )
             }
         },
         title = {
-            Texts.TitleMedium(
-                text = title
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelLarge
             )
         },
         text = {
-            Texts.BodyMedium(
-                text = content
+            Text(
+                text = content,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     )

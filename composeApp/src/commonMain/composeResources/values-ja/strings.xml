@@ -24,6 +24,7 @@
     <string name="life">生活</string>
 
     <string name="description">メモ</string>
+    <string name="category_add_description">例:ローン</string>
 
     <string name="monday">月</string>
     <string name="tuesday">火</string>

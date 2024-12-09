@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,10 +34,15 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import feature.core.presentation.CategoryList
 import feature.core.presentation.model.CategoryUi
 import feature.core.presentation.noRippleClick
+import moneymanagerkmp.composeapp.generated.resources.Res
+import moneymanagerkmp.composeapp.generated.resources.category_add_description
+import moneymanagerkmp.composeapp.generated.resources.description
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CategoryAddDialog(
@@ -85,7 +93,10 @@ fun CategoryAddDialog(
                                 0.5.dp,
                                 color = Color.LightGray,
                                 shape = RoundedCornerShape(8.dp)
-                            ),
+                            )
+                            .padding(horizontal = 8.dp)
+                            .wrapContentHeight(Alignment.CenterVertically)
+                        ,
                         value = currentCategoryUi.name,
                         onValueChange = {
                             currentCategoryUi = currentCategoryUi.copy(
@@ -95,12 +106,18 @@ fun CategoryAddDialog(
                         maxLines = 1,
                         singleLine = true,
                         decorationBox = {
-                            Box(
-                                contentAlignment = Alignment.Center
-                            ){
-                                it()
+                            if (currentCategoryUi.name.isEmpty()){
+                                Text(
+                                    text = stringResource(Res.string.category_add_description),
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        color = Color.LightGray,
+                                        fontSize = 12.sp
+                                    )
+                                )
                             }
-                        }
+                            it()
+                        },
+                        textStyle = MaterialTheme.typography.bodyMedium
                     )
                     IconButton(
                         onClick = {

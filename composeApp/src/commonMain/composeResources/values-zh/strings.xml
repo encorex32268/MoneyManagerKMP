@@ -25,6 +25,7 @@
     <string name="life">生活</string>
 
     <string name="description">說明</string>
+    <string name="category_add_description">例:生活</string>
 
     <string name="monday">一</string>
     <string name="tuesday">二</string>

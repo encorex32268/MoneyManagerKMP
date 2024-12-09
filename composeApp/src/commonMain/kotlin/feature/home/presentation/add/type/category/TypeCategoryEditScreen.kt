@@ -29,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -189,13 +190,16 @@ fun TypeCategoryEditScreen(
                         )
                         .size(32.dp)
                 )
-                Texts.TitleMedium(
+                Text(
                     modifier = Modifier
-                        .padding(horizontal = 8.dp),
-                    text = state.typeUi.name
+                        .weight(1f)
+                        .padding(horizontal = 8.dp)
+                    ,
+                    text = state.typeUi.name,
+                    style = MaterialTheme.typography.bodyMedium
                 )
                 Icon(
-                    modifier = Modifier.size(12.dp),
+                    modifier = Modifier.size(16.dp),
                     imageVector = Icons.Default.Edit,
                     contentDescription = null
                 )
@@ -219,7 +223,7 @@ fun TypeCategoryEditScreen(
                         .weight(1f)
                         .padding(16.dp)
                         .border(
-                            1.dp,
+                            0.dp,
                             color = Color.Black,
                             shape = RoundedCornerShape(16.dp)
                         )
@@ -234,7 +238,7 @@ fun TypeCategoryEditScreen(
                     { item ->
                         ReorderableItem(
                             modifier = Modifier
-                                .padding(8.dp)
+                                .padding(4.dp)
                                 .detectReorderAfterLongPress(reorderState)
                                 .background(Color.White)
                             ,
@@ -268,7 +272,7 @@ fun TypeCategoryEditScreen(
                         .weight(1f)
                         .padding(16.dp)
                         .border(
-                            1.dp,
+                            0.dp,
                             color = Color.Black,
                             shape = RoundedCornerShape(16.dp)
                         ),

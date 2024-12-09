@@ -26,6 +26,7 @@
     <string name="life">Life</string>
 
     <string name="description">Description...</string>
+    <string name="category_add_description">Ex:Food...</string>
     <string name="monday">Mon</string>
     <string name="tuesday">Tue</string>
     <string name="wednesday">Wed</string>
