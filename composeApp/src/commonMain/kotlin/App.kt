@@ -43,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -417,7 +418,10 @@ private fun AppNavigationRail(
                 },
                 label = {
                     Text(
-                        text = stringResource(bottomNavigationItem.title)
+                        text = stringResource(bottomNavigationItem.title),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontSize = 14.sp
+                        )
                     )
                 }
 
@@ -457,7 +461,10 @@ private fun AppNavigationBar(
                 },
                 label = {
                     Text(
-                        text = stringResource(bottomNavigationItem.title)
+                        text = stringResource(bottomNavigationItem.title),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontSize = 14.sp
+                        )
                     )
                 }
             )

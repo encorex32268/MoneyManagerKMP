@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -88,22 +90,24 @@ fun ExpenseDetailItem(
             )
         )
         Spacer(Modifier.width(8.dp))
-        Texts.TitleSmall(
+        Text(
             modifier = Modifier.widthIn(40.dp, 100.dp),
-            text = chart.type.name
+            text = chart.type.name,
+            style = MaterialTheme.typography.bodyMedium
         )
-        Texts.TitleSmall(
+        Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(2f)
+                .weight(1f)
                 .padding(start = 4.dp),
             text = "${(percent * 100).toDouble().format(1)}%",
+            style = MaterialTheme.typography.bodyLarge
         )
-        Spacer(Modifier.weight(1f))
-        Texts.TitleMedium(
+        Text(
             modifier = Modifier
                 .padding(horizontal = 25.dp),
             text = sum.toMoneyString(),
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }

@@ -33,9 +33,9 @@ class ChartRepositoryImpl(
                if (expenses.isNotEmpty()){
                    chartItems.add(
                        Chart(
-                       type = type,
-                       items = expenses
-                    )
+                            type = type,
+                            items = expenses
+                        )
                    )
                }
             }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
@@ -153,7 +154,8 @@ fun ChartScreen(
                                     it.size.width.toDp() + 10.dp
                                 }
                             },
-                            text = stringResource(Res.string.expense)
+                            text = stringResource(Res.string.expense),
+                            style = MaterialTheme.typography.labelMedium
                         )
                     }
                 )
@@ -173,7 +175,8 @@ fun ChartScreen(
                                     it.size.width.toDp() + 10.dp
                                 }
                             },
-                            text = stringResource(Res.string.income)
+                            text = stringResource(Res.string.income),
+                            style = MaterialTheme.typography.labelMedium
                         )
                     }
                 )
@@ -201,7 +204,7 @@ fun ChartScreen(
                 ExpenseDetailLayout(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    items = state.items,
+                    items = if (state.isIncomeShown) state.incomeItems else state.items,
                     isIncomeShown = state.isIncomeShown,
                     sumTotal = sumTotal,
                     onItemClick = {

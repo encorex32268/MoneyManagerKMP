@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -82,10 +83,7 @@ fun DetailScreen(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(horizontal = 25.dp),
-            text = state.total.toMoneyString(),
-            style = TextStyle(
-                fontFamily = FontFamily(Font(Res.font.notosanslao_bold))
-            )
+            text = state.total.toMoneyString()
         )
 
         state.items.forEach {
@@ -108,16 +106,13 @@ private fun AutoSizeText(
     modifier: Modifier = Modifier,
     text: String,
     textColor: Color = MaterialTheme.colorScheme.onSurface,
-    style: TextStyle,
-    textSize: TextUnit = 24.sp
 ){
     var dynamicTextSize by remember {
-        mutableStateOf(textSize)
+        mutableStateOf(24.sp)
     }
-    Texts.TitleSmall(
+    Text(
         modifier = modifier,
         text = text,
-        fontSize = dynamicTextSize,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         color = textColor,
@@ -125,7 +120,10 @@ private fun AutoSizeText(
             if (it.hasVisualOverflow && dynamicTextSize > 9.sp){
                 dynamicTextSize = (dynamicTextSize.value - 1.0F).sp
             }
-        }
+        },
+        style = MaterialTheme.typography.labelLarge.copy(
+            fontSize = dynamicTextSize
+        )
     )
 }
 

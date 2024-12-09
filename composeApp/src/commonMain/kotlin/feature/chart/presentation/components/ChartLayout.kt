@@ -24,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -139,8 +140,7 @@ fun ChartLayout(
                                     .padding(vertical = 4.dp),
                                 title = stringResource(Res.string.total),
                                 textColor = MaterialTheme.colorScheme.onBackground,
-                                text = sumTotal.toMoneyString(),
-                                textSize = 20.sp
+                                text = sumTotal.toMoneyString()
                             )
                         }
                     }
@@ -173,8 +173,9 @@ fun ChartLayout(
                                             )
                                     )
                                     Spacer(Modifier.width(8.dp))
-                                    Texts.BodySmall(
-                                        text = chart.type.name
+                                    Text(
+                                        text = chart.type.name,
+                                        style = MaterialTheme.typography.bodySmall
                                     )
                                 }
 
