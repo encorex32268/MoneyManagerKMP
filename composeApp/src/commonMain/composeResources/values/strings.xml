@@ -10,6 +10,8 @@
     <string name="expense">Expense</string>
     <string name="total_expense_item">Total : %1$s</string>
     <string name="save_snackbar">Saved</string>
+    <string name="success_snackbar">Succeed</string>
+    <string name="failed_snackbar">Failed</string>
     <string name="dialog_ok_button">OK</string>
     <string name="dialog_cancel_button">Cancel</string>
     <string name="dialog_delete_title">Delete</string>
@@ -40,6 +42,9 @@
     <string name="backup_error_csv_data_empty">The imported file contains no data.</string>
     <string name="backup_error_restore_exception">An error occurred while importing the file.</string>
     <string name="backup_error_json_parse">An error occurred during the analysis.</string>
+    <string name="backup_backup">Backup</string>
+    <string name="backup_import">Import</string>
+
 
         <!-- Food -->
         <string name="food_beer">Beer</string>

@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,13 +40,14 @@ fun FilterChip(
         ,
         contentAlignment = Alignment.Center
     ){
-        Texts.TitleSmall(
+        Text(
             text = dateFilter.text,
             color = if (!isSelected) {
                 Color.Black
             }else{
                 Color.White
-            }
+            },
+            style = MaterialTheme.typography.titleSmall
         )
     }
 

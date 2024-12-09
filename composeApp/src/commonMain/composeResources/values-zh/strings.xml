@@ -9,6 +9,8 @@
     <string name="expense">支出</string>
     <string name="total_expense_item">總共：%1$s</string>
     <string name="save_snackbar">已儲存</string>
+    <string name="success_snackbar">成功</string>
+    <string name="failed_snackbar">失敗</string>
     <string name="dialog_ok_button">確認</string>
     <string name="dialog_cancel_button">取消</string>
     <string name="dialog_delete_title">刪除</string>
@@ -41,6 +43,8 @@
     <string name="backup_error_restore_exception">匯入檔案發生錯誤</string>
     <string name="backup_error_json_parse">分析時發生錯誤</string>
 
+    <string name="backup_backup">備份</string>
+    <string name="backup_import">匯入</string>
 
 
         <!-- Food -->

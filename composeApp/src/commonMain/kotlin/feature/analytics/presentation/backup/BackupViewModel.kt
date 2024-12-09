@@ -162,6 +162,11 @@ class BackupViewModel(
                     initialDirectory = downloadsPath,
                     bytes = csv.toCsvText().encodeToByteArray()
                 )
+
+                _uiEvent.send(
+                    BackupUiEvent.TaskSuccess
+                )
+
             }.launchIn(this)
 
         }
@@ -210,7 +215,9 @@ class BackupViewModel(
             }
 
             awaitAll(jobExpenseRestore,jobTypeRestore)
-
+            _uiEvent.send(
+                BackupUiEvent.TaskSuccess
+            )
 
         }
     }

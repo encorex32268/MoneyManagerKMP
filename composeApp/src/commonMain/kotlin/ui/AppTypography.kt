@@ -81,5 +81,14 @@ fun getTypography() : Typography {
             fontWeight = FontWeight.Thin
         ),
 
+
+        titleSmall = TextStyle(
+            fontFamily = notosanslao,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+
+
     )
 }

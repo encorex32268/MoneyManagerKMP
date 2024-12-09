@@ -10,34 +10,27 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.analytics.presentation.components.FilterChip
-import feature.analytics.presentation.model.DataPoint
 import feature.analytics.presentation.model.LineChartStyle
 import feature.core.presentation.Texts
 import getScreenWidth
@@ -75,15 +68,30 @@ private fun AnalyticsScreen(
     state: AnalyticsState,
     onEvent: (AnalyticsEvent) -> Unit = {}
 ) {
-    val animationProgress = remember(state.dateFilter) {
+
+    val lineChartStyle = remember {
+        LineChartStyle(
+            chartLineColor = Color.Black,
+            unselectedColor = Color(0xFFC8C8C8),
+            selectedColor = Color.Black,
+            helperLinesThicknessPx = 1f,
+            axisLinesThicknessPx = 5f,
+            labelFontSize = 14.sp,
+            minYLabelSpacing = 25.dp,
+            verticalPadding = 12.dp,
+            horizontalPadding = 8.dp,
+            xAxisLabelSpacing = 16.dp
+        )
+    }
+    val expenseLineChartProgress = remember(state.dateFilter) {
         Animatable(0f)
     }
 
-    val animationProgress2 = remember(state.dateFilter) {
+    val incomeLineChartProgress = remember(state.dateFilter) {
         Animatable(0f)
     }
     LaunchedEffect(key1 = state) {
-        animationProgress.animateTo(
+        expenseLineChartProgress.animateTo(
             targetValue = 1f,
             animationSpec = tween(
                 durationMillis = 1500,
@@ -93,7 +101,7 @@ private fun AnalyticsScreen(
 
     }
     LaunchedEffect(key1 = state){
-        animationProgress2.animateTo(
+        incomeLineChartProgress.animateTo(
             targetValue = 1f,
             animationSpec = tween(
                 durationMillis = 1500,
@@ -151,12 +159,16 @@ private fun AnalyticsScreen(
             Modifier.fillMaxWidth().padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
-            Texts.TitleMedium(
-                text = stringResource(Res.string.expense)
+            Text(
+                text = stringResource(Res.string.expense),
+                style = MaterialTheme.typography.bodyMedium
             )
-            Texts.TitleLarge(
+            Text(
                 modifier = Modifier.padding(start = 4.dp),
-                text = state.expenseSum.toMoneyString()
+                text = state.expenseSum.toMoneyString(),
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontSize = 20.sp
+                )
             )
         }
         Box(
@@ -171,19 +183,8 @@ private fun AnalyticsScreen(
                     .fillMaxWidth()
                     .width((getScreenWidth().value * 10) .dp ),
                 dataPoints = state.dataPoints,
-                style = LineChartStyle(
-                    chartLineColor = Color.Black,
-                    unselectedColor = Color(0xFF7C7C7C),
-                    selectedColor = Color.Black,
-                    helperLinesThicknessPx = 1f,
-                    axisLinesThicknessPx = 5f,
-                    labelFontSize = 14.sp,
-                    minYLabelSpacing = 25.dp,
-                    verticalPadding = 12.dp,
-                    horizontalPadding = 8.dp,
-                    xAxisLabelSpacing = 16.dp
-                ),
-                animationProgress = animationProgress.value,
+                style = lineChartStyle,
+                animationProgress = expenseLineChartProgress.value,
                 selectedDataPoint = state.selectedDataPoint,
                 onSelectedDataPoint = {
                     onEvent(AnalyticsEvent.OnSelectDataPoint(it))
@@ -197,12 +198,16 @@ private fun AnalyticsScreen(
             Modifier.fillMaxWidth().padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
-            Texts.TitleMedium(
-                text = stringResource(Res.string.income)
+            Text(
+                text = stringResource(Res.string.income),
+                style = MaterialTheme.typography.bodyMedium
             )
-            Texts.TitleLarge(
+            Text(
                 modifier = Modifier.padding(start = 4.dp),
-                text = state.incomeSum.toMoneyString()
+                text = state.incomeSum.toMoneyString(),
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontSize = 20.sp
+                )
             )
         }
         Box(
@@ -217,19 +222,8 @@ private fun AnalyticsScreen(
                     .fillMaxWidth()
                     .width((getScreenWidth().value * 10) .dp ),
                 dataPoints = state.incomeDataPoints,
-                style = LineChartStyle(
-                    chartLineColor = Color.Black,
-                    unselectedColor = Color(0xFF7C7C7C),
-                    selectedColor = Color.Black,
-                    helperLinesThicknessPx = 1f,
-                    axisLinesThicknessPx = 5f,
-                    labelFontSize = 14.sp,
-                    minYLabelSpacing = 25.dp,
-                    verticalPadding = 12.dp,
-                    horizontalPadding = 8.dp,
-                    xAxisLabelSpacing = 16.dp
-                ),
-                animationProgress = animationProgress2.value,
+                style = lineChartStyle,
+                animationProgress = incomeLineChartProgress.value,
                 selectedDataPoint = state.incomeSelectedDataPoint,
                 onSelectedDataPoint = {
                     onEvent(AnalyticsEvent.OnIncomeSelectDataPoint(it))

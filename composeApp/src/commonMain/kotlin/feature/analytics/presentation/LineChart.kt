@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,6 +23,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import feature.analytics.presentation.model.DataPoint
@@ -45,9 +47,9 @@ fun LineChart(
     showHelperLines: Boolean = false,
     animationProgress: Float = 1f
 ) {
-    val textStyle = LocalTextStyle.current.copy(
+    val textStyle = MaterialTheme.typography.bodyMedium.copy(
         fontSize = style.labelFontSize,
-        fontFamily = FontFamily(Font(Res.font.notosanslao_medium)),
+        fontWeight = FontWeight.Normal
     )
 
     val maxYValue = remember(dataPoints) {

@@ -9,6 +9,8 @@
     <string name="expense">支出</string>
     <string name="total_expense_item">合計：%1$s</string>
     <string name="save_snackbar">保存しました</string>
+    <string name="success_snackbar">成功</string>
+    <string name="failed_snackbar">失敗</string>
     <string name="dialog_ok_button">OK</string>
     <string name="dialog_cancel_button">キャンセル</string>
     <string name="dialog_delete_title">削除</string>
@@ -40,7 +42,12 @@
     <string name="backup_error_restore_exception">インポート中にエラーが発生しました</string>
     <string name="backup_error_json_parse">分析中にエラーが発生しました</string>
 
-        <!-- Food -->
+
+    <string name="backup_backup">バックアップ</string>
+    <string name="backup_import">インポート</string>
+
+
+    <!-- Food -->
         <string name="food_beer">ビール</string>
         <string name="food_bread">パン</string>
         <string name="food_buy_food">買い物</string>

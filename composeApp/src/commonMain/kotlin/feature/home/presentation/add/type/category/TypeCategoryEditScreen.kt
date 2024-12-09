@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import feature.core.presentation.ObserveAsEvents
 import feature.core.presentation.Texts
 import feature.core.presentation.model.CategoryUi
 import feature.core.presentation.reorderable.ReorderableItem
@@ -72,19 +73,18 @@ fun TypeCategoryEditScreenRoot(
     val state by viewModel.state.collectAsState()
     val hostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    LaunchedEffect(viewModel){
-        viewModel.uiEvent.collectLatest {
-            when(it){
-                TypeCategoryEditUiEvent.OnBack      -> {
-                    onBack()
-                }
-                TypeCategoryEditUiEvent.OnSavedShow -> {
-                    scope.launch {
-                        hostState.showSnackbar(
-                            getString(Res.string.save_snackbar),
-                            duration = SnackbarDuration.Short
-                        )
-                    }
+
+    ObserveAsEvents(viewModel.uiEvent, viewModel){
+        when(it){
+            TypeCategoryEditUiEvent.OnBack      -> {
+                onBack()
+            }
+            TypeCategoryEditUiEvent.OnSavedShow -> {
+                scope.launch {
+                    hostState.showSnackbar(
+                        getString(Res.string.save_snackbar),
+                        duration = SnackbarDuration.Short
+                    )
                 }
             }
         }
