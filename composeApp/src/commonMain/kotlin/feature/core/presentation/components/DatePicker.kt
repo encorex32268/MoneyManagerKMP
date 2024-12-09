@@ -9,7 +9,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -24,6 +27,9 @@ fun DatePicker(
     month: Int,
     onDateChange: (Int,Int) -> Unit
 ) {
+    val dateString = remember(year,month){
+        "${year}/${zeroStringDisplay(month)}"
+    }
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -52,10 +58,15 @@ fun DatePicker(
             )
         }
 
-        Texts.TitleSmall(
-            modifier = Modifier.weight(1f),
-            text = "${year}/${zeroStringDisplay(month)}",
-            textAlign = TextAlign.Center
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            textAlign = TextAlign.Center,
+            text = dateString,
+            style = MaterialTheme.typography.bodyLarge
+
         )
         IconButton(
             onClick = {

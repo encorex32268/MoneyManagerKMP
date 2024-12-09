@@ -1,6 +1,7 @@
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import feature.core.ui.lightScheme
+import ui.getTypography
 
 
 @Composable
@@ -9,6 +10,7 @@ fun AppTheme(
 ) {
     MaterialTheme(
         colorScheme = lightScheme,
-        content = content
+        content = content,
+        typography = getTypography()
     )
 }

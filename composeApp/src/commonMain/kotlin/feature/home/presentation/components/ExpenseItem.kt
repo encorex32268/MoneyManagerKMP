@@ -1,25 +1,33 @@
 package feature.home.presentation.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
 import feature.core.presentation.CategoryList
@@ -35,6 +43,7 @@ import moneymanagerkmp.composeapp.generated.resources.total_expense_item
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import toMoneyString
+import kotlin.math.exp
 
 @Composable
 fun ExpenseItem(
@@ -81,22 +90,24 @@ fun ExpenseItem(
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    Texts.BodyMedium(
+                    Text(
                         modifier = Modifier.weight(1f),
-                        text = date
-                    )
-                    Texts.BodyMedium(
-                        text = stringResource(
-                            Res.string.total_expense_item,
-                            total.toMoneyString()
+                        text = date,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Normal
                         )
+                    )
+                    Text(
+                        text = total.toMoneyString(),
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
                 items.forEach {expense ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(4.dp)
                             .noRippleClick {
                                 onItemClick(expense)
                             }
@@ -117,8 +128,9 @@ fun ExpenseItem(
                             modifier = Modifier.weight(1f),
                             verticalAlignment = Alignment.CenterVertically
                         ){
-                            Texts.BodySmall(
+                            Text(
                                 text = expense.description,
+                                style = MaterialTheme.typography.labelSmall
                             )
                             if (expense.content.trim().isNotEmpty()){
                                 Spacer(modifier = Modifier.width(4.dp))
@@ -130,9 +142,12 @@ fun ExpenseItem(
                                 )
                             }
                         }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Texts.BodySmall(
-                            text = if (expense.isIncome) expense.cost.toMoneyString() else "-${expense.cost.toMoneyString()}",
+                        val expenseCost = remember(expense.isIncome){
+                            if (expense.isIncome) expense.cost.toMoneyString() else "-${expense.cost.toMoneyString()}"
+                        }
+                        Text(
+                            text = expenseCost,
+                            style = MaterialTheme.typography.labelSmall
                         )
                     }
                 }

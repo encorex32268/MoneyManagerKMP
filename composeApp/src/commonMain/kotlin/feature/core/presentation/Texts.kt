@@ -19,6 +19,13 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.FontResource
 
+
+
+
+
+
+
+
 @OptIn(ExperimentalResourceApi::class)
 object Texts {
 

@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +38,7 @@ import moneymanagerkmp.composeapp.generated.resources.total
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import toMoneyString
+import kotlin.math.max
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -97,8 +99,7 @@ fun AmountText(
     title: String,
     text: String,
     textColor: Color,
-    textSize: TextUnit = 14.sp,
-    textAlign: TextAlign = TextAlign.Start
+    textSize: TextUnit = 20.sp
 ){
     var dynamicTextSize by remember {
         mutableStateOf(textSize)
@@ -108,12 +109,17 @@ fun AmountText(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Texts.BodySmall(text = title)
-        Spacer(modifier = Modifier.width(20.dp))
-        Texts.TitleSmall(
-            textAlign = textAlign,
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodySmall
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+
+        Text(
             text = text,
-            fontSize = dynamicTextSize,
+            style = MaterialTheme.typography.labelLarge.copy(
+                fontSize = textSize
+            ),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             color = textColor,
@@ -121,7 +127,8 @@ fun AmountText(
                 if (it.hasVisualOverflow && dynamicTextSize > 9.sp){
                     dynamicTextSize = (dynamicTextSize.value - 1.0F).sp
                 }
-            }
+            },
+            textAlign = TextAlign.Center
         )
     }
 }

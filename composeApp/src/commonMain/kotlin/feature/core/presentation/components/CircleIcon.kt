@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,7 +28,6 @@ fun CircleIcon(
     id: Int?=null,
     onItemClick: (Int) -> Unit = {},
     backgroundColor: Color,
-    tintColor: Color = Color.Unspecified
 ) {
     Column(
         modifier = modifier,
@@ -49,13 +49,16 @@ fun CircleIcon(
             contentAlignment = Alignment.Center
         ){
             image?.let {
+                val tintColor = remember(backgroundColor){
+                    if (backgroundColor.luminance() < 0.5f) Color(0xFFFDFDFD) else Color.Black
+                }
                 Icon(
                     modifier = Modifier
                         .size(50.dp)
                         .padding(8.dp),
                     painter = image,
                     contentDescription = null,
-                    tint =  Color.Black,
+                    tint = tintColor,
                 )
             }
         }
