@@ -7,6 +7,7 @@ package feature.home.presentation.add
 import AdMobBannerController
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -22,10 +23,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.BottomSheetDefaults.DragHandle
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
@@ -53,9 +58,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
+import moneymanagerkmp.composeapp.generated.resources.baseline_edit_note_24
 import moneymanagerkmp.composeapp.generated.resources.recently
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
@@ -212,21 +219,47 @@ fun AddScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            CostTypeSelect(
-                modifier = Modifier.padding(end = 8.dp),
-                isIncome =  state.isIncome,
-                onTypeChange = {
-                    onEvent(
-                        AddEvent.OnTypeChange(it)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ){
+                IconButton(
+                    onClick = {
+                        onEvent(AddEvent.OnBack)
+                    }
+                ){
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                        contentDescription = null
                     )
-                },
-                onCloseClick = {
-                    onEvent(AddEvent.OnBack)
-                },
-                onGoToCategoryEditClick = {
-                    onEvent(AddEvent.OnGoToCategoryEditClick)
                 }
-            )
+                CostTypeSelect(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(top = 4.dp),
+                    isIncome =  state.isIncome,
+                    onTypeChange = {
+                        onEvent(
+                            AddEvent.OnTypeChange(it)
+                        )
+                    }
+                )
+                IconButton(
+                    onClick = {
+                        onEvent(AddEvent.OnGoToCategoryEditClick)
+                    }
+                ){
+                    Icon(
+                        imageVector = vectorResource(Res.drawable.baseline_edit_note_24),
+                        contentDescription = null
+                    )
+                }
+
+
+            }
+
             ItemSection(
                 state = state,
                 onEvent = onEvent,
@@ -319,9 +352,9 @@ private fun ItemSection(
                             )
                         )
                         Spacer(Modifier.width(4.dp))
-                        Texts.TitleSmall(
-                            modifier = Modifier.weight(1f),
-                            text = it.name
+                        Text(
+                            text = it.name,
+                            style = MaterialTheme.typography.titleSmall
                         )
 
                     }

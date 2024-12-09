@@ -49,26 +49,31 @@ fun getTypography() : Typography {
     )
 
     return Typography(
-        bodySmall = TextStyle(
+        bodyLarge = TextStyle(
             fontFamily = notosanslao,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Light
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 16.sp
         ),
         bodyMedium = TextStyle(
             fontFamily = notosanslao,
             fontWeight = FontWeight.Medium,
             fontSize = 14.sp,
         ),
-        bodyLarge = TextStyle(
+        bodySmall = TextStyle(
             fontFamily = notosanslao,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 16.sp
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Light
         ),
 
         labelLarge = TextStyle(
             fontFamily = notosanslao,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 20.sp
+        ),
+        labelMedium = TextStyle(
+            fontFamily = notosanslao,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold
         ),
         labelSmall = TextStyle(
             fontFamily = notosanslao,

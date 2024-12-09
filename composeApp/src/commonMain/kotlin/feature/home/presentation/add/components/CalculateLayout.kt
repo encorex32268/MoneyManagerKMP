@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -296,7 +297,6 @@ private fun CalendarButton(
     month: Int = 1,
     day: Int = 6,
     onClick: () -> Unit = {},
-    textColor : Color = MaterialTheme.colorScheme.onSurface,
     shape: Shape = RoundedCornerShape(16.dp)
 ){
     Box(
@@ -322,10 +322,10 @@ private fun CalendarButton(
                 tint = MaterialTheme.colorScheme.onSurface,
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Texts.TitleMedium(
+            Text(
                 text = "$month/$day",
                 textAlign = TextAlign.Center,
-                color = textColor,
+                style = MaterialTheme.typography.labelMedium
             )
         }
     }
@@ -338,12 +338,10 @@ private fun NumberButton(
     modifier: Modifier = Modifier,
     text: String,
     onClick: (String) -> Unit = {},
-    textColor: Color = MaterialTheme.colorScheme.onSurface,
     shape: Shape = RoundedCornerShape(24.dp)
 ){
     Box(
         modifier = modifier
-            .size(50.dp)
             .clip(shape)
             .clickable { onClick(text) }
             .background(
@@ -353,13 +351,12 @@ private fun NumberButton(
         ,
         contentAlignment = Alignment.Center
     ){
-        Texts.TitleMedium(
+        Text(
             text = text,
-            modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            color = textColor,
-            fontSize = 24.sp
+            style = MaterialTheme.typography.labelMedium.copy(
+                fontSize = 20.sp
+            )
         )
-
     }
 }

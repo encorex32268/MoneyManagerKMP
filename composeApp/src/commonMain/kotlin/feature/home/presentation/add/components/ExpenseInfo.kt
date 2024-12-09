@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
@@ -19,8 +21,8 @@ import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.description
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
+import toMoneyString
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ExpenseInfo(
     modifier: Modifier = Modifier,
@@ -38,28 +40,36 @@ fun ExpenseInfo(
             backgroundColor = if (categoryUi?.colorArgb == null) CategoryList.getColorByTypeId(categoryUi?.typeId?:0) else Color(categoryUi.colorArgb),
             image = CategoryList.getCategoryIconById(categoryUi?.id?.toLong()?:0),
             isClicked = true,
+            colorCheck = true
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(12.dp))
         BasicTextField(
             modifier = Modifier.weight(1f),
             value = description,
             onValueChange = onValueChange,
             decorationBox = {
                 if (description.isEmpty()){
-                    Texts.BodyMedium(
-                        text = stringResource(Res.string.description)
+                    Text(
+                        text = stringResource(Res.string.description),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = Color.LightGray,
+                            fontSize = 16.sp
+                        )
                     )
                 }
                 it()
             },
             textStyle = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onSurface
+                fontSize = 14.sp
             )
         )
-        Spacer(modifier = Modifier.width(8.dp))
-        Texts.TitleMedium(
-            text = cost.toString(),
-            maxLines = 1
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = cost.toMoneyString(),
+            maxLines = 1,
+            style = MaterialTheme.typography.labelLarge.copy(
+                fontSize = 16.sp
+            )
         )
     }
 }

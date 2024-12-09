@@ -17,6 +17,7 @@ import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,92 +43,65 @@ fun CostTypeSelect(
     modifier: Modifier = Modifier,
     isIncome: Boolean = false,
     onTypeChange: (Boolean) -> Unit = {},
-    shape: RoundedCornerShape = RoundedCornerShape(8.dp),
-    onCloseClick: () -> Unit,
-    onGoToCategoryEditClick: () -> Unit = {}
+    shape: RoundedCornerShape = RoundedCornerShape(8.dp)
 ){
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            IconButton(
-                onClick = onCloseClick
-            ){
-                Icon(
-                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                    contentDescription = null
+                .noRippleClick { onTypeChange(false) }
+                .background(
+                    if (!isIncome) {
+                        light_ErrorColorContainer
+                    } else {
+                        light_onErrorColor
+                    },
+                    shape = shape
                 )
-            }
-            IconButton(
-                onClick = onGoToCategoryEditClick
-            ){
-                Icon(
-                    imageVector = vectorResource(Res.drawable.baseline_edit_note_24),
-                    contentDescription = null
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    shape = shape
                 )
-            }
+                .padding(horizontal = 32.dp , vertical = 8.dp)
+            ,
+            contentAlignment = Alignment.Center){
+
+            Text(
+                text = stringResource(Res.string.expense),
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .noRippleClick { onTypeChange(false) }
-                    .background(
-                        if (!isIncome) {
-                            light_ErrorColorContainer
-                        } else {
-                            light_onErrorColor
-                        },
-                        shape = shape
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        shape = shape
-                    )
-                ,
-                contentAlignment = Alignment.Center){
-                Texts.BodyMedium(
-                    modifier = Modifier.padding(8.dp),
-                    text = stringResource(Res.string.expense)
+        Spacer(modifier = Modifier.width(16.dp))
+        Box(
+            modifier = Modifier
+                .noRippleClick {
+                    onTypeChange(true)
+                }
+                .background(
+                    if (isIncome) {
+                        light_CorrectColorContainer
+                    } else {
+                        light_onCorrectColor
+                    },
+                    shape = shape
                 )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Box(
-                modifier = Modifier
-                    .noRippleClick {
-                        onTypeChange(true)
-                    }
-                    .background(
-                        if (isIncome) {
-                            light_CorrectColorContainer
-                        } else {
-                            light_onCorrectColor
-                        },
-                        shape = shape
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        shape = shape
-                    )
-                ,
-                contentAlignment = Alignment.Center
-            ){
-                Texts.BodyMedium(
-                    modifier = Modifier.padding(8.dp),
-                    text =  stringResource(Res.string.income)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    shape = shape
                 )
-            }
+                .padding(horizontal = 32.dp, vertical = 8.dp)
+            ,
+            contentAlignment = Alignment.Center
+        ){
+            Text(
+                text = stringResource(Res.string.income),
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }

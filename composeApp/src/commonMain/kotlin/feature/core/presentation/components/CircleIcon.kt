@@ -28,6 +28,7 @@ fun CircleIcon(
     id: Int?=null,
     onItemClick: (Int) -> Unit = {},
     backgroundColor: Color,
+    colorCheck: Boolean = false
 ) {
     Column(
         modifier = modifier,
@@ -50,7 +51,7 @@ fun CircleIcon(
         ){
             image?.let {
                 val tintColor = remember(backgroundColor){
-                    if (backgroundColor.luminance() < 0.5f) Color(0xFFFDFDFD) else Color.Black
+                    if (backgroundColor.luminance() < 0.5f && colorCheck) Color(0xFFFDFDFD) else Color.Black
                 }
                 Icon(
                     modifier = Modifier
