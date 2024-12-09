@@ -4,6 +4,8 @@
 
 package feature.core.presentation.navigation
 
+import androidx.navigation.NavOptions
+import androidx.navigation.navOptions
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.analytics
 import moneymanagerkmp.composeapp.generated.resources.baseline_analytics_24_filled
@@ -32,7 +34,6 @@ val bottomNavigationItems = listOf(
         unSelectedIcon = Res.drawable.baseline_receipt_24_outline,
         name = "Route.Home",
         title = Res.string.home
-
     ),
     BottomNavigationItem(
         selectedIcon = Res.drawable.baseline_pie_chart_24_filled,

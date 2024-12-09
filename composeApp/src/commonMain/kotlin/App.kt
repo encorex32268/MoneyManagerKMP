@@ -108,8 +108,14 @@ fun App(
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination?.route
-        var itemSelectedIndex by remember {
-            mutableStateOf(0)
+        var itemSelectedIndex by remember(currentDestination) {
+            mutableStateOf(
+                when(currentDestination){
+                    "Route.Home" ->0
+                    "Route.Chart"->1
+                    else -> 2
+                }
+            )
         }
 
         val windowSizeClass = calculateWindowSizeClass()
@@ -130,13 +136,31 @@ fun App(
                     AppNavigationBar(
                         itemSelectedIndex = itemSelectedIndex,
                         onBarItemClick = { index , name ->
-                            itemSelectedIndex = index
-                            navController.navigate(
-                                route = name,
-                                navOptions = navOptions {
-                                    launchSingleTop = true
-                                }
-                            )
+                            if(itemSelectedIndex != index){
+                                itemSelectedIndex = index
+                                navController.navigate(
+                                    route = name,
+                                    navOptions = when(name){
+                                        "Route.Home" -> {
+                                             navOptions {
+                                                popUpTo(navController.graph.startDestinationId) {
+                                                    inclusive = true
+                                                }
+                                                launchSingleTop = true
+                                            }
+                                        }
+                                        else -> {
+                                            navOptions {
+                                                popUpTo("Route.Home") {
+                                                    inclusive = false
+                                                }
+                                                launchSingleTop = true
+                                            }
+                                        }
+                                    }
+
+                                )
+                            }
 
                         }
                     )
@@ -158,13 +182,30 @@ fun App(
                         AppNavigationRail(
                             itemSelectedIndex = itemSelectedIndex,
                             onBarItemClick = { index, name ->
-                                itemSelectedIndex = index
-                                navController.navigate(
-                                    route = name,
-                                    navOptions = navOptions {
-                                        launchSingleTop = true
-                                    }
-                                )
+                                if(itemSelectedIndex != index){
+                                    itemSelectedIndex = index
+                                    navController.navigate(
+                                        route = name,
+                                        navOptions = when(name){
+                                            "Route.Home" -> {
+                                                navOptions {
+                                                    popUpTo(navController.graph.startDestinationId) {
+                                                        inclusive = true
+                                                    }
+                                                    launchSingleTop = true
+                                                }
+                                            }
+                                            else -> {
+                                                navOptions {
+                                                    popUpTo("Route.Home") {
+                                                        inclusive = false
+                                                    }
+                                                    launchSingleTop = true
+                                                }
+                                            }
+                                        }
+                                    )
+                                }
                             }
                         )
                         VerticalDivider(
