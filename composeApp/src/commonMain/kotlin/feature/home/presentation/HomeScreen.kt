@@ -111,7 +111,6 @@ fun HomeScreen(
                 }
             )
             Spacer(modifier = Modifier.height(4.dp))
-            println(">> ${navigationLayoutType}")
             if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
                 HomeScreenNaviBottom(state, onEvent)
             }else{

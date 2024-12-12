@@ -8,16 +8,19 @@ import AdMobBannerController
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -35,6 +38,7 @@ import feature.chart.presentation.components.ExpenseDetailLazyGrid
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
 import feature.core.presentation.customTabIndicatorOffset
+import feature.core.presentation.navigation.NavigationLayoutType
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.expense
 import moneymanagerkmp.composeapp.generated.resources.income
@@ -50,7 +54,8 @@ private const val TAB_SIZE = 2
 @Composable
 fun ChartScreenRoot(
     viewModel: ChartViewModel = koinViewModel(),
-    onGotoDetail: (List<Expense>,Type) -> Unit = { _ , _->}
+    onGotoDetail: (List<Expense>,Type) -> Unit = { _ , _->},
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ){
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -64,7 +69,8 @@ fun ChartScreenRoot(
                 else -> Unit
             }
             viewModel.onEvent(event)
-        }
+        },
+        navigationLayoutType = navigationLayoutType
     )
 }
 
@@ -72,7 +78,8 @@ fun ChartScreenRoot(
 fun ChartScreen(
     state: ChartState,
     onEvent: (ChartEvent) -> Unit = {},
-    isDebug: Boolean = false
+    isDebug: Boolean = false,
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ){
     val density = LocalDensity.current
     val tabWidths = remember {
@@ -184,41 +191,50 @@ fun ChartScreen(
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)
         ){
-            Column(
+            ChartDataSection(
                 modifier = Modifier
-                    .weight(1f)
                     .fillMaxWidth()
-            ) {
-                ChartLayout(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    state = state,
-                    sumTotal = sumTotal
-                )
-                Spacer(Modifier.height(8.dp))
-                ExpenseDetailLazyGrid(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                    ,
-                    items = if (state.isIncomeShown) state.incomeItems else state.items,
-                    isIncomeShown = state.isIncomeShown,
-                    sumTotal = sumTotal,
-                    onItemClick = {
-                        onEvent(
-                            ChartEvent.OnGotoDetail(
-                                expenses = if (state.isIncomeShown){
-                                    it.itemsIncome
-                                }else {
-                                    it.itemsNotIncome
-                                },
-                                type = it.type
-                            )
-                        )
+                    .padding(horizontal = 16.dp)
+                    .weight(1f),
+                navigationLayoutType = navigationLayoutType,
+                content = {
+                    ChartLayout(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp)
+                            .weight(0.5f),
+                        state = state,
+                        sumTotal = sumTotal
+                    )
+                    if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
+                        Spacer(Modifier.height(4.dp))
+                    }else{
+                        Spacer(Modifier.width(8.dp))
                     }
-                )
-            }
+                    ExpenseDetailLazyGrid(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.5f)
+                        ,
+                        items = if (state.isIncomeShown) state.incomeItems else state.items,
+                        isIncomeShown = state.isIncomeShown,
+                        sumTotal = sumTotal,
+                        onItemClick = {
+                            onEvent(
+                                ChartEvent.OnGotoDetail(
+                                    expenses = if (state.isIncomeShown){
+                                        it.itemsIncome
+                                    }else {
+                                        it.itemsNotIncome
+                                    },
+                                    type = it.type
+                                )
+                            )
+                        }
+                    )
+                }
+            )
+
             if (!isDebug){
                 AdMobBannerController.AdMobBannerCompose(
                     modifier = Modifier.fillMaxWidth()
@@ -228,3 +244,29 @@ fun ChartScreen(
     }
 
 }
+
+@Composable
+private fun ChartDataSection(
+    modifier: Modifier = Modifier,
+    navigationLayoutType: NavigationLayoutType,
+    content: @Composable () -> Unit = {}
+){
+    when(navigationLayoutType){
+        NavigationLayoutType.BOTTOM_NAVIGATION -> {
+            Column(
+                modifier = modifier
+            ){
+                content()
+            }
+        }
+        else -> {
+            Row(
+                modifier = modifier
+            ){
+                content()
+            }
+        }
+    }
+}
+
+

@@ -353,22 +353,23 @@ private fun ItemsSection(
     navigationLayoutType: NavigationLayoutType,
     content: @Composable () -> Unit = {}
 ){
-    if(navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
-        Column(
-            modifier = modifier.background(Color.White),
-            verticalArrangement = Arrangement.SpaceBetween
-        ){
-            content()
+    when(navigationLayoutType){
+        NavigationLayoutType.BOTTOM_NAVIGATION -> {
+            Column(
+                modifier = modifier.background(Color.White),
+                verticalArrangement = Arrangement.SpaceBetween
+            ){
+                content()
+            }
         }
-    }else{
-        Row(
-            modifier = modifier.background(Color.White),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            content()
+        else -> {
+            Row(
+                modifier = modifier.background(Color.White),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                content()
+            }
         }
     }
-
-
 }
 

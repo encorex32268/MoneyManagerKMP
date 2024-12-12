@@ -48,7 +48,7 @@ fun ExpenseDetailLazyGrid(
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = modifier,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ){
             items(items){ chart ->
@@ -68,24 +68,6 @@ fun ExpenseDetailLazyGrid(
                 }
             }
         }
-//        Column(
-//            modifier = modifier,
-//            verticalArrangement = Arrangement.spacedBy(16.dp)
-//        ) {
-//            items.forEach { chart ->
-//                val sum =  if (isIncomeShown) chart.itemsIncome.sumOf { it.cost } else chart.itemsNotIncome.sumOf { it.cost }
-//                if (sum != 0L){
-//                    ExpenseDetailItem(
-//                        onItemClick = onItemClick,
-//                        chart = chart,
-//                        percent = sum / sumTotal.toFloat(),
-//                        sum = sum
-//                    )
-//
-//                }
-//            }
-//        }
-
     }
 }
 
@@ -100,9 +82,8 @@ fun ExpenseDetailItem(
         modifier = modifier
     ){
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(8.dp)
         ){
-
             Text(
                 text = chart.type.name,
                 style = MaterialTheme.typography.bodyMedium.copy(

@@ -277,7 +277,8 @@ private fun NavGraphBuilder.chartGraph(
                             launchSingleTop = true
                         }
                     )
-                }
+                },
+                navigationLayoutType = navigationLayoutType
             )
         }
         composable<Route.ChartDetail>(
@@ -460,14 +461,14 @@ private fun AppNavigationRail(
                         contentDescription = bottomNavigationItem.name,
                     )
                 },
-                label = {
-                    Text(
-                        text = stringResource(bottomNavigationItem.title),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontSize = 14.sp
-                        )
-                    )
-                }
+//                label = {
+//                    Text(
+//                        text = stringResource(bottomNavigationItem.title),
+//                        style = MaterialTheme.typography.bodySmall.copy(
+//                            fontSize = 14.sp
+//                        )
+//                    )
+//                }
 
             )
         }
@@ -503,14 +504,14 @@ private fun AppNavigationBar(
                         contentDescription = bottomNavigationItem.name,
                     )
                 },
-                label = {
-                    Text(
-                        text = stringResource(bottomNavigationItem.title),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontSize = 14.sp
-                        )
-                    )
-                }
+//                label = {
+//                    Text(
+//                        text = stringResource(bottomNavigationItem.title),
+//                        style = MaterialTheme.typography.bodySmall.copy(
+//                            fontSize = 14.sp
+//                        )
+//                    )
+//                }
             )
         }
     }

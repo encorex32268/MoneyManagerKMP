@@ -77,14 +77,12 @@ fun ChartLayout(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            OutlinedCard(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
-                colors = CardDefaults.outlinedCardColors(
-                    containerColor = Color.White
-                )
+                    .background(Color.White)
+                    .align(Alignment.CenterHorizontally)
+                ,
             ) {
                 Row(
                     modifier = Modifier
@@ -183,12 +181,8 @@ fun ChartLayout(
                         }
                     }
 
-
                 }
-
             }
-            Spacer(modifier = Modifier.height(8.dp))
-
         }
     }
 
