@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import feature.core.presentation.ObserveAsEvents
 import feature.core.presentation.Texts
 import feature.core.presentation.model.CategoryUi
+import feature.core.presentation.navigation.NavigationLayoutType
 import feature.core.presentation.reorderable.ReorderableItem
 import feature.core.presentation.reorderable.detectReorderAfterLongPress
 import feature.core.presentation.reorderable.rememberReorderableLazyGridState
@@ -68,7 +71,8 @@ fun TypeCategoryEditScreenRoot(
     viewModel: TypeCategoryEditViewModel = koinInject{
         parametersOf(typeUi)
     },
-    onBack: () -> Unit = {}
+    onBack: () -> Unit = {},
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ) {
     val state by viewModel.state.collectAsState()
     val hostState = remember { SnackbarHostState() }
@@ -96,7 +100,8 @@ fun TypeCategoryEditScreenRoot(
     ){
         TypeCategoryEditScreen(
             state = state,
-            onEvent = viewModel::onEvent
+            onEvent = viewModel::onEvent,
+            navigationLayoutType = navigationLayoutType
         )
 
     }
@@ -106,7 +111,8 @@ fun TypeCategoryEditScreenRoot(
 @Composable
 fun TypeCategoryEditScreen(
     state: TypeCategoryEditState,
-    onEvent: (TypeCategoryEditEvent) -> Unit = {}
+    onEvent: (TypeCategoryEditEvent) -> Unit = {},
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ) {
 
     var currentCategoryUi by remember {
@@ -128,6 +134,15 @@ fun TypeCategoryEditScreen(
             )
         }
     )
+    val gridCells by remember(navigationLayoutType) {
+        mutableStateOf(
+            if (navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL){
+                5
+            }else{
+                4
+            }
+        )
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -191,10 +206,7 @@ fun TypeCategoryEditScreen(
                         .size(32.dp)
                 )
                 Text(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 8.dp)
-                    ,
+                    modifier = Modifier.padding(horizontal = 8.dp),
                     text = state.typeUi.name,
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -205,105 +217,97 @@ fun TypeCategoryEditScreen(
                 )
             }
 
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .background(Color.White)
-                ,
-                verticalArrangement = Arrangement.SpaceBetween
-            ){
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(4),
-                    state = reorderState.gridState,
-                    contentPadding = PaddingValues(horizontal = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(16.dp)
-                        .border(
-                            0.dp,
-                            color = Color.Black,
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .reorderable(reorderState)
-                ) {
-                    items(
-                        items = state.typeUi.categories,
-                        key = {
-                            it.uuid
-                        }
-                    )
-                    { item ->
-                        ReorderableItem(
-                            modifier = Modifier
-                                .padding(4.dp)
-                                .detectReorderAfterLongPress(reorderState)
-                                .background(Color.White)
-                            ,
-                            reorderableState = reorderState,
-                            key = item.uuid
-                        ) { isDragging ->
-                            Icon(
-                                modifier = Modifier
-                                    .size(12.dp)
-                                    .align(Alignment.TopEnd)
-                                    .noRippleClick {
-                                        onEvent(
-                                            TypeCategoryEditEvent.OnItemRemove(item)
-                                        )
-                                    }
-                                ,
-                                imageVector = Icons.Default.Close,
-                                contentDescription = null
+            ItemsSection(
+                navigationLayoutType = navigationLayoutType,
+                content = {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(gridCells),
+                        state = reorderState.gridState,
+                        contentPadding = PaddingValues(horizontal = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(16.dp)
+                            .border(
+                                0.dp,
+                                color = Color.Black,
+                                shape = RoundedCornerShape(16.dp)
                             )
+                            .reorderable(reorderState)
+                    ) {
+                        items(
+                            items = state.typeUi.categories,
+                            key = {
+                                it.uuid
+                            }
+                        )
+                        { item ->
+                            ReorderableItem(
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .detectReorderAfterLongPress(reorderState)
+                                    .background(Color.White)
+                                ,
+                                reorderableState = reorderState,
+                                key = item.uuid
+                            ) { isDragging ->
+                                Icon(
+                                    modifier = Modifier
+                                        .size(12.dp)
+                                        .align(Alignment.TopEnd)
+                                        .noRippleClick {
+                                            onEvent(
+                                                TypeCategoryEditEvent.OnItemRemove(item)
+                                            )
+                                        }
+                                    ,
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = null
+                                )
+                                CategoryItem(
+                                    categoryUi = item,
+                                    isClicked = isDragging
+                                )
+                            }
+
+                        }
+                    }
+                    LazyVerticalGrid(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(16.dp)
+                            .border(
+                                0.dp,
+                                color = Color.Black,
+                                shape = RoundedCornerShape(16.dp)
+                            ),
+                        columns = GridCells.Fixed(gridCells),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(
+                            state.categories,
+                            key = {
+                                it.id
+                            }
+                        ) { item ->
                             CategoryItem(
                                 categoryUi = item,
-                                isClicked = isDragging
+                                isClicked = false,
+                                onItemClick = {
+                                    currentCategoryUi = item
+                                    isShowAddDialog = true
+                                },
+                                isVisibilityText = false
                             )
                         }
 
+
                     }
                 }
-                LazyVerticalGrid(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(16.dp)
-                        .border(
-                            0.dp,
-                            color = Color.Black,
-                            shape = RoundedCornerShape(16.dp)
-                        ),
-                    columns = GridCells.Fixed(4),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(
-                        state.categories,
-                        key = {
-                            it.id
-                        }
-                    ) { item ->
-                        CategoryItem(
-                            categoryUi = item,
-                            isClicked = false,
-                            onItemClick = {
-                                currentCategoryUi = item
-                                isShowAddDialog = true
-                            },
-                            isVisibilityText = false
-                        )
-                    }
-
-
-                }
-
-            }
-
-
-
-
+            )
 
         }
     }
@@ -342,3 +346,29 @@ fun TypeCategoryEditScreen(
 
 
 }
+
+@Composable
+private fun ItemsSection(
+    modifier: Modifier = Modifier,
+    navigationLayoutType: NavigationLayoutType,
+    content: @Composable () -> Unit = {}
+){
+    if(navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
+        Column(
+            modifier = modifier.background(Color.White),
+            verticalArrangement = Arrangement.SpaceBetween
+        ){
+            content()
+        }
+    }else{
+        Row(
+            modifier = modifier.background(Color.White),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
+            content()
+        }
+    }
+
+
+}
+

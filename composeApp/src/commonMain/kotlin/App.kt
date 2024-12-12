@@ -62,7 +62,9 @@ import feature.core.domain.mapper.toType
 import feature.core.domain.mapper.toTypeUi
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
+import feature.core.presentation.navigation.NavigationLayoutType
 import feature.core.presentation.navigation.bottomNavigationItems
+import feature.core.presentation.navigation.calculateNavigationLayout
 import feature.home.domain.navigation.ExpenseListNavType
 import feature.home.domain.navigation.ExpenseNavType
 import feature.home.domain.navigation.TypeNavType
@@ -79,24 +81,8 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import kotlin.reflect.typeOf
 
-@Immutable
-private enum class NavigationLayoutType {
-    BOTTOM_NAVIGATION,
-    NAVIGATION_RAIL,
-    FULL_SCREEN,
-}
 
-private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?): NavigationLayoutType {
-    return when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> {
-            NavigationLayoutType.BOTTOM_NAVIGATION
-        }
 
-        else -> {
-            NavigationLayoutType.NAVIGATION_RAIL
-        }
-    }
-}
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -111,9 +97,9 @@ fun App(
         var itemSelectedIndex by remember(currentDestination) {
             mutableStateOf(
                 when(currentDestination){
-                    "Route.Home" ->0
                     "Route.Chart"->1
-                    else -> 2
+                    "Route.Analytics" -> 2
+                    else -> 0
                 }
             )
         }
@@ -174,7 +160,7 @@ fun App(
                     .padding(paddingValues),
             ) {
                 AnimatedVisibility(
-                    visible = (navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL),
+                    visible = (isMainCurrentDestination(currentDestination) && navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL),
                     enter = slideInHorizontally(initialOffsetX = { -it }),
                     exit = shrinkHorizontally() + fadeOut(),
                 ) {
@@ -224,10 +210,17 @@ fun App(
                         navController = navController,
                         onChartClick = {
                             itemSelectedIndex = 1
-                        }
+                        },
+                        navigationLayoutType = navigationLayoutType
                     )
-                    chartGraph(navController)
-                    analyticsGraph(navController)
+                    chartGraph(
+                        navController = navController,
+                        navigationLayoutType = navigationLayoutType
+                    )
+                    analyticsGraph(
+                        navController = navController,
+                        navigationLayoutType = navigationLayoutType
+                    )
                 }
             }
 
@@ -238,7 +231,10 @@ fun App(
 
 
 
-private fun NavGraphBuilder.analyticsGraph(navController: NavHostController) {
+private fun NavGraphBuilder.analyticsGraph(
+    navController: NavHostController,
+    navigationLayoutType: NavigationLayoutType
+) {
     navigation<Route.AnalyticsGraph>(
         startDestination = Route.Analytics
     ){
@@ -262,7 +258,10 @@ private fun NavGraphBuilder.analyticsGraph(navController: NavHostController) {
 
 }
 
-private fun NavGraphBuilder.chartGraph(navController: NavHostController) {
+private fun NavGraphBuilder.chartGraph(
+    navController: NavHostController,
+    navigationLayoutType: NavigationLayoutType
+) {
     navigation<Route.ChartGraph>(
         startDestination = Route.Chart
     ) {
@@ -302,7 +301,8 @@ private fun NavGraphBuilder.chartGraph(navController: NavHostController) {
 
 private fun NavGraphBuilder.homeGraph(
     navController: NavHostController,
-    onChartClick: () -> Unit = {}
+    onChartClick: () -> Unit = {},
+    navigationLayoutType: NavigationLayoutType
 ) {
     navigation<Route.HomeGraph>(
         startDestination = Route.Home
@@ -338,7 +338,8 @@ private fun NavGraphBuilder.homeGraph(
                             launchSingleTop = true
                         }
                     )
-                }
+                },
+                navigationLayoutType = navigationLayoutType
             )
         }
         composable<Route.HomeAdd>(
@@ -360,7 +361,8 @@ private fun NavGraphBuilder.homeGraph(
                             launchSingleTop = true
                         }
                     )
-                }
+                },
+                navigationLayoutType = navigationLayoutType
             )
         }
         composable<Route.HomeEdit>(
@@ -414,7 +416,8 @@ private fun NavGraphBuilder.homeGraph(
                 typeUi = typeUi,
                 onBack = {
                     navController.navigateUp()
-                }
+                },
+                navigationLayoutType = navigationLayoutType
             )
         }
 

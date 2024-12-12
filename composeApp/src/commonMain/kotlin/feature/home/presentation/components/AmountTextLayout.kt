@@ -3,6 +3,7 @@
 package feature.home.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import feature.core.presentation.Texts
+import feature.core.presentation.navigation.NavigationLayoutType
 import feature.core.ui.CorrectColor
 import feature.core.ui.ErrorColor
 import moneymanagerkmp.composeapp.generated.resources.Res
@@ -46,51 +48,104 @@ fun AmountTextLayout(
     modifier: Modifier = Modifier,
     income: Long,
     expense: Long,
-    total: Long
+    total: Long,
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ) {
-    OutlinedCard(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(0.dp),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = Color.Transparent
-        )
-    ){
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-            ,
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            AmountText(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 4.dp),
-                title = stringResource(Res.string.total),
-                textColor = MaterialTheme.colorScheme.onBackground,
-                text = total.toMoneyString(),
-                textSize = 20.sp
+    if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
+        OutlinedCard(
+            modifier = modifier,
+            shape = RoundedCornerShape(0.dp),
+            colors = CardDefaults.outlinedCardColors(
+                containerColor = Color.Transparent
             )
-            AmountText(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 4.dp),
-                title = stringResource(Res.string.income),
-                text = income.toMoneyString(),
-                textColor = CorrectColor
-            )
-            AmountText(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 4.dp),
-                title = stringResource(Res.string.expense),
-                text = expense.toMoneyString(),
-                textColor = ErrorColor
-            )
+        ){
+            AmountTextLayoutNaviBottom(income, expense, total)
         }
 
+    }else{
+        Box(
+            modifier = modifier
+        ){
+            AmountTextLayoutNaviRail(income, expense, total)
+        }
     }
+
+}
+@Composable
+private fun AmountTextLayoutNaviRail(
+    income: Long,
+    expense: Long,
+    total: Long,
+){
+    Column(
+        modifier = Modifier.padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        AmountSection(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+            income = income,
+            expense =  expense,
+            total =  total
+        )
+    }
+}
+
+@Composable
+private fun AmountTextLayoutNaviBottom(
+    income: Long,
+    expense: Long,
+    total: Long,
+){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+        ,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        AmountSection(
+            modifier = Modifier
+                .weight(1f)
+                .padding(vertical = 4.dp),
+            income = income,
+            expense =  expense,
+            total =  total
+        )
+
+    }
+}
+
+
+@Composable
+private fun AmountSection(
+    modifier: Modifier = Modifier,
+    total: Long,
+    income: Long,
+    expense: Long
+) {
+
+    AmountText(
+        modifier = modifier,
+        title = stringResource(Res.string.total),
+        textColor = MaterialTheme.colorScheme.onBackground,
+        text = total.toMoneyString(),
+        textSize = 20.sp
+    )
+    AmountText(
+        modifier = modifier,
+        title = stringResource(Res.string.income),
+        text = income.toMoneyString(),
+        textColor = CorrectColor
+    )
+    AmountText(
+        modifier =  modifier,
+        title = stringResource(Res.string.expense),
+        text = expense.toMoneyString(),
+        textColor = ErrorColor
+    )
 }
 
 @Composable

@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import feature.chart.presentation.ChartScreen
 import feature.chart.presentation.ChartState
-import feature.chart.presentation.components.ExpenseDetailLayout
+import feature.chart.presentation.components.ExpenseDetailLazyGrid
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
 import feature.core.domain.model.chart.Chart
@@ -60,7 +60,7 @@ fun ChartScreenPreview() {
 fun ExpenseDetailLayoutPreview() {
 
     AppTheme {
-        ExpenseDetailLayout(
+        ExpenseDetailLazyGrid(
             items = listOf(),
             sumTotal = 100L,
             onItemClick = {}

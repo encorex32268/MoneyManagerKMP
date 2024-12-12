@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -33,10 +31,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.core.presentation.components.DatePicker
 
 import feature.chart.presentation.components.ChartLayout
-import feature.chart.presentation.components.ExpenseDetailLayout
+import feature.chart.presentation.components.ExpenseDetailLazyGrid
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
-import feature.core.domain.model.chart.Chart
 import feature.core.presentation.customTabIndicatorOffset
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.expense
@@ -191,7 +188,6 @@ fun ChartScreen(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
             ) {
                 ChartLayout(
                     modifier = Modifier
@@ -201,9 +197,11 @@ fun ChartScreen(
                     sumTotal = sumTotal
                 )
                 Spacer(Modifier.height(8.dp))
-                ExpenseDetailLayout(
+                ExpenseDetailLazyGrid(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                    ,
                     items = if (state.isIncomeShown) state.incomeItems else state.items,
                     isIncomeShown = state.isIncomeShown,
                     sumTotal = sumTotal,

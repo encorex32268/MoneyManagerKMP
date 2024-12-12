@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -23,15 +24,18 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
+
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +47,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import feature.core.presentation.Texts
+import feature.core.presentation.navigation.NavigationLayoutType
 import feature.core.ui.light_ErrorColorContainer
+import feature.home.presentation.add.AddEvent
 import feature.home.presentation.add.AddState
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_done
@@ -51,6 +57,7 @@ import moneymanagerkmp.composeapp.generated.resources.baseline_remove
 import moneymanagerkmp.composeapp.generated.resources.dialog_cancel_button
 import moneymanagerkmp.composeapp.generated.resources.dialog_ok_button
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -60,16 +67,20 @@ import org.jetbrains.compose.resources.vectorResource
 @Composable
 fun CalculateLayout(
     modifier: Modifier = Modifier,
-    onValueChange: (String) -> Unit = {},
-    onOkClick: () -> Unit = {},
-    onItemClick: (String) -> Unit = {},
-    onDelete: () -> Unit = {},
-    onDateSelected: (Long) -> Unit = {},
+    onEvent: (AddEvent) -> Unit = {},
     month: String = "",
     day: String = "",
-    state: AddState
+    state: AddState,
+    numberButtonAspectRatio: Float = 1.25f,
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ){
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(
+        initialDisplayMode = if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
+            DisplayMode.Picker
+        }else{
+            DisplayMode.Input
+        }
+    )
     val isShowDialog = rememberSaveable { mutableStateOf(false) }
     if (isShowDialog.value) {
         DatePickerDialog(
@@ -84,10 +95,18 @@ fun CalculateLayout(
                         containerColor = Color.Transparent
                     ),
                     onClick = {
-                        onDateSelected(datePickerState.selectedDateMillis?:0L)
+                        onEvent(
+                            AddEvent.OnSelectedDate(
+                            timestamp = datePickerState.selectedDateMillis?:0L)
+                        )
                         isShowDialog.value = false
                     }) {
-                    Text(stringResource(Res.string.dialog_ok_button))
+                    Text(
+                        text = stringResource(Res.string.dialog_ok_button),
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            fontSize = 14.sp
+                        )
+                    )
                 }
             },
             dismissButton = {
@@ -97,7 +116,12 @@ fun CalculateLayout(
                         containerColor = Color.Transparent
                     ),
                     onClick = { isShowDialog.value = false }) {
-                    Text(stringResource(Res.string.dialog_cancel_button))
+                    Text(
+                        text = stringResource(Res.string.dialog_cancel_button),
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            fontSize = 14.sp
+                        )
+                    )
                 }
             }
         ) {
@@ -134,7 +158,9 @@ fun CalculateLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-            onValueChange = onValueChange,
+            onValueChange = {
+                onEvent(AddEvent.OnDescriptionChange(it))
+            },
             categoryUi = state.categoryUi,
             description = state.description,
             cost = state.cost.toLongOrNull()?:0L
@@ -142,12 +168,10 @@ fun CalculateLayout(
         Spacer(modifier = Modifier.height(8.dp))
         CalculateKeyboard(
             onCalendarButtonClick = { isShowDialog.value = true },
-            onDelete = onDelete,
-            onOkClick = onOkClick,
-            onItemClick = onItemClick,
+            onEvent = onEvent,
             month = month,
-            day = day
-
+            day = day,
+            aspectRatio = numberButtonAspectRatio
         )
     }
 
@@ -155,14 +179,15 @@ fun CalculateLayout(
 
 @Composable
 private fun CalculateKeyboard(
-    onOkClick : () -> Unit = {},
-    onItemClick: (String) -> Unit = {},
-    onDelete : () -> Unit = {},
     onCalendarButtonClick : () -> Unit = {},
     month: String = "",
     day : String = "",
-    aspectRatio: Float = 1.25f
+    aspectRatio: Float = 1.25f,
+    onEvent: (AddEvent) -> Unit = {}
 ){
+    val numberButtonModifier = remember(aspectRatio){
+        Modifier.aspectRatio(aspectRatio)
+    }
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom,
@@ -173,34 +198,16 @@ private fun CalculateKeyboard(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             NumberButton(
-                modifier = Modifier.aspectRatio(aspectRatio), text = "7", onClick = onItemClick
+                modifier = numberButtonModifier, text = "7", onEvent =  onEvent
             )
             NumberButton(
-                modifier = Modifier.aspectRatio(aspectRatio), text = "4", onClick = onItemClick
+                modifier = numberButtonModifier, text = "4", onEvent =  onEvent
             )
             NumberButton(
-                modifier = Modifier.aspectRatio(aspectRatio), text = "1", onClick = onItemClick
+                modifier = numberButtonModifier, text = "1", onEvent =  onEvent
             )
             NumberButton(
-                modifier = Modifier.aspectRatio(aspectRatio), text = "0", onClick = onItemClick
-            )
-        }
-
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            NumberButton(
-                modifier = Modifier.aspectRatio(aspectRatio), text = "8", onClick = onItemClick
-            )
-            NumberButton(
-                modifier = Modifier.aspectRatio(aspectRatio), text = "5", onClick = onItemClick
-            )
-            NumberButton(
-                modifier = Modifier.aspectRatio(aspectRatio), text = "2", onClick = onItemClick
-            )
-            NumberButton(
-                modifier = Modifier.aspectRatio(aspectRatio), text = "00", onClick = onItemClick
+                modifier = numberButtonModifier, text = "0", onEvent =  onEvent
             )
         }
 
@@ -209,16 +216,34 @@ private fun CalculateKeyboard(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             NumberButton(
-                modifier = Modifier.aspectRatio(aspectRatio), text = "9", onClick = onItemClick
+                modifier = numberButtonModifier, text = "8", onEvent =  onEvent
             )
             NumberButton(
-                modifier = Modifier.aspectRatio(aspectRatio), text = "6", onClick = onItemClick
+                modifier = numberButtonModifier, text = "5", onEvent =  onEvent
             )
             NumberButton(
-                modifier = Modifier.aspectRatio(aspectRatio), text = "3", onClick = onItemClick
+                modifier = numberButtonModifier, text = "2", onEvent =  onEvent
             )
             NumberButton(
-                modifier = Modifier.aspectRatio(aspectRatio), text = "000", onClick = onItemClick
+                modifier = numberButtonModifier, text = "00", onEvent =  onEvent
+            )
+        }
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            NumberButton(
+                modifier = numberButtonModifier, text = "9", onEvent =  onEvent
+            )
+            NumberButton(
+                modifier = numberButtonModifier, text = "6", onEvent =  onEvent
+            )
+            NumberButton(
+                modifier = numberButtonModifier, text = "3" , onEvent =  onEvent
+            )
+            NumberButton(
+                modifier = numberButtonModifier, text = "000", onEvent =  onEvent
             )
         }
 
@@ -227,10 +252,12 @@ private fun CalculateKeyboard(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             CalculateIconButton(
-                modifier = Modifier.aspectRatio(aspectRatio),
+                modifier = numberButtonModifier,
                 icon = vectorResource(Res.drawable.baseline_remove),
                 contentDescription = "remove button",
-                onClick = onDelete,
+                onClick = {
+                    onEvent(AddEvent.OnDeleteTextClick)
+                },
                 backgroundColor = light_ErrorColorContainer
             )
             CalendarButton(
@@ -241,10 +268,12 @@ private fun CalculateKeyboard(
 
             )
             CalculateIconButton(
-                modifier = Modifier.aspectRatio(aspectRatio),
+                modifier = numberButtonModifier,
                 icon = vectorResource(Res.drawable.baseline_done),
                 contentDescription = "done button",
-                onClick = onOkClick,
+                onClick = {
+                    onEvent(AddEvent.OnSaveClick)
+                },
                 backgroundColor = Color(69, 230, 0, 59)
             )
         }
@@ -336,13 +365,15 @@ private fun CalendarButton(
 private fun NumberButton(
     modifier: Modifier = Modifier,
     text: String,
-    onClick: (String) -> Unit = {},
+    onEvent: (AddEvent) -> Unit = {},
     shape: Shape = RoundedCornerShape(24.dp)
 ){
     Box(
         modifier = modifier
             .clip(shape)
-            .clickable { onClick(text) }
+            .clickable {
+                onEvent(AddEvent.OnCostChange(text))
+            }
             .background(
                 color = MaterialTheme.colorScheme.background,
                 shape = shape

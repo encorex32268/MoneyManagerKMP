@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -34,6 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
@@ -50,7 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.core.domain.model.Expense
 import feature.core.presentation.CategoryList
-import feature.core.presentation.Texts
+import feature.core.presentation.navigation.NavigationLayoutType
 import feature.home.presentation.add.components.CalculateLayout
 import feature.home.presentation.add.components.CategoryItem
 import feature.home.presentation.add.components.CostTypeSelect
@@ -75,7 +77,8 @@ fun AddScreenRoot(
         parametersOf(expense)
     },
     onGoBack: () -> Unit = {},
-    onGoToCategoryEditClick: () -> Unit = {}
+    onGoToCategoryEditClick: () -> Unit = {},
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel){
@@ -88,17 +91,31 @@ fun AddScreenRoot(
             }
         }
     }
-    AddScreen(
-        state = state,
-        onEvent = { event ->
-            when(event){
-                AddEvent.OnBack                  -> onGoBack()
-                AddEvent.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
-                else -> Unit
+    if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
+        AddScreen(
+            state = state,
+            onEvent = { event ->
+                when(event){
+                    AddEvent.OnBack                  -> onGoBack()
+                    AddEvent.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
+                    else -> Unit
+                }
+                viewModel.onEvent(event)
             }
-            viewModel.onEvent(event)
-        }
-    )
+        )
+    }else{
+        AddScreenNaviRail(
+            state = state,
+            onEvent = { event ->
+                when(event){
+                    AddEvent.OnBack                  -> onGoBack()
+                    AddEvent.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
+                    else -> Unit
+                }
+                viewModel.onEvent(event)
+            }
+        )
+    }
 }
 
 
@@ -106,7 +123,7 @@ fun AddScreenRoot(
 fun AddScreen(
     state: AddState,
     onEvent: (AddEvent) -> Unit = {},
-    isDebug: Boolean = false
+    isDebug: Boolean = false,
 ){
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -184,31 +201,7 @@ fun AddScreen(
                         )
                     }
                 ,
-                onItemClick = {
-                    onEvent(
-                        AddEvent.OnCostChange(it)
-                    )
-                },
-                onDelete = {
-                    onEvent(
-                        AddEvent.OnDeleteTextClick
-                    )
-                },
-                onOkClick = {
-                    onEvent(
-                        AddEvent.OnSaveClick
-                    )
-                },
-                onValueChange = {
-                    onEvent(
-                        AddEvent.OnDescriptionChange(it)
-                    )
-                },
-                onDateSelected = {
-                    onEvent(
-                        AddEvent.OnSelectedDate(it)
-                    )
-                } ,
+                onEvent = onEvent,
                 month = state.monthNumber.toString(),
                 day = state.dayOfMonth.toString(),
                 state = state
@@ -259,8 +252,8 @@ fun AddScreen(
 
 
             }
-
             ItemSection(
+                modifier = Modifier.fillMaxSize().padding(8.dp),
                 state = state,
                 onEvent = onEvent,
                 scope = scope,
@@ -272,36 +265,138 @@ fun AddScreen(
     }
 }
 
+
+
+@Composable
+fun AddScreenNaviRail(
+    state: AddState,
+    onEvent: (AddEvent) -> Unit = {},
+    isDebug: Boolean = false,
+){
+    val keyboard = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
+    Column(
+        modifier = Modifier.fillMaxSize().background(
+            color = Color.White
+        )
+    ) {
+        Row{
+            Column(
+                modifier = Modifier.weight(0.55f)
+            ){
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    IconButton(
+                        onClick = {
+                            onEvent(AddEvent.OnBack)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                            contentDescription = null
+                        )
+                    }
+                    CostTypeSelect(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(top = 4.dp),
+                        isIncome = state.isIncome,
+                        onTypeChange = {
+                            onEvent(
+                                AddEvent.OnTypeChange(it)
+                            )
+                        }
+                    )
+                    IconButton(
+                        onClick = {
+                            onEvent(AddEvent.OnGoToCategoryEditClick)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = vectorResource(Res.drawable.baseline_edit_note_24),
+                            contentDescription = null
+                        )
+                    }
+                }
+                ItemSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(8.dp),
+                    state = state,
+                    onEvent = onEvent,
+                    isDebug = isDebug,
+                    maxItemsInEachRow = 8
+                )
+            }
+            state.categoryUi?.let {
+                VerticalDivider()
+                CalculateLayout(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .weight(0.45f)
+                        .pointerInput(Unit){
+                            detectTapGestures(
+                                onTap = {
+                                    keyboard?.hide()
+                                    focusManager.clearFocus(true)
+                                }
+                            )
+                        }
+                    ,
+                    onEvent = onEvent,
+                    month = state.monthNumber.toString(),
+                    day = state.dayOfMonth.toString(),
+                    state = state,
+                    navigationLayoutType = NavigationLayoutType.NAVIGATION_RAIL
+                )
+
+            }
+        }
+
+
+    }
+
+}
+
 @Composable
 private fun ItemSection(
+    modifier: Modifier = Modifier,
     state: AddState,
     onEvent: (AddEvent) -> Unit,
-    scope: CoroutineScope,
-    bottomSheetScaffoldState: BottomSheetScaffoldState,
-    isDebug: Boolean = false
+    scope: CoroutineScope?=null,
+    bottomSheetScaffoldState: BottomSheetScaffoldState? = null,
+    isDebug: Boolean = false,
+    maxItemsInEachRow: Int = 4
 ) {
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(8.dp)
-    ){
+        modifier = modifier
+    ) {
         item {
-            if (!isDebug){
+            if (!isDebug) {
                 AdMobBannerController.AdMobBannerCompose(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
         }
-        item{
-            if (state.recentlyItems?.categories?.isNotEmpty() == true){
+        item {
+            if (state.recentlyItems?.categories?.isNotEmpty() == true) {
                 Text(
                     text = stringResource(Res.string.recently),
                     style = MaterialTheme.typography.titleSmall
                 )
                 FlowRow(
                     modifier = Modifier.fillMaxWidth(),
-                    maxItemsInEachRow = 4,
+                    maxItemsInEachRow = maxItemsInEachRow,
                 ) {
-                    val categories = state.recentlyItems?.categories?: emptyList()
+                    val categories = state.recentlyItems.categories
                     categories.forEach { categoryUi ->
                         val categoryNameRes =
                             CategoryList.getCategoryDescriptionById(categoryUi.id.toLong())
@@ -317,13 +412,13 @@ private fun ItemSection(
                                         isRecently = true
                                     )
                                 )
-                                scope.launch {
-                                    bottomSheetScaffoldState.bottomSheetState.expand()
+                                scope?.launch {
+                                    bottomSheetScaffoldState?.bottomSheetState?.expand()
                                 }
                             }
                         )
                     }
-                    repeat(4 - categories.size % 4) {
+                    repeat(maxItemsInEachRow - categories.size % maxItemsInEachRow) {
                         Spacer(modifier = Modifier.weight(1f))
                     }
                 }
@@ -335,16 +430,16 @@ private fun ItemSection(
             key = {
                 it.typeIdTimestamp
             }
-        ){
-            if (it.categories.isNotEmpty()){
+        ) {
+            if (it.categories.isNotEmpty()) {
                 Column(
                     modifier = Modifier.fillMaxWidth()
-                ){
+                ) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
-                    ){
+                    ) {
                         Box(
                             modifier = Modifier.size(24.dp).background(
                                 color = Color(it.colorArgb),
@@ -360,7 +455,7 @@ private fun ItemSection(
                     }
                     FlowRow(
                         modifier = Modifier.fillMaxWidth(),
-                        maxItemsInEachRow = 4,
+                        maxItemsInEachRow = maxItemsInEachRow,
                     ) {
                         it.categories.forEach { categoryUi ->
                             CategoryItem(
@@ -374,14 +469,14 @@ private fun ItemSection(
                                             description = categoryUi.name
                                         )
                                     )
-                                    scope.launch {
-                                        bottomSheetScaffoldState.bottomSheetState.expand()
+                                    scope?.launch {
+                                        bottomSheetScaffoldState?.bottomSheetState?.expand()
                                     }
                                 }
                             )
 
                         }
-                        repeat(4 - it.categories.size % 4) {
+                        repeat(maxItemsInEachRow - it.categories.size % maxItemsInEachRow) {
                             Spacer(modifier = Modifier.weight(1f))
                         }
 
@@ -391,6 +486,6 @@ private fun ItemSection(
 
             }
         }
-        }
+    }
 
 }

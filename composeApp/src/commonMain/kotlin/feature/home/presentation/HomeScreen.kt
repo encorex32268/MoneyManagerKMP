@@ -4,11 +4,15 @@ package feature.home.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -28,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lihan.moneymanager.BuildKonfig
 import feature.core.domain.model.Expense
 import feature.core.presentation.components.DatePicker
+import feature.core.presentation.navigation.NavigationLayoutType
 import feature.home.presentation.components.AmountTextLayout
 import feature.home.presentation.components.ExpenseItem
 import feature.core.presentation.noRippleClick
@@ -41,6 +46,7 @@ fun HomeScreenRoot(
     onGotoAddScreen: () -> Unit = {},
     onGotoChartScreen: () -> Unit = {},
     onGotoEditScreen: (Expense) -> Unit  = {},
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -56,7 +62,8 @@ fun HomeScreenRoot(
                 else -> Unit
             }
             viewModel.onEvent(event)
-        }
+        },
+        navigationLayoutType = navigationLayoutType
     )
 }
 
@@ -65,7 +72,8 @@ fun HomeScreenRoot(
 fun HomeScreen(
     state: HomeState,
     onEvent: (HomeEvent) -> Unit,
-    isDebug: Boolean = false
+    isDebug: Boolean = false,
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ){
     Scaffold(
         containerColor = Color.White,
@@ -103,44 +111,13 @@ fun HomeScreen(
                 }
             )
             Spacer(modifier = Modifier.height(4.dp))
-            AmountTextLayout(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .noRippleClick(
-                        onClick = {
-                            onEvent(HomeEvent.OnGotoChartScreen)
-                        }
-                    )
-                ,
-                income = state.income,
-                expense = state.expense,
-                total = state.totalAmount
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ){
-                items(
-                    items = state.items,
-                    key = { it }
-                ) {(_ , expenses) ->
-                    ExpenseItem(
-                        modifier = Modifier.fillMaxWidth(),
-                        items = expenses,
-                        onItemClick = { expense ->
-                            onEvent(HomeEvent.OnGotoEditScreen(expense = expense))
-                        },
-                        types = state.typesItem
-                    )
-                }
-                item {
-                    Spacer(modifier = Modifier.height(100.dp))
-                }
+            println(">> ${navigationLayoutType}")
+            if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
+                HomeScreenNaviBottom(state, onEvent)
+            }else{
+                HomeScreenNaviRail(state, onEvent)
             }
+
             if (!isDebug){
                 AdMobBannerController.AdMobBannerCompose(
                     modifier = Modifier.fillMaxWidth()
@@ -150,4 +127,104 @@ fun HomeScreen(
         }
     }
 
+}
+
+@Composable
+private fun HomeScreenNaviBottom(
+    state: HomeState,
+    onEvent: (HomeEvent) -> Unit = {}
+){
+    Column {
+        AmountTextLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .noRippleClick(
+                    onClick = {
+                        onEvent(HomeEvent.OnGotoChartScreen)
+                    }
+                )
+            ,
+            income = state.income,
+            expense = state.expense,
+            total = state.totalAmount,
+            navigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ){
+            items(
+                items = state.items,
+                key = { it }
+            ) {(_ , expenses) ->
+                ExpenseItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    items = expenses,
+                    onItemClick = { expense ->
+                        onEvent(HomeEvent.OnGotoEditScreen(expense = expense))
+                    },
+                    types = state.typesItem
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.height(100.dp))
+            }
+        }
+    }
+
+}
+
+
+@Composable
+private fun HomeScreenNaviRail(
+    state: HomeState,
+    onEvent: (HomeEvent) -> Unit = {}
+){
+    Row(
+        modifier = Modifier.fillMaxWidth()
+    ){
+        AmountTextLayout(
+            modifier = Modifier
+                .width(IntrinsicSize.Max)
+                .noRippleClick(
+                    onClick = {
+                        onEvent(HomeEvent.OnGotoChartScreen)
+                    }
+                )
+            ,
+            income = state.income,
+            expense = state.expense,
+            total = state.totalAmount,
+            navigationLayoutType = NavigationLayoutType.NAVIGATION_RAIL
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ){
+            items(
+                items = state.items,
+                key = { it }
+            ) {(_ , expenses) ->
+                ExpenseItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    items = expenses,
+                    onItemClick = { expense ->
+                        onEvent(HomeEvent.OnGotoEditScreen(expense = expense))
+                    },
+                    types = state.typesItem
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.height(100.dp))
+            }
+        }
+    }
 }

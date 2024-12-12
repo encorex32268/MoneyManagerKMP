@@ -43,7 +43,7 @@ fun CostTypeSelect(
     modifier: Modifier = Modifier,
     isIncome: Boolean = false,
     onTypeChange: (Boolean) -> Unit = {},
-    shape: RoundedCornerShape = RoundedCornerShape(8.dp)
+    shape: RoundedCornerShape = RoundedCornerShape(20.dp)
 ){
     Row(
         modifier = modifier,
