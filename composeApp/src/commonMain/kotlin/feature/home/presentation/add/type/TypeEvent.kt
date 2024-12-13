@@ -1,6 +1,6 @@
 package feature.home.presentation.add.type
 
-import feature.core.presentation.reorderable.ItemPosition
+import feature.home.presentation.reorderable.ItemPosition
 
 sealed interface TypeEvent {
     data class OnNew(

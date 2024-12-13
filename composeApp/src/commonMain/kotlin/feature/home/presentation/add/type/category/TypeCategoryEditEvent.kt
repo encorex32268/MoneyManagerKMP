@@ -1,7 +1,7 @@
 package feature.home.presentation.add.type.category
 
 import feature.core.presentation.model.CategoryUi
-import feature.core.presentation.reorderable.ItemPosition
+import feature.home.presentation.reorderable.ItemPosition
 
 
 sealed interface TypeCategoryEditEvent {

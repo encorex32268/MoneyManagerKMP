@@ -1,9 +1,8 @@
-package feature.analytics.presentation
+package feature.analytics.presentation.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,16 +21,12 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.drawText
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import feature.analytics.presentation.model.DataPoint
 import feature.analytics.presentation.model.LineChartStyle
 import feature.analytics.presentation.model.ValueLabel
-import moneymanagerkmp.composeapp.generated.resources.Res
-import moneymanagerkmp.composeapp.generated.resources.notosanslao_medium
-import org.jetbrains.compose.resources.Font
 import toMoneyString
 import kotlin.math.roundToInt
 
@@ -128,7 +123,9 @@ fun LineChart(
         val yLabelTextLayoutResults = yLabels.map {
             measurer.measure(
                 text = it.value.toMoneyString(),
-                style = textStyle
+                style = textStyle.copy(
+                    fontWeight = FontWeight.SemiBold
+                )
             )
         }
         val maxYLabelWidth = yLabelTextLayoutResults.maxOfOrNull { it.size.width } ?: 0
@@ -219,7 +216,7 @@ fun LineChart(
                     x = x,
                     y = y
                 ),
-                color = style.unselectedColor
+                color = style.selectedColor
             )
 
             if(showHelperLines) {
@@ -339,6 +336,7 @@ fun LineChart(
             }
         }
     }
+
 }
 
 private fun getSelectedDataPointIndex(

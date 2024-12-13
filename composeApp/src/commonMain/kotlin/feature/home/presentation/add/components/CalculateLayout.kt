@@ -75,10 +75,13 @@ fun CalculateLayout(
     navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ){
     val datePickerState = rememberDatePickerState(
-        initialDisplayMode = if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
-            DisplayMode.Picker
-        }else{
-            DisplayMode.Input
+        initialDisplayMode = when(navigationLayoutType){
+            NavigationLayoutType.BOTTOM_NAVIGATION -> {
+                DisplayMode.Picker
+            }
+            else -> {
+                DisplayMode.Input
+            }
         }
     )
     val isShowDialog = rememberSaveable { mutableStateOf(false) }

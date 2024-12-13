@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package feature.core.presentation.reorderable
+package feature.home.presentation.reorderable
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring

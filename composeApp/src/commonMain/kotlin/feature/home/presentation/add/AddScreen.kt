@@ -91,30 +91,33 @@ fun AddScreenRoot(
             }
         }
     }
-    if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
-        AddScreen(
-            state = state,
-            onEvent = { event ->
-                when(event){
-                    AddEvent.OnBack                  -> onGoBack()
-                    AddEvent.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
-                    else -> Unit
+    when(navigationLayoutType){
+        NavigationLayoutType.BOTTOM_NAVIGATION -> {
+            AddScreen(
+                state = state,
+                onEvent = { event ->
+                    when(event){
+                        AddEvent.OnBack                  -> onGoBack()
+                        AddEvent.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
+                        else -> Unit
+                    }
+                    viewModel.onEvent(event)
                 }
-                viewModel.onEvent(event)
-            }
-        )
-    }else{
-        AddScreenNaviRail(
-            state = state,
-            onEvent = { event ->
-                when(event){
-                    AddEvent.OnBack                  -> onGoBack()
-                    AddEvent.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
-                    else -> Unit
+            )
+        }
+        else -> {
+            AddScreenNaviRail(
+                state = state,
+                onEvent = { event ->
+                    when(event){
+                        AddEvent.OnBack                  -> onGoBack()
+                        AddEvent.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
+                        else -> Unit
+                    }
+                    viewModel.onEvent(event)
                 }
-                viewModel.onEvent(event)
-            }
-        )
+            )
+        }
     }
 }
 
@@ -127,7 +130,6 @@ fun AddScreen(
 ){
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-
 
     val bottomSheetState = rememberStandardBottomSheetState(
         skipHiddenState = false,

@@ -8,42 +8,25 @@ import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.NavigationRail
-import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastAny
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -62,6 +45,8 @@ import feature.core.domain.mapper.toType
 import feature.core.domain.mapper.toTypeUi
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
+import feature.core.presentation.navigation.AppNavigationBottom
+import feature.core.presentation.navigation.AppNavigationRail
 import feature.core.presentation.navigation.NavigationLayoutType
 import feature.core.presentation.navigation.bottomNavigationItems
 import feature.core.presentation.navigation.calculateNavigationLayout
@@ -74,8 +59,6 @@ import feature.home.presentation.add.type.TypesScreenRoot
 import feature.home.presentation.add.type.category.TypeCategoryEditScreenRoot
 import feature.home.presentation.edit.EditExpenseScreenRoot
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -119,7 +102,7 @@ fun App(
                     enter = slideInVertically(),
                     exit = slideOutVertically(),
                 ){
-                    AppNavigationBar(
+                    AppNavigationBottom(
                         itemSelectedIndex = itemSelectedIndex,
                         onBarItemClick = { index , name ->
                             if(itemSelectedIndex != index){
@@ -244,7 +227,8 @@ private fun NavGraphBuilder.analyticsGraph(
                     navController.navigate(
                         Route.Backup
                     )
-                }
+                },
+                navigationLayoutType = navigationLayoutType
             )
         }
         composable<Route.Backup> {
@@ -426,97 +410,8 @@ private fun NavGraphBuilder.homeGraph(
 }
 
 private fun isMainCurrentDestination(currentDestination: String?): Boolean{
-    return (currentDestination in bottomNavigationItems.map { it.name })
+    return currentDestination in bottomNavigationItems.map { it.name }
 }
-
-@Composable
-private fun AppNavigationRail(
-    itemSelectedIndex: Int,
-    onBarItemClick: (Int,String) -> Unit = { _ , _-> }
-) {
-    NavigationRail(
-        containerColor = Color.White
-    ) {
-        bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
-            NavigationRailItem(
-                colors = NavigationRailItemDefaults.colors(
-                    indicatorColor = Color.LightGray.copy(alpha = 0.3f)
-                ),
-                selected = (itemSelectedIndex == index),
-                onClick = {
-                    onBarItemClick(
-                        index,
-                        bottomNavigationItem.name
-                    )
-                },
-                icon = {
-                    Icon(
-                        painter = painterResource(
-                            if (itemSelectedIndex == index) {
-                                bottomNavigationItem.selectedIcon
-                            } else {
-                                bottomNavigationItem.unSelectedIcon
-                            }
-                        ),
-                        contentDescription = bottomNavigationItem.name,
-                    )
-                },
-//                label = {
-//                    Text(
-//                        text = stringResource(bottomNavigationItem.title),
-//                        style = MaterialTheme.typography.bodySmall.copy(
-//                            fontSize = 14.sp
-//                        )
-//                    )
-//                }
-
-            )
-        }
-    }
-}
-
-@Composable
-private fun AppNavigationBar(
-    itemSelectedIndex: Int,
-    onBarItemClick: (Int,String) -> Unit = { _ , _-> }
-) {
-    NavigationBar(
-        containerColor = Color.White
-    ) {
-        bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
-            NavigationBarItem(
-                colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Color.LightGray.copy(alpha = 0.3f)
-                ),
-                selected = (itemSelectedIndex == index),
-                onClick = {
-                    onBarItemClick(index , bottomNavigationItem.name)
-                },
-                icon = {
-                    Icon(
-                        painter = painterResource(
-                            if (itemSelectedIndex == index) {
-                                bottomNavigationItem.selectedIcon
-                            } else {
-                                bottomNavigationItem.unSelectedIcon
-                            }
-                        ),
-                        contentDescription = bottomNavigationItem.name,
-                    )
-                },
-//                label = {
-//                    Text(
-//                        text = stringResource(bottomNavigationItem.title),
-//                        style = MaterialTheme.typography.bodySmall.copy(
-//                            fontSize = 14.sp
-//                        )
-//                    )
-//                }
-            )
-        }
-    }
-}
-
 
 
 

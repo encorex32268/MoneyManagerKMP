@@ -8,6 +8,10 @@ sealed interface AnalyticsEvent {
         val dateFilter: DateFilter
     ): AnalyticsEvent
 
+    data class OnMoneyManagerTypeChange(
+        val moneyManagerTypeFilter: MoneyManagerTypeFilter
+    ): AnalyticsEvent
+
     data object OnBackupClick: AnalyticsEvent
 
     data class OnSelectDataPoint(

@@ -100,6 +100,13 @@ class AnalyticsViewModel(
                     )
                 }
             }
+            is AnalyticsEvent.OnMoneyManagerTypeChange -> {
+                _state.update {
+                    it.copy(
+                        moneyManagerTypeFilter = event.moneyManagerTypeFilter
+                    )
+                }
+            }
             else -> Unit
         }
     }

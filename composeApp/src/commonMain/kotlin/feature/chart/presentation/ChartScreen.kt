@@ -189,12 +189,12 @@ fun ChartScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp)
+                .padding(vertical = 8.dp)
         ){
             ChartDataSection(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .padding(16.dp)
                     .weight(1f),
                 navigationLayoutType = navigationLayoutType,
                 content = {
@@ -207,7 +207,7 @@ fun ChartScreen(
                         sumTotal = sumTotal
                     )
                     if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
-                        Spacer(Modifier.height(4.dp))
+                        Spacer(Modifier.height(8.dp))
                     }else{
                         Spacer(Modifier.width(8.dp))
                     }

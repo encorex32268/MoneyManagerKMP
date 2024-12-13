@@ -11,7 +11,8 @@ data class AnalyticsState(
     val selectedDataPoint: DataPoint? = null,
     val incomeSelectedDataPoint: DataPoint? = null,
     val expenseSum: Long = 0,
-    val incomeSum: Long= 0
+    val incomeSum: Long= 0,
+    val moneyManagerTypeFilter:  MoneyManagerTypeFilter = MoneyManagerTypeFilter.EXPENSE
 )
 
 enum class DateFilter(val text: String) {
@@ -21,4 +22,9 @@ enum class DateFilter(val text: String) {
     SIX_MONTHS("6M"),
     ONE_YEAR("1Y"),
     ALL("All")
+}
+
+enum class MoneyManagerTypeFilter {
+    EXPENSE,
+    INCOME
 }

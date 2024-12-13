@@ -1,7 +1,6 @@
 package feature.analytics.presentation.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,16 +12,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import feature.analytics.presentation.DateFilter
-import feature.core.presentation.Texts
+
 
 @Composable
-fun FilterChip(
+fun TextChip(
     modifier: Modifier = Modifier,
-    dateFilter: DateFilter,
-    onClick: () -> Unit,
-    isSelected: Boolean = false
-) {
+    onClick: () -> Unit = {},
+    isSelected: Boolean = false,
+    text: String
+){
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
@@ -41,7 +39,7 @@ fun FilterChip(
         contentAlignment = Alignment.Center
     ){
         Text(
-            text = dateFilter.text,
+            text = text,
             color = if (!isSelected) {
                 Color.Black
             }else{
@@ -50,6 +48,5 @@ fun FilterChip(
             style = MaterialTheme.typography.titleSmall
         )
     }
-
 }
 

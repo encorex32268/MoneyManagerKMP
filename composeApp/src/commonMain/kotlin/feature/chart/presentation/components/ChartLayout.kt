@@ -2,6 +2,8 @@
 
 package feature.chart.presentation.components
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -65,12 +67,22 @@ fun ChartLayout(
     LaunchedEffect(key1 = Unit) {
         isStart = true
     }
+    val chartProgress = remember(state) {
+        Animatable(0f)
+    }
     var sweepAngle = 0f
     var startAngle = 0f
-    val animation by animateFloatAsState(
-        targetValue = if (isStart) 1f else 0f, label = "",
-        animationSpec = tween(1000)
-    )
+
+    LaunchedEffect(key1 = state) {
+        chartProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(
+                durationMillis = 1000,
+                easing = LinearOutSlowInEasing
+            )
+        )
+
+    }
     if (sumTotal != 0L){
         Column(
             modifier = modifier,
@@ -98,7 +110,7 @@ fun ChartLayout(
                         contentAlignment = Alignment.Center
                     ){
                         Box(modifier = Modifier
-                            .padding(24.dp)
+                            .padding(16.dp)
                             .sizeIn(
                                 minWidth = 150.dp,
                                 minHeight = 150.dp,
@@ -122,8 +134,8 @@ fun ChartLayout(
                                     }
                                     drawArc(
                                         color = Color(item.type.colorArgb),
-                                        startAngle = startAngle * animation,
-                                        sweepAngle = sweepAngle * animation,
+                                        startAngle = startAngle * chartProgress.value,
+                                        sweepAngle = sweepAngle * chartProgress.value,
                                         useCenter = false,
                                         style = Stroke(
                                             width = 30.dp.toPx()

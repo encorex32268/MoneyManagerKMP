@@ -48,10 +48,10 @@ import feature.core.presentation.ObserveAsEvents
 import feature.core.presentation.Texts
 import feature.core.presentation.model.CategoryUi
 import feature.core.presentation.navigation.NavigationLayoutType
-import feature.core.presentation.reorderable.ReorderableItem
-import feature.core.presentation.reorderable.detectReorderAfterLongPress
-import feature.core.presentation.reorderable.rememberReorderableLazyGridState
-import feature.core.presentation.reorderable.reorderable
+import feature.home.presentation.reorderable.ReorderableItem
+import feature.home.presentation.reorderable.detectReorderAfterLongPress
+import feature.home.presentation.reorderable.rememberReorderableLazyGridState
+import feature.home.presentation.reorderable.reorderable
 import feature.home.presentation.add.components.CategoryItem
 import feature.home.presentation.add.type.TypeUi
 import feature.home.presentation.add.type.category.components.CategoryAddDialog
@@ -136,10 +136,9 @@ fun TypeCategoryEditScreen(
     )
     val gridCells by remember(navigationLayoutType) {
         mutableStateOf(
-            if (navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL){
-                5
-            }else{
-                4
+            when(navigationLayoutType){
+                NavigationLayoutType.BOTTOM_NAVIGATION -> 4
+                else ->  5
             }
         )
     }

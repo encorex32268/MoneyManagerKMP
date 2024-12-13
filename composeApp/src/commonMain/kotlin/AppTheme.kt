@@ -1,7 +1,7 @@
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import feature.core.ui.lightScheme
-import ui.getTypography
+import feature.core.ui.getTypography
 
 
 @Composable

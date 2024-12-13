@@ -2,6 +2,7 @@
 
 package feature.home.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -96,6 +97,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color.White)
                 .padding(it)
         ) {
             DatePicker(
@@ -111,10 +113,19 @@ fun HomeScreen(
                 }
             )
             Spacer(modifier = Modifier.height(4.dp))
-            if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
-                HomeScreenNaviBottom(state, onEvent)
-            }else{
-                HomeScreenNaviRail(state, onEvent)
+            when(navigationLayoutType){
+                NavigationLayoutType.BOTTOM_NAVIGATION -> {
+                    HomeScreenNaviBottom(
+                        state = state,
+                        onEvent = onEvent
+                    )
+                }
+                else -> {
+                    HomeScreenNaviRail(
+                        state = state,
+                        onEvent = onEvent
+                    )
+                }
             }
 
             if (!isDebug){

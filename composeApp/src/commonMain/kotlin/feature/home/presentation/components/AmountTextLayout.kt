@@ -1,7 +1,7 @@
-@file:OptIn(ExperimentalResourceApi::class)
 
 package feature.home.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,10 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,13 +20,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import feature.core.presentation.Texts
 import feature.core.presentation.navigation.NavigationLayoutType
 import feature.core.ui.CorrectColor
 import feature.core.ui.ErrorColor
@@ -37,12 +32,9 @@ import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.expense
 import moneymanagerkmp.composeapp.generated.resources.income
 import moneymanagerkmp.composeapp.generated.resources.total
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import toMoneyString
-import kotlin.math.max
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun AmountTextLayout(
     modifier: Modifier = Modifier,
@@ -51,22 +43,21 @@ fun AmountTextLayout(
     total: Long,
     navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ) {
-    if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
-        OutlinedCard(
-            modifier = modifier,
-            shape = RoundedCornerShape(0.dp),
-            colors = CardDefaults.outlinedCardColors(
-                containerColor = Color.Transparent
-            )
-        ){
-            AmountTextLayoutNaviBottom(income, expense, total)
+    when(navigationLayoutType){
+        NavigationLayoutType.BOTTOM_NAVIGATION -> {
+            Box(
+                modifier = modifier.background(Color.White),
+                contentAlignment = Alignment.Center
+            ){
+                AmountTextLayoutNaviBottom(income, expense, total)
+            }
         }
-
-    }else{
-        Box(
-            modifier = modifier
-        ){
-            AmountTextLayoutNaviRail(income, expense, total)
+        else -> {
+            Box(
+                modifier = modifier
+            ){
+                AmountTextLayoutNaviRail(income, expense, total)
+            }
         }
     }
 

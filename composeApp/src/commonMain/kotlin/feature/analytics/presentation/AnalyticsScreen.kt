@@ -3,12 +3,15 @@
 package feature.analytics.presentation
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,9 +34,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import feature.analytics.presentation.components.FilterChip
+import feature.analytics.presentation.components.LineChart
+import feature.analytics.presentation.components.TextChip
 import feature.analytics.presentation.model.LineChartStyle
-import feature.core.presentation.Texts
+import feature.core.presentation.navigation.NavigationLayoutType
 import getScreenWidth
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.backup_backup_icon
@@ -47,7 +52,8 @@ import toMoneyString
 @Composable
 fun AnalyticsScreenRoot(
     viewModel: AnalyticsViewModel = koinViewModel(),
-    onBackupClick: () -> Unit = {}
+    onBackupClick: () -> Unit = {},
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     AnalyticsScreen(
@@ -58,7 +64,8 @@ fun AnalyticsScreenRoot(
                 else -> Unit
             }
             viewModel.onEvent(event)
-        }
+        },
+        navigationLayoutType = navigationLayoutType
     )
 
 }
@@ -66,7 +73,8 @@ fun AnalyticsScreenRoot(
 @Composable
 private fun AnalyticsScreen(
     state: AnalyticsState,
-    onEvent: (AnalyticsEvent) -> Unit = {}
+    onEvent: (AnalyticsEvent) -> Unit = {},
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ) {
 
     val lineChartStyle = remember {
@@ -83,11 +91,11 @@ private fun AnalyticsScreen(
             xAxisLabelSpacing = 16.dp
         )
     }
-    val expenseLineChartProgress = remember(state.dateFilter) {
+    val expenseLineChartProgress = remember(state.dateFilter , state.moneyManagerTypeFilter) {
         Animatable(0f)
     }
 
-    val incomeLineChartProgress = remember(state.dateFilter) {
+    val incomeLineChartProgress = remember(state.dateFilter , state.moneyManagerTypeFilter) {
         Animatable(0f)
     }
     LaunchedEffect(key1 = state) {
@@ -113,7 +121,9 @@ private fun AnalyticsScreen(
 
     Column (
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(Color.White)
+        ,
         verticalArrangement = Arrangement.spacedBy(8.dp,Alignment.CenterVertically),
         horizontalAlignment = Alignment.Start
     ){
@@ -132,15 +142,14 @@ private fun AnalyticsScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ){
                 DateFilter.entries.forEach { dateFilter ->
-                    FilterChip(
+                    TextChip(
                         modifier = Modifier.size(36.dp),
-                        dateFilter = dateFilter,
+                        text = dateFilter.text,
                         onClick = {
                             onEvent(AnalyticsEvent.OnDateFilterChange(dateFilter))
                         },
                         isSelected = state.dateFilter.text == dateFilter.text
                     )
-
                 }
             }
             IconButton(
@@ -154,86 +163,168 @@ private fun AnalyticsScreen(
                 )
             }
         }
-
-        Row(
-            Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Text(
-                text = stringResource(Res.string.expense),
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Text(
-                modifier = Modifier.padding(start = 4.dp),
-                text = state.expenseSum.toMoneyString(),
-                style = MaterialTheme.typography.titleSmall.copy(
-                    fontSize = 20.sp
-                )
-            )
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.4f)
-                .horizontalScroll(rememberScrollState())
-            ,
-        ){
-            LineChart(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .width((getScreenWidth().value * 10) .dp ),
-                dataPoints = state.dataPoints,
-                style = lineChartStyle,
-                animationProgress = expenseLineChartProgress.value,
-                selectedDataPoint = state.selectedDataPoint,
-                onSelectedDataPoint = {
-                    onEvent(AnalyticsEvent.OnSelectDataPoint(it))
+        when(navigationLayoutType){
+            NavigationLayoutType.BOTTOM_NAVIGATION -> {
+                if (state.expenseSum != 0L){
+                    ExpenseSection(
+                        state = state,
+                        lineChartStyle = lineChartStyle,
+                        expenseLineChartProgress = expenseLineChartProgress,
+                        onEvent = onEvent
+                    )
                 }
-
-            )
-
-        }
-
-        Row(
-            Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Text(
-                text = stringResource(Res.string.income),
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Text(
-                modifier = Modifier.padding(start = 4.dp),
-                text = state.incomeSum.toMoneyString(),
-                style = MaterialTheme.typography.titleSmall.copy(
-                    fontSize = 20.sp
-                )
-            )
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.4f)
-                .horizontalScroll(rememberScrollState())
-            ,
-        ){
-            LineChart(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .width((getScreenWidth().value * 10) .dp ),
-                dataPoints = state.incomeDataPoints,
-                style = lineChartStyle,
-                animationProgress = incomeLineChartProgress.value,
-                selectedDataPoint = state.incomeSelectedDataPoint,
-                onSelectedDataPoint = {
-                    onEvent(AnalyticsEvent.OnIncomeSelectDataPoint(it))
+                if (state.incomeSum != 0L){
+                    IncomeSection(
+                        state = state,
+                        lineChartStyle = lineChartStyle,
+                        incomeLineChartProgress = incomeLineChartProgress,
+                        onEvent = onEvent
+                    )
                 }
-            )
-
+            }
+            else -> {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ){
+                    MoneyManagerTypeFilter.entries.forEach { moneymanagerType ->
+                        TextChip(
+                            modifier = Modifier.size(36.dp),
+                            text = when(moneymanagerType){
+                                MoneyManagerTypeFilter.EXPENSE -> stringResource(Res.string.expense)
+                                else ->  stringResource(Res.string.income)
+                            },
+                            onClick = {
+                                onEvent(AnalyticsEvent.OnMoneyManagerTypeChange(moneymanagerType))
+                            },
+                            isSelected = state.moneyManagerTypeFilter == moneymanagerType
+                        )
+                    }
+                }
+                when(state.moneyManagerTypeFilter){
+                    MoneyManagerTypeFilter.EXPENSE  -> {
+                        if (state.expenseSum != 0L){
+                            ExpenseSection(
+                                state = state,
+                                lineChartStyle = lineChartStyle,
+                                expenseLineChartProgress = expenseLineChartProgress,
+                                onEvent = onEvent
+                            )
+                        }
+                    }
+                    MoneyManagerTypeFilter.INCOME -> {
+                        if (state.incomeSum != 0L){
+                            IncomeSection(
+                                state = state,
+                                lineChartStyle = lineChartStyle,
+                                incomeLineChartProgress = incomeLineChartProgress,
+                                onEvent = onEvent
+                            )
+                        }
+                    }
+                }
+            }
         }
+
 
     }
 
 
+}
+
+@Composable
+private fun ColumnScope.IncomeSection(
+    state: AnalyticsState,
+    lineChartStyle: LineChartStyle,
+    incomeLineChartProgress: Animatable<Float, AnimationVector1D>,
+    onEvent: (AnalyticsEvent) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Text(
+            text = stringResource(Res.string.income),
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Text(
+            modifier = Modifier.padding(start = 4.dp),
+            text = state.incomeSum.toMoneyString(),
+            style = MaterialTheme.typography.titleSmall.copy(
+                fontSize = 20.sp
+            )
+        )
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp)
+            .weight(0.4f)
+            .horizontalScroll(rememberScrollState()),
+    ) {
+        LineChart(
+            modifier = Modifier
+                .fillMaxWidth()
+                .width((getScreenWidth().value * 10).dp),
+            dataPoints = state.incomeDataPoints,
+            style = lineChartStyle,
+            animationProgress = incomeLineChartProgress.value,
+            selectedDataPoint = state.incomeSelectedDataPoint,
+            onSelectedDataPoint = {
+                onEvent(AnalyticsEvent.OnIncomeSelectDataPoint(it))
+            }
+        )
+
+    }
+}
+
+@Composable
+private fun ColumnScope.ExpenseSection(
+    state: AnalyticsState,
+    lineChartStyle: LineChartStyle,
+    expenseLineChartProgress: Animatable<Float, AnimationVector1D>,
+    onEvent: (AnalyticsEvent) -> Unit
+) {
+    Row(
+        Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(Res.string.expense),
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Text(
+            modifier = Modifier.padding(start = 4.dp),
+            text = state.expenseSum.toMoneyString(),
+            style = MaterialTheme.typography.titleSmall.copy(
+                fontSize = 20.sp
+            )
+        )
+
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp)
+            .weight(0.4f)
+            .horizontalScroll(rememberScrollState()),
+    ) {
+
+        LineChart(
+            modifier = Modifier
+                .fillMaxWidth()
+                .width((getScreenWidth().value * 10).dp),
+            dataPoints = state.dataPoints,
+            style = lineChartStyle,
+            animationProgress = expenseLineChartProgress.value,
+            selectedDataPoint = state.selectedDataPoint,
+            onSelectedDataPoint = {
+                onEvent(AnalyticsEvent.OnSelectDataPoint(it))
+            }
+        )
+
+    }
 }
 
