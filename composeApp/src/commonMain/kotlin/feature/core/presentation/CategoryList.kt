@@ -7,25 +7,35 @@ import feature.core.domain.model.Category
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.food
 import moneymanagerkmp.composeapp.generated.resources.food_beer
+import moneymanagerkmp.composeapp.generated.resources.food_boxlunch
+import moneymanagerkmp.composeapp.generated.resources.food_boxlunch2
 import moneymanagerkmp.composeapp.generated.resources.food_bread
 import moneymanagerkmp.composeapp.generated.resources.food_buy_food
 import moneymanagerkmp.composeapp.generated.resources.food_buy_food2
 import moneymanagerkmp.composeapp.generated.resources.food_cake
 import moneymanagerkmp.composeapp.generated.resources.food_coffee
 import moneymanagerkmp.composeapp.generated.resources.food_cookie
+import moneymanagerkmp.composeapp.generated.resources.food_delivery
+import moneymanagerkmp.composeapp.generated.resources.food_dog
 import moneymanagerkmp.composeapp.generated.resources.food_drink
 import moneymanagerkmp.composeapp.generated.resources.food_fast_food
 import moneymanagerkmp.composeapp.generated.resources.food_food
+import moneymanagerkmp.composeapp.generated.resources.food_foodset
 import moneymanagerkmp.composeapp.generated.resources.food_fruits
 import moneymanagerkmp.composeapp.generated.resources.food_hamburger
 import moneymanagerkmp.composeapp.generated.resources.food_hot_coffee
 import moneymanagerkmp.composeapp.generated.resources.food_hot_tea
+import moneymanagerkmp.composeapp.generated.resources.food_meal
+import moneymanagerkmp.composeapp.generated.resources.food_meal2
 import moneymanagerkmp.composeapp.generated.resources.food_noodles
 import moneymanagerkmp.composeapp.generated.resources.food_pizza
 import moneymanagerkmp.composeapp.generated.resources.food_rice
 import moneymanagerkmp.composeapp.generated.resources.food_salad
+import moneymanagerkmp.composeapp.generated.resources.food_sauce
 import moneymanagerkmp.composeapp.generated.resources.food_seafood
+import moneymanagerkmp.composeapp.generated.resources.food_streetfood
 import moneymanagerkmp.composeapp.generated.resources.food_vegetables
+import moneymanagerkmp.composeapp.generated.resources.food_water
 import moneymanagerkmp.composeapp.generated.resources.food_wine
 import moneymanagerkmp.composeapp.generated.resources.header_clothes
 import moneymanagerkmp.composeapp.generated.resources.header_food
@@ -36,6 +46,8 @@ import moneymanagerkmp.composeapp.generated.resources.header_shopping
 import moneymanagerkmp.composeapp.generated.resources.header_sports
 import moneymanagerkmp.composeapp.generated.resources.header_traffic
 import moneymanagerkmp.composeapp.generated.resources.health
+import moneymanagerkmp.composeapp.generated.resources.health_calendar
+import moneymanagerkmp.composeapp.generated.resources.health_card
 import moneymanagerkmp.composeapp.generated.resources.health_doctor
 import moneymanagerkmp.composeapp.generated.resources.health_doctor2
 import moneymanagerkmp.composeapp.generated.resources.health_health
@@ -48,9 +60,12 @@ import moneymanagerkmp.composeapp.generated.resources.health_sick
 import moneymanagerkmp.composeapp.generated.resources.health_tooth
 import moneymanagerkmp.composeapp.generated.resources.life
 import moneymanagerkmp.composeapp.generated.resources.life_bank
+import moneymanagerkmp.composeapp.generated.resources.life_bath
 import moneymanagerkmp.composeapp.generated.resources.life_car
+import moneymanagerkmp.composeapp.generated.resources.life_furniture
 import moneymanagerkmp.composeapp.generated.resources.life_hammer
 import moneymanagerkmp.composeapp.generated.resources.life_light_fee
+import moneymanagerkmp.composeapp.generated.resources.life_makeup4
 import moneymanagerkmp.composeapp.generated.resources.life_money_income
 import moneymanagerkmp.composeapp.generated.resources.life_money_transfer
 import moneymanagerkmp.composeapp.generated.resources.life_music
@@ -60,6 +75,8 @@ import moneymanagerkmp.composeapp.generated.resources.life_phone_fee
 import moneymanagerkmp.composeapp.generated.resources.life_rent
 import moneymanagerkmp.composeapp.generated.resources.life_salary
 import moneymanagerkmp.composeapp.generated.resources.life_save_money
+import moneymanagerkmp.composeapp.generated.resources.life_shampoo
+import moneymanagerkmp.composeapp.generated.resources.life_shampoo2
 import moneymanagerkmp.composeapp.generated.resources.life_smart_phone_fee
 import moneymanagerkmp.composeapp.generated.resources.life_stock_decrease
 import moneymanagerkmp.composeapp.generated.resources.life_stock_increase
@@ -67,25 +84,36 @@ import moneymanagerkmp.composeapp.generated.resources.life_stocks
 import moneymanagerkmp.composeapp.generated.resources.life_taxes
 import moneymanagerkmp.composeapp.generated.resources.life_taxes2
 import moneymanagerkmp.composeapp.generated.resources.life_taxes3
+import moneymanagerkmp.composeapp.generated.resources.life_tube
+import moneymanagerkmp.composeapp.generated.resources.life_tube2
 import moneymanagerkmp.composeapp.generated.resources.life_video
 import moneymanagerkmp.composeapp.generated.resources.life_water_fee
 import moneymanagerkmp.composeapp.generated.resources.life_wifi
 import moneymanagerkmp.composeapp.generated.resources.life_wifi_router
 import moneymanagerkmp.composeapp.generated.resources.other
 import moneymanagerkmp.composeapp.generated.resources.other_bill
+import moneymanagerkmp.composeapp.generated.resources.other_bitcoin
 import moneymanagerkmp.composeapp.generated.resources.other_book
 import moneymanagerkmp.composeapp.generated.resources.other_book2
+import moneymanagerkmp.composeapp.generated.resources.other_box
+import moneymanagerkmp.composeapp.generated.resources.other_camera
 import moneymanagerkmp.composeapp.generated.resources.other_car_fee
 import moneymanagerkmp.composeapp.generated.resources.other_car_repair
 import moneymanagerkmp.composeapp.generated.resources.other_car_wash
 import moneymanagerkmp.composeapp.generated.resources.other_card_fee
+import moneymanagerkmp.composeapp.generated.resources.other_claw
 import moneymanagerkmp.composeapp.generated.resources.other_creditcard
+import moneymanagerkmp.composeapp.generated.resources.other_cut
 import moneymanagerkmp.composeapp.generated.resources.other_cuthair
 import moneymanagerkmp.composeapp.generated.resources.other_gamble
 import moneymanagerkmp.composeapp.generated.resources.other_game
+import moneymanagerkmp.composeapp.generated.resources.other_giftcard
 import moneymanagerkmp.composeapp.generated.resources.other_iphone
 import moneymanagerkmp.composeapp.generated.resources.other_job
 import moneymanagerkmp.composeapp.generated.resources.other_karaoke
+import moneymanagerkmp.composeapp.generated.resources.other_lesson
+import moneymanagerkmp.composeapp.generated.resources.other_lesson2
+import moneymanagerkmp.composeapp.generated.resources.other_letter
 import moneymanagerkmp.composeapp.generated.resources.other_light_fee
 import moneymanagerkmp.composeapp.generated.resources.other_massage
 import moneymanagerkmp.composeapp.generated.resources.other_money_exchange
@@ -96,11 +124,14 @@ import moneymanagerkmp.composeapp.generated.resources.other_music
 import moneymanagerkmp.composeapp.generated.resources.other_music2
 import moneymanagerkmp.composeapp.generated.resources.other_pet
 import moneymanagerkmp.composeapp.generated.resources.other_phone_fee
+import moneymanagerkmp.composeapp.generated.resources.other_post
 import moneymanagerkmp.composeapp.generated.resources.other_repair
 import moneymanagerkmp.composeapp.generated.resources.other_salary
 import moneymanagerkmp.composeapp.generated.resources.other_save_money
+import moneymanagerkmp.composeapp.generated.resources.other_stationery
 import moneymanagerkmp.composeapp.generated.resources.other_stock_decrease
 import moneymanagerkmp.composeapp.generated.resources.other_stock_increase
+import moneymanagerkmp.composeapp.generated.resources.other_study
 import moneymanagerkmp.composeapp.generated.resources.other_toys
 import moneymanagerkmp.composeapp.generated.resources.other_unknown
 import moneymanagerkmp.composeapp.generated.resources.other_video
@@ -135,6 +166,8 @@ import moneymanagerkmp.composeapp.generated.resources.sports_camp
 import moneymanagerkmp.composeapp.generated.resources.sports_football
 import moneymanagerkmp.composeapp.generated.resources.sports_golf
 import moneymanagerkmp.composeapp.generated.resources.sports_gym
+import moneymanagerkmp.composeapp.generated.resources.sports_jumping
+import moneymanagerkmp.composeapp.generated.resources.sports_paragliding
 import moneymanagerkmp.composeapp.generated.resources.sports_pingpong
 import moneymanagerkmp.composeapp.generated.resources.sports_skiing
 import moneymanagerkmp.composeapp.generated.resources.sports_sports
@@ -190,19 +223,19 @@ object CategoryList {
     const val OTHER = 80010L
 
     val items = kotlin.run {
-        (1..21).map {
+        (1..31).map {
             Category(id = (FOOD + it).toInt(), typeId = FOOD)
         } +
                 (1..14).map {
                     Category(id = (TRAFFIC + it).toInt(), typeId = TRAFFIC)
                 } +
-                (1..25).map {
+                (1..32).map {
                     Category(id = (LIFE + it).toInt(), typeId = LIFE)
                 } +
-                (1..10).map {
+                (1..12).map {
                     Category(id = (HEALTH + it).toInt(), typeId = HEALTH)
                 } +
-                (1..17).map {
+                (1..19).map {
                     Category(id = (SPORTS + it).toInt(), typeId = SPORTS)
                 } +
                 (1..13).map {
@@ -211,7 +244,7 @@ object CategoryList {
                 (1..17).map {
                     Category(id = (SHOPPING + it).toInt(), typeId = SHOPPING)
                 } +
-                (1..36).map {
+                (1..48).map {
                     Category(id = (OTHER + it).toInt(), typeId = OTHER)
                 }
 
@@ -303,9 +336,18 @@ object CategoryList {
                 painterResource(Res.drawable.food_hot_coffee)
             }
 
-            FOOD + 21 -> {
-                painterResource(Res.drawable.food_hot_tea)
-            }
+            FOOD + 21 -> { painterResource(Res.drawable.food_hot_tea) }
+
+            FOOD + 22 -> { painterResource(Res.drawable.food_boxlunch) }
+            FOOD + 23 -> { painterResource(Res.drawable.food_boxlunch2) }
+            FOOD + 24 -> { painterResource(Res.drawable.food_delivery) }
+            FOOD + 25 -> { painterResource(Res.drawable.food_dog) }
+            FOOD + 26 -> { painterResource(Res.drawable.food_foodset) }
+            FOOD + 27 -> { painterResource(Res.drawable.food_meal) }
+            FOOD + 28 -> { painterResource(Res.drawable.food_meal2) }
+            FOOD + 29 -> { painterResource(Res.drawable.food_sauce) }
+            FOOD + 30 -> { painterResource(Res.drawable.food_streetfood) }
+            FOOD + 31 -> { painterResource(Res.drawable.food_water) }
 
             TRAFFIC + 1 -> {
                 painterResource(Res.drawable.traffic_train)
@@ -459,9 +501,14 @@ object CategoryList {
                 painterResource(Res.drawable.life_paint)
             }
 
-            LIFE + 25 -> {
-                painterResource(Res.drawable.life_hammer)
-            }
+            LIFE + 25 -> { painterResource(Res.drawable.life_hammer) }
+            LIFE + 26 -> { painterResource(Res.drawable.life_shampoo) }
+            LIFE + 27 -> { painterResource(Res.drawable.life_shampoo2) }
+            LIFE + 28 -> { painterResource(Res.drawable.life_furniture) }
+            LIFE + 29 -> { painterResource(Res.drawable.life_makeup4) }
+            LIFE + 30 -> { painterResource(Res.drawable.life_bath) }
+            LIFE + 31 -> { painterResource(Res.drawable.life_tube) }
+            LIFE + 32 -> { painterResource(Res.drawable.life_tube2) }
 
             HEALTH + 1 -> {
                 painterResource(Res.drawable.health_doctor2)
@@ -501,6 +548,12 @@ object CategoryList {
 
             HEALTH + 10 -> {
                 painterResource(Res.drawable.health_massage)
+            }
+            HEALTH + 11 -> {
+                painterResource(Res.drawable.health_calendar)
+            }
+            HEALTH + 12 -> {
+                painterResource(Res.drawable.health_card)
             }
 
             SPORTS + 1 -> {
@@ -569,6 +622,12 @@ object CategoryList {
 
             SPORTS + 17 -> {
                 painterResource(Res.drawable.sports_camp)
+            }
+            SPORTS + 18 -> {
+                painterResource(Res.drawable.sports_jumping)
+            }
+            SPORTS + 19 -> {
+                painterResource(Res.drawable.sports_paragliding)
             }
 
             WEAR + 1 -> {
@@ -835,6 +894,19 @@ object CategoryList {
                 painterResource(Res.drawable.other_karaoke)
             }
 
+            OTHER + 37 -> { painterResource(Res.drawable.other_bitcoin) }
+            OTHER + 38 -> { painterResource(Res.drawable.other_box) }
+            OTHER + 39 -> { painterResource(Res.drawable.other_camera) }
+            OTHER + 40 -> { painterResource(Res.drawable.other_claw) }
+            OTHER + 41 -> { painterResource(Res.drawable.other_cut) }
+            OTHER + 42 -> { painterResource(Res.drawable.other_giftcard) }
+            OTHER + 43 -> { painterResource(Res.drawable.other_lesson) }
+            OTHER + 44 -> { painterResource(Res.drawable.other_lesson2) }
+            OTHER + 45 -> { painterResource(Res.drawable.other_letter) }
+            OTHER + 46 -> { painterResource(Res.drawable.other_post) }
+            OTHER + 47 -> { painterResource(Res.drawable.other_stationery) }
+            OTHER + 48 -> { painterResource(Res.drawable.other_study) }
+
 
             else -> {
                 painterResource(Res.drawable.other_unknown)
@@ -932,6 +1004,20 @@ object CategoryList {
             FOOD + 21 -> {
                 stringResource(Res.string.food_hot_tea)
             }
+
+            FOOD + 22 -> { stringResource(Res.string.food_boxlunch) }
+            FOOD + 23 -> { stringResource(Res.string.food_boxlunch2) }
+            FOOD + 24 -> { stringResource(Res.string.food_delivery) }
+            FOOD + 25 -> { stringResource(Res.string.food_dog) }
+            FOOD + 26 -> { stringResource(Res.string.food_foodset) }
+            FOOD + 27 -> { stringResource(Res.string.food_meal) }
+            FOOD + 28 -> { stringResource(Res.string.food_meal2) }
+            FOOD + 29 -> { stringResource(Res.string.food_sauce) }
+            FOOD + 30 -> { stringResource(Res.string.food_streetfood) }
+            FOOD + 31 -> { stringResource(Res.string.food_water) }
+
+
+
 
             TRAFFIC + 1 -> {
                 stringResource(Res.string.traffic_train)
@@ -1086,6 +1172,13 @@ object CategoryList {
             LIFE + 25 -> {
                 stringResource(Res.string.life_hammer)
             }
+            LIFE + 26 -> { stringResource(Res.string.life_shampoo) }
+            LIFE + 27 -> { stringResource(Res.string.life_shampoo2) }
+            LIFE + 28 -> { stringResource(Res.string.life_furniture) }
+            LIFE + 29 -> { stringResource(Res.string.life_makeup4) }
+            LIFE + 30 -> { stringResource(Res.string.life_bath) }
+            LIFE + 31 -> { stringResource(Res.string.life_tube) }
+            LIFE + 32 -> { stringResource(Res.string.life_tube2) }
 
             HEALTH + 1 -> {
                 stringResource(Res.string.health_doctor2)
@@ -1125,6 +1218,13 @@ object CategoryList {
 
             HEALTH + 10 -> {
                 stringResource(Res.string.health_massage)
+            }
+
+            HEALTH + 11 -> {
+                stringResource(Res.string.health_calendar)
+            }
+            HEALTH + 12 -> {
+                stringResource(Res.string.health_card)
             }
 
             SPORTS + 1 -> {
@@ -1194,6 +1294,14 @@ object CategoryList {
             SPORTS + 17 -> {
                 stringResource(Res.string.sports_camp)
             }
+
+            SPORTS + 18 -> {
+                stringResource(Res.string.sports_jumping)
+            }
+            SPORTS + 19 -> {
+                stringResource(Res.string.sports_paragliding)
+            }
+
 
             WEAR + 1 -> {
                 stringResource(Res.string.wear_shirts)
@@ -1459,6 +1567,18 @@ object CategoryList {
                 stringResource(Res.string.other_karaoke)
             }
 
+            OTHER + 37 -> { stringResource(Res.string.other_bitcoin) }
+            OTHER + 38 -> { stringResource(Res.string.other_box) }
+            OTHER + 39 -> { stringResource(Res.string.other_camera) }
+            OTHER + 40 -> { stringResource(Res.string.other_claw) }
+            OTHER + 41 -> { stringResource(Res.string.other_cut) }
+            OTHER + 42 -> { stringResource(Res.string.other_giftcard) }
+            OTHER + 43 -> { stringResource(Res.string.other_lesson) }
+            OTHER + 44 -> { stringResource(Res.string.other_lesson2) }
+            OTHER + 45 -> { stringResource(Res.string.other_letter) }
+            OTHER + 46 -> { stringResource(Res.string.other_post) }
+            OTHER + 47 -> { stringResource(Res.string.other_stationery) }
+            OTHER + 48 -> { stringResource(Res.string.other_study) }
 
             else -> {
                 ""
@@ -2134,5 +2254,5 @@ object CategoryList {
             else -> ""
         }
     }
-    
+
 }

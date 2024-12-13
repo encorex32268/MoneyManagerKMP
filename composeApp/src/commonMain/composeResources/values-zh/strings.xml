@@ -70,6 +70,17 @@
         <string name="food_vegetables">蔬菜</string>
         <string name="food_wine">紅酒</string>
 
+        <string name="food_boxlunch">便當</string>
+        <string name="food_boxlunch2">便當</string>
+        <string name="food_delivery">外送</string>
+        <string name="food_dog">飼料</string>
+        <string name="food_foodset">套餐</string>
+        <string name="food_meal">餐點</string>
+        <string name="food_meal2">餐點</string>
+        <string name="food_sauce">醬料</string>
+        <string name="food_streetfood">小吃</string>
+        <string name="food_water">水</string>
+
         <!-- Health -->
         <string name="health_doctor">醫生</string>
         <string name="health_doctor2">醫生</string>
@@ -81,7 +92,8 @@
         <string name="health_pill">藥丸</string>
         <string name="health_sick">生病</string>
         <string name="health_tooth">牙齒</string>
-
+        <string name="health_calendar">定期治療</string>
+        <string name="health_card">健保卡</string>
         <!-- Life -->
         <string name="life_bank">銀行</string>
         <string name="life_car">汽車</string>
@@ -107,6 +119,15 @@
         <string name="life_water_fee">水費</string>
         <string name="life_wifi_router">WiFi路由器</string>
         <string name="life_wifi">WiFi</string>
+
+        <string name="life_shampoo">洗髮精</string>
+        <string name="life_shampoo2">洗髮精</string>
+        <string name="life_furniture">家具</string>
+        <string name="life_makeup4">化妝品</string>
+        <string name="life_bath">沐浴</string>
+        <string name="life_tube">洗面乳</string>
+        <string name="life_tube2">洗面乳</string>
+
 
         <!-- Other -->
         <string name="other_bill">帳單</string>
@@ -143,6 +164,20 @@
         <string name="other_video">影片</string>
         <string name="other_washing_machine">洗衣機</string>
         <string name="other_water_fee">水費</string>
+
+
+        <string name="other_bitcoin">虛擬貨幣</string>
+        <string name="other_box">箱子</string>
+        <string name="other_camera">相機</string>
+        <string name="other_claw">夾娃娃</string>
+        <string name="other_cut">剪髮</string>
+        <string name="other_giftcard">禮品卡</string>
+        <string name="other_lesson">課程</string>
+        <string name="other_lesson2">課程</string>
+        <string name="other_letter">信件</string>
+        <string name="other_post">郵件</string>
+        <string name="other_stationery">文具</string>
+        <string name="other_study">學習</string>
 
         <!-- Shopping -->
         <string name="shopping_bag">包包</string>
@@ -181,6 +216,8 @@
         <string name="sports_usa_football">美式足球</string>
         <string name="sports_volley">排球</string>
         <string name="sports_yoga">瑜伽</string>
+        <string name="sports_jumping">跳高</string>
+        <string name="sports_paragliding">滑翔傘</string>
 
         <!-- Traffic -->
         <string name="traffic_bicycle">腳踏車</string>

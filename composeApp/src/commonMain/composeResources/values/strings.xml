@@ -69,6 +69,17 @@
         <string name="food_vegetables">Vegetables</string>
         <string name="food_wine">Wine</string>
 
+        <string name="food_boxlunch">Box Lunch</string>
+        <string name="food_boxlunch2">Box Lunch</string>
+        <string name="food_delivery">Delivery</string>
+        <string name="food_dog">DogFood</string>
+        <string name="food_foodset">FoodSet</string>
+        <string name="food_meal">Meal</string>
+        <string name="food_meal2">Meal</string>
+        <string name="food_sauce">Sauce</string>
+        <string name="food_streetfood">StreetFood</string>
+        <string name="food_water">Water</string>
+
         <!-- Health -->
         <string name="health_doctor">Doctor</string>
         <string name="health_doctor2">Doctor</string>
@@ -80,6 +91,11 @@
         <string name="health_pill">Pill</string>
         <string name="health_sick">Sick</string>
         <string name="health_tooth">Tooth</string>
+
+        <string name="health_calendar">Regular</string>
+        <string name="health_card">Card</string>
+
+
 
         <!-- Life -->
         <string name="life_bank">Bank</string>
@@ -106,6 +122,14 @@
         <string name="life_water_fee">WaterBill</string>
         <string name="life_wifi_router">WiFi Router</string>
         <string name="life_wifi">WiFi</string>
+
+        <string name="life_shampoo">Shampoo</string>
+        <string name="life_shampoo2">Shampoo</string>
+        <string name="life_furniture">Furniture</string>
+        <string name="life_makeup4">Makeup</string>
+        <string name="life_bath">Bath</string>
+        <string name="life_tube">FaceWash</string>
+        <string name="life_tube2">FaceWash</string>
 
         <!-- Other -->
         <string name="other_bill">Bill</string>
@@ -142,6 +166,21 @@
         <string name="other_video">Video</string>
         <string name="other_washing_machine">Washing Machine</string>
         <string name="other_water_fee">Water</string>
+
+        <string name="other_bitcoin">Crypto</string>
+        <string name="other_box">Box</string>
+        <string name="other_camera">Camera</string>
+        <string name="other_claw">Claw</string>
+        <string name="other_cut">cut</string>
+        <string name="other_giftcard">GiftCard</string>
+        <string name="other_lesson">Lesson</string>
+        <string name="other_lesson2">Lesson</string>
+        <string name="other_letter">Letter</string>
+        <string name="other_post">Post</string>
+        <string name="other_stationery">Stationery</string>
+        <string name="other_study">Study</string>
+
+
 
         <!-- Shopping -->
         <string name="shopping_bag">Bag</string>
@@ -180,6 +219,9 @@
         <string name="sports_usa_football">Football</string>
         <string name="sports_volley">Volleyball</string>
         <string name="sports_yoga">Yoga</string>
+
+        <string name="sports_jumping">Jumping</string>
+        <string name="sports_paragliding">Paragliding</string>
 
         <!-- Traffic -->
         <string name="traffic_bicycle">Bicycle</string>
