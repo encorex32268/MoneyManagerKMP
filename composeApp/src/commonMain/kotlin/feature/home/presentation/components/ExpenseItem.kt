@@ -107,7 +107,7 @@ fun ExpenseItem(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(4.dp)
+                            .padding(6.dp)
                             .noRippleClick {
                                 onItemClick(expense)
                             }

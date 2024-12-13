@@ -159,13 +159,13 @@ private fun HomeScreenNaviBottom(
             total = state.totalAmount,
             navigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ){
             items(
                 items = state.items,
