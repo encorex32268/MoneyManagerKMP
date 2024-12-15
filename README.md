@@ -1,6 +1,6 @@
 # Kotlin Multiplatform App - MoneyManager 1.3.3
 
-<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/github_cover.jpg" height="300" width="500"/>
+<img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/github_cover.jpg" height="650" width="1000"/>
 
 ### App Store Link
 - [AppStore - MoneyManager](https://apps.apple.com/us/app/moneymanager-expensetracker/id6503697767) iOS App
