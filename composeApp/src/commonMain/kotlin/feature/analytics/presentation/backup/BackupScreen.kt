@@ -38,6 +38,7 @@ import feature.core.presentation.ObserveAsEvents
 import feature.core.presentation.UiText
 import feature.core.presentation.components.OneButtonDialog
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
+import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
 import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
@@ -60,7 +61,8 @@ fun BackupScreenRoot(
     val hostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val singleFilePicker = rememberFilePickerLauncher(
-        type = PickerType.File()
+        type = PickerType.File(listOf("txt")),
+        mode = PickerMode.Single,
     ){ platformFile ->
         platformFile?.let {
             viewModel.onEvent(

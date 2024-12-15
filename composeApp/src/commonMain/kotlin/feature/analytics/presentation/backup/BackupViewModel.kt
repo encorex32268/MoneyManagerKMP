@@ -74,7 +74,7 @@ class BackupViewModel(
 
 
     private fun backup() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Main) {
             val nowTimestamp = DateConverter.getNowDateTimestamp()
             val downloadsPath = getDownloadsPath()
             if (downloadsPath.isBlank()) {
