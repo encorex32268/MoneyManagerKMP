@@ -2,6 +2,7 @@ package feature.core.data
 
 import feature.core.data.model.CategoryEntity
 import feature.core.data.model.ExpenseEntity
+import feature.core.data.model.SpendingLimitEntity
 import feature.core.data.model.TypeEntity
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
@@ -17,7 +18,8 @@ class RealmFactory{
                 schema = setOf(
                     ExpenseEntity::class,
                     CategoryEntity::class,
-                    TypeEntity::class
+                    TypeEntity::class,
+                    SpendingLimitEntity::class
                 )
             )
                 .compactOnLaunch()

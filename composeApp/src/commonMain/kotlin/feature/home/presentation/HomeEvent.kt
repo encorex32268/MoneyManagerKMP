@@ -14,4 +14,10 @@ sealed interface HomeEvent {
     data class OnGotoEditScreen(
         val expense: Expense
     ): HomeEvent
+
+    data class OnSpendingLimitChange(
+        val expenseLimitText: String
+    ): HomeEvent
+
+    data object OnExpenseLimitClick: HomeEvent
 }

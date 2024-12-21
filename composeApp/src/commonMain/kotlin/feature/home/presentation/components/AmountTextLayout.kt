@@ -2,6 +2,7 @@
 package feature.home.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,7 +10,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,11 +31,9 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import feature.core.presentation.navigation.NavigationLayoutType
-import feature.core.ui.CorrectColor
 import feature.core.ui.ErrorColor
 import moneymanagerkmp.composeapp.generated.resources.Res
-import moneymanagerkmp.composeapp.generated.resources.expense
-import moneymanagerkmp.composeapp.generated.resources.income
+import moneymanagerkmp.composeapp.generated.resources.home_spending_limit
 import moneymanagerkmp.composeapp.generated.resources.total
 import org.jetbrains.compose.resources.stringResource
 import toMoneyString
@@ -38,10 +41,10 @@ import toMoneyString
 @Composable
 fun AmountTextLayout(
     modifier: Modifier = Modifier,
-    income: Long,
-    expense: Long,
-    total: Long,
-    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
+    totalExpense: Long,
+    expenseLimit: Long,
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION,
+    onExpenseLimitClick: () -> Unit = {}
 ) {
     when(navigationLayoutType){
         NavigationLayoutType.BOTTOM_NAVIGATION -> {
@@ -49,14 +52,22 @@ fun AmountTextLayout(
                 modifier = modifier.background(Color.White),
                 contentAlignment = Alignment.Center
             ){
-                AmountTextLayoutNaviBottom(income, expense, total)
+                AmountTextLayoutNaviBottom(
+                    totalExpense = totalExpense,
+                    expenseLimit = expenseLimit,
+                    onExpenseLimitClick = onExpenseLimitClick
+                )
             }
         }
         else -> {
             Box(
                 modifier = modifier
             ){
-                AmountTextLayoutNaviRail(income, expense, total)
+                AmountTextLayoutNaviRail(
+                    totalExpense = totalExpense,
+                    expenseLimit = expenseLimit,
+                    onExpenseLimitClick = onExpenseLimitClick
+                )
             }
         }
     }
@@ -64,46 +75,46 @@ fun AmountTextLayout(
 }
 @Composable
 private fun AmountTextLayoutNaviRail(
-    income: Long,
-    expense: Long,
-    total: Long,
+    totalExpense: Long,
+    expenseLimit: Long,
+    onExpenseLimitClick: () -> Unit = {}
 ){
     Column(
         modifier = Modifier.padding(8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         AmountSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp),
-            income = income,
-            expense =  expense,
-            total =  total
+            totalExpense =  totalExpense,
+            expenseLimit =  expenseLimit,
+            onExpenseLimitClick = onExpenseLimitClick
         )
     }
 }
 
 @Composable
 private fun AmountTextLayoutNaviBottom(
-    income: Long,
-    expense: Long,
-    total: Long,
+    totalExpense: Long,
+    expenseLimit: Long,
+    onExpenseLimitClick: () -> Unit = {}
 ){
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
         ,
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AmountSection(
             modifier = Modifier
                 .weight(1f)
                 .padding(vertical = 4.dp),
-            income = income,
-            expense =  expense,
-            total =  total
+            totalExpense =  totalExpense,
+            expenseLimit =  expenseLimit,
+            onExpenseLimitClick = onExpenseLimitClick
         )
 
     }
@@ -113,29 +124,37 @@ private fun AmountTextLayoutNaviBottom(
 @Composable
 private fun AmountSection(
     modifier: Modifier = Modifier,
-    total: Long,
-    income: Long,
-    expense: Long
+    totalExpense: Long,
+    expenseLimit: Long,
+    onExpenseLimitClick: () -> Unit = {}
 ) {
 
-    AmountText(
-        modifier = modifier,
-        title = stringResource(Res.string.total),
-        textColor = MaterialTheme.colorScheme.onBackground,
-        text = total.toMoneyString(),
-        textSize = 20.sp
-    )
-    AmountText(
-        modifier = modifier,
-        title = stringResource(Res.string.income),
-        text = income.toMoneyString(),
-        textColor = CorrectColor
-    )
+    Row(
+        modifier = modifier.clickable {
+            onExpenseLimitClick()
+        },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ){
+        AmountText(
+            title = stringResource(Res.string.home_spending_limit),
+            textColor = MaterialTheme.colorScheme.onBackground,
+            text = expenseLimit.toMoneyString(),
+            textSize = 24.sp
+        )
+        Icon(
+            modifier = Modifier
+                .size(12.dp)
+                .align(Alignment.CenterVertically),
+            imageVector = Icons.Default.Edit,
+            contentDescription = "SpendingLimit Edit"
+        )
+    }
     AmountText(
         modifier =  modifier,
-        title = stringResource(Res.string.expense),
-        text = expense.toMoneyString(),
-        textColor = ErrorColor
+        title = stringResource(Res.string.total),
+        text = totalExpense.toMoneyString(),
+        textColor = if (totalExpense > expenseLimit) ErrorColor else MaterialTheme.colorScheme.onBackground
     )
 }
 

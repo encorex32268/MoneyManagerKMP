@@ -40,9 +40,8 @@ fun HomeScreenPreview() {
         ){
            HomeScreen(
                 state = HomeState(
-                    income = 100,
-                    expense = 200,
-                    totalAmount = 300,
+                    totalExpense = 1000,
+                    expenseLimit = 20000,
                     nowDateYear = "2024",
                     nowDateMonth = "11",
                     nowDateDayOfMonth = "21",

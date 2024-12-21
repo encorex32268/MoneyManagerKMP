@@ -3,7 +3,9 @@ package feature.home.presentation
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import feature.core.domain.model.SpendingLimit
 import feature.core.domain.repository.ExpenseRepository
+import feature.core.domain.repository.SpendingLimitRepository
 import feature.core.domain.repository.TypeRepository
 import feature.core.presentation.date.DateConverter
 import feature.core.presentation.date.DateConverter.getNowDate
@@ -20,8 +22,11 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val repository: HomeRepository,
-    private val typeRepository: TypeRepository
+    private val typeRepository: TypeRepository,
+    private val spendingLimitRepository: SpendingLimitRepository
 ): ViewModel() {
+
+    private var currentSpendingLimit: SpendingLimit? = null
 
     private val _state = MutableStateFlow(HomeState())
     val state = _state.onStart {
@@ -45,56 +50,110 @@ class HomeViewModel(
         when(event){
             is HomeEvent.OnDatePick -> {
                 viewModelScope.launch {
+                    val nowDate = getNowDate()
+                    val nowYear = nowDate.year
+                    val nowMonth = nowDate.monthNumber
+
                     val (startTime,endTime) = DateConverter.getMonthStartAndEndTime(
                         year =  event.year,
                         month = event.month
                     )
-                    val result = repository.getExpenseByTime(
-                        startTimeOfMonth = startTime,
-                        endTimeOfMonth = endTime
-                    )
-                    result.collectLatest { data ->
-                        val dataGroup = data
-                            .sortedByDescending {
-                                it.timestamp
+                    launch {
+                        val spendingLimitResult = spendingLimitRepository.getSpendingLimit(
+                            year = event.year?:nowYear,
+                            month = event.month?:nowMonth
+                        )
+                        println("Debug spendingLimitResult")
+                        spendingLimitResult.collectLatest { spendingLimit ->
+                            spendingLimit?.let { it ->
+                                currentSpendingLimit = it
+                                _state.update { state ->
+                                    state.copy(
+                                        expenseLimit = it.limit
+                                    )
+                                }
                             }
-                            .groupBy {
-                                it.timestamp.toDayString()
+                        }
+                    }
+
+                    launch {
+                        val result = repository.getExpenseByTime(
+                            startTimeOfMonth = startTime,
+                            endTimeOfMonth = endTime
+                        )
+                        result.collectLatest { data ->
+                            val dataGroup = data
+                                .sortedByDescending {
+                                    it.timestamp
+                                }
+                                .groupBy {
+                                    it.timestamp.toDayString()
+                                }
+                                .toList()
+                            val expenseItems = data.filterNot { it.isIncome }
+                            val expense = expenseItems.sumOf { it.cost }
+                            val totalExpense = -expense
+                            if (event.isInit){
+                                _state.update {
+                                    it.copy(
+                                        nowDateDayOfMonth = nowDate.dayOfMonth.toString()
+                                    )
+                                }
                             }
-                            .toList()
-                        val incomeItems = data.filter { it.isIncome }
-                        val expenseItems = data.filterNot { it.isIncome }
-                        val income = incomeItems.sumOf { it.cost }
-                        val expense = expenseItems.sumOf { it.cost }
-                        val total = -expense + income
-                        if (event.isInit){
                             _state.update {
                                 it.copy(
-                                    nowDateDayOfMonth = getNowDate().dayOfMonth.toString()
+                                    totalExpense = totalExpense,
+                                    items = dataGroup,
+                                    nowDateYear = if (event.year == null) {
+                                        nowYear.toString()
+                                    }else {
+                                        event.year.toString()
+                                    },
+                                    nowDateMonth = if (event.month == null) {
+                                        nowMonth.toString()
+                                    }else {
+                                        event.month.toString()
+                                    },
                                 )
                             }
                         }
-                        _state.update {
-                            it.copy(
-                                income = income,
-                                expense = expense,
-                                totalAmount = total,
-                                items = dataGroup,
-                                nowDateYear = if (event.year == null) {
-                                    getNowDate().year.toString()
-                                }else {
-                                    event.year.toString()
-                                },
-                                nowDateMonth = if (event.month == null) {
-                                    getNowDate().monthNumber.toString()
-                                }else {
-                                    event.month.toString()
-                                },
-                            )
-                        }
+
                     }
                 }
             }
+            is HomeEvent.OnSpendingLimitChange ->{
+                val expenseLimit = event.expenseLimitText.toLongOrNull()
+                expenseLimit?.let { limit ->
+                    viewModelScope.launch {
+                        if (currentSpendingLimit != null){
+                            val spendingLimit = currentSpendingLimit!!
+                            spendingLimitRepository.update(
+                                spendingLimit = spendingLimit.copy(
+                                    limit =  limit
+                                )
+                            )
+                        }else{
+                            val nowDate = getNowDate()
+                            val nowYear = nowDate.year
+                            val nowMonth = nowDate.monthNumber
+                            spendingLimitRepository.insert(
+                                SpendingLimit(
+                                    limit =  limit,
+                                    year = nowYear,
+                                    month = nowMonth
+                                )
+                            )
+                        }
+
+                    }
+                    _state.update {
+                        it.copy(
+                            expenseLimit = limit
+                        )
+                    }
+                }
+            }
+
             else -> Unit
         }
     }

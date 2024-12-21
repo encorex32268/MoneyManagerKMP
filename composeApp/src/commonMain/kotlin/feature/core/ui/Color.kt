@@ -8,7 +8,7 @@ val md_theme_dark_outline = Color(0xFF928F99)
 
 
 val CorrectColor = Color(0xFF00DEA6)
-val ErrorColor = Color(0xFFFFAAB5)
+val ErrorColor = Color(0xFFFF2A46)
 
 val light_onCorrectColor = Color(0xFFFFFFFF)
 //val light_CorrectColorContainer = Color(0xFF4BFEC3)

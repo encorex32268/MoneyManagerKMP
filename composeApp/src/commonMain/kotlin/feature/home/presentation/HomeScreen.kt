@@ -26,6 +26,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -37,6 +40,7 @@ import feature.core.presentation.navigation.NavigationLayoutType
 import feature.home.presentation.components.AmountTextLayout
 import feature.home.presentation.components.ExpenseItem
 import feature.core.presentation.noRippleClick
+import feature.home.presentation.components.SpendingLimitDialog
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -51,6 +55,9 @@ fun HomeScreenRoot(
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    var isShowExpenseLimitDialog by remember{
+        mutableStateOf(false)
+    }
     HomeScreen(
         state = state,
         onEvent = { event ->
@@ -60,12 +67,27 @@ fun HomeScreenRoot(
                 is HomeEvent.OnGotoEditScreen  -> {
                     onGotoEditScreen(event.expense)
                 }
+                HomeEvent.OnExpenseLimitClick -> {
+                    isShowExpenseLimitDialog = true
+                }
                 else -> Unit
             }
             viewModel.onEvent(event)
         },
-        navigationLayoutType = navigationLayoutType
+        navigationLayoutType = navigationLayoutType,
     )
+    if (isShowExpenseLimitDialog){
+        SpendingLimitDialog(
+            onDismissRequest = {
+                isShowExpenseLimitDialog = false
+            },
+            onConfirmButtonClick = {
+                viewModel.onEvent(
+                    HomeEvent.OnSpendingLimitChange(it)
+                )
+            }
+        )
+    }
 }
 
 
@@ -74,7 +96,7 @@ fun HomeScreen(
     state: HomeState,
     onEvent: (HomeEvent) -> Unit,
     isDebug: Boolean = false,
-    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
+    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION,
 ){
     Scaffold(
         containerColor = Color.White,
@@ -117,13 +139,19 @@ fun HomeScreen(
                 NavigationLayoutType.BOTTOM_NAVIGATION -> {
                     HomeScreenNaviBottom(
                         state = state,
-                        onEvent = onEvent
+                        onEvent = onEvent,
+                        onExpenseLimitClick = {
+                            onEvent(HomeEvent.OnExpenseLimitClick)
+                        }
                     )
                 }
                 else -> {
                     HomeScreenNaviRail(
                         state = state,
-                        onEvent = onEvent
+                        onEvent = onEvent,
+                        onExpenseLimitClick = {
+                            onEvent(HomeEvent.OnExpenseLimitClick)
+                        }
                     )
                 }
             }
@@ -142,7 +170,8 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenNaviBottom(
     state: HomeState,
-    onEvent: (HomeEvent) -> Unit = {}
+    onEvent: (HomeEvent) -> Unit = {},
+    onExpenseLimitClick: () -> Unit = {}
 ){
     Column {
         AmountTextLayout(
@@ -154,10 +183,10 @@ private fun HomeScreenNaviBottom(
                     }
                 )
             ,
-            income = state.income,
-            expense = state.expense,
-            total = state.totalAmount,
-            navigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
+            totalExpense = state.totalExpense,
+            expenseLimit = state.expenseLimit,
+            navigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION,
+            onExpenseLimitClick = onExpenseLimitClick
         )
         Spacer(modifier = Modifier.height(8.dp))
         LazyColumn(
@@ -192,7 +221,9 @@ private fun HomeScreenNaviBottom(
 @Composable
 private fun HomeScreenNaviRail(
     state: HomeState,
-    onEvent: (HomeEvent) -> Unit = {}
+    onEvent: (HomeEvent) -> Unit = {},
+    onExpenseLimitClick: () -> Unit = {}
+
 ){
     Row(
         modifier = Modifier.fillMaxWidth()
@@ -204,12 +235,12 @@ private fun HomeScreenNaviRail(
                     onClick = {
                         onEvent(HomeEvent.OnGotoChartScreen)
                     }
-                )
-            ,
-            income = state.income,
-            expense = state.expense,
-            total = state.totalAmount,
-            navigationLayoutType = NavigationLayoutType.NAVIGATION_RAIL
+                ),
+            totalExpense = state.totalExpense,
+            expenseLimit = state.expenseLimit,
+            navigationLayoutType = NavigationLayoutType.NAVIGATION_RAIL,
+            onExpenseLimitClick = onExpenseLimitClick
+
         )
         Spacer(modifier = Modifier.width(8.dp))
         LazyColumn(

@@ -9,10 +9,12 @@ import feature.chart.presentation.chartdetail.DetailViewModel
 import feature.core.data.DefaultKeySettings
 import feature.core.data.RealmFactory
 import feature.core.data.repository.ExpenseRepositoryImpl
+import feature.core.data.repository.SpendingLimitRepositoryImpl
 import feature.core.data.repository.TypeRepositoryImpl
 import feature.core.domain.KeySettings
 import feature.core.domain.model.Expense
 import feature.core.domain.repository.ExpenseRepository
+import feature.core.domain.repository.SpendingLimitRepository
 import feature.core.domain.repository.TypeRepository
 import feature.home.di.homeModule
 import feature.home.presentation.HomeViewModel
@@ -43,6 +45,7 @@ private val appModule = module {
 
     singleOf(::ExpenseRepositoryImpl).bind<ExpenseRepository>()
     singleOf(::TypeRepositoryImpl).bind<TypeRepository>()
+    singleOf(::SpendingLimitRepositoryImpl).bind<SpendingLimitRepository>()
 
     viewModelOf(::AppViewModel)
 
