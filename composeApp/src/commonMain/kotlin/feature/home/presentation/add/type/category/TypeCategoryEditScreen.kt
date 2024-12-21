@@ -19,7 +19,9 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -142,80 +144,79 @@ fun TypeCategoryEditScreen(
             }
         )
     }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-            ,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = {
-                    onEvent(
-                        TypeCategoryEditEvent.OnBackClick
-                    )
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                    contentDescription = null
-                )
-            }
-            IconButton(
-                onClick = {
-                    onEvent(
-                        TypeCategoryEditEvent.OnSaveClick
-                    )
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp)
+                            .background(Color.White)
+                            .noRippleClick {
+                                isShowColorPicker = true
+                            }
+                        ,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = Color(state.typeUi.colorArgb),
+                                    shape = CircleShape
+                                )
+                                .size(24.dp)
+                        )
+                        Text(
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                            text = state.typeUi.name,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Icon(
+                            modifier = Modifier.size(16.dp),
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = null
+                        )
+                    }
                 },
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = null
-                )
-            }
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            onEvent(
+                                TypeCategoryEditEvent.OnBackClick
+                            )
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            onEvent(
+                                TypeCategoryEditEvent.OnSaveClick
+                            )
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null
+                        )
+                    }
+                },
+                backgroundColor = Color.White
+            )
         }
+    ){
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp)
+                .padding(it)
+                .background(Color.White)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 8.dp)
-                    .background(Color.White)
-                    .noRippleClick {
-                        isShowColorPicker = true
-                    }
-                ,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .background(
-                            color = Color(state.typeUi.colorArgb),
-                            shape = CircleShape
-                        )
-                        .size(32.dp)
-                )
-                Text(
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    text = state.typeUi.name,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = null
-                )
-            }
-
             ItemsSection(
                 navigationLayoutType = navigationLayoutType,
                 content = {
@@ -252,22 +253,15 @@ fun TypeCategoryEditScreen(
                                 reorderableState = reorderState,
                                 key = item.uuid
                             ) { isDragging ->
-                                Icon(
-                                    modifier = Modifier
-                                        .size(12.dp)
-                                        .align(Alignment.TopEnd)
-                                        .noRippleClick {
-                                            onEvent(
-                                                TypeCategoryEditEvent.OnItemRemove(item)
-                                            )
-                                        }
-                                    ,
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = null
-                                )
                                 CategoryItem(
                                     categoryUi = item,
-                                    isClicked = isDragging
+                                    isClicked = isDragging,
+                                    isNeedDeleteIcon = true,
+                                    onDeleteClick = {
+                                        onEvent(
+                                            TypeCategoryEditEvent.OnItemRemove(item)
+                                        )
+                                    }
                                 )
                             }
 

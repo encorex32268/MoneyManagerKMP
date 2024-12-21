@@ -82,7 +82,11 @@ class HomeViewModel(
                             endTimeOfMonth = endTime
                         )
                         result.collectLatest { data ->
-                            val dataGroup = data
+                            val expenseItems = data.filterNot { it.isIncome }
+                            val expense = expenseItems.sumOf { it.cost }
+                            val totalExpense = -expense
+
+                            val dataGroup = expenseItems
                                 .sortedByDescending {
                                     it.timestamp
                                 }
@@ -90,9 +94,7 @@ class HomeViewModel(
                                     it.timestamp.toDayString()
                                 }
                                 .toList()
-                            val expenseItems = data.filterNot { it.isIncome }
-                            val expense = expenseItems.sumOf { it.cost }
-                            val totalExpense = -expense
+
                             if (event.isInit){
                                 _state.update {
                                     it.copy(

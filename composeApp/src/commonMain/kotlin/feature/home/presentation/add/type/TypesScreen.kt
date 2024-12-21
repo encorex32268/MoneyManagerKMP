@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -25,6 +27,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,16 +43,19 @@ import androidx.compose.ui.unit.dp
 import feature.core.presentation.Texts
 import feature.core.presentation.components.TwoButtonDialog
 import feature.core.presentation.date.DateConverter
+import feature.home.presentation.add.AddEvent
 import feature.home.presentation.reorderable.ReorderableItem
 import feature.home.presentation.reorderable.detectReorderAfterLongPress
 import feature.home.presentation.reorderable.rememberReorderableLazyListState
 import feature.home.presentation.reorderable.reorderable
 import feature.home.presentation.add.type.components.ColorPickerDialog
 import moneymanagerkmp.composeapp.generated.resources.Res
+import moneymanagerkmp.composeapp.generated.resources.baseline_edit_note_24
 import moneymanagerkmp.composeapp.generated.resources.baseline_visibility_24
 import moneymanagerkmp.composeapp.generated.resources.baseline_visibility_off_24
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_content
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_title
+import moneymanagerkmp.composeapp.generated.resources.expense
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -64,9 +70,14 @@ fun TypesScreenRoot(
     val state by viewModel.state.collectAsState()
     TypesScreen(
         state = state,
-        onEvent = viewModel::onEvent,
+        onEvent = {
+            when(it){
+                TypeEvent.OnBackClick -> onBack()
+                else -> Unit
+            }
+            viewModel.onEvent(it)
+        },
         navigateToTypeCategoryEdit = navigateToTypeCategoryEdit,
-        onBack = onBack
     )
 
 }
@@ -76,7 +87,6 @@ fun TypesScreenRoot(
 fun TypesScreen(
     state: TypesState,
     onEvent: (TypeEvent) -> Unit ={},
-    onBack: () -> Unit ={},
     navigateToTypeCategoryEdit: (TypeUi) -> Unit = {}
 ) {
     var isShowColorPicker by remember {
@@ -102,39 +112,44 @@ fun TypesScreen(
             )
         }
     )
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ){
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            IconButton(
-                onClick = {
-                    onBack()
-                }
-            ){
-                Icon(
-                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                    contentDescription = null
-                )
-            }
-            IconButton(
-                onClick = {
-                    isShowColorPicker = true
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            onEvent(TypeEvent.OnBackClick)
+                        }
+                    ){
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
                 },
-            ){
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null
-                )
-            }
+                actions = {
+                    IconButton(
+                        onClick = {
+                            isShowColorPicker = true
+                        },
+                    ){
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null
+                        )
+                    }
+                },
+                backgroundColor = Color.White
+            )
         }
+    ){
         Column(
-            modifier = Modifier.fillMaxWidth().weight(1f),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(it)
+                .background(Color.White)
+            ,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ){
             LazyColumn(
@@ -251,8 +266,6 @@ fun TypesScreen(
             }
 
         }
-
-
     }
     if (state.isSaving){
         Box(

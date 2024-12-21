@@ -9,7 +9,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -24,7 +23,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.BottomSheetDefaults.DragHandle
 import androidx.compose.material3.BottomSheetScaffold
@@ -52,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.core.domain.model.Expense
 import feature.core.presentation.CategoryList
+import feature.core.presentation.ObserveAsEvents
 import feature.core.presentation.navigation.NavigationLayoutType
 import feature.home.presentation.add.components.CalculateLayout
 import feature.home.presentation.add.components.CategoryItem
@@ -61,6 +63,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_edit_note_24
+import moneymanagerkmp.composeapp.generated.resources.expense
 import moneymanagerkmp.composeapp.generated.resources.recently
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -81,14 +84,12 @@ fun AddScreenRoot(
     navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
-    LaunchedEffect(viewModel){
-        viewModel.uiEvent.collectLatest {
-            when(it){
-                AddUiEvent.Success -> {
-                    onGoBack()
-                }
-                else -> Unit
+    ObserveAsEvents(viewModel.uiEvent){
+        when(it){
+            AddUiEvent.Success -> {
+                onGoBack()
             }
+            else -> Unit
         }
     }
     when(navigationLayoutType){
@@ -151,6 +152,41 @@ fun AddScreen(
     }
 
     BottomSheetScaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(Res.string.expense),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            onEvent(AddEvent.OnBack)
+                        }
+                    ){
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            onEvent(AddEvent.OnGoToCategoryEditClick)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = vectorResource(Res.drawable.baseline_edit_note_24),
+                            contentDescription = null
+                        )
+                    }
+                },
+                backgroundColor = Color.White
+            )
+        },
         containerColor = Color.White,
         sheetContainerColor = Color.White,
         sheetShadowElevation = 8.dp,
@@ -214,54 +250,18 @@ fun AddScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ){
-                IconButton(
-                    onClick = {
-                        onEvent(AddEvent.OnBack)
-                    }
-                ){
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                        contentDescription = null
-                    )
-                }
-                CostTypeSelect(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(top = 4.dp),
-                    isIncome =  state.isIncome,
-                    onTypeChange = {
-                        onEvent(
-                            AddEvent.OnTypeChange(it)
-                        )
-                    }
-                )
-                IconButton(
-                    onClick = {
-                        onEvent(AddEvent.OnGoToCategoryEditClick)
-                    }
-                ){
-                    Icon(
-                        imageVector = vectorResource(Res.drawable.baseline_edit_note_24),
-                        contentDescription = null
-                    )
-                }
-
-
-            }
             ItemSection(
-                modifier = Modifier.fillMaxSize().padding(8.dp),
+                modifier = Modifier.fillMaxWidth().weight(1f).padding(8.dp),
                 state = state,
                 onEvent = onEvent,
                 scope = scope,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
-                isDebug = isDebug
             )
+            if (!isDebug) {
+                AdMobBannerController.AdMobBannerCompose(
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
         }
     }
@@ -272,8 +272,7 @@ fun AddScreen(
 @Composable
 fun AddScreenNaviRail(
     state: AddState,
-    onEvent: (AddEvent) -> Unit = {},
-    isDebug: Boolean = false,
+    onEvent: (AddEvent) -> Unit = {}
 ){
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -302,17 +301,10 @@ fun AddScreenNaviRail(
                             contentDescription = null
                         )
                     }
-                    CostTypeSelect(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .padding(top = 4.dp),
-                        isIncome = state.isIncome,
-                        onTypeChange = {
-                            onEvent(
-                                AddEvent.OnTypeChange(it)
-                            )
-                        }
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = stringResource(Res.string.expense),
+                        style = MaterialTheme.typography.bodyMedium
                     )
                     IconButton(
                         onClick = {
@@ -332,7 +324,6 @@ fun AddScreenNaviRail(
                         .padding(8.dp),
                     state = state,
                     onEvent = onEvent,
-                    isDebug = isDebug,
                     maxItemsInEachRow = 8
                 )
             }
@@ -374,20 +365,12 @@ private fun ItemSection(
     onEvent: (AddEvent) -> Unit,
     scope: CoroutineScope?=null,
     bottomSheetScaffoldState: BottomSheetScaffoldState? = null,
-    isDebug: Boolean = false,
     maxItemsInEachRow: Int = 4
 ) {
 
     LazyColumn(
         modifier = modifier
     ) {
-        item {
-            if (!isDebug) {
-                AdMobBannerController.AdMobBannerCompose(
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        }
         item {
             if (state.recentlyItems?.categories?.isNotEmpty() == true) {
                 Text(

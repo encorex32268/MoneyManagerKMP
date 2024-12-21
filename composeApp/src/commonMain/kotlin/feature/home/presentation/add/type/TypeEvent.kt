@@ -28,4 +28,6 @@ sealed interface TypeEvent {
         val startIndex: Int,
         val endIndex: Int
     ): TypeEvent
+
+    data object OnBackClick: TypeEvent
 }

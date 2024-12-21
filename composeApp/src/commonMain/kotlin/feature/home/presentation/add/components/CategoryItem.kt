@@ -3,10 +3,14 @@
 package feature.home.presentation.add.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +22,8 @@ import feature.core.presentation.CategoryList
 import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
 import feature.core.presentation.model.CategoryUi
+import feature.core.presentation.noRippleClick
+import feature.home.presentation.add.type.category.TypeCategoryEditEvent
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @Composable
@@ -26,29 +32,49 @@ fun CategoryItem(
     categoryUi: CategoryUi,
     isClicked: Boolean,
     onItemClick: (() -> Unit)? = null,
-    isVisibilityText: Boolean = true
+    isVisibilityText: Boolean = true,
+    isNeedDeleteIcon: Boolean = false,
+    onDeleteClick: () -> Unit = {}
 ){
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircleIcon(
+        Box(
             modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .padding(top = 8.dp)
-                .size(42.dp)
-            ,
-            backgroundColor = if (categoryUi.colorArgb == null) CategoryList.getColorByTypeId(categoryUi.typeId?:0) else Color(categoryUi.colorArgb),
-            image = CategoryList.getCategoryIconById(categoryUi.id.toLong()),
-            isClicked = isClicked,
-            id = categoryUi.id,
-            onItemClick = {
-                onItemClick?.let {
-                    onItemClick()
-                }
-            },
-        )
+        ){
+            CircleIcon(
+                modifier = Modifier
+                    .padding(horizontal = 4.dp)
+                    .padding(top = 8.dp)
+                    .size(42.dp)
+                ,
+                backgroundColor = if (categoryUi.colorArgb == null) CategoryList.getColorByTypeId(categoryUi.typeId?:0) else Color(categoryUi.colorArgb),
+                image = CategoryList.getCategoryIconById(categoryUi.id.toLong()),
+                isClicked = isClicked,
+                id = categoryUi.id,
+                onItemClick = {
+                    onItemClick?.let {
+                        onItemClick()
+                    }
+                },
+            )
+            if (isNeedDeleteIcon){
+                Icon(
+                    modifier = Modifier
+                        .size(12.dp)
+                        .align(Alignment.TopEnd)
+                        .noRippleClick {
+                            onDeleteClick()
+                        }
+                    ,
+                    imageVector = Icons.Default.Close,
+                    contentDescription = null
+                )
+            }
+
+        }
 
         if (isVisibilityText){
             val description = categoryUi.name.ifEmpty {

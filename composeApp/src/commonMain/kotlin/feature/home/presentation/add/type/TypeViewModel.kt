@@ -141,6 +141,7 @@ class TypeViewModel(
                     )
                 }
             }
+            else -> Unit
         }
     }
 }

@@ -15,7 +15,6 @@ data class AddState(
     val currentExpense: Expense?=null,
     val categoryUi: CategoryUi?=null,
     val description: String = "",
-    val isIncome: Boolean = false,
     val cost: String = "",
     val year: Int = 0,
     val monthNumber: Int = 0,

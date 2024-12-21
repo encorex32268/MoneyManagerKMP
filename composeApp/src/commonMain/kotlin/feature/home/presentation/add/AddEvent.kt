@@ -15,11 +15,7 @@ sealed interface AddEvent {
         val isRecently: Boolean = false
     ) : AddEvent
 
-    data class OnTypeChange(val isClicked : Boolean): AddEvent
-    data class OnSelectedDate(val timestamp: Long): AddEvent
+    data class  OnSelectedDate(val timestamp: Long): AddEvent
     data object OnBack: AddEvent
     data object OnGoToCategoryEditClick: AddEvent
-
-
-
 }

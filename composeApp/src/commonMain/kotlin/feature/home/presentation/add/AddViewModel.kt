@@ -111,7 +111,6 @@ class AddViewModel(
                     dayOfMonth = localDateTime.dayOfMonth,
                     nowLocalDateTime = localDateTime,
                     currentExpense = expense,
-                    isIncome = expense?.isIncome?:false,
                     cost = expense?.let { expense.cost.toString() }?:"0",
                     categoryUi = expense?.let {
                         val findType = typeFlow.find { type ->
@@ -175,14 +174,6 @@ class AddViewModel(
                         cost = currentCost.dropLast(1)
                     )
                 }
-            }
-            is AddEvent.OnTypeChange        -> {
-                _state.update {
-                    it.copy(
-                        isIncome = event.isClicked
-                    )
-                }
-
             }
             is AddEvent.OnSelectedDate      -> {
                 val localDateTime = event.timestamp.toLocalDateTime()
@@ -258,7 +249,6 @@ class AddViewModel(
                             typeId = state.value.categoryUi?.typeId?:0,
                             categoryId = state.value.categoryUi?.id?:0,
                             description = state.value.description,
-                            isIncome = state.value.isIncome,
                             cost = state.value.cost.toLongOrNull()?:0L,
                             timestamp = timestamp
                         )
@@ -268,7 +258,6 @@ class AddViewModel(
                     }else{
                         val updateExpense =  Expense(
                             description = state.value.description,
-                            isIncome = state.value.isIncome,
                             typeId = state.value.categoryUi?.typeId?:0,
                             categoryId = state.value.categoryUi?.id?:0,
                             cost = state.value.cost.toLongOrNull()?:0L,
