@@ -55,11 +55,8 @@ fun ExpenseItem(
 ){
     if (items.isNotEmpty()){
         val total = remember(items){
-            val incomeItems = items.filter { it.isIncome }
             val expenseItems = items.filterNot { it.isIncome }
-            val income = incomeItems.sumOf { it.cost }
-            val expense = expenseItems.sumOf { it.cost }
-            -expense + income
+            expenseItems.sumOf { it.cost }
         }
         val localDateTime  = remember(items){
             (items.firstOrNull()?.timestamp?:0L).toLocalDateTime()
@@ -115,7 +112,7 @@ fun ExpenseItem(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         val findType = types.find {
-                            it.typeIdTimestamp == expense.typeId.toLong()
+                            it.typeIdTimestamp == expense.typeId
                         }
                         CircleIcon(
                             modifier = Modifier.size(36.dp),
@@ -143,11 +140,8 @@ fun ExpenseItem(
                                 )
                             }
                         }
-                        val expenseCost = remember(expense.isIncome){
-                            if (expense.isIncome) expense.cost.toMoneyString() else "-${expense.cost.toMoneyString()}"
-                        }
                         Text(
-                            text = expenseCost,
+                            text = expense.cost.toMoneyString(),
                             style = MaterialTheme.typography.labelSmall
                         )
                     }

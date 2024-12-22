@@ -63,15 +63,12 @@ class HomeViewModel(
                             year = event.year?:nowYear,
                             month = event.month?:nowMonth
                         )
-                        println("Debug spendingLimitResult")
                         spendingLimitResult.collectLatest { spendingLimit ->
-                            spendingLimit?.let { it ->
-                                currentSpendingLimit = it
-                                _state.update { state ->
-                                    state.copy(
-                                        expenseLimit = it.limit
-                                    )
-                                }
+                            currentSpendingLimit = spendingLimit
+                            _state.update { state ->
+                                state.copy(
+                                    expenseLimit = currentSpendingLimit?.limit?:0
+                                )
                             }
                         }
                     }
@@ -83,8 +80,7 @@ class HomeViewModel(
                         )
                         result.collectLatest { data ->
                             val expenseItems = data.filterNot { it.isIncome }
-                            val expense = expenseItems.sumOf { it.cost }
-                            val totalExpense = -expense
+                            val totalExpense = expenseItems.sumOf { it.cost }
 
                             val dataGroup = expenseItems
                                 .sortedByDescending {

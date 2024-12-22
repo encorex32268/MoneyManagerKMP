@@ -214,8 +214,7 @@ fun ChartScreen(
                     ExpenseDetailLazyGrid(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(0.5f)
-                        ,
+                            .weight(0.5f),
                         items = if (state.isIncomeShown) state.incomeItems else state.items,
                         isIncomeShown = state.isIncomeShown,
                         sumTotal = sumTotal,

@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
@@ -34,7 +35,7 @@ import feature.core.presentation.navigation.NavigationLayoutType
 import feature.core.ui.ErrorColor
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.home_spending_limit
-import moneymanagerkmp.composeapp.generated.resources.total
+import moneymanagerkmp.composeapp.generated.resources.total_expense
 import org.jetbrains.compose.resources.stringResource
 import toMoneyString
 
@@ -134,28 +135,36 @@ private fun AmountSection(
             onExpenseLimitClick()
         },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.SpaceEvenly
     ){
         AmountText(
-            title = stringResource(Res.string.home_spending_limit),
+            title = stringResource(Res.string.total_expense),
+            text = totalExpense.toMoneyString(),
+            textColor = if (totalExpense > expenseLimit) ErrorColor else MaterialTheme.colorScheme.onBackground
+        )
+        AmountText(
+            title = "",
             textColor = MaterialTheme.colorScheme.onBackground,
-            text = expenseLimit.toMoneyString(),
-            textSize = 24.sp
+            text = "|",
         )
-        Icon(
-            modifier = Modifier
-                .size(12.dp)
-                .align(Alignment.CenterVertically),
-            imageVector = Icons.Default.Edit,
-            contentDescription = "SpendingLimit Edit"
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            AmountText(
+                title = stringResource(Res.string.home_spending_limit),
+                textColor = MaterialTheme.colorScheme.onBackground,
+                text = expenseLimit.toMoneyString(),
+            )
+            Icon(
+                modifier = Modifier
+                    .size(12.dp)
+                    .align(Alignment.CenterVertically),
+                imageVector = Icons.Default.Edit,
+                contentDescription = "SpendingLimit Edit"
+            )
+
+        }
     }
-    AmountText(
-        modifier =  modifier,
-        title = stringResource(Res.string.total),
-        text = totalExpense.toMoneyString(),
-        textColor = if (totalExpense > expenseLimit) ErrorColor else MaterialTheme.colorScheme.onBackground
-    )
 }
 
 @Composable
@@ -164,7 +173,10 @@ fun AmountText(
     title: String,
     text: String,
     textColor: Color,
-    textSize: TextUnit = 20.sp
+    textSize: TextUnit = 24.sp,
+    textStyle: TextStyle = MaterialTheme.typography.labelLarge.copy(
+        fontSize = textSize
+    )
 ){
     var dynamicTextSize by remember {
         mutableStateOf(textSize)
@@ -182,9 +194,7 @@ fun AmountText(
 
         Text(
             text = text,
-            style = MaterialTheme.typography.labelLarge.copy(
-                fontSize = textSize
-            ),
+            style = textStyle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             color = textColor,

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,11 +20,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.Edit
@@ -35,10 +34,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,18 +61,16 @@ import feature.core.presentation.ObserveAsEvents
 import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
 import feature.core.presentation.components.TwoButtonDialog
-import feature.core.presentation.date.DateConverter
 import feature.core.presentation.date.toDayOfWeekStringResource
 import feature.core.presentation.date.toLocalDateTime
 import feature.core.presentation.noRippleClick
-import feature.home.presentation.edit.components.CostTypeItem
-import kotlinx.coroutines.flow.collectLatest
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_attach_money_24
 import moneymanagerkmp.composeapp.generated.resources.baseline_sticky_note_24
 import moneymanagerkmp.composeapp.generated.resources.description
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_content
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_title
+import moneymanagerkmp.composeapp.generated.resources.expense_detail
 import moneymanagerkmp.composeapp.generated.resources.notosanslao_regular
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
@@ -127,47 +123,28 @@ fun EditExpenseScreen(
     var isShowDeleteDialog by remember {
         mutableStateOf(false)
     }
-    state.currentExpense?.let {
-        val type = remember {
-            state.typeItems.find { type ->
-                type.typeIdTimestamp == it.typeId
-            }
-        }
-        val colorArgb = remember {
-            type?.colorArgb ?:CategoryList.getColorByTypeId(it.typeId).toArgb()
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .noRippleClick {
-                    keyboard?.hide()
-                    focusManager.clearFocus()
-                }
-                .verticalScroll(rememberScrollState())
-            ,
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier.weight(1f)
-                ){
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(Res.string.expense_detail),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
+                navigationIcon = {
                     IconButton(
                         onClick = {
                             onEvent(EditExpenseEvent.OnBackClick)
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
                             contentDescription = null
                         )
                     }
-                }
-                Row {
+                },
+                actions = {
                     IconButton(
                         onClick = {
                             onEvent(EditExpenseEvent.OnGoAddScreenClick)
@@ -188,63 +165,80 @@ fun EditExpenseScreen(
                             contentDescription = null
                         )
                     }
-
+                },
+                backgroundColor = Color.White
+            )
+        }
+    ){ paddingValues ->
+        state.currentExpense?.let {
+            val type = remember {
+                state.typeItems.find { type ->
+                    type.typeIdTimestamp == it.typeId
                 }
-
             }
-
-            OutlinedCard(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.White
-                ),
-                shape = RoundedCornerShape(16.dp)
+            val colorArgb = remember {
+                type?.colorArgb ?:CategoryList.getColorByTypeId(it.typeId).toArgb()
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .background(Color.White)
+                    .noRippleClick {
+                        keyboard?.hide()
+                        focusManager.clearFocus()
+                    }
+                    .verticalScroll(rememberScrollState())
+                ,
             ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 16.dp)
-                    ,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ){
-                    IconSection(
-                        iconId = it.categoryId,
-                        colorArgb = colorArgb,
-                        description = it.description
-                    )
-                    HorizontalDivider(
-                        modifier = Modifier.padding(8.dp)
-                    )
+                OutlinedCard(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
                     Column(
                         modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 8.dp)
-                            .padding(bottom = 8.dp)
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 16.dp)
                         ,
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ){
-                        GroupSection(type = type)
-                        TimestampSection(
-                            timestamp = it.timestamp
+                        IconSection(
+                            iconId = it.categoryId,
+                            colorArgb = colorArgb,
+                            description = it.description
                         )
-                        CostSection(
-                            isIncome = it.isIncome,
-                            cost = it.cost
+                        HorizontalDivider(
+                            modifier = Modifier.padding(8.dp)
                         )
-                        CostTypeSection(
-                            isIncome = it.isIncome
-                        )
+                        Column(
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(horizontal = 8.dp)
+                                .padding(bottom = 8.dp)
+                            ,
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ){
+                            GroupSection(type = type)
+                            TimestampSection(
+                                timestamp = it.timestamp
+                            )
+                            CostSection(cost = it.cost)
+                        }
                     }
                 }
+                Spacer(modifier = Modifier.height(16.dp))
+                ContentSection(
+                    content = state.currentExpense.content,
+                    onValueChange = {
+                        onEvent(
+                            EditExpenseEvent.OnContentChange(it)
+                        )
+                    }
+                )
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            ContentSection(
-                content = state.currentExpense.content,
-                onValueChange = {
-                    onEvent(
-                        EditExpenseEvent.OnContentChange(it)
-                    )
-                }
-            )
+
         }
 
     }
@@ -262,23 +256,9 @@ fun EditExpenseScreen(
     }
 }
 
-@Composable
-private fun CostTypeSection(
-    modifier: Modifier = Modifier,
-    isIncome: Boolean
-) {
-    Row(
-        modifier = modifier.fillMaxWidth()
-    ) {
-        CostTypeItem(
-            isIncome = isIncome
-        )
-    }
-}
 
 @Composable
 private fun CostSection(
-    isIncome: Boolean,
     cost: Long
 ) {
     Row(
@@ -286,16 +266,15 @@ private fun CostSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(Res.drawable.baseline_attach_money_24),
             modifier = Modifier.size(16.dp),
+            painter = painterResource(Res.drawable.baseline_attach_money_24),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface
         )
         Spacer(modifier = Modifier.width(16.dp))
         Texts.TitleSmall(
-            modifier = Modifier
-                .weight(1f),
-            text = if (isIncome) cost.toMoneyString() else "-${cost.toMoneyString()}"
+            modifier = Modifier.weight(1f),
+            text = cost.toMoneyString()
         )
     }
 }

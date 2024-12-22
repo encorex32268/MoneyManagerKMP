@@ -5,6 +5,8 @@
     <string name="chart">チャート</string>
     <string name="analytics">分析</string>
     <string name="total">合計</string>
+    <string name="total_expense">支出合計</string>
+    <string name="expense_detail">詳細</string>
     <string name="income">収入</string>
     <string name="expense">支出</string>
     <string name="total_expense_item">合計：%1$s</string>
