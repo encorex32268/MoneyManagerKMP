@@ -126,7 +126,8 @@ class AddViewModel(
                             colorArgb = colorArgb
                         )
                     },
-                    description = expense?.description?:""
+                    description = expense?.description?:"",
+                    isLoading = false
                 )
             }
         }.launchIn(viewModelScope)
@@ -274,6 +275,38 @@ class AddViewModel(
                     )
 
 
+                }
+            }
+            is AddEvent.CreateDefaultType ->{
+                viewModelScope.launch {
+                    val types = mutableListOf<Type>()
+                    val defaultCategories = CategoryList.items.groupBy { it.typeId }
+                    defaultCategories.onEachIndexed { index, entry ->
+                        val typeId = entry.key?:0
+                        val typeName = CategoryList.getTypeStringById(typeId = typeId)
+                        val typeColor = CategoryList.getColorByTypeId(id = typeId).toArgb()
+                        types.add(
+                            Type(
+                                typeIdTimestamp = typeId,
+                                name = typeName,
+                                colorArgb = typeColor,
+                                order = index,
+                                categories = entry.value.mapIndexed { index, category ->
+                                    val description = CategoryList.getCategoryNameById(category.id.toLong())
+                                    category.copy(
+                                        order = index,
+                                        name = description
+                                    )
+                                }
+                            )
+                        )
+                    }
+                    types.forEach {
+                        typeRepository.insert(it)
+                    }
+//                    keySettings.setIsSetDefaultTypes(true)
+//                    if (!keySettings.getIsSetDefaultTypes()){
+//                    }
                 }
             }
             else -> Unit

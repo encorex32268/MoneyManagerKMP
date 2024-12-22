@@ -21,8 +21,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
+import androidx.compose.material.TopAppBar
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,6 +39,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.analytics.presentation.components.LineChart
 import feature.analytics.presentation.components.TextChip
 import feature.analytics.presentation.model.LineChartStyle
+import feature.chart.presentation.ChartEvent
+import feature.core.presentation.components.DatePicker
 import feature.core.presentation.navigation.NavigationLayoutType
 import getScreenWidth
 import moneymanagerkmp.composeapp.generated.resources.Res
@@ -53,7 +57,6 @@ import toMoneyString
 fun AnalyticsScreenRoot(
     viewModel: AnalyticsViewModel = koinViewModel(),
     onBackupClick: () -> Unit = {},
-    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     AnalyticsScreen(
@@ -64,17 +67,15 @@ fun AnalyticsScreenRoot(
                 else -> Unit
             }
             viewModel.onEvent(event)
-        },
-        navigationLayoutType = navigationLayoutType
+        }
     )
 
 }
 
 @Composable
-private fun AnalyticsScreen(
+fun AnalyticsScreen(
     state: AnalyticsState,
     onEvent: (AnalyticsEvent) -> Unit = {},
-    navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ) {
 
     val lineChartStyle = remember {
@@ -91,11 +92,7 @@ private fun AnalyticsScreen(
             xAxisLabelSpacing = 16.dp
         )
     }
-    val expenseLineChartProgress = remember(state.dateFilter , state.moneyManagerTypeFilter) {
-        Animatable(0f)
-    }
-
-    val incomeLineChartProgress = remember(state.dateFilter , state.moneyManagerTypeFilter) {
+    val expenseLineChartProgress = remember(state.dateFilter) {
         Animatable(0f)
     }
     LaunchedEffect(key1 = state) {
@@ -108,36 +105,41 @@ private fun AnalyticsScreen(
         )
 
     }
-    LaunchedEffect(key1 = state){
-        incomeLineChartProgress.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(
-                durationMillis = 1500,
-                easing = LinearOutSlowInEasing
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                actions = {
+                    IconButton(
+                        onClick = {
+                            onEvent(AnalyticsEvent.OnBackupClick)
+                        }
+                    ){
+                        Icon(
+                            painter = painterResource(Res.drawable.backup_backup_icon),
+                            contentDescription = "backup icon"
+                        )
+                    }
+                },
+                backgroundColor = Color.White
             )
-        )
-    }
-
-
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-        ,
-        verticalArrangement = Arrangement.spacedBy(8.dp,Alignment.CenterVertically),
-        horizontalAlignment = Alignment.Start
+        }
     ){
-        Row(
+        Column (
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.1f)
-                .padding(vertical = 8.dp)
-                .padding(start = 16.dp)
-            ,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .padding(it)
+                .background(Color.White),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.Start
         ){
             Row(
-                modifier = Modifier.fillMaxWidth().weight(1f),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp)
+                ,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ){
@@ -152,133 +154,36 @@ private fun AnalyticsScreen(
                     )
                 }
             }
-            IconButton(
-                onClick = {
-                    onEvent(AnalyticsEvent.OnBackupClick)
-                }
-            ){
-                Icon(
-                    painter = painterResource(Res.drawable.backup_backup_icon),
-                    contentDescription = "backup icon"
+            if (state.dateFilter == DateFilter.ONE_MONTH){
+                DatePicker(
+                    year = state.nowDateYear.toIntOrNull()?:0,
+                    month = state.nowDateMonth.toIntOrNull()?:0,
+                    onDateChange = { year , month ->
+                        onEvent(
+                            AnalyticsEvent.OnDatePick(
+                                year = year,
+                                month = month
+                            )
+                        )
+                    }
+                )
+            }
+            if (state.expenseSum != 0L){
+                ExpenseSection(
+                    state = state,
+                    lineChartStyle = lineChartStyle,
+                    expenseLineChartProgress = expenseLineChartProgress,
+                    onEvent = onEvent
                 )
             }
         }
-        when(navigationLayoutType){
-            NavigationLayoutType.BOTTOM_NAVIGATION -> {
-                if (state.expenseSum != 0L){
-                    ExpenseSection(
-                        state = state,
-                        lineChartStyle = lineChartStyle,
-                        expenseLineChartProgress = expenseLineChartProgress,
-                        onEvent = onEvent
-                    )
-                }
-                if (state.incomeSum != 0L){
-                    IncomeSection(
-                        state = state,
-                        lineChartStyle = lineChartStyle,
-                        incomeLineChartProgress = incomeLineChartProgress,
-                        onEvent = onEvent
-                    )
-                }
-            }
-            else -> {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ){
-                    MoneyManagerTypeFilter.entries.forEach { moneymanagerType ->
-                        TextChip(
-                            modifier = Modifier.size(36.dp),
-                            text = when(moneymanagerType){
-                                MoneyManagerTypeFilter.EXPENSE -> stringResource(Res.string.expense)
-                                else ->  stringResource(Res.string.income)
-                            },
-                            onClick = {
-                                onEvent(AnalyticsEvent.OnMoneyManagerTypeChange(moneymanagerType))
-                            },
-                            isSelected = state.moneyManagerTypeFilter == moneymanagerType
-                        )
-                    }
-                }
-                when(state.moneyManagerTypeFilter){
-                    MoneyManagerTypeFilter.EXPENSE  -> {
-                        if (state.expenseSum != 0L){
-                            ExpenseSection(
-                                state = state,
-                                lineChartStyle = lineChartStyle,
-                                expenseLineChartProgress = expenseLineChartProgress,
-                                onEvent = onEvent
-                            )
-                        }
-                    }
-                    MoneyManagerTypeFilter.INCOME -> {
-                        if (state.incomeSum != 0L){
-                            IncomeSection(
-                                state = state,
-                                lineChartStyle = lineChartStyle,
-                                incomeLineChartProgress = incomeLineChartProgress,
-                                onEvent = onEvent
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
 
     }
+
 
 
 }
 
-@Composable
-private fun ColumnScope.IncomeSection(
-    state: AnalyticsState,
-    lineChartStyle: LineChartStyle,
-    incomeLineChartProgress: Animatable<Float, AnimationVector1D>,
-    onEvent: (AnalyticsEvent) -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        Text(
-            text = stringResource(Res.string.income),
-            style = MaterialTheme.typography.bodyMedium
-        )
-        Text(
-            modifier = Modifier.padding(start = 4.dp),
-            text = state.incomeSum.toMoneyString(),
-            style = MaterialTheme.typography.titleSmall.copy(
-                fontSize = 20.sp
-            )
-        )
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(4.dp)
-            .weight(0.4f)
-            .horizontalScroll(rememberScrollState()),
-    ) {
-        LineChart(
-            modifier = Modifier
-                .fillMaxWidth()
-                .width((getScreenWidth().value * 10).dp),
-            dataPoints = state.incomeDataPoints,
-            style = lineChartStyle,
-            animationProgress = incomeLineChartProgress.value,
-            selectedDataPoint = state.incomeSelectedDataPoint,
-            onSelectedDataPoint = {
-                onEvent(AnalyticsEvent.OnIncomeSelectDataPoint(it))
-            }
-        )
-
-    }
-}
 
 @Composable
 private fun ColumnScope.ExpenseSection(

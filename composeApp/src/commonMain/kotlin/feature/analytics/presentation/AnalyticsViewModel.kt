@@ -6,6 +6,7 @@ import feature.analytics.domain.AnalyticsRepository
 import feature.analytics.presentation.model.DataPoint
 import feature.core.domain.model.Expense
 import feature.core.presentation.date.DateConverter
+import feature.core.presentation.date.DateConverter.getNowDate
 import feature.core.presentation.date.toDayString
 import feature.core.presentation.date.toEpochMilliseconds
 import feature.core.presentation.date.toStringDateByTimestamp
@@ -14,6 +15,7 @@ import feature.core.presentation.date.toStringDateMDByTimestamp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -27,32 +29,25 @@ class AnalyticsViewModel(
 ): ViewModel() {
 
     private val currentExpenseList = MutableStateFlow(emptyList<Expense>())
-
+    private val nowDate = getNowDate()
     private val _state = MutableStateFlow(AnalyticsState())
     val state = _state.onStart {
         viewModelScope.launch {
             repository.getAllExpense().collectLatest { data ->
-                currentExpenseList.update { data }
-
+                currentExpenseList.update { data.filter { !it.isIncome } }
                 val expenseList = currentExpenseList.value.filter { !it.isIncome }
-                val incomeList = currentExpenseList.value.filter { it.isIncome }
-
-                val dataPoints = filterExpenseByDate(
-                    items = expenseList
-                )
-                val incomeDataPoints = filterExpenseByDate(
-                    items = incomeList
-                )
+                val dataPoints = filterExpenseByDate(items = expenseList)
+                val nowDate = getNowDate()
+                val nowYear = nowDate.year
+                val nowMonth = nowDate.monthNumber
                 _state.update {
                     it.copy(
                         dataPoints =dataPoints,
-                        incomeDataPoints = incomeDataPoints,
                         expenseSum = dataPoints.sumOf { it.y.toLong() },
-                        incomeSum = incomeDataPoints.sumOf { it.y.toLong() }
+                        nowDateYear = nowYear.toString(),
+                        nowDateMonth = nowMonth.toString()
                     )
                 }
-
-
             }
         }
     }.stateIn(
@@ -64,25 +59,18 @@ class AnalyticsViewModel(
     fun onEvent(event: AnalyticsEvent){
         when(event){
             is AnalyticsEvent.OnDateFilterChange -> {
-                val expenseList = currentExpenseList.value.filter { !it.isIncome }
-                val incomeList = currentExpenseList.value.filter { it.isIncome }
                 val dataPoints = filterExpenseByDate(
                     dateFilter = event.dateFilter,
-                    items = expenseList
-                )
-                val incomeDataPoints = filterExpenseByDate(
-                    dateFilter = event.dateFilter,
-                    items = incomeList
+                    items = currentExpenseList.value
                 )
                 _state.update {
                     it.copy(
                         dateFilter = event.dateFilter,
                         dataPoints = dataPoints,
-                        incomeDataPoints = incomeDataPoints,
                         selectedDataPoint = null,
-                        incomeSelectedDataPoint = null,
                         expenseSum = dataPoints.sumOf { it.y.toLong() },
-                        incomeSum = incomeDataPoints.sumOf {it.y.toLong() }
+                        nowDateYear = nowDate.year.toString(),
+                        nowDateMonth = nowDate.monthNumber.toString()
                     )
                 }
             }
@@ -93,19 +81,38 @@ class AnalyticsViewModel(
                     )
                 }
             }
-            is AnalyticsEvent.OnIncomeSelectDataPoint  -> {
-                _state.update {
-                    it.copy(
-                        incomeSelectedDataPoint = event.dataPoint
+            is AnalyticsEvent.OnDatePick -> {
+                if (state.value.dateFilter != DateFilter.ONE_MONTH) return
+                val nowDateYear = event.year ?: nowDate.year
+                val nowDateMonth = event.month ?: nowDate.monthNumber
+                val (startTime,endTime) = DateConverter.getMonthStartAndEndTime(
+                    year =  event.year,
+                    month = event.month
+                )
+
+                val filteredItems = currentExpenseList.value.filter {
+                    it.timestamp in LongRange(startTime , endTime)
+                }
+                    .sortedBy { it.timestamp }
+                    .groupBy {
+                        it.timestamp.toStringDateMDByTimestamp()
+                    }
+                val dataPoints = filteredItems.map {
+                    DataPoint(
+                        x = it.key.length.toFloat(),
+                        y = it.value.sumOf { it.cost }.toFloat(),
+                        xLabel = it.key
                     )
                 }
-            }
-            is AnalyticsEvent.OnMoneyManagerTypeChange -> {
                 _state.update {
                     it.copy(
-                        moneyManagerTypeFilter = event.moneyManagerTypeFilter
+                        nowDateYear = nowDateYear.toString(),
+                        nowDateMonth = nowDateMonth.toString(),
+                        dataPoints = dataPoints,
+                        expenseSum = dataPoints.sumOf { it.y.toLong() },
                     )
                 }
+
             }
             else -> Unit
         }
@@ -128,6 +135,28 @@ class AnalyticsViewModel(
                         xLabel = it.key
                     )
                 }
+            }
+            DateFilter.ONE_MONTH -> {
+                val nowDate = getNowDate()
+                val (startTime,endTime) = DateConverter.getMonthStartAndEndTime(
+                    year =  nowDate.year,
+                    month = nowDate.monthNumber
+                )
+                val filteredItems = currentExpenseList.value.filter {
+                    it.timestamp in LongRange(startTime , endTime)
+                }
+                    .sortedBy { it.timestamp }
+                    .groupBy {
+                        it.timestamp.toStringDateMDByTimestamp()
+                    }
+               filteredItems.map {
+                    DataPoint(
+                        x = it.key.length.toFloat(),
+                        y = it.value.sumOf { it.cost }.toFloat(),
+                        xLabel = it.key
+                    )
+                }
+
             }
             else -> {
                 val filteredItems = items.filter {
@@ -170,10 +199,7 @@ class AnalyticsViewModel(
         return when(dateFilter){
             DateFilter.SEVEN_DAYS   -> {
                 val startDayOfMonth = nowDate.toEpochMilliseconds()
-                val sevenDaysBefore = nowDate.minus(
-                    DatePeriod(
-                        days = 7)
-                ).toEpochMilliseconds()
+                val sevenDaysBefore = nowDate.minus(DatePeriod(days = 7)).toEpochMilliseconds()
                 LongRange(sevenDaysBefore , startDayOfMonth)
             }
             DateFilter.ONE_MONTH   -> {

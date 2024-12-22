@@ -18,4 +18,5 @@ sealed interface AddEvent {
     data class  OnSelectedDate(val timestamp: Long): AddEvent
     data object OnBack: AddEvent
     data object OnGoToCategoryEditClick: AddEvent
+    data object CreateDefaultType: AddEvent
 }

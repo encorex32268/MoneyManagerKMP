@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -42,7 +43,10 @@ import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -64,6 +68,8 @@ import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_edit_note_24
 import moneymanagerkmp.composeapp.generated.resources.expense
+import moneymanagerkmp.composeapp.generated.resources.home_add_type_custom
+import moneymanagerkmp.composeapp.generated.resources.home_add_type_default
 import moneymanagerkmp.composeapp.generated.resources.recently
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -140,6 +146,9 @@ fun AddScreen(
     )
     val scope = rememberCoroutineScope()
 
+    val shouldShowDefaultButtons = remember(state.recentlyItems?.categories, state.types) {
+        state.recentlyItems?.categories.isNullOrEmpty() && state.types.isEmpty()
+    }
 
     LaunchedEffect(state.categoryUi){
         scope.launch {
@@ -250,13 +259,42 @@ fun AddScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            ItemSection(
-                modifier = Modifier.fillMaxWidth().weight(1f).padding(8.dp),
-                state = state,
-                onEvent = onEvent,
-                scope = scope,
-                bottomSheetScaffoldState = bottomSheetScaffoldState,
-            )
+            if (shouldShowDefaultButtons && !state.isLoading){
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp , Alignment.CenterVertically),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Button(
+                        onClick = {
+                            onEvent(AddEvent.CreateDefaultType)
+                        }
+                    ){
+                        Text(
+                            text =  stringResource(Res.string.home_add_type_default),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            onEvent(AddEvent.OnGoToCategoryEditClick)
+                        }
+                    ){
+                        Text(
+                            text = stringResource(Res.string.home_add_type_custom),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }else{
+                ItemSection(
+                    modifier = Modifier.fillMaxWidth().weight(1f).padding(8.dp),
+                    state = state,
+                    onEvent = onEvent,
+                    scope = scope,
+                    bottomSheetScaffoldState = bottomSheetScaffoldState,
+                )
+            }
             if (!isDebug) {
                 AdMobBannerController.AdMobBannerCompose(
                     modifier = Modifier.fillMaxWidth()
@@ -317,15 +355,45 @@ fun AddScreenNaviRail(
                         )
                     }
                 }
-                ItemSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(8.dp),
-                    state = state,
-                    onEvent = onEvent,
-                    maxItemsInEachRow = 8
-                )
+                if (state.recentlyItems?.categories.isNullOrEmpty() && state.types.isEmpty()){
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(16.dp , Alignment.CenterVertically),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                        Button(
+                            onClick = {
+                                onEvent(AddEvent.CreateDefaultType)
+                            }
+                        ){
+                            Text(
+                                text =  stringResource(Res.string.home_add_type_default),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                        Button(
+                            onClick = {
+                                onEvent(AddEvent.OnGoToCategoryEditClick)
+                            }
+                        ){
+                            Text(
+                                text = stringResource(Res.string.home_add_type_custom),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                }else{
+                    ItemSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(8.dp),
+                        state = state,
+                        onEvent = onEvent,
+                        maxItemsInEachRow = 8
+                    )
+
+                }
             }
             state.categoryUi?.let {
                 VerticalDivider()

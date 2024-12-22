@@ -10,6 +10,7 @@ import kotlinx.datetime.LocalDateTime
 
 
 data class AddState(
+    val isLoading: Boolean = true,
     val types: List<TypeUi> = emptyList(),
     val recentlyItems: TypeUi?=null,
     val currentExpense: Expense?=null,

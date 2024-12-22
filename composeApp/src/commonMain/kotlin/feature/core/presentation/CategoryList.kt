@@ -1004,21 +1004,6 @@ object CategoryList {
             FOOD + 21 -> {
                 stringResource(Res.string.food_hot_tea)
             }
-
-            FOOD + 22 -> { stringResource(Res.string.food_boxlunch) }
-            FOOD + 23 -> { stringResource(Res.string.food_boxlunch2) }
-            FOOD + 24 -> { stringResource(Res.string.food_delivery) }
-            FOOD + 25 -> { stringResource(Res.string.food_dog) }
-            FOOD + 26 -> { stringResource(Res.string.food_foodset) }
-            FOOD + 27 -> { stringResource(Res.string.food_meal) }
-            FOOD + 28 -> { stringResource(Res.string.food_meal2) }
-            FOOD + 29 -> { stringResource(Res.string.food_sauce) }
-            FOOD + 30 -> { stringResource(Res.string.food_streetfood) }
-            FOOD + 31 -> { stringResource(Res.string.food_water) }
-
-
-
-
             TRAFFIC + 1 -> {
                 stringResource(Res.string.traffic_train)
             }
@@ -1172,13 +1157,6 @@ object CategoryList {
             LIFE + 25 -> {
                 stringResource(Res.string.life_hammer)
             }
-            LIFE + 26 -> { stringResource(Res.string.life_shampoo) }
-            LIFE + 27 -> { stringResource(Res.string.life_shampoo2) }
-            LIFE + 28 -> { stringResource(Res.string.life_furniture) }
-            LIFE + 29 -> { stringResource(Res.string.life_makeup4) }
-            LIFE + 30 -> { stringResource(Res.string.life_bath) }
-            LIFE + 31 -> { stringResource(Res.string.life_tube) }
-            LIFE + 32 -> { stringResource(Res.string.life_tube2) }
 
             HEALTH + 1 -> {
                 stringResource(Res.string.health_doctor2)
@@ -1293,13 +1271,6 @@ object CategoryList {
 
             SPORTS + 17 -> {
                 stringResource(Res.string.sports_camp)
-            }
-
-            SPORTS + 18 -> {
-                stringResource(Res.string.sports_jumping)
-            }
-            SPORTS + 19 -> {
-                stringResource(Res.string.sports_paragliding)
             }
 
 
@@ -1579,7 +1550,25 @@ object CategoryList {
             OTHER + 46 -> { stringResource(Res.string.other_post) }
             OTHER + 47 -> { stringResource(Res.string.other_stationery) }
             OTHER + 48 -> { stringResource(Res.string.other_study) }
-
+            SPORTS + 18 -> { stringResource(Res.string.sports_jumping) }
+            SPORTS + 19 -> { stringResource(Res.string.sports_paragliding) }
+            LIFE + 26 -> { stringResource(Res.string.life_shampoo) }
+            LIFE + 27 -> { stringResource(Res.string.life_shampoo2) }
+            LIFE + 28 -> { stringResource(Res.string.life_furniture) }
+            LIFE + 29 -> { stringResource(Res.string.life_makeup4) }
+            LIFE + 30 -> { stringResource(Res.string.life_bath) }
+            LIFE + 31 -> { stringResource(Res.string.life_tube) }
+            LIFE + 32 -> { stringResource(Res.string.life_tube2) }
+            FOOD + 22 -> { stringResource(Res.string.food_boxlunch) }
+            FOOD + 23 -> { stringResource(Res.string.food_boxlunch2) }
+            FOOD + 24 -> { stringResource(Res.string.food_delivery) }
+            FOOD + 25 -> { stringResource(Res.string.food_dog) }
+            FOOD + 26 -> { stringResource(Res.string.food_foodset) }
+            FOOD + 27 -> { stringResource(Res.string.food_meal) }
+            FOOD + 28 -> { stringResource(Res.string.food_meal2) }
+            FOOD + 29 -> { stringResource(Res.string.food_sauce) }
+            FOOD + 30 -> { stringResource(Res.string.food_streetfood) }
+            FOOD + 31 -> { stringResource(Res.string.food_water) }
             else -> {
                 ""
             }
@@ -1674,6 +1663,8 @@ object CategoryList {
             FOOD + 21 -> {
                 getString(Res.string.food_hot_tea)
             }
+
+
 
             TRAFFIC + 1 -> {
                 getString(Res.string.traffic_train)
@@ -2200,7 +2191,37 @@ object CategoryList {
             OTHER + 36 -> {
                 getString(Res.string.other_karaoke)
             }
-
+            OTHER + 37 -> { getString(Res.string.other_bitcoin) }
+            OTHER + 38 -> { getString(Res.string.other_box) }
+            OTHER + 39 -> { getString(Res.string.other_camera) }
+            OTHER + 40 -> { getString(Res.string.other_claw) }
+            OTHER + 41 -> { getString(Res.string.other_cut) }
+            OTHER + 42 -> { getString(Res.string.other_giftcard) }
+            OTHER + 43 -> { getString(Res.string.other_lesson) }
+            OTHER + 44 -> { getString(Res.string.other_lesson2) }
+            OTHER + 45 -> { getString(Res.string.other_letter) }
+            OTHER + 46 -> { getString(Res.string.other_post) }
+            OTHER + 47 -> { getString(Res.string.other_stationery) }
+            OTHER + 48 -> { getString(Res.string.other_study) }
+            SPORTS + 18 -> { getString(Res.string.sports_jumping) }
+            SPORTS + 19 -> { getString(Res.string.sports_paragliding) }
+            LIFE + 26 -> { getString(Res.string.life_shampoo) }
+            LIFE + 27 -> { getString(Res.string.life_shampoo2) }
+            LIFE + 28 -> { getString(Res.string.life_furniture) }
+            LIFE + 29 -> { getString(Res.string.life_makeup4) }
+            LIFE + 30 -> { getString(Res.string.life_bath) }
+            LIFE + 31 -> { getString(Res.string.life_tube) }
+            LIFE + 32 -> { getString(Res.string.life_tube2) }
+            FOOD + 22 -> { getString(Res.string.food_boxlunch) }
+            FOOD + 23 -> { getString(Res.string.food_boxlunch2) }
+            FOOD + 24 -> { getString(Res.string.food_delivery) }
+            FOOD + 25 -> { getString(Res.string.food_dog) }
+            FOOD + 26 -> { getString(Res.string.food_foodset) }
+            FOOD + 27 -> { getString(Res.string.food_meal) }
+            FOOD + 28 -> { getString(Res.string.food_meal2) }
+            FOOD + 29 -> { getString(Res.string.food_sauce) }
+            FOOD + 30 -> { getString(Res.string.food_streetfood) }
+            FOOD + 31 -> { getString(Res.string.food_water) }
 
             else -> {
                 "?"
@@ -2211,14 +2232,14 @@ object CategoryList {
     fun getColorByTypeId(id: Long): Color {
         return Color(
             when (id) {
-                FOOD -> 0xFFFAFF92
-                TRAFFIC -> 0xFFD6FAFF
-                WEAR -> 0xFFEFD6FF
-                SPORTS -> 0xFFD6FFF9
-                SHOPPING -> 0xFFFFD6F8
-                HEALTH -> 0xFFFFD6D6
-                LIFE -> 0xFFFFE3D6
-                else -> 0xFFDFFFD6
+                FOOD -> 0xFFE5E671
+                TRAFFIC -> 0xFFB3E5E6
+                WEAR -> 0xFFD1B3FF
+                SPORTS -> 0xFFB3E6F2
+                SHOPPING -> 0xFFE6B3F1
+                HEALTH -> 0xFFE6B3B3
+                LIFE -> 0xFFE6C2B3
+                else -> 0xFFB3FFB3
             }
         )
     }

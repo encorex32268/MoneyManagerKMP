@@ -78,10 +78,10 @@ class HomeViewModel(
                             startTimeOfMonth = startTime,
                             endTimeOfMonth = endTime
                         )
+                        println("Debug Home ${startTime} / ${endTime} / ")
                         result.collectLatest { data ->
                             val expenseItems = data.filterNot { it.isIncome }
                             val totalExpense = expenseItems.sumOf { it.cost }
-
                             val dataGroup = expenseItems
                                 .sortedByDescending {
                                     it.timestamp
@@ -90,6 +90,10 @@ class HomeViewModel(
                                     it.timestamp.toDayString()
                                 }
                                 .toList()
+
+                            dataGroup.forEach {
+                                println("Debug Home ${it.first} / ${it.second.sumOf { it.cost }} / ")
+                            }
 
                             if (event.isInit){
                                 _state.update {

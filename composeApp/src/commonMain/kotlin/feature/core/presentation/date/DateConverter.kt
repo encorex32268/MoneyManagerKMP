@@ -46,20 +46,33 @@ object DateConverter {
         val startDayOfMonth = LocalDate(
             year = year?:localDateTime.year,
             monthNumber = month?:localDateTime.monthNumber,
-            dayOfMonth = 1
+            dayOfMonth = 1,
         )
         val endOfDayMonth = startDayOfMonth
             .plus(1, DateTimeUnit.MONTH) - DatePeriod(days = 1)
+
+
+        val startTime = LocalDateTime(
+            year = startDayOfMonth.year,
+            monthNumber = startDayOfMonth.monthNumber,
+            dayOfMonth = startDayOfMonth.dayOfMonth,
+            hour = 0,
+            minute = 0,
+            second = 0,
+            nanosecond = 0
+        )
+
         val endTime = LocalDateTime(
             year = endOfDayMonth.year,
             monthNumber = endOfDayMonth.monthNumber,
             dayOfMonth = endOfDayMonth.dayOfMonth,
             hour = 23,
             minute = 59,
-            second = 59
+            second = 59,
+            nanosecond = 999_999_999
         )
         return Pair(
-            first = startDayOfMonth.atStartOfDayIn(timeZone).toEpochMilliseconds(),
+            first = startTime.toInstant(timeZone).toEpochMilliseconds(),
             second = endTime.toInstant(timeZone).toEpochMilliseconds()
         )
     }

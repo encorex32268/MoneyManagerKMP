@@ -56,6 +56,7 @@ import moneymanagerkmp.composeapp.generated.resources.baseline_visibility_off_24
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_content
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_title
 import moneymanagerkmp.composeapp.generated.resources.expense
+import moneymanagerkmp.composeapp.generated.resources.home_add_type_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -115,7 +116,12 @@ fun TypesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {},
+                title = {
+                    Text(
+                        text = stringResource(Res.string.home_add_type_title),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
                 navigationIcon = {
                     IconButton(
                         onClick = {

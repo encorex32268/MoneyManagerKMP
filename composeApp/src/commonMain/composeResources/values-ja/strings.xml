@@ -52,6 +52,10 @@
     <string name="home_spending_limit_set">支出上限設定</string>
     <string name="home_spending_limit_set_hint">例:10,000</string>
 
+    <string name="home_add_type_default">デフォルトの種類を使用する</string>
+    <string name="home_add_type_custom">自分で作る</string>
+    <string name="home_add_type_title">種類編集</string>
+
     <!-- Food -->
         <string name="food_beer">ビール</string>
         <string name="food_bread">パン</string>

@@ -24,7 +24,7 @@ class ExpenseRepositoryImpl(
     ): Flow<List<Expense>> {
         return realm.query(
             clazz = ExpenseEntity::class,
-            query = "timestamp < $0 AND timestamp > $1",
+            query = "timestamp <= $0 AND timestamp >= $1",
             endTimeOfMonth,
             startTimeOfMonth
         ).asFlow().map {

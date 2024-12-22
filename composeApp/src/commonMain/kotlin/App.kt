@@ -227,8 +227,7 @@ private fun NavGraphBuilder.analyticsGraph(
                     navController.navigate(
                         Route.Backup
                     )
-                },
-                navigationLayoutType = navigationLayoutType
+                }
             )
         }
         composable<Route.Backup> {
