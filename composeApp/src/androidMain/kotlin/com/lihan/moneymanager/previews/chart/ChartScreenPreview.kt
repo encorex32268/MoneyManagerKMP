@@ -47,7 +47,9 @@ fun ChartScreenPreview() {
             state = ChartState(
                 nowDateYear = "2024",
                 nowDateMonth = "11",
-                items = listOf(chart)
+                items = listOf(chart),
+                totalExpense = 30000,
+                spendingLimit = 60000
             ),
             isDebug = true
         )

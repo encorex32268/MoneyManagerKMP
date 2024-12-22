@@ -7,6 +7,7 @@ package feature.chart.presentation
 import AdMobBannerController
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,41 +16,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import feature.core.presentation.components.DatePicker
-
 import feature.chart.presentation.components.ChartLayout
 import feature.chart.presentation.components.ExpenseDetailLazyGrid
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
-import feature.core.presentation.customTabIndicatorOffset
+import feature.core.presentation.components.DatePicker
+import feature.core.presentation.components.SpendingLimitProgressBar
 import feature.core.presentation.navigation.NavigationLayoutType
-import moneymanagerkmp.composeapp.generated.resources.Res
-import moneymanagerkmp.composeapp.generated.resources.expense
-import moneymanagerkmp.composeapp.generated.resources.income
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-private const val EXPENSE = 0
-private const val INCOME = 1
-private const val TAB_SIZE = 2
 
 @Composable
 fun ChartScreenRoot(
@@ -81,36 +64,6 @@ fun ChartScreen(
     isDebug: Boolean = false,
     navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ){
-    val density = LocalDensity.current
-    val tabWidths = remember {
-        val tabWidthStateList = mutableStateListOf<Dp>()
-        repeat(TAB_SIZE){
-            tabWidthStateList.add(0.dp)
-        }
-        tabWidthStateList
-    }
-    val selectTabIndex = remember(state) {
-        if(state.isIncomeShown) INCOME else EXPENSE
-    }
-
-    val sumTotal = remember(state) {
-        var sum = 0L
-        if (state.isIncomeShown){
-            state.items.forEach { chart ->
-                chart.itemsIncome.forEach {
-                    sum += it.cost
-                }
-            }
-        }else{
-            state.items.forEach {chart ->
-                chart.itemsNotIncome.forEach {
-                    sum += it.cost
-                }
-            }
-        }
-        sum
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -128,73 +81,21 @@ fun ChartScreen(
                 )
             }
         )
-        TabRow(
-            selectedTabIndex = selectTabIndex,
-            containerColor = Color.White,
-            contentColor = Color.Black,
-            indicator = { tabPositions ->
-                TabRowDefaults.SecondaryIndicator(
-                    modifier = Modifier.customTabIndicatorOffset(
-                        currentTabPosition = tabPositions[selectTabIndex],
-                        tabWidth = tabWidths[selectTabIndex]
-                    ),
-                    height = 2.dp
-                )
-            },
-            tabs = {
-                Tab(
-                    selected = !state.isIncomeShown,
-                    onClick = {
-                        onEvent(
-                            ChartEvent.OnTypeChange(false)
-                        )
-                    },
-                    text = {
-                        Text(
-                            onTextLayout = {
-                                tabWidths[0] = with(
-                                    density
-                                ){
-                                    it.size.width.toDp() + 10.dp
-                                }
-                            },
-                            text = stringResource(Res.string.expense),
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                    }
-                )
-                Tab(
-                    selected = state.isIncomeShown,
-                    onClick = {
-                        onEvent(
-                            ChartEvent.OnTypeChange(true)
-                        )
-                    },
-                    text = {
-                        Text(
-                            onTextLayout = {
-                                tabWidths[1] = with(
-                                    density
-                                ){
-                                    it.size.width.toDp() + 10.dp
-                                }
-                            },
-                            text = stringResource(Res.string.income),
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                    }
-                )
-            }
+        SpendingLimitProgressBar(
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            spendingLimit = state.spendingLimit,
+            totalExpense = state.totalExpense
         )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp)
+                .padding(vertical = 8.dp),
+            verticalArrangement = Arrangement.Center
         ){
             ChartDataSection(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(8.dp)
                     .weight(1f),
                 navigationLayoutType = navigationLayoutType,
                 content = {
@@ -204,7 +105,6 @@ fun ChartScreen(
                             .padding(4.dp)
                             .weight(0.5f),
                         state = state,
-                        sumTotal = sumTotal
                     )
                     if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION){
                         Spacer(Modifier.height(8.dp))
@@ -215,17 +115,12 @@ fun ChartScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.5f),
-                        items = if (state.isIncomeShown) state.incomeItems else state.items,
-                        isIncomeShown = state.isIncomeShown,
-                        sumTotal = sumTotal,
+                        items = state.items,
+                        sumTotal = state.totalExpense,
                         onItemClick = {
                             onEvent(
                                 ChartEvent.OnGotoDetail(
-                                    expenses = if (state.isIncomeShown){
-                                        it.itemsIncome
-                                    }else {
-                                        it.itemsNotIncome
-                                    },
+                                    expenses = it.items,
                                     type = it.type
                                 )
                             )

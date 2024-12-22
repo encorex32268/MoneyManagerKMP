@@ -10,10 +10,6 @@ sealed interface ChartEvent {
         val month: Int?=null
     ): ChartEvent
 
-    data class OnTypeChange(
-        val isIncome: Boolean
-    ): ChartEvent
-
     data class OnGotoDetail(
         val expenses: List<Expense>,
         val type: Type

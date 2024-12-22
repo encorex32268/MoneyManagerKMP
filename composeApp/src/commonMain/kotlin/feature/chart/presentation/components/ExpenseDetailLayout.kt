@@ -39,12 +39,10 @@ import toMoneyString
 fun ExpenseDetailLazyGrid(
     modifier: Modifier = Modifier,
     items: List<Chart> = emptyList(),
-    isIncomeShown: Boolean = false,
     sumTotal: Long,
     onItemClick: (Chart) -> Unit
 ) {
     if (sumTotal != 0L){
-
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = modifier,
@@ -52,7 +50,7 @@ fun ExpenseDetailLazyGrid(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ){
             items(items){ chart ->
-                val sum =  if (isIncomeShown) chart.itemsIncome.sumOf { it.cost } else chart.itemsNotIncome.sumOf { it.cost }
+                val sum =  chart.items.sumOf { it.cost }
                 if (sum != 0L){
                     ExpenseDetailItem(
                         modifier = Modifier
@@ -108,27 +106,34 @@ fun ExpenseDetailItem(
                         )
                         .clip(RoundedCornerShape(12.dp))
                 )
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = "${(percent * 100).toDouble().format(1)}%",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontSize = 24.sp
-                    ),
-                    maxLines = 1,
-                    textAlign = TextAlign.End
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min),
+                ){
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "${(percent * 100).toDouble().format(1)}%",
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            fontSize = 20.sp
+                        ),
+                        maxLines = 1,
+                        textAlign = TextAlign.End
+                    )
+                    Spacer(Modifier.height(2.dp))
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 4.dp),
+                        text = sum.toMoneyString(),
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        textAlign = TextAlign.End
+                    )
+                }
             }
-            Spacer(Modifier.height(4.dp))
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 4.dp),
-                text = sum.toMoneyString(),
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                textAlign = TextAlign.End
-            )
+
 
         }
 

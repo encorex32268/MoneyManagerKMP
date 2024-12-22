@@ -37,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lihan.moneymanager.BuildKonfig
 import feature.core.domain.model.Expense
 import feature.core.presentation.components.DatePicker
+import feature.core.presentation.components.SpendingLimitProgressBar
 import feature.core.presentation.navigation.NavigationLayoutType
 import feature.home.presentation.components.AmountTextLayout
 import feature.home.presentation.components.ExpenseItem
@@ -190,6 +191,12 @@ private fun HomeScreenNaviBottom(
             expenseLimit = state.expenseLimit,
             navigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION,
             onExpenseLimitClick = onExpenseLimitClick
+        )
+        SpendingLimitProgressBar(
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            totalExpense = state.totalExpense,
+            spendingLimit = state.expenseLimit,
+            isShowLimitAndExpense = false
         )
         Spacer(modifier = Modifier.height(8.dp))
         LazyColumn(

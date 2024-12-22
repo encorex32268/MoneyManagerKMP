@@ -3,13 +3,11 @@ package feature.chart.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import feature.chart.domain.repository.ChartRepository
-import feature.core.domain.model.Expense
-import feature.core.domain.model.chart.Chart
-import feature.core.domain.repository.ExpenseRepository
+import feature.core.domain.repository.SpendingLimitRepository
 import feature.core.presentation.date.DateConverter
+import feature.core.presentation.date.DateConverter.getNowDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -17,16 +15,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ChartViewModel(
-    private val repository: ChartRepository
+    private val repository: ChartRepository,
+    private val spendingLimitRepository: SpendingLimitRepository
 ): ViewModel() {
 
     private val _state = MutableStateFlow(ChartState())
     val state =
         _state
             .onStart {
-                onEvent(
-                    ChartEvent.OnDatePick()
-                )
+                onEvent(ChartEvent.OnDatePick())
             }
             .stateIn(
                 viewModelScope,
@@ -37,43 +34,59 @@ class ChartViewModel(
 
     fun onEvent(event: ChartEvent){
         when(event){
-            is ChartEvent.OnTypeChange -> {
-                if (state.value.isIncomeShown == event.isIncome) return
-                _state.update {
-                    it.copy(
-                        isIncomeShown = event.isIncome
-                    )
-                }
-            }
             is ChartEvent.OnDatePick   -> {
                 viewModelScope.launch {
+                    val nowDate = getNowDate()
+                    val nowYear = nowDate.year
+                    val nowMonth = nowDate.monthNumber
+
                     val (startTime,endTime) = DateConverter.getMonthStartAndEndTime(
                         year =  event.year,
                         month = event.month
                     )
-                    repository.getExpenseByTime(
-                        startTimeOfMonth = startTime,
-                        endTimeOfMonth = endTime
-                    ).collectLatest { resultData ->
-                        val nowDateYear = event.year ?: DateConverter.getNowDate().year
-                        val nowDateMonth = event.month ?: DateConverter.getNowDate().monthNumber
-
-                        val sortedItems = resultData.sortedByDescending {
-                            it.itemsNotIncome.sumOf { it.cost }
-                        }
-                        val sortedIncomeItems = resultData.sortedByDescending {
-                            it.itemsIncome.sumOf { it.cost }
-                        }
-
-                        _state.update {
-                            it.copy(
-                                items = sortedItems,
-                                incomeItems = sortedIncomeItems,
-                                nowDateYear = nowDateYear.toString(),
-                                nowDateMonth = nowDateMonth.toString()
-                            )
+                    launch {
+                        val spendingLimitResult = spendingLimitRepository.getSpendingLimit(
+                            year = event.year?:nowYear,
+                            month = event.month?:nowMonth
+                        )
+                        spendingLimitResult.collectLatest { spendingLimit ->
+                            _state.update { state ->
+                                state.copy(
+                                    spendingLimit = spendingLimit?.limit?:0L
+                                )
+                            }
                         }
                     }
+
+                    launch {
+                        repository.getExpenseByTime(
+                            startTimeOfMonth = startTime,
+                            endTimeOfMonth = endTime
+                        ).collectLatest { resultData ->
+                            val nowDateYear = event.year ?: nowYear
+                            val nowDateMonth = event.month ?: nowMonth
+
+                            val sortedItems = resultData.sortedByDescending {
+                                it.items.sumOf { it.cost }
+                            }
+                            var totalExpense = 0L
+                            sortedItems.forEach { chart ->
+                                chart.items.forEach {
+                                    totalExpense += it.cost
+                                }
+                            }
+
+                            _state.update {
+                                it.copy(
+                                    items = sortedItems,
+                                    nowDateYear = nowDateYear.toString(),
+                                    nowDateMonth = nowDateMonth.toString(),
+                                    totalExpense = totalExpense
+                                )
+                            }
+                        }
+                    }
+
                 }
             }
             else -> Unit

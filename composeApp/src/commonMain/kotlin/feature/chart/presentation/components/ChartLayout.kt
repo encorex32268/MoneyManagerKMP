@@ -58,15 +58,8 @@ import toMoneyString
 @Composable
 fun ChartLayout(
     modifier: Modifier = Modifier,
-    state: ChartState,
-    sumTotal: Long = 0L
+    state: ChartState
 ) {
-    var isStart by remember {
-        mutableStateOf(false)
-    }
-    LaunchedEffect(key1 = Unit) {
-        isStart = true
-    }
     val chartProgress = remember(state) {
         Animatable(0f)
     }
@@ -77,13 +70,13 @@ fun ChartLayout(
         chartProgress.animateTo(
             targetValue = 1f,
             animationSpec = tween(
-                durationMillis = 1000,
+                durationMillis = 1500,
                 easing = LinearOutSlowInEasing
             )
         )
 
     }
-    if (sumTotal != 0L){
+    if (state.totalExpense != 0L){
         Column(
             modifier = modifier,
             verticalArrangement = Arrangement.Center,
@@ -118,19 +111,16 @@ fun ChartLayout(
                                 maxHeight = 200.dp
                             )
                             .drawBehind {
+                                val totalExpense = state.totalExpense
                                 state.items.forEachIndexed { index, item ->
-                                    val typeSumCost = if (state.isIncomeShown)
-                                        item.itemsIncome.sumOf { it.cost }
-                                    else {
-                                        item.itemsNotIncome.sumOf { it.cost }
-                                    }
-                                    sweepAngle = 360f * typeSumCost / sumTotal
+                                    val typeSumCost = item.items.sumOf { it.cost }
+                                    sweepAngle = 360f * typeSumCost / totalExpense
                                     if (index == 0) {
                                         startAngle = -90f
                                     } else {
                                         val chart = state.items[index - 1]
-                                        val countList = if (state.isIncomeShown) chart.itemsIncome else chart.itemsNotIncome
-                                        startAngle += 360f * countList.sumOf { it.cost } / sumTotal
+                                        val countList = chart.items
+                                        startAngle += 360f * countList.sumOf { it.cost } / totalExpense
                                     }
                                     drawArc(
                                         color = Color(item.type.colorArgb),
@@ -150,7 +140,7 @@ fun ChartLayout(
                                     .padding(vertical = 4.dp),
                                 title = stringResource(Res.string.total),
                                 textColor = MaterialTheme.colorScheme.onBackground,
-                                text = sumTotal.toMoneyString()
+                                text = state.totalExpense.toMoneyString()
                             )
                         }
                     }
@@ -162,12 +152,8 @@ fun ChartLayout(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         state.items.forEach { chart ->
-                            val checkTotal =  remember(state.isIncomeShown){
-                                if (state.isIncomeShown) {
-                                    chart.itemsIncome.sumOf { it.cost }
-                                }else{
-                                    chart.itemsNotIncome.sumOf { it.cost }
-                                }
+                            val checkTotal =  remember(chart){
+                                chart.items.sumOf{ it.cost }
                             }
                             if (checkTotal != 0L){
                                 Row(

@@ -28,7 +28,7 @@ class ChartRepositoryImpl(
             val chartItems = mutableListOf<Chart>()
             showTypes.forEach { type ->
                val expenses = expenseList.filter {
-                   type.typeIdTimestamp == it.typeId
+                   type.typeIdTimestamp == it.typeId && !it.isIncome
                }
                if (expenses.isNotEmpty()){
                    chartItems.add(
