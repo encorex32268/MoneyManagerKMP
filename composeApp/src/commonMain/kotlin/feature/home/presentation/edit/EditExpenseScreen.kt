@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalResourceApi::class, KoinExperimentalAPI::class)
+@file:OptIn(ExperimentalResourceApi::class, KoinExperimentalAPI::class,
+    ExperimentalMaterial3Api::class
+)
 
 package feature.home.presentation.edit
 
@@ -22,13 +24,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -165,8 +168,7 @@ fun EditExpenseScreen(
                             contentDescription = null
                         )
                     }
-                },
-                backgroundColor = Color.White
+                }
             )
         }
     ){ paddingValues ->

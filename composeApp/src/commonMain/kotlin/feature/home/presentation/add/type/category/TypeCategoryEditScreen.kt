@@ -1,12 +1,12 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package feature.home.presentation.add.type.category
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,16 +16,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,8 +31,8 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,19 +44,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import feature.core.presentation.ObserveAsEvents
-import feature.core.presentation.Texts
 import feature.core.presentation.model.CategoryUi
 import feature.core.presentation.navigation.NavigationLayoutType
-import feature.home.presentation.reorderable.ReorderableItem
-import feature.home.presentation.reorderable.detectReorderAfterLongPress
-import feature.home.presentation.reorderable.rememberReorderableLazyGridState
-import feature.home.presentation.reorderable.reorderable
+import feature.core.presentation.noRippleClick
 import feature.home.presentation.add.components.CategoryItem
 import feature.home.presentation.add.type.TypeUi
 import feature.home.presentation.add.type.category.components.CategoryAddDialog
 import feature.home.presentation.add.type.components.ColorPickerDialog
-import feature.core.presentation.noRippleClick
-import kotlinx.coroutines.flow.collectLatest
+import feature.home.presentation.reorderable.ReorderableItem
+import feature.home.presentation.reorderable.detectReorderAfterLongPress
+import feature.home.presentation.reorderable.rememberReorderableLazyGridState
+import feature.home.presentation.reorderable.reorderable
 import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.save_snackbar
@@ -210,8 +205,7 @@ fun TypeCategoryEditScreen(
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
-                },
-                backgroundColor = MaterialTheme.colorScheme.background
+                }
             )
         }
     ){

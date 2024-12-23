@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalResourceApi::class, KoinExperimentalAPI::class)
+@file:OptIn(ExperimentalResourceApi::class, KoinExperimentalAPI::class,
+    ExperimentalMaterial3Api::class
+)
 
 package feature.chart.presentation.chartdetail
 
@@ -16,9 +18,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -80,8 +83,7 @@ fun DetailScreen(
                             contentDescription = null
                         )
                     }
-                },
-                backgroundColor = Color.White
+                }
             )
         }
     ){

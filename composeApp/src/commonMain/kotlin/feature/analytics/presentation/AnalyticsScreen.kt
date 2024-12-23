@@ -1,4 +1,4 @@
-@file:OptIn(KoinExperimentalAPI::class)
+@file:OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3Api::class)
 
 package feature.analytics.presentation
 
@@ -19,13 +19,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -121,8 +121,7 @@ fun AnalyticsScreen(
                             contentDescription = "backup icon"
                         )
                     }
-                },
-                backgroundColor = Color.White
+                }
             )
         }
     ){
