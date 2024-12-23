@@ -70,7 +70,8 @@ fun CategoryItem(
                         }
                     ,
                     imageVector = Icons.Default.Close,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = if (isClicked) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground
                 )
             }
 
@@ -84,7 +85,9 @@ fun CategoryItem(
             }
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             )
         }
 

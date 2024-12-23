@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,41 +28,31 @@ fun CircleIcon(
     isClicked: Boolean = false,
     id: Int?=null,
     onItemClick: (Int) -> Unit = {},
-    backgroundColor: Color,
-    colorCheck: Boolean = false
+    backgroundColor: Color
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    color = if (isClicked) backgroundColor else Color.White,
-                    shape = CircleShape
-                )
-                .clip(CircleShape)
-                .noRippleClick {
-                    id?.let {
-                        onItemClick(it)
-                    }
-                },
-            contentAlignment = Alignment.Center
-        ){
-            image?.let {
-                val tintColor = remember(backgroundColor){
-                    if (backgroundColor.luminance() < 0.5f && colorCheck) Color(0xFFFDFDFD) else Color.Black
+    Box(
+        modifier = modifier
+            .background(
+                color = if (isClicked) backgroundColor else Color.Unspecified,
+                shape = CircleShape
+            )
+            .clip(CircleShape)
+            .noRippleClick {
+                id?.let {
+                    onItemClick(it)
                 }
-                Icon(
-                    modifier = Modifier
-                        .size(50.dp)
-                        .padding(8.dp),
-                    painter = image,
-                    contentDescription = null,
-                    tint = tintColor,
-                )
-            }
+            },
+        contentAlignment = Alignment.Center
+    ){
+        image?.let {
+            Icon(
+                modifier = Modifier
+                    .size(50.dp)
+                    .padding(8.dp),
+                painter = image,
+                contentDescription = null,
+                tint = if (isClicked) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground,
+            )
         }
     }
 

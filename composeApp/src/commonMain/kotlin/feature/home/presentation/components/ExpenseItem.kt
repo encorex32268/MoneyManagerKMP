@@ -112,7 +112,6 @@ fun ExpenseItem(
                             isClicked = isClick,
                             image = CategoryList.getCategoryIconById(expense.categoryId.toLong()),
                             backgroundColor = if (findType == null) CategoryList.getColorByTypeId(expense.typeId) else Color(findType.colorArgb),
-                            colorCheck = true
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Row(

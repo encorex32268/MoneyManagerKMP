@@ -4,6 +4,7 @@ package feature.home.presentation.add.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,6 +49,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import feature.core.presentation.Texts
 import feature.core.presentation.navigation.NavigationLayoutType
+import feature.core.ui.calculateCalendarDarkContainerColor
+import feature.core.ui.calculateCalendarLightContainerColor
+import feature.core.ui.calculateDoneDarkContainerColor
+import feature.core.ui.calculateDoneLightContainerColor
+import feature.core.ui.calculateRemoveDarkContainerColor
+import feature.core.ui.calculateRemoveLightContainerColor
 import feature.core.ui.light_ErrorColorContainer
 import feature.home.presentation.add.AddEvent
 import feature.home.presentation.add.AddState
@@ -87,16 +94,9 @@ fun CalculateLayout(
     val isShowDialog = rememberSaveable { mutableStateOf(false) }
     if (isShowDialog.value) {
         DatePickerDialog(
-            colors = DatePickerDefaults.colors(
-                containerColor = Color.White
-            ),
             onDismissRequest = { isShowDialog.value = false },
             confirmButton = {
                 TextButton(
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.Black,
-                        containerColor = Color.Transparent
-                    ),
                     onClick = {
                         onEvent(
                             AddEvent.OnSelectedDate(
@@ -114,10 +114,6 @@ fun CalculateLayout(
             },
             dismissButton = {
                 TextButton(
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.Black,
-                        containerColor = Color.Transparent
-                    ),
                     onClick = { isShowDialog.value = false }) {
                     Text(
                         text = stringResource(Res.string.dialog_cancel_button),
@@ -129,26 +125,7 @@ fun CalculateLayout(
             }
         ) {
             DatePicker(
-                state = datePickerState,
-                colors = DatePickerDefaults.colors(
-                    containerColor = Color.White,
-                    selectedDayContainerColor = Color.Black,
-                    dayContentColor = Color.Black,
-                    todayDateBorderColor = Color.Black,
-                    todayContentColor = Color.Black,
-                    selectedYearContainerColor = Color.Black,
-                    selectedYearContentColor = Color.White,
-                    yearContentColor = Color.Black,
-                    dateTextFieldColors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Black,
-                        focusedLabelColor = Color.Black,
-                        disabledLabelColor = Color.Black,
-                        cursorColor = Color.Black,
-                        focusedContainerColor = Color.White,
-                        disabledContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White
-                    )
-                )
+                state = datePickerState
             )
         }
     }
@@ -261,14 +238,14 @@ private fun CalculateKeyboard(
                 onClick = {
                     onEvent(AddEvent.OnDeleteTextClick)
                 },
-                backgroundColor = light_ErrorColorContainer
+                backgroundColor = if (isSystemInDarkTheme()) calculateRemoveDarkContainerColor else calculateRemoveLightContainerColor
             )
             CalendarButton(
                 modifier = Modifier.aspectRatio(aspectRatio / 2),
                 month = month.toInt(),
                 day = day.toInt(),
                 onClick = onCalendarButtonClick,
-
+                backgroundColor = if (isSystemInDarkTheme()) calculateCalendarDarkContainerColor else calculateCalendarLightContainerColor
             )
             CalculateIconButton(
                 modifier = numberButtonModifier,
@@ -277,7 +254,7 @@ private fun CalculateKeyboard(
                 onClick = {
                     onEvent(AddEvent.OnSaveClick)
                 },
-                backgroundColor = Color(69, 230, 0, 59)
+                backgroundColor = if (isSystemInDarkTheme()) calculateDoneDarkContainerColor else calculateDoneLightContainerColor
             )
         }
 
@@ -328,7 +305,8 @@ private fun CalendarButton(
     month: Int = 1,
     day: Int = 6,
     onClick: () -> Unit = {},
-    shape: Shape = RoundedCornerShape(16.dp)
+    shape: Shape = RoundedCornerShape(16.dp),
+    backgroundColor: Color
 ){
     Box(
         modifier = modifier
@@ -336,7 +314,7 @@ private fun CalendarButton(
             .size(36.dp)
             .clip(shape)
             .background(
-                color = Color(227,236,254),
+                color = backgroundColor,
                 shape = shape
             )
             .clickable { onClick() }
@@ -350,7 +328,7 @@ private fun CalendarButton(
             Icon(
                 imageVector = Icons.Outlined.DateRange,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = MaterialTheme.colorScheme.onBackground,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(

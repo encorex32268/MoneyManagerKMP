@@ -39,8 +39,7 @@ fun ExpenseInfo(
             modifier = Modifier.size(36.dp),
             backgroundColor = if (categoryUi?.colorArgb == null) CategoryList.getColorByTypeId(categoryUi?.typeId?:0) else Color(categoryUi.colorArgb),
             image = CategoryList.getCategoryIconById(categoryUi?.id?.toLong()?:0),
-            isClicked = true,
-            colorCheck = true
+            isClicked = true
         )
         Spacer(modifier = Modifier.width(12.dp))
         BasicTextField(
@@ -52,15 +51,16 @@ fun ExpenseInfo(
                     Text(
                         text = stringResource(Res.string.description),
                         style = MaterialTheme.typography.bodyMedium.copy(
-                            color = Color.LightGray,
-                            fontSize = 16.sp
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     )
                 }
                 it()
             },
             textStyle = MaterialTheme.typography.bodyMedium.copy(
-                fontSize = 14.sp
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onBackground
             )
         )
         Spacer(modifier = Modifier.width(4.dp))
@@ -68,7 +68,7 @@ fun ExpenseInfo(
             text = cost.toMoneyString(),
             maxLines = 1,
             style = MaterialTheme.typography.labelLarge.copy(
-                fontSize = 16.sp
+                fontSize = 20.sp
             )
         )
     }

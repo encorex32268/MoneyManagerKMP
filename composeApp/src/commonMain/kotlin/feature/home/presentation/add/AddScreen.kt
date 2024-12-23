@@ -173,7 +173,8 @@ fun AddScreen(
                     ){
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
@@ -185,15 +186,14 @@ fun AddScreen(
                     ) {
                         Icon(
                             imageVector = vectorResource(Res.drawable.baseline_edit_note_24),
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
-                backgroundColor = Color.White
+                backgroundColor = MaterialTheme.colorScheme.background
             )
         },
-        containerColor = Color.White,
-        sheetContainerColor = Color.White,
         sheetShadowElevation = 8.dp,
         modifier = Modifier
             .pointerInput(Unit) {
