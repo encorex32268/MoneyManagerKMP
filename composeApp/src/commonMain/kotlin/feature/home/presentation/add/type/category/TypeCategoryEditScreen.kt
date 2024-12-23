@@ -152,7 +152,6 @@ fun TypeCategoryEditScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 8.dp)
-                            .background(Color.White)
                             .noRippleClick {
                                 isShowColorPicker = true
                             }
@@ -170,12 +169,15 @@ fun TypeCategoryEditScreen(
                         Text(
                             modifier = Modifier.padding(horizontal = 8.dp),
                             text = state.typeUi.name,
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
                         )
                         Icon(
                             modifier = Modifier.size(16.dp),
                             imageVector = Icons.Default.Edit,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
@@ -189,7 +191,8 @@ fun TypeCategoryEditScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
@@ -203,11 +206,12 @@ fun TypeCategoryEditScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Check,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
-                backgroundColor = Color.White
+                backgroundColor = MaterialTheme.colorScheme.background
             )
         }
     ){
@@ -215,7 +219,6 @@ fun TypeCategoryEditScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
-                .background(Color.White)
         ) {
             ItemsSection(
                 navigationLayoutType = navigationLayoutType,
@@ -232,7 +235,7 @@ fun TypeCategoryEditScreen(
                             .padding(16.dp)
                             .border(
                                 0.dp,
-                                color = Color.Black,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 shape = RoundedCornerShape(16.dp)
                             )
                             .reorderable(reorderState)
@@ -248,7 +251,6 @@ fun TypeCategoryEditScreen(
                                 modifier = Modifier
                                     .padding(4.dp)
                                     .detectReorderAfterLongPress(reorderState)
-                                    .background(Color.White)
                                 ,
                                 reorderableState = reorderState,
                                 key = item.uuid
@@ -274,7 +276,7 @@ fun TypeCategoryEditScreen(
                             .padding(16.dp)
                             .border(
                                 0.dp,
-                                color = Color.Black,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 shape = RoundedCornerShape(16.dp)
                             ),
                         columns = GridCells.Fixed(gridCells),
@@ -349,7 +351,6 @@ private fun ItemsSection(
     when(navigationLayoutType){
         NavigationLayoutType.BOTTOM_NAVIGATION -> {
             Column(
-                modifier = modifier.background(Color.White),
                 verticalArrangement = Arrangement.SpaceBetween
             ){
                 content()
@@ -357,7 +358,6 @@ private fun ItemsSection(
         }
         else -> {
             Row(
-                modifier = modifier.background(Color.White),
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
                 content()

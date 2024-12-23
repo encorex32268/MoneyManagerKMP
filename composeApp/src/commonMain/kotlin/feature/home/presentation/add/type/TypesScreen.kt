@@ -3,6 +3,7 @@
 package feature.home.presentation.add.type
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -130,7 +131,8 @@ fun TypesScreen(
                     ){
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
@@ -142,20 +144,19 @@ fun TypesScreen(
                     ){
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
-                backgroundColor = Color.White
+                backgroundColor = MaterialTheme.colorScheme.background
             )
         }
     ){
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(it)
-                .background(Color.White)
-            ,
+                .padding(it),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ){
             LazyColumn(
@@ -181,15 +182,13 @@ fun TypesScreen(
                     ) { isDragging ->
                         Row (
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Color.White)
-                            ,
+                                .fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ){
                             Icon(
                                 imageVector = Icons.Default.Menu,
                                 contentDescription = null,
-                                tint = Color.LightGray
+                                tint = MaterialTheme.colorScheme.onBackground
                             )
                             Spacer(modifier = Modifier.padding(4.dp))
                             Box(
@@ -215,7 +214,8 @@ fun TypesScreen(
                             ){
                                 Icon(
                                     imageVector = Icons.Default.Edit,
-                                    contentDescription = null
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground
                                 )
                             }
                             IconButton(
@@ -227,7 +227,8 @@ fun TypesScreen(
                             ){
                                 Icon(
                                     imageVector = vectorResource(Res.drawable.baseline_visibility_24),
-                                    contentDescription = null
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onBackground
                                 )
                             }
 
@@ -321,16 +322,13 @@ private fun OnHideTypeItem(
 
     Row (
         modifier = modifier
-            .fillMaxWidth()
-            .background(Color.White)
-        ,
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ){
         Icon(
             modifier = Modifier.alpha(0f),
             imageVector = Icons.Default.Menu,
             contentDescription = null,
-            tint = Color.LightGray
         )
         Spacer(modifier = Modifier.padding(4.dp))
         Box(
@@ -348,7 +346,7 @@ private fun OnHideTypeItem(
             ,
             text = item.name,
             style = MaterialTheme.typography.bodyMedium.copy(
-                color = Color.LightGray
+                color = MaterialTheme.colorScheme.onBackground
             )
         )
         IconButton(
@@ -359,7 +357,7 @@ private fun OnHideTypeItem(
             Icon(
                 imageVector = vectorResource(Res.drawable.baseline_visibility_off_24),
                 contentDescription = null,
-                tint = Color.LightGray
+                tint = MaterialTheme.colorScheme.onBackground
             )
         }
         IconButton(
@@ -370,7 +368,7 @@ private fun OnHideTypeItem(
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = null,
-                tint = Color.LightGray
+                tint = MaterialTheme.colorScheme.onBackground
             )
         }
 

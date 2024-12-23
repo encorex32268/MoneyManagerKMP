@@ -67,7 +67,7 @@ fun CategoryAddDialog(
                         focusManager.clearFocus(true)
                     }
                     .background(
-                        Color.White,
+                        color = MaterialTheme.colorScheme.background,
                         shape = RoundedCornerShape(24.dp)
                     )
                 ,
@@ -82,7 +82,8 @@ fun CategoryAddDialog(
                         modifier = Modifier
                             .size(24.dp),
                         painter = CategoryList.getCategoryIconById(categoryUi.id.toLong()),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(Modifier.width(12.dp))
                     BasicTextField(
@@ -91,7 +92,7 @@ fun CategoryAddDialog(
                             .height(36.dp)
                             .border(
                                 0.5.dp,
-                                color = Color.LightGray,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 shape = RoundedCornerShape(8.dp)
                             )
                             .padding(horizontal = 8.dp)
@@ -110,14 +111,16 @@ fun CategoryAddDialog(
                                 Text(
                                     text = stringResource(Res.string.category_add_description),
                                     style = MaterialTheme.typography.bodyMedium.copy(
-                                        color = Color.LightGray,
+                                        color = MaterialTheme.colorScheme.onBackground,
                                         fontSize = 12.sp
                                     )
                                 )
                             }
                             it()
                         },
-                        textStyle = MaterialTheme.typography.bodyMedium
+                        textStyle = MaterialTheme.typography.bodyMedium.copy(
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                     )
                     IconButton(
                         onClick = {
@@ -126,7 +129,8 @@ fun CategoryAddDialog(
                         }) {
                         Icon(
                             imageVector = Icons.Default.Check,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
 
