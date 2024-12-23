@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
@@ -95,8 +96,10 @@ fun App(
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background)
+                .systemBarsPadding()
                 .navigationBarsPadding()
-                .systemBarsPadding(),
+            ,
             bottomBar = {
                 AnimatedVisibility(
                     visible = isMainCurrentDestination(currentDestination) && (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION),
@@ -140,7 +143,7 @@ fun App(
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(paddingValues)
             ) {
                 AnimatedVisibility(
                     visible = (isMainCurrentDestination(currentDestination) && navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL),
@@ -185,6 +188,7 @@ fun App(
                     }
                 }
                 NavHost(
+                    modifier = Modifier.fillMaxSize(),
                     navController = navController,
                     startDestination = Route.HomeGraph
                 ){

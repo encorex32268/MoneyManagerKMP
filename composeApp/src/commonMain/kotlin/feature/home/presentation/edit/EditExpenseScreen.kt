@@ -284,7 +284,7 @@ private fun TimestampSection(
     val dayOfWeek = stringResource(timestamp.toLocalDateTime().toDayOfWeekStringResource())
     val date = remember(timestamp){
         val localDateTime = timestamp.toLocalDateTime()
-        "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} ${dayOfWeek}"
+        "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} (${dayOfWeek}) ${localDateTime.hour}:${localDateTime.minute}:${localDateTime.second}"
     }
     Row(
         modifier = Modifier.fillMaxWidth(),

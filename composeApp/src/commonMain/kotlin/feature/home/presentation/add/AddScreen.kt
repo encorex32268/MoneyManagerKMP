@@ -249,8 +249,7 @@ fun AddScreen(
         }
     ){
         Column(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             if (shouldShowDefaultButtons && !state.isLoading){
                 Column(
@@ -309,9 +308,7 @@ fun AddScreenNaviRail(
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = Modifier.fillMaxSize().background(
-            color = Color.White
-        )
+        modifier = Modifier.fillMaxSize()
     ) {
         Row{
             Column(
