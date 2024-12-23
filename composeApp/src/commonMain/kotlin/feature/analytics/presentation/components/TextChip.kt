@@ -30,9 +30,9 @@ fun TextChip(
             .background(
                 shape = RoundedCornerShape(16.dp),
                 color = if (isSelected) {
-                    Color.Black
+                    MaterialTheme.colorScheme.onBackground
                 }else{
-                    Color.White
+                    MaterialTheme.colorScheme.background
                 }
             )
         ,
@@ -41,9 +41,9 @@ fun TextChip(
         Text(
             text = text,
             color = if (!isSelected) {
-                Color.Black
+                MaterialTheme.colorScheme.onBackground
             }else{
-                Color.White
+                MaterialTheme.colorScheme.background
             },
             style = MaterialTheme.typography.titleSmall
         )

@@ -2,6 +2,7 @@ package feature.core.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,7 +52,15 @@ fun CircleIcon(
                     .padding(8.dp),
                 painter = image,
                 contentDescription = null,
-                tint = if (isClicked) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground,
+                tint =
+                    when(isSystemInDarkTheme()){
+                        true -> {
+                            if (isClicked) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground
+                        }
+                        else -> {
+                            MaterialTheme.colorScheme.onBackground
+                        }
+                    }
             )
         }
     }

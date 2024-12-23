@@ -4,10 +4,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-val ErrorColor = Color(0xFFFF2A46)
-val light_ErrorColorContainer = Color(0xFFFFD9DD)
-
-val calculateRemoveLightContainerColor = Color(0xFFFDEE1)
+val calculateRemoveLightContainerColor = Color(0xFFFFD9DD)
 val calculateCalendarLightContainerColor = Color(0xFFe8efff)
 val calculateDoneLightContainerColor = Color(0xFFe3ffde)
 

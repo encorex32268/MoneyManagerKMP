@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -91,11 +92,11 @@ fun ChartLayout(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(3f),
+                            .weight(2f),
                         contentAlignment = Alignment.Center
                     ){
                         Box(modifier = Modifier
-                            .padding(16.dp)
+                            .padding(4.dp)
                             .sizeIn(
                                 minWidth = 150.dp,
                                 minHeight = 150.dp,
@@ -120,7 +121,7 @@ fun ChartLayout(
                                         sweepAngle = sweepAngle * chartProgress.value,
                                         useCenter = false,
                                         style = Stroke(
-                                            width = 30.dp.toPx()
+                                            width = 24.dp.toPx()
                                         )
                                     )
                                 }

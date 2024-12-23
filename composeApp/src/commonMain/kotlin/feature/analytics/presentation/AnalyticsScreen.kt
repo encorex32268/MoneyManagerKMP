@@ -8,6 +8,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -78,11 +79,13 @@ fun AnalyticsScreen(
     onEvent: (AnalyticsEvent) -> Unit = {},
 ) {
 
-    val lineChartStyle = remember {
+    val chartLineColor = MaterialTheme.colorScheme.onBackground
+    val unselectedColor = MaterialTheme.colorScheme.onSecondaryContainer
+    val lineChartStyle = remember(isSystemInDarkTheme()){
         LineChartStyle(
-            chartLineColor = Color.Black,
-            unselectedColor = Color(0xFFC8C8C8),
-            selectedColor = Color.Black,
+            chartLineColor = chartLineColor,
+            unselectedColor = unselectedColor,
+            selectedColor =chartLineColor,
             helperLinesThicknessPx = 1f,
             axisLinesThicknessPx = 5f,
             labelFontSize = 14.sp,
@@ -128,8 +131,7 @@ fun AnalyticsScreen(
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it)
-                .background(Color.White),
+                .padding(it),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.Start
         ){

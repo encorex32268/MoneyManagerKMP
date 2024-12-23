@@ -320,7 +320,7 @@ fun LineChart(
                     pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f,5f),0f)
                 )
                 drawCircle(
-                    color = Color.White,
+                    color = style.chartLineColor,
                     radius = 15f,
                     center = circleOffset
                 )

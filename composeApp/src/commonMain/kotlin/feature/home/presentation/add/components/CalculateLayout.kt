@@ -8,11 +8,9 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,10 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,8 +26,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
-
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +40,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import feature.core.presentation.Texts
 import feature.core.presentation.navigation.NavigationLayoutType
 import feature.core.ui.calculateCalendarDarkContainerColor
 import feature.core.ui.calculateCalendarLightContainerColor
@@ -55,7 +47,6 @@ import feature.core.ui.calculateDoneDarkContainerColor
 import feature.core.ui.calculateDoneLightContainerColor
 import feature.core.ui.calculateRemoveDarkContainerColor
 import feature.core.ui.calculateRemoveLightContainerColor
-import feature.core.ui.light_ErrorColorContainer
 import feature.home.presentation.add.AddEvent
 import feature.home.presentation.add.AddState
 import moneymanagerkmp.composeapp.generated.resources.Res
@@ -64,7 +55,6 @@ import moneymanagerkmp.composeapp.generated.resources.baseline_remove
 import moneymanagerkmp.composeapp.generated.resources.dialog_cancel_button
 import moneymanagerkmp.composeapp.generated.resources.dialog_ok_button
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 

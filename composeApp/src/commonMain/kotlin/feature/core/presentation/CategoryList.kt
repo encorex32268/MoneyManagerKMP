@@ -549,12 +549,6 @@ object CategoryList {
             HEALTH + 10 -> {
                 painterResource(Res.drawable.health_massage)
             }
-            HEALTH + 11 -> {
-                painterResource(Res.drawable.health_calendar)
-            }
-            HEALTH + 12 -> {
-                painterResource(Res.drawable.health_card)
-            }
 
             SPORTS + 1 -> {
                 painterResource(Res.drawable.sports_sports)
@@ -906,7 +900,12 @@ object CategoryList {
             OTHER + 46 -> { painterResource(Res.drawable.other_post) }
             OTHER + 47 -> { painterResource(Res.drawable.other_stationery) }
             OTHER + 48 -> { painterResource(Res.drawable.other_study) }
-
+            HEALTH + 11 -> {
+                painterResource(Res.drawable.health_calendar)
+            }
+            HEALTH + 12 -> {
+                painterResource(Res.drawable.health_card)
+            }
 
             else -> {
                 painterResource(Res.drawable.other_unknown)
@@ -1198,12 +1197,7 @@ object CategoryList {
                 stringResource(Res.string.health_massage)
             }
 
-            HEALTH + 11 -> {
-                stringResource(Res.string.health_calendar)
-            }
-            HEALTH + 12 -> {
-                stringResource(Res.string.health_card)
-            }
+
 
             SPORTS + 1 -> {
                 stringResource(Res.string.sports_sports)
@@ -1569,6 +1563,12 @@ object CategoryList {
             FOOD + 29 -> { stringResource(Res.string.food_sauce) }
             FOOD + 30 -> { stringResource(Res.string.food_streetfood) }
             FOOD + 31 -> { stringResource(Res.string.food_water) }
+            HEALTH + 11 -> {
+                stringResource(Res.string.health_calendar)
+            }
+            HEALTH + 12 -> {
+                stringResource(Res.string.health_card)
+            }
             else -> {
                 ""
             }
@@ -2222,7 +2222,8 @@ object CategoryList {
             FOOD + 29 -> { getString(Res.string.food_sauce) }
             FOOD + 30 -> { getString(Res.string.food_streetfood) }
             FOOD + 31 -> { getString(Res.string.food_water) }
-
+            HEALTH + 11 -> { getString(Res.string.health_calendar) }
+            HEALTH + 12 -> { getString(Res.string.health_card) }
             else -> {
                 "?"
             }
