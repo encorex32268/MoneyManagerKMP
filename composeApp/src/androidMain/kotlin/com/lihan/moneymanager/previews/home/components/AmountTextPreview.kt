@@ -27,12 +27,10 @@ fun AmountTextPreview(){
             AmountText(
                 title = "Total",
                 text = "￥1,234,56",
-                textColor = Color.Black
             )
             AmountText(
                 title = "Testerqweqweew",
                 text = "￥1,234,56,13213123",
-                textColor = Color.Black
             )
         }
     }

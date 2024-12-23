@@ -56,8 +56,10 @@ fun SpendingLimitProgressBar(
     }
     val animatedProgress = progress * animatable.value
 
+    val errorColor = MaterialTheme.colorScheme.error
+    val onBackgroundColor = MaterialTheme.colorScheme.onBackground
     val limitOverColor = remember(spendingLimit , totalExpense){
-        if (totalExpense > spendingLimit ) ErrorColor else Color.Black
+        if (totalExpense > spendingLimit && spendingLimit != 0L) errorColor else onBackgroundColor
     }
     Column(
         modifier = modifier.padding(8.dp),
@@ -112,8 +114,7 @@ fun SpendingLimitProgressBar(
                     .padding(8.dp),
                 progress = animatedProgress,
                 strokeCap = StrokeCap.Round,
-                backgroundColor = Color.LightGray.copy(alpha = 0.5f),
-                color = limitOverColor
+                color = limitOverColor,
             )
             Text(
                 text =  "${(progress * 100).toDouble().format(1)}%",

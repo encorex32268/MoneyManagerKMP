@@ -65,9 +65,7 @@ fun ChartScreen(
     navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ){
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
+        modifier = Modifier.fillMaxSize()
     ) {
         DatePicker(
             year = state.nowDateYear.toIntOrNull()?:0,

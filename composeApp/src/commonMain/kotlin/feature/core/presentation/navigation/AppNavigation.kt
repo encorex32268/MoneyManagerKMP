@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -23,28 +25,26 @@ fun AppNavigationBottom(
     onBarItemClick: (Int,String) -> Unit = { _ , _-> }
 ){
     NavigationBar(
-        containerColor = Color.White,
         modifier = Modifier.height(60.dp)
     ) {
         bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
+            val isSelected = itemSelectedIndex == index
             NavigationBarItem(
-                colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Color.LightGray.copy(alpha = 0.3f)
-                ),
-                selected = (itemSelectedIndex == index),
+                selected = isSelected,
                 onClick = {
                     onBarItemClick(index , bottomNavigationItem.name)
                 },
                 icon = {
                     Icon(
                         painter = painterResource(
-                            if (itemSelectedIndex == index) {
+                            if (isSelected) {
                                 bottomNavigationItem.selectedIcon
                             } else {
                                 bottomNavigationItem.unSelectedIcon
                             }
                         ),
                         contentDescription = bottomNavigationItem.name,
+                        tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.medium)
                     )
                 }
             )
@@ -60,31 +60,26 @@ fun AppNavigationRail(
 ){
 
     NavigationRail(
-        containerColor = Color.White,
         modifier = Modifier.width(60.dp)
     ) {
         bottomNavigationItems.forEachIndexed { index, bottomNavigationItem ->
+            val isSelected = itemSelectedIndex == index
             NavigationRailItem(
-                colors = NavigationRailItemDefaults.colors(
-                    indicatorColor = Color.LightGray.copy(alpha = 0.3f)
-                ),
-                selected = (itemSelectedIndex == index),
+                selected = isSelected,
                 onClick = {
-                    onBarItemClick(
-                        index,
-                        bottomNavigationItem.name
-                    )
+                    onBarItemClick(index , bottomNavigationItem.name)
                 },
                 icon = {
                     Icon(
                         painter = painterResource(
-                            if (itemSelectedIndex == index) {
+                            if (isSelected) {
                                 bottomNavigationItem.selectedIcon
                             } else {
                                 bottomNavigationItem.unSelectedIcon
                             }
                         ),
                         contentDescription = bottomNavigationItem.name,
+                        tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.medium)
                     )
                 }
             )

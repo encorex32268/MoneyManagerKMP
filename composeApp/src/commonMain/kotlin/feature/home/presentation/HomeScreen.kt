@@ -101,19 +101,16 @@ fun HomeScreen(
     navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION,
 ){
     Scaffold(
-        containerColor = Color.White,
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
                     onEvent(HomeEvent.OnGotoAddScreen)
-                },
-                containerColor = MaterialTheme.colorScheme.onBackground
+                }
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription =null,
-                    tint = MaterialTheme.colorScheme.background
+                    contentDescription =null
                 )
             }
         }
@@ -121,7 +118,6 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
                 .padding(it)
         ) {
             DatePicker(

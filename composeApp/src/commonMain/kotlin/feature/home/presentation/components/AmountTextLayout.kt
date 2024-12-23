@@ -50,7 +50,6 @@ fun AmountTextLayout(
     when(navigationLayoutType){
         NavigationLayoutType.BOTTOM_NAVIGATION -> {
             Box(
-                modifier = modifier.background(Color.White),
                 contentAlignment = Alignment.Center
             ){
                 AmountTextLayoutNaviBottom(
@@ -130,6 +129,9 @@ private fun AmountSection(
     onExpenseLimitClick: () -> Unit = {}
 ) {
 
+    val errorColor = MaterialTheme.colorScheme.error
+    val onBackgroundColor = MaterialTheme.colorScheme.onBackground
+
     Row(
         modifier = modifier.clickable {
             onExpenseLimitClick()
@@ -140,11 +142,13 @@ private fun AmountSection(
         AmountText(
             title = stringResource(Res.string.total_expense),
             text = totalExpense.toMoneyString(),
-            textColor = if (totalExpense > expenseLimit) ErrorColor else MaterialTheme.colorScheme.onBackground
+            textStyle = MaterialTheme.typography.labelLarge.copy(
+                color = if (totalExpense > expenseLimit && expenseLimit != 0L) errorColor else onBackgroundColor,
+                fontSize = 24.sp
+            )
         )
         AmountText(
             title = "",
-            textColor = MaterialTheme.colorScheme.onBackground,
             text = "|",
         )
         Row(
@@ -152,7 +156,6 @@ private fun AmountSection(
         ){
             AmountText(
                 title = stringResource(Res.string.home_spending_limit),
-                textColor = MaterialTheme.colorScheme.onBackground,
                 text = expenseLimit.toMoneyString(),
             )
             Icon(
@@ -160,7 +163,8 @@ private fun AmountSection(
                     .size(12.dp)
                     .align(Alignment.CenterVertically),
                 imageVector = Icons.Default.Edit,
-                contentDescription = "SpendingLimit Edit"
+                contentDescription = "SpendingLimit Edit",
+                tint = MaterialTheme.colorScheme.onBackground
             )
 
         }
@@ -172,7 +176,6 @@ fun AmountText(
     modifier: Modifier = Modifier,
     title: String,
     text: String,
-    textColor: Color,
     textSize: TextUnit = 24.sp,
     textStyle: TextStyle = MaterialTheme.typography.labelLarge.copy(
         fontSize = textSize
@@ -197,7 +200,6 @@ fun AmountText(
             style = textStyle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            color = textColor,
             onTextLayout = {
                 if (it.hasVisualOverflow && dynamicTextSize > 9.sp){
                     dynamicTextSize = (dynamicTextSize.value - 1.0F).sp

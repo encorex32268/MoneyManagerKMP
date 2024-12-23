@@ -139,7 +139,6 @@ fun ChartLayout(
                                 modifier = Modifier
                                     .padding(vertical = 4.dp),
                                 title = stringResource(Res.string.total),
-                                textColor = MaterialTheme.colorScheme.onBackground,
                                 text = state.totalExpense.toMoneyString()
                             )
                         }

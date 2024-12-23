@@ -8,6 +8,7 @@ import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -135,8 +136,7 @@ fun App(
                     )
                 }
             }
-        ){
-            paddingValues ->
+        ){ paddingValues ->
             Row(
                 modifier = Modifier
                     .fillMaxSize()
@@ -201,9 +201,7 @@ fun App(
                         navigationLayoutType = navigationLayoutType
                     )
                     analyticsGraph(
-                        navController = navController,
-                        navigationLayoutType = navigationLayoutType
-                    )
+                        navController = navController)
                 }
             }
 
@@ -215,8 +213,7 @@ fun App(
 
 
 private fun NavGraphBuilder.analyticsGraph(
-    navController: NavHostController,
-    navigationLayoutType: NavigationLayoutType
+    navController: NavHostController
 ) {
     navigation<Route.AnalyticsGraph>(
         startDestination = Route.Analytics

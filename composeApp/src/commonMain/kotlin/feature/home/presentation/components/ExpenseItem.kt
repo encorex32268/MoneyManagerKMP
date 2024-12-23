@@ -66,15 +66,8 @@ fun ExpenseItem(
             "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} $dayOfWeekString"
         }
         OutlinedCard(
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White
-            ),
             modifier = modifier,
-            shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(
-                width = 0.dp ,
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
+            shape = RoundedCornerShape(16.dp)
         ) {
 
             Column(
@@ -128,7 +121,7 @@ fun ExpenseItem(
                         ){
                             Text(
                                 text = expense.description,
-                                style = MaterialTheme.typography.labelSmall
+                                style = MaterialTheme.typography.labelMedium
                             )
                             if (expense.content.trim().isNotEmpty()){
                                 Spacer(modifier = Modifier.width(4.dp))
@@ -136,13 +129,13 @@ fun ExpenseItem(
                                     modifier = Modifier.size(12.dp),
                                     imageVector = vectorResource(Res.drawable.baseline_sticky_note_24),
                                     contentDescription = null,
-                                    tint = Color.Gray
+                                    tint = MaterialTheme.colorScheme.onBackground
                                 )
                             }
                         }
                         Text(
                             text = expense.cost.toMoneyString(),
-                            style = MaterialTheme.typography.labelSmall
+                            style = MaterialTheme.typography.labelMedium
                         )
                     }
                 }

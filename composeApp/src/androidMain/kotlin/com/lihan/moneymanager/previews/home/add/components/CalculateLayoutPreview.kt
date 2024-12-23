@@ -15,12 +15,10 @@ import androidx.compose.ui.unit.dp
 import feature.core.domain.mapper.toCategory
 import feature.core.domain.mapper.toCategoryUi
 import feature.core.domain.mapper.toTypeUi
-import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
 import feature.core.presentation.CategoryList
 import feature.home.presentation.add.AddState
 import feature.home.presentation.add.components.CalculateLayout
-import feature.home.presentation.add.components.CostTypeSelect
 
 @Preview(showSystemUi = true)
 @Composable
