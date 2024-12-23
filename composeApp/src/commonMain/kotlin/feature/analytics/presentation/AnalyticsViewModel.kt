@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import feature.analytics.domain.AnalyticsRepository
 import feature.analytics.presentation.model.DataPoint
+import feature.core.domain.KeySettings
 import feature.core.domain.model.Expense
 import feature.core.presentation.date.DateConverter
 import feature.core.presentation.date.DateConverter.getNowDate
@@ -45,7 +46,7 @@ class AnalyticsViewModel(
                         dataPoints =dataPoints,
                         expenseSum = dataPoints.sumOf { it.y.toLong() },
                         nowDateYear = nowYear.toString(),
-                        nowDateMonth = nowMonth.toString()
+                        nowDateMonth = nowMonth.toString(),
                     )
                 }
             }

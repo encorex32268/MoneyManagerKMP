@@ -23,12 +23,15 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastAny
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -67,93 +70,52 @@ import org.koin.core.annotation.KoinExperimentalAPI
 import kotlin.reflect.typeOf
 
 
+val LocalDarkLightMode = compositionLocalOf { false }
 
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 @Preview
-fun App(
-    appViewModel:AppViewModel = koinViewModel<AppViewModel>()
-) {
-    AppTheme {
-        val navController = rememberNavController()
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination?.route
-        var itemSelectedIndex by remember(currentDestination) {
-            mutableStateOf(
-                when(currentDestination){
-                    "Route.Chart"->1
-                    "Route.Analytics" -> 2
-                    else -> 0
-                }
-            )
-        }
+fun App(){
+    val viewModel = koinViewModel<AppViewModel>()
+    val appState by viewModel.state.collectAsStateWithLifecycle()
 
-        val windowSizeClass = calculateWindowSizeClass()
-        val navigationLayoutType = windowSizeClass.calculateNavigationLayout(
-            currentRoute = currentDestination,
-        )
-        Scaffold(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background)
-                .systemBarsPadding()
-                .navigationBarsPadding()
-            ,
-            bottomBar = {
-                AnimatedVisibility(
-                    visible = isMainCurrentDestination(currentDestination) && (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION),
-                    enter = slideInVertically(),
-                    exit = slideOutVertically(),
-                ){
-                    AppNavigationBottom(
-                        itemSelectedIndex = itemSelectedIndex,
-                        onBarItemClick = { index , name ->
-                            if(itemSelectedIndex != index){
-                                itemSelectedIndex = index
-                                navController.navigate(
-                                    route = name,
-                                    navOptions = when(name){
-                                        "Route.Home" -> {
-                                             navOptions {
-                                                popUpTo(navController.graph.startDestinationId) {
-                                                    inclusive = true
-                                                }
-                                                launchSingleTop = true
-                                            }
-                                        }
-                                        else -> {
-                                            navOptions {
-                                                popUpTo("Route.Home") {
-                                                    inclusive = false
-                                                }
-                                                launchSingleTop = true
-                                            }
-                                        }
-                                    }
-
-                                )
-                            }
-
-                        }
-                    )
-                }
+    CompositionLocalProvider( LocalDarkLightMode provides appState.isDarkMode){
+        AppTheme(
+            darkTheme = LocalDarkLightMode.current
+        ){
+            val navController = rememberNavController()
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination?.route
+            var itemSelectedIndex by remember(currentDestination) {
+                mutableStateOf(
+                    when(currentDestination){
+                        "Route.Chart"->1
+                        "Route.Analytics" -> 2
+                        else -> 0
+                    }
+                )
             }
-        ){ paddingValues ->
-            Row(
+
+            val windowSizeClass = calculateWindowSizeClass()
+            val navigationLayoutType = windowSizeClass.calculateNavigationLayout(
+                currentRoute = currentDestination,
+            )
+            Scaffold(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                AnimatedVisibility(
-                    visible = (isMainCurrentDestination(currentDestination) && navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL),
-                    enter = slideInHorizontally(initialOffsetX = { -it }),
-                    exit = shrinkHorizontally() + fadeOut(),
-                ) {
-                    Row {
-                        AppNavigationRail(
+                    .background(color = MaterialTheme.colorScheme.background)
+                    .systemBarsPadding()
+                    .navigationBarsPadding()
+                ,
+                bottomBar = {
+                    AnimatedVisibility(
+                        visible = isMainCurrentDestination(currentDestination) && (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION),
+                        enter = slideInVertically(),
+                        exit = slideOutVertically(),
+                    ){
+                        AppNavigationBottom(
                             itemSelectedIndex = itemSelectedIndex,
-                            onBarItemClick = { index, name ->
+                            onBarItemClick = { index , name ->
                                 if(itemSelectedIndex != index){
                                     itemSelectedIndex = index
                                     navController.navigate(
@@ -176,48 +138,101 @@ fun App(
                                                 }
                                             }
                                         }
+
                                     )
                                 }
+
                             }
-                        )
-                        VerticalDivider(
-                            modifier = Modifier.fillMaxHeight()
-                                .wrapContentWidth(),
-                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
                         )
                     }
                 }
-                NavHost(
-                    modifier = Modifier.fillMaxSize(),
-                    navController = navController,
-                    startDestination = Route.HomeGraph
-                ){
+            ){ paddingValues ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                ) {
+                    AnimatedVisibility(
+                        visible = (isMainCurrentDestination(currentDestination) && navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL),
+                        enter = slideInHorizontally(initialOffsetX = { -it }),
+                        exit = shrinkHorizontally() + fadeOut(),
+                    ) {
+                        Row {
+                            AppNavigationRail(
+                                itemSelectedIndex = itemSelectedIndex,
+                                onBarItemClick = { index, name ->
+                                    if(itemSelectedIndex != index){
+                                        itemSelectedIndex = index
+                                        navController.navigate(
+                                            route = name,
+                                            navOptions = when(name){
+                                                "Route.Home" -> {
+                                                    navOptions {
+                                                        popUpTo(navController.graph.startDestinationId) {
+                                                            inclusive = true
+                                                        }
+                                                        launchSingleTop = true
+                                                    }
+                                                }
+                                                else -> {
+                                                    navOptions {
+                                                        popUpTo("Route.Home") {
+                                                            inclusive = false
+                                                        }
+                                                        launchSingleTop = true
+                                                    }
+                                                }
+                                            }
+                                        )
+                                    }
+                                }
+                            )
+                            VerticalDivider(
+                                modifier = Modifier.fillMaxHeight()
+                                    .wrapContentWidth(),
+                                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                            )
+                        }
+                    }
+                    NavHost(
+                        modifier = Modifier.fillMaxSize(),
+                        navController = navController,
+                        startDestination = Route.HomeGraph
+                    ){
 
-                    homeGraph(
-                        navController = navController,
-                        onChartClick = {
-                            itemSelectedIndex = 1
-                        },
-                        navigationLayoutType = navigationLayoutType
-                    )
-                    chartGraph(
-                        navController = navController,
-                        navigationLayoutType = navigationLayoutType
-                    )
-                    analyticsGraph(
-                        navController = navController)
+                        homeGraph(
+                            navController = navController,
+                            onChartClick = {
+                                itemSelectedIndex = 1
+                            },
+                            navigationLayoutType = navigationLayoutType
+                        )
+                        chartGraph(
+                            navController = navController,
+                            navigationLayoutType = navigationLayoutType
+                        )
+                        analyticsGraph(
+                            navController = navController,
+                            onDarkLightModeSwitch = {
+                                viewModel.onEvent(AppEvent.DarkLightChange)
+                            }
+                        )
+                    }
                 }
-            }
 
+            }
         }
+
     }
+
 }
 
 
 
 
 private fun NavGraphBuilder.analyticsGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    onDarkLightModeSwitch: () -> Unit = {}
 ) {
     navigation<Route.AnalyticsGraph>(
         startDestination = Route.Analytics
@@ -228,7 +243,8 @@ private fun NavGraphBuilder.analyticsGraph(
                     navController.navigate(
                         Route.Backup
                     )
-                }
+                },
+                onDarkLightModeSwitch = onDarkLightModeSwitch
             )
         }
         composable<Route.Backup> {

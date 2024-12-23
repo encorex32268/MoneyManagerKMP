@@ -8,7 +8,7 @@ data class AnalyticsState(
     val dateFilter: DateFilter = DateFilter.SEVEN_DAYS,
     val dataPoints: List<DataPoint> = emptyList(),
     val selectedDataPoint: DataPoint? = null,
-    val expenseSum: Long = 0,
+    val expenseSum: Long = 0
 )
 
 enum class DateFilter(val text: String) {

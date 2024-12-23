@@ -1,5 +1,6 @@
 package feature.core.presentation.components
 
+import LocalDarkLightMode
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -36,7 +37,8 @@ fun SpendingLimitProgressBar(
     totalExpense: Long,
     isShowLimitAndExpense: Boolean = true
 ) {
-    val animatable = remember(isSystemInDarkTheme()) { Animatable(0f) }
+    val isDarkMode = LocalDarkLightMode.current
+    val animatable = remember(isDarkMode) { Animatable(0f) }
 
     LaunchedEffect(spendingLimit, totalExpense) {
         animatable.animateTo(

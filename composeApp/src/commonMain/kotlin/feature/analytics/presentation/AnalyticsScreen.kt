@@ -2,13 +2,12 @@
 
 package feature.analytics.presentation
 
+import LocalDarkLightMode
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,21 +32,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.analytics.presentation.components.LineChart
 import feature.analytics.presentation.components.TextChip
 import feature.analytics.presentation.model.LineChartStyle
-import feature.chart.presentation.ChartEvent
 import feature.core.presentation.components.DatePicker
-import feature.core.presentation.navigation.NavigationLayoutType
 import getScreenWidth
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.backup_backup_icon
 import moneymanagerkmp.composeapp.generated.resources.expense
-import moneymanagerkmp.composeapp.generated.resources.income
+import moneymanagerkmp.composeapp.generated.resources.outline_light_mode_24
+import moneymanagerkmp.composeapp.generated.resources.outline_night_mode_24
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -58,13 +55,16 @@ import toMoneyString
 fun AnalyticsScreenRoot(
     viewModel: AnalyticsViewModel = koinViewModel(),
     onBackupClick: () -> Unit = {},
+    onDarkLightModeSwitch: () -> Unit = {}
 ) {
+
     val state by viewModel.state.collectAsStateWithLifecycle()
     AnalyticsScreen(
         state = state,
         onEvent = { event ->
             when(event){
                 AnalyticsEvent.OnBackupClick         -> onBackupClick()
+                AnalyticsEvent.OnDarkLightModeSwitch -> onDarkLightModeSwitch()
                 else -> Unit
             }
             viewModel.onEvent(event)
@@ -81,7 +81,8 @@ fun AnalyticsScreen(
 
     val chartLineColor = MaterialTheme.colorScheme.onBackground
     val unselectedColor = MaterialTheme.colorScheme.onSecondaryContainer
-    val lineChartStyle = remember(isSystemInDarkTheme()){
+    val isDarkMode = LocalDarkLightMode.current
+    val lineChartStyle = remember(isDarkMode){
         LineChartStyle(
             chartLineColor = chartLineColor,
             unselectedColor = unselectedColor,
@@ -114,6 +115,22 @@ fun AnalyticsScreen(
             TopAppBar(
                 title = {},
                 actions = {
+                    IconButton(
+                        onClick = {
+                            onEvent(AnalyticsEvent.OnDarkLightModeSwitch)
+                        }
+                    ){
+                        Icon(
+                            painter = painterResource(
+                                if (isDarkMode){
+                                    Res.drawable.outline_light_mode_24
+                                }else{
+                                    Res.drawable.outline_night_mode_24
+                                }
+                            ),
+                            contentDescription = "backup icon"
+                        )
+                    }
                     IconButton(
                         onClick = {
                             onEvent(AnalyticsEvent.OnBackupClick)

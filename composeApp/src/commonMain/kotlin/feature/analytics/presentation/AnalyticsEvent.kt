@@ -18,4 +18,6 @@ sealed interface AnalyticsEvent {
         val year: Int?=null,
         val month: Int?=null
     ): AnalyticsEvent
+
+    data object OnDarkLightModeSwitch: AnalyticsEvent
 }

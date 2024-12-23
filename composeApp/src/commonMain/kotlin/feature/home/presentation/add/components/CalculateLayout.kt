@@ -2,9 +2,9 @@
 
 package feature.home.presentation.add.components
 
+import LocalDarkLightMode
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -153,7 +153,8 @@ private fun CalculateKeyboard(
     month: String = "",
     day : String = "",
     aspectRatio: Float = 1.25f,
-    onEvent: (AddEvent) -> Unit = {}
+    onEvent: (AddEvent) -> Unit = {},
+    isDarkMode: Boolean = LocalDarkLightMode.current
 ){
     val numberButtonModifier = remember(aspectRatio){
         Modifier.aspectRatio(aspectRatio)
@@ -228,14 +229,14 @@ private fun CalculateKeyboard(
                 onClick = {
                     onEvent(AddEvent.OnDeleteTextClick)
                 },
-                backgroundColor = if (isSystemInDarkTheme()) calculateRemoveDarkContainerColor else calculateRemoveLightContainerColor
+                backgroundColor = if (isDarkMode) calculateRemoveDarkContainerColor else calculateRemoveLightContainerColor
             )
             CalendarButton(
                 modifier = Modifier.aspectRatio(aspectRatio / 2),
                 month = month.toInt(),
                 day = day.toInt(),
                 onClick = onCalendarButtonClick,
-                backgroundColor = if (isSystemInDarkTheme()) calculateCalendarDarkContainerColor else calculateCalendarLightContainerColor
+                backgroundColor = if (isDarkMode) calculateCalendarDarkContainerColor else calculateCalendarLightContainerColor
             )
             CalculateIconButton(
                 modifier = numberButtonModifier,
@@ -244,7 +245,7 @@ private fun CalculateKeyboard(
                 onClick = {
                     onEvent(AddEvent.OnSaveClick)
                 },
-                backgroundColor = if (isSystemInDarkTheme()) calculateDoneDarkContainerColor else calculateDoneLightContainerColor
+                backgroundColor = if (isDarkMode) calculateDoneDarkContainerColor else calculateDoneLightContainerColor
             )
         }
 

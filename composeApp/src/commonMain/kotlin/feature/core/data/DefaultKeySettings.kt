@@ -35,4 +35,18 @@ class DefaultKeySettings(
             defaultValue = false
         )
     }
+
+    override fun setDarkLightMode(isDark: Boolean) {
+        settings.set(
+            key = KeySettings.IS_DARK_THEME,
+            value = isDark
+        )
+    }
+
+    override fun getDarkLightMode(): Boolean {
+        return settings.get(
+            key = KeySettings.IS_DARK_THEME,
+            defaultValue = false
+        )
+    }
 }
