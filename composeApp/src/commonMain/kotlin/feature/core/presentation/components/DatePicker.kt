@@ -56,8 +56,7 @@ fun DatePicker(
         ){
             Icon(
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground
+                contentDescription = null
             )
         }
 
@@ -91,8 +90,7 @@ fun DatePicker(
         ){
             Icon(
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground
+                contentDescription = null
             )
         }
     }

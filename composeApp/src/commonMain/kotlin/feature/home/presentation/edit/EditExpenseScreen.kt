@@ -185,7 +185,6 @@ fun EditExpenseScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .background(Color.White)
                     .noRippleClick {
                         keyboard?.hide()
                         focusManager.clearFocus()
@@ -195,9 +194,6 @@ fun EditExpenseScreen(
             ) {
                 OutlinedCard(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(
@@ -270,13 +266,13 @@ private fun CostSection(
         Icon(
             modifier = Modifier.size(16.dp),
             painter = painterResource(Res.drawable.baseline_attach_money_24),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface
+            contentDescription = null
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Texts.TitleSmall(
+        Text(
             modifier = Modifier.weight(1f),
-            text = cost.toMoneyString()
+            text = cost.toMoneyString(),
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }
@@ -294,18 +290,16 @@ private fun TimestampSection(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
+        Icon(
             modifier = Modifier.size(16.dp),
             imageVector = Icons.Outlined.DateRange,
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            contentDescription = null
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Texts.TitleSmall(
+        Text(
             modifier = Modifier.weight(1f),
-            text = date
+            text = date,
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }
@@ -327,9 +321,10 @@ private fun GroupSection(
                 )
             )
             Spacer(Modifier.width(16.dp))
-            Texts.TitleSmall(
+            Text(
                 modifier = Modifier.weight(1f),
-                text = it.name
+                text = it.name,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }
@@ -353,9 +348,10 @@ private fun IconSection(
             backgroundColor = Color(colorArgb)
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Texts.TitleSmall(
+        Text(
             modifier = Modifier.weight(1f),
-            text = description
+            text = description,
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 
@@ -365,19 +361,12 @@ private fun IconSection(
 private fun ContentSection(
     modifier: Modifier = Modifier,
     content: String = "",
-    onValueChange: (String) -> Unit,
-    textStyle: TextStyle = TextStyle(
-        fontFamily = FontFamily(Font(Res.font.notosanslao_regular)),
-        fontSize = 12.sp
-    )
+    onValueChange: (String) -> Unit
 ){
     OutlinedCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(
@@ -389,8 +378,7 @@ private fun ContentSection(
             Icon(
                 modifier = Modifier.size(16.dp),
                 imageVector = vectorResource(Res.drawable.baseline_sticky_note_24),
-                contentDescription = null,
-                tint = Color.Black
+                contentDescription = null
             )
             BasicTextField(
                 modifier = Modifier
@@ -403,13 +391,16 @@ private fun ContentSection(
                     if (content.trim().isEmpty()){
                         Text(
                             text = stringResource(Res.string.description),
-                            style = textStyle,
-                            color = Color.LightGray
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                color = MaterialTheme.colorScheme.secondary
+                            )
                         )
                     }
                     it()
                 },
-                textStyle = textStyle,
+                textStyle = MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.onBackground
+                ),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
                 )

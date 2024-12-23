@@ -76,67 +76,60 @@ fun ExpenseDetailItem(
     percent: Float,
     sum: Long
 ) {
-    Box(
-        modifier = modifier
+    Column(
+        modifier = modifier.padding(8.dp)
     ){
-        Column(
-            modifier = Modifier.padding(8.dp)
-        ){
-            Text(
-                text = chart.type.name,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp
-                )
-
+        Text(
+            text = chart.type.name,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp
             )
-            Spacer(Modifier.height(8.dp))
-            Row(
+
+        )
+        Spacer(Modifier.height(8.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround
+        ){
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround
+                    .size(48.dp)
+                    .background(
+                        color = Color(chart.type.colorArgb),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .clip(RoundedCornerShape(12.dp))
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min),
             ){
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background(
-                            color = Color(chart.type.colorArgb),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .clip(RoundedCornerShape(12.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "${(percent * 100).toDouble().format(1)}%",
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        fontSize = 20.sp
+                    ),
+                    maxLines = 1,
+                    textAlign = TextAlign.End
                 )
-                Column(
+                Spacer(Modifier.height(2.dp))
+                Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(IntrinsicSize.Min),
-                ){
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "${(percent * 100).toDouble().format(1)}%",
-                        style = MaterialTheme.typography.labelLarge.copy(
-                            fontSize = 20.sp
-                        ),
-                        maxLines = 1,
-                        textAlign = TextAlign.End
-                    )
-                    Spacer(Modifier.height(2.dp))
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(end = 4.dp),
-                        text = sum.toMoneyString(),
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.SemiBold
-                        ),
-                        textAlign = TextAlign.End
-                    )
-                }
+                        .padding(end = 4.dp),
+                    text = sum.toMoneyString(),
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    textAlign = TextAlign.End
+                )
             }
-
-
         }
-
     }
 }
 

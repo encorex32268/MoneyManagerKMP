@@ -82,8 +82,7 @@ fun CategoryAddDialog(
                         modifier = Modifier
                             .size(24.dp),
                         painter = CategoryList.getCategoryIconById(categoryUi.id.toLong()),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onBackground
+                        contentDescription = null
                     )
                     Spacer(Modifier.width(12.dp))
                     BasicTextField(
@@ -111,7 +110,6 @@ fun CategoryAddDialog(
                                 Text(
                                     text = stringResource(Res.string.category_add_description),
                                     style = MaterialTheme.typography.bodyMedium.copy(
-                                        color = MaterialTheme.colorScheme.onBackground,
                                         fontSize = 12.sp
                                     )
                                 )
@@ -129,8 +127,7 @@ fun CategoryAddDialog(
                         }) {
                         Icon(
                             imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground
+                            contentDescription = null
                         )
                     }
 

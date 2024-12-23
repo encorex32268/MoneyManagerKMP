@@ -115,8 +115,7 @@ fun ExpenseItem(
                                 Icon(
                                     modifier = Modifier.size(12.dp),
                                     imageVector = vectorResource(Res.drawable.baseline_sticky_note_24),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground
+                                    contentDescription = null
                                 )
                             }
                         }

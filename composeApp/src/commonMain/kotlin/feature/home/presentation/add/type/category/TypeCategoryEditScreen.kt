@@ -164,15 +164,13 @@ fun TypeCategoryEditScreen(
                         Text(
                             modifier = Modifier.padding(horizontal = 8.dp),
                             text = state.typeUi.name,
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
+                            style = MaterialTheme.typography.bodyMedium
                         )
                         Icon(
                             modifier = Modifier.size(16.dp),
                             imageVector = Icons.Default.Edit,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground
+                            
                         )
                     }
                 },
@@ -187,7 +185,7 @@ fun TypeCategoryEditScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground
+                            
                         )
                     }
                 },
@@ -201,8 +199,7 @@ fun TypeCategoryEditScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground
+                            contentDescription = null
                         )
                     }
                 }

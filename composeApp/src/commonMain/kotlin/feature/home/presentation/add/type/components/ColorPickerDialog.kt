@@ -129,7 +129,6 @@ fun ColorPickerDialog(
                                 Text(
                                     text = stringResource(Res.string.category_add_description),
                                     style = MaterialTheme.typography.bodyMedium.copy(
-                                        color = MaterialTheme.colorScheme.onBackground,
                                         fontSize = 12.sp
                                     )
                                 )
@@ -147,8 +146,7 @@ fun ColorPickerDialog(
                         }) {
                         Icon(
                             imageVector = Icons.Default.Check,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground
+                            contentDescription = null
                         )
                     }
                 }

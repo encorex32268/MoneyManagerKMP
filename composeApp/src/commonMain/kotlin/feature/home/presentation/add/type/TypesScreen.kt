@@ -135,8 +135,7 @@ fun TypesScreen(
                     ){
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground
+                            contentDescription = null
                         )
                     }
                 },
@@ -148,8 +147,7 @@ fun TypesScreen(
                     ){
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground
+                            contentDescription = null
                         )
                     }
                 }
@@ -190,8 +188,7 @@ fun TypesScreen(
                         ){
                             Icon(
                                 imageVector = Icons.Default.Menu,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onBackground
+                                contentDescription = null
                             )
                             Spacer(modifier = Modifier.padding(4.dp))
                             Box(
@@ -217,8 +214,7 @@ fun TypesScreen(
                             ){
                                 Icon(
                                     imageVector = Icons.Default.Edit,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground
+                                    contentDescription = null
                                 )
                             }
                             IconButton(
@@ -230,8 +226,7 @@ fun TypesScreen(
                             ){
                                 Icon(
                                     imageVector = vectorResource(Res.drawable.baseline_visibility_24),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground
+                                    contentDescription = null
                                 )
                             }
 
@@ -348,9 +343,7 @@ private fun OnHideTypeItem(
                 .padding(horizontal = 8.dp)
             ,
             text = item.name,
-            style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onBackground,
-            ),
+            style = MaterialTheme.typography.bodyMedium,
             textDecoration = TextDecoration.LineThrough
 
         )
@@ -361,8 +354,7 @@ private fun OnHideTypeItem(
         ){
             Icon(
                 imageVector = vectorResource(Res.drawable.baseline_visibility_off_24),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground
+                contentDescription = null
             )
         }
         IconButton(
@@ -372,8 +364,7 @@ private fun OnHideTypeItem(
         ){
             Icon(
                 imageVector = Icons.Default.Close,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground
+                contentDescription = null
             )
         }
 

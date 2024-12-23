@@ -268,7 +268,6 @@ private fun CalculateIconButton(
     onClick: () -> Unit = {},
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     shape: Shape = RoundedCornerShape(24.dp),
-    tint: Color = MaterialTheme.colorScheme.onBackground,
     icon: ImageVector,
     contentDescription: String?=null
 ) {
@@ -289,8 +288,7 @@ private fun CalculateIconButton(
         Icon(
             modifier = Modifier.size(24.dp),
             imageVector = icon,
-            contentDescription = contentDescription,
-            tint = tint
+            contentDescription = contentDescription
         )
 
     }
@@ -328,7 +326,6 @@ private fun CalendarButton(
             Icon(
                 imageVector = Icons.Outlined.DateRange,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(

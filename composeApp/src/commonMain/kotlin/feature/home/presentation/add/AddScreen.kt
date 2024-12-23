@@ -173,8 +173,7 @@ fun AddScreen(
                     ){
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground
+                            contentDescription = null
                         )
                     }
                 },
@@ -186,8 +185,7 @@ fun AddScreen(
                     ) {
                         Icon(
                             imageVector = vectorResource(Res.drawable.baseline_edit_note_24),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground
+                            contentDescription = null
                         )
                     }
                 }

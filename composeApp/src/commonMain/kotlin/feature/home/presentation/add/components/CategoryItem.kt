@@ -82,9 +82,7 @@ fun CategoryItem(
             }
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodySmall.copy(
-                    color = MaterialTheme.colorScheme.onBackground
-                )
+                style = MaterialTheme.typography.bodySmall
             )
         }
 

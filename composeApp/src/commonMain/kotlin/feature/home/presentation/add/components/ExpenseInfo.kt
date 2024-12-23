@@ -51,8 +51,7 @@ fun ExpenseInfo(
                     Text(
                         text = stringResource(Res.string.description),
                         style = MaterialTheme.typography.bodyMedium.copy(
-                            fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.onBackground
+                            fontSize = 16.sp
                         )
                     )
                 }
