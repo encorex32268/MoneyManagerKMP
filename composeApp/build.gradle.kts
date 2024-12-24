@@ -102,8 +102,8 @@ android {
         applicationId = "com.lihan.moneymanager"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 18
-        versionName = "1.3.3"
+        versionCode = 19
+        versionName = "1.3.5"
     }
     packaging {
         resources {

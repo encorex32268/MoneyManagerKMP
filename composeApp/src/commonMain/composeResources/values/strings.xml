@@ -47,8 +47,8 @@
     <string name="backup_backup">Backup</string>
     <string name="backup_import">Import</string>
 
-    <string name="home_spending_limit">SpendingLimit</string>
-    <string name="home_spending_limit_set">Set Your Spending Limit</string>
+    <string name="home_spending_limit">SpendingLimits</string>
+    <string name="home_spending_limit_set">Set Your Spending Limits</string>
     <string name="home_spending_limit_set_hint">Ex:10,000</string>
 
     <string name="home_add_type_default">Use Default Type</string>

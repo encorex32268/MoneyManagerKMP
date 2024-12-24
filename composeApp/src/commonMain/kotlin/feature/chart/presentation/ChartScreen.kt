@@ -4,10 +4,7 @@
 
 package feature.chart.presentation
 
-import AdMobBannerController
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,13 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.chart.presentation.components.ChartLayout
@@ -31,7 +24,7 @@ import feature.chart.presentation.components.ExpenseDetailLazyGrid
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
 import feature.core.presentation.components.DatePicker
-import feature.core.presentation.components.SpendingLimitProgressBar
+import feature.core.presentation.components.SpendingLimitsProgressBar
 import feature.core.presentation.navigation.NavigationLayoutType
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.koin.compose.viewmodel.koinViewModel
@@ -85,7 +78,7 @@ fun ChartScreen(
                 )
             }
         )
-        SpendingLimitProgressBar(
+        SpendingLimitsProgressBar(
             modifier = Modifier.fillMaxWidth().padding(8.dp),
             spendingLimit = state.spendingLimit,
             totalExpense = state.totalExpense

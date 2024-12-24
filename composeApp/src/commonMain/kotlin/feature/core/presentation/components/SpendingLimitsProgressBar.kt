@@ -4,7 +4,6 @@ import LocalDarkLightMode
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +30,7 @@ import org.jetbrains.compose.resources.stringResource
 import toMoneyString
 
 @Composable
-fun SpendingLimitProgressBar(
+fun SpendingLimitsProgressBar(
     modifier: Modifier = Modifier,
     spendingLimit: Long,
     totalExpense: Long,
