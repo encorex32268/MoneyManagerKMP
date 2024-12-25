@@ -84,16 +84,16 @@ fun SpendingLimitDialog(
                             Text(
                                 text = stringResource(Res.string.home_spending_limit_set_hint),
                                 style = MaterialTheme.typography.bodyMedium.copy(
-                                    color = Color.LightGray,
                                     fontSize = 14.sp
                                 )
                             )
                         }
                         it()
-
                     }
                 },
-                textStyle = MaterialTheme.typography.bodyMedium,
+                textStyle = MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.onBackground
+                ),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.NumberPassword
                 )
