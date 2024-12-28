@@ -13,6 +13,19 @@ val calculateCalendarDarkContainerColor = Color(0xFF37404e)
 val calculateDoneDarkContainerColor = Color(0xFF29462a)
 
 
+//val limitsColor_0_50_LightColor = Color(0xFF1aba1a)
+//val limitsColor_50_70_LightColor = Color(0xFFbaba1a)
+//val limitsColor_70_90_LightColor = Color(0xFFba721a)
+
+val limitsColor_0_50_LightContainerColor = Color(0xFF2fc729)
+val limitsColor_50_70_LightContainerColor = Color(0xFFc4c427)
+val limitsColor_70_90_LightContainerColor = Color(0xFFa96407)
+
+val limitsColor_0_50_DarkColor = Color(0xFF50e243)
+val limitsColor_50_70_DarkColor = Color(0xFFdddd41)
+val limitsColor_70_90_DarkColor = Color(0xFFffb870)
+
+
 
 
 val primaryLight = Color(0xFF5D5F5F)

@@ -22,6 +22,12 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import feature.core.ui.limitsColor_0_50_DarkColor
+import feature.core.ui.limitsColor_0_50_LightContainerColor
+import feature.core.ui.limitsColor_50_70_DarkColor
+import feature.core.ui.limitsColor_50_70_LightContainerColor
+import feature.core.ui.limitsColor_70_90_DarkColor
+import feature.core.ui.limitsColor_70_90_LightContainerColor
 import format
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.home_spending_limit
@@ -57,9 +63,15 @@ fun SpendingLimitsProgressBar(
     val animatedProgress = progress * animatable.value
 
     val errorColor = MaterialTheme.colorScheme.error
-    val onBackgroundColor = MaterialTheme.colorScheme.onBackground
-    val limitOverColor = remember(spendingLimit , totalExpense){
-        if (totalExpense > spendingLimit && spendingLimit != 0L) errorColor else onBackgroundColor
+    val isDark = LocalDarkLightMode.current
+
+    val limitOverColor = remember(spendingLimit , totalExpense , isDark){
+        when(progress){
+            in 0.0f..0.5f -> if (isDark) limitsColor_0_50_DarkColor else limitsColor_0_50_LightContainerColor
+            in 0.5f..0.7f -> if (isDark) limitsColor_50_70_DarkColor else limitsColor_50_70_LightContainerColor
+            in 0.7f..0.9f -> if (isDark) limitsColor_70_90_DarkColor else limitsColor_70_90_LightContainerColor
+            else -> errorColor
+        }
     }
     Column(
         modifier = modifier.padding(8.dp),
