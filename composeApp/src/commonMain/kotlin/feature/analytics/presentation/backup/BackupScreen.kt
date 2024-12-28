@@ -1,4 +1,4 @@
-@file:OptIn(KoinExperimentalAPI::class)
+@file:OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3Api::class)
 
 package feature.analytics.presentation.backup
 
@@ -16,12 +16,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -98,10 +101,25 @@ fun BackupScreenRoot(
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState)
+        },
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(
+                        onClick = onBackClick
+                    ){
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = "Backup Back"
+                        )
+                    }
+                }
+            )
         }
     ){
         BackupScreen(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(it),
             onEvent = { event ->
                 when(event){
                     BackupEvent.OnBackClick -> onBackClick()
@@ -134,24 +152,12 @@ fun BackupScreen(
     onEvent: (BackupEvent) -> Unit = {}
 ) {
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = modifier
     ){
-        IconButton(
-            onClick = {
-                onEvent(BackupEvent.OnBackClick)
-            }
-        ){
-            Icon(
-                imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                contentDescription = "Backup Back"
-            )
-        }
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(16.dp)
                 .border(
                     width = 1.dp ,
                     color = Color.Black ,
