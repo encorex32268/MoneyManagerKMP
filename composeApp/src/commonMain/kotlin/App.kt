@@ -50,8 +50,11 @@ import feature.core.domain.mapper.toType
 import feature.core.domain.mapper.toTypeUi
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
+import feature.core.presentation.navigation.ANALYTICS
 import feature.core.presentation.navigation.AppNavigationBottom
 import feature.core.presentation.navigation.AppNavigationRail
+import feature.core.presentation.navigation.CHART
+import feature.core.presentation.navigation.HOME
 import feature.core.presentation.navigation.NavigationLayoutType
 import feature.core.presentation.navigation.bottomNavigationItems
 import feature.core.presentation.navigation.calculateNavigationLayout
@@ -78,19 +81,18 @@ val LocalDarkLightMode = compositionLocalOf { false }
 fun App(){
     val viewModel = koinViewModel<AppViewModel>()
     val appState by viewModel.state.collectAsStateWithLifecycle()
-
+    val navController = rememberNavController()
     CompositionLocalProvider( LocalDarkLightMode provides appState.isDarkMode){
         AppTheme(
             darkTheme = LocalDarkLightMode.current
         ){
-            val navController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination?.route
             var itemSelectedIndex by remember(currentDestination) {
                 mutableStateOf(
                     when(currentDestination){
-                        "Route.Chart"->1
-                        "Route.Analytics" -> 2
+                        CHART->1
+                        ANALYTICS -> 2
                         else -> 0
                     }
                 )
@@ -121,7 +123,7 @@ fun App(){
                                     navController.navigate(
                                         route = name,
                                         navOptions = when(name){
-                                            "Route.Home" -> {
+                                            HOME -> {
                                                 navOptions {
                                                     popUpTo(navController.graph.startDestinationId) {
                                                         inclusive = true
@@ -131,7 +133,7 @@ fun App(){
                                             }
                                             else -> {
                                                 navOptions {
-                                                    popUpTo("Route.Home") {
+                                                    popUpTo(HOME) {
                                                         inclusive = false
                                                     }
                                                     launchSingleTop = true
@@ -166,7 +168,7 @@ fun App(){
                                         navController.navigate(
                                             route = name,
                                             navOptions = when(name){
-                                                "Route.Home" -> {
+                                                HOME -> {
                                                     navOptions {
                                                         popUpTo(navController.graph.startDestinationId) {
                                                             inclusive = true
@@ -176,7 +178,7 @@ fun App(){
                                                 }
                                                 else -> {
                                                     navOptions {
-                                                        popUpTo("Route.Home") {
+                                                        popUpTo(HOME) {
                                                             inclusive = false
                                                         }
                                                         launchSingleTop = true

@@ -27,24 +27,27 @@ data class BottomNavigationItem(
     val title: StringResource
 )
 
+const val HOME = "Route.Home"
+const val CHART = "Route.Chart"
+const val ANALYTICS = "Route.Analytics"
 
 val bottomNavigationItems = listOf(
     BottomNavigationItem(
         selectedIcon = Res.drawable.baseline_receipt_24_filled,
         unSelectedIcon = Res.drawable.baseline_receipt_24_outline,
-        name = "Route.Home",
+        name = HOME,
         title = Res.string.home
     ),
     BottomNavigationItem(
         selectedIcon = Res.drawable.baseline_pie_chart_24_filled,
         unSelectedIcon = Res.drawable.baseline_pie_chart_24_outline,
-        name = "Route.Chart",
+        name = CHART,
         title = Res.string.chart
     ),
     BottomNavigationItem(
         selectedIcon = Res.drawable.baseline_analytics_24_filled,
         unSelectedIcon = Res.drawable.baseline_analytics_24_outline,
-        name = "Route.Analytics",
+        name = ANALYTICS,
         title = Res.string.analytics
     )
 )
