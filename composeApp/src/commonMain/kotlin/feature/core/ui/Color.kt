@@ -12,15 +12,9 @@ val calculateRemoveDarkContainerColor = Color(0xFF52393c)
 val calculateCalendarDarkContainerColor = Color(0xFF37404e)
 val calculateDoneDarkContainerColor = Color(0xFF29462a)
 
-val limitsColor_0_50_LightContainerColor = Color(0xFF73ff5d)
-val limitsColor_50_70_LightContainerColor = Color(0xFFFFD700)
-val limitsColor_70_90_LightContainerColor = Color(0xFFff9c41)
-
-val limitsColor_0_50_DarkColor = Color(0xFF50e243)
-val limitsColor_50_70_DarkColor = Color(0xFFdddd41)
-val limitsColor_70_90_DarkColor = Color(0xFFffb870)
-
-
+val limitsColor_0_50_Color = Color(0xFF73ff5d)
+val limitsColor_50_70_Color = Color(0xFFFFD700)
+val limitsColor_70_90_Color = Color(0xFFff9c41)
 
 
 val primaryLight = Color(0xFF5D5F5F)
