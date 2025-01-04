@@ -4,7 +4,6 @@
 
 package feature.home.presentation.edit
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,13 +23,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -39,6 +36,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,21 +45,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import feature.core.domain.exts.formatAddZero
 import feature.core.domain.model.Expense
 import feature.core.domain.model.Type
 import feature.core.presentation.CategoryList
 import feature.core.presentation.ObserveAsEvents
-import feature.core.presentation.Texts
 import feature.core.presentation.components.CircleIcon
 import feature.core.presentation.components.TwoButtonDialog
 import feature.core.presentation.date.toDayOfWeekStringResource
@@ -74,9 +68,7 @@ import moneymanagerkmp.composeapp.generated.resources.description
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_content
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_title
 import moneymanagerkmp.composeapp.generated.resources.expense_detail
-import moneymanagerkmp.composeapp.generated.resources.notosanslao_regular
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -284,7 +276,11 @@ private fun TimestampSection(
     val dayOfWeek = stringResource(timestamp.toLocalDateTime().toDayOfWeekStringResource())
     val date = remember(timestamp){
         val localDateTime = timestamp.toLocalDateTime()
-        "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} (${dayOfWeek}) ${localDateTime.hour}:${localDateTime.minute}:${localDateTime.second}"
+        if (localDateTime.hour == 0 && localDateTime.minute == 0 && localDateTime.second == 0 && localDateTime.nanosecond == 0){
+            "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} (${dayOfWeek})"
+        }else{
+            "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} (${dayOfWeek}) ${localDateTime.hour.formatAddZero()}:${localDateTime.minute.formatAddZero()}:${localDateTime.second.formatAddZero()}"
+        }
     }
     Row(
         modifier = Modifier.fillMaxWidth(),

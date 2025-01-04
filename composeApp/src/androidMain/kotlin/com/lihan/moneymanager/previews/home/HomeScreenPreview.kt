@@ -40,7 +40,7 @@ fun HomeScreenPreview() {
         ){
            HomeScreen(
                 state = HomeState(
-                    totalExpense = 10000,
+                    totalExpense = expenses.sumOf { it.second.sumOf { it.cost } },
                     expenseLimit = 20000,
                     nowDateYear = "2024",
                     nowDateMonth = "11",

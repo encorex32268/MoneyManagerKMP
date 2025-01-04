@@ -17,7 +17,9 @@ import feature.core.domain.repository.TypeRepository
 import feature.core.presentation.CategoryList
 import feature.core.presentation.date.DateConverter
 import feature.core.presentation.date.toLocalDateTime
+import feature.core.presentation.date.toStringDateByTimestamp
 import feature.core.presentation.date.toStringDateMDByTimestamp
+import feature.core.presentation.date.toStringDateYMDByTimestamp
 import feature.core.presentation.date.toTimestamp
 import feature.core.presentation.model.CategoryUi
 import feature.home.presentation.add.type.TypeUi
@@ -35,6 +37,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.recently
@@ -244,7 +247,22 @@ class AddViewModel(
             }
             AddEvent.OnSaveClick            -> {
                 viewModelScope.launch {
-                    val timestamp = state.value.nowLocalDateTime.toTimestamp()
+                    val nowDate = DateConverter.getNowDate()
+                    val stateNowDate = state.value.nowLocalDateTime?: nowDate
+                    val expenseIsToday = (nowDate.year == stateNowDate.year) &&
+                            (nowDate.monthNumber == stateNowDate.monthNumber) &&
+                            (nowDate.dayOfMonth == stateNowDate.dayOfMonth)
+
+                    val timestamp = LocalDateTime(
+                        year = stateNowDate.year,
+                        monthNumber = stateNowDate.monthNumber,
+                        dayOfMonth = stateNowDate.dayOfMonth,
+                        hour = if (!expenseIsToday) 0 else nowDate.hour,
+                        minute = if (!expenseIsToday) 0 else nowDate.minute,
+                        second = if (!expenseIsToday) 0 else nowDate.second,
+                        nanosecond = if (!expenseIsToday) 0 else nowDate.nanosecond
+                    ).toTimestamp()
+
                     if(state.value.currentExpense == null){
                         val expense = Expense(
                             typeId = state.value.categoryUi?.typeId?:0,
@@ -304,9 +322,6 @@ class AddViewModel(
                     types.forEach {
                         typeRepository.insert(it)
                     }
-//                    keySettings.setIsSetDefaultTypes(true)
-//                    if (!keySettings.getIsSetDefaultTypes()){
-//                    }
                 }
             }
             else -> Unit
