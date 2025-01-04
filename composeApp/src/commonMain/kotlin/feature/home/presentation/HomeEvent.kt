@@ -10,7 +10,6 @@ sealed interface HomeEvent {
     ): HomeEvent
 
     data object OnGotoAddScreen: HomeEvent
-    data object OnGotoChartScreen: HomeEvent
     data class OnGotoEditScreen(
         val expense: Expense
     ): HomeEvent

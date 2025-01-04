@@ -45,7 +45,6 @@ import org.koin.core.annotation.KoinExperimentalAPI
 fun HomeScreenRoot(
     viewModel: HomeViewModel = koinViewModel(),
     onGotoAddScreen: () -> Unit = {},
-    onGotoChartScreen: () -> Unit = {},
     onGotoEditScreen: (Expense) -> Unit  = {},
     navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ){
@@ -59,7 +58,6 @@ fun HomeScreenRoot(
         onEvent = { event ->
             when(event){
                 HomeEvent.OnGotoAddScreen   -> onGotoAddScreen()
-                HomeEvent.OnGotoChartScreen -> onGotoChartScreen()
                 is HomeEvent.OnGotoEditScreen  -> {
                     onGotoEditScreen(event.expense)
                 }
@@ -169,14 +167,7 @@ private fun HomeScreenNaviBottom(
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         AmountTextLayout(
-            modifier = Modifier
-                .fillMaxWidth()
-                .noRippleClick(
-                    onClick = {
-                        onEvent(HomeEvent.OnGotoChartScreen)
-                    }
-                )
-            ,
+            modifier = Modifier.fillMaxWidth(),
             totalExpense = state.totalExpense,
             expenseLimit = state.expenseLimit,
             navigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION,
@@ -230,12 +221,7 @@ private fun HomeScreenNaviRail(
     ){
         AmountTextLayout(
             modifier = Modifier
-                .width(IntrinsicSize.Max)
-                .noRippleClick(
-                    onClick = {
-                        onEvent(HomeEvent.OnGotoChartScreen)
-                    }
-                ),
+                .width(IntrinsicSize.Max),
             totalExpense = state.totalExpense,
             expenseLimit = state.expenseLimit,
             navigationLayoutType = NavigationLayoutType.NAVIGATION_RAIL,

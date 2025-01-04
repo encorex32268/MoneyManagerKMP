@@ -205,9 +205,6 @@ fun App(){
 
                         homeGraph(
                             navController = navController,
-                            onChartClick = {
-                                itemSelectedIndex = 1
-                            },
                             navigationLayoutType = navigationLayoutType
                         )
                         chartGraph(
@@ -305,7 +302,6 @@ private fun NavGraphBuilder.chartGraph(
 
 private fun NavGraphBuilder.homeGraph(
     navController: NavHostController,
-    onChartClick: () -> Unit = {},
     navigationLayoutType: NavigationLayoutType
 ) {
     navigation<Route.HomeGraph>(
@@ -319,15 +315,6 @@ private fun NavGraphBuilder.homeGraph(
                             expense = Expense(),
                             isAddNew = true
                         ),
-                        navOptions = navOptions {
-                            launchSingleTop = true
-                        }
-                    )
-                },
-                onGotoChartScreen = {
-                    onChartClick()
-                    navController.navigate(
-                        Route.Chart,
                         navOptions = navOptions {
                             launchSingleTop = true
                         }
