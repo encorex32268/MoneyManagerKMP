@@ -1,4 +1,4 @@
-# Kotlin Multiplatform App - MoneyManager 1.3.3
+# Kotlin Multiplatform App - MoneyManager 1.3.6
 
 <img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshots/github_cover.jpg" height="550" width="800"/>
 
