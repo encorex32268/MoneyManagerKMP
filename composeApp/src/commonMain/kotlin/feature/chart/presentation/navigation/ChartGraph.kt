@@ -20,10 +20,11 @@ fun NavGraphBuilder.chartGraph(
     navController: NavHostController,
     navigationLayoutType: NavigationLayoutType
 ) {
-    navigation<Route.ChartGraph>(
-        startDestination = Route.Chart
+    navigation(
+        route = Route.ChartGraph.route,
+        startDestination = Route.Chart.route
     ) {
-        composable<Route.Chart> {
+        composable(Route.Chart.route) {
             ChartScreenRoot(
                 onGotoDetail = { items, type ->
                     navController.navigate(

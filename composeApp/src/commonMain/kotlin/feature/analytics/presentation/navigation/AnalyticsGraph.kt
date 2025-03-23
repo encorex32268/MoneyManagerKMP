@@ -12,10 +12,11 @@ fun NavGraphBuilder.analyticsGraph(
     navController: NavHostController,
     onDarkLightModeSwitch: () -> Unit = {}
 ) {
-    navigation<Route.AnalyticsGraph>(
-        startDestination = Route.Analytics
+    navigation(
+        route = Route.AnalyticsGraph.route,
+        startDestination = Route.Analytics.route
     ){
-        composable<Route.Analytics> {
+        composable(Route.Analytics.route) {
             AnalyticsScreenRoot(
                 onBackupClick = {
                     navController.navigate(

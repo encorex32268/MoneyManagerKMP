@@ -27,10 +27,11 @@ fun NavGraphBuilder.homeGraph(
     navController: NavHostController,
     navigationLayoutType: NavigationLayoutType
 ) {
-    navigation<Route.HomeGraph>(
-        startDestination = Route.Home
+    navigation(
+        route = Route.HomeGraph.route,
+        startDestination = Route.Home.route
     ) {
-        composable<Route.Home> {
+        composable(Route.Home.route) {
             HomeScreenRoot(
                 onGotoAddScreen = {
                     navController.navigate(

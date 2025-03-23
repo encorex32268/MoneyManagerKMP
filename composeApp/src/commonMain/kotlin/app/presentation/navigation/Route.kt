@@ -3,20 +3,24 @@ package app.presentation.navigation
 import core.domain.model.Expense
 import core.domain.model.Type
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
+@Serializable
+sealed class Route(val route: String){
 
-sealed interface Route  {
     @Serializable
-    data object HomeGraph
+    data object HomeGraph: Route("HomeGraph")
 
     @Serializable
-    data object Home
+    data object Home: Route("Home")
 
     @Serializable
     data class  HomeAdd(
         val expense: Expense,
         val isAddNew: Boolean
     )
+
     @Serializable
     data object Types
 
@@ -31,11 +35,11 @@ sealed interface Route  {
     )
 
     @Serializable
-    data object ChartGraph
+    data object ChartGraph: Route("ChartGraph")
 
 
     @Serializable
-    data object Chart
+    data object Chart: Route("Chart")
 
     @Serializable
     data class  ChartDetail(
@@ -44,10 +48,10 @@ sealed interface Route  {
     )
 
     @Serializable
-    data object AnalyticsGraph
+    data object AnalyticsGraph: Route("AnalyticsGraph")
 
     @Serializable
-    data object Analytics
+    data object Analytics: Route("Analytics")
 
     @Serializable
     data object Backup

@@ -6,6 +6,7 @@ package core.presentation.navigation
 
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
+import app.presentation.navigation.Route
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.analytics
 import moneymanagerkmp.composeapp.generated.resources.baseline_analytics_24_filled
@@ -27,27 +28,24 @@ data class BottomNavigationItem(
     val title: StringResource
 )
 
-const val HOME = "app.presentation.navigation.Route.Home"
-const val CHART = "app.presentation.navigation.Route.Chart"
-const val ANALYTICS = "app.presentation.navigation.Route.Analytics"
 
 val bottomNavigationItems = listOf(
     BottomNavigationItem(
         selectedIcon = Res.drawable.baseline_receipt_24_filled,
         unSelectedIcon = Res.drawable.baseline_receipt_24_outline,
-        name = HOME,
+        name = Route.Home.route,
         title = Res.string.home
     ),
     BottomNavigationItem(
         selectedIcon = Res.drawable.baseline_pie_chart_24_filled,
         unSelectedIcon = Res.drawable.baseline_pie_chart_24_outline,
-        name = CHART,
+        name = Route.Chart.route,
         title = Res.string.chart
     ),
     BottomNavigationItem(
         selectedIcon = Res.drawable.baseline_analytics_24_filled,
         unSelectedIcon = Res.drawable.baseline_analytics_24_outline,
-        name = ANALYTICS,
+        name = Route.Analytics.route,
         title = Res.string.analytics
     )
 )
