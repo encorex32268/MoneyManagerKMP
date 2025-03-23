@@ -43,10 +43,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import feature.core.presentation.ObserveAsEvents
-import feature.core.presentation.model.CategoryUi
-import feature.core.presentation.navigation.NavigationLayoutType
-import feature.core.presentation.noRippleClick
+import core.presentation.ObserveAsEvents
+import core.presentation.model.CategoryUi
+import core.presentation.navigation.NavigationLayoutType
+import core.presentation.noRippleClick
 import feature.home.presentation.add.components.CategoryItem
 import feature.home.presentation.add.type.TypeUi
 import feature.home.presentation.add.type.category.components.CategoryAddDialog

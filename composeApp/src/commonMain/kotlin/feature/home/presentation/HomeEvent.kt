@@ -1,6 +1,6 @@
 package feature.home.presentation
 
-import feature.core.domain.model.Expense
+import core.domain.model.Expense
 
 sealed interface HomeEvent {
     data class OnDatePick(

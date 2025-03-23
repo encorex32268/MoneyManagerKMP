@@ -1,7 +1,7 @@
 package feature.home.presentation.edit
 
-import feature.core.domain.model.Expense
-import feature.core.domain.model.Type
+import core.domain.model.Expense
+import core.domain.model.Type
 
 data class EditExpenseState(
     val currentExpense: Expense?= null,

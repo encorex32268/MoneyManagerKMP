@@ -1,7 +1,6 @@
 package feature.chart.presentation.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -29,7 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import feature.core.domain.model.chart.Chart
 import format
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import toMoneyString
@@ -38,9 +35,9 @@ import toMoneyString
 @Composable
 fun ExpenseDetailLazyGrid(
     modifier: Modifier = Modifier,
-    items: List<Chart> = emptyList(),
+    items: List<core.domain.model.chart.Chart> = emptyList(),
     sumTotal: Long,
-    onItemClick: (Chart) -> Unit
+    onItemClick: (core.domain.model.chart.Chart) -> Unit
 ) {
     if (sumTotal != 0L){
         LazyVerticalGrid(
@@ -72,7 +69,7 @@ fun ExpenseDetailLazyGrid(
 @Composable
 fun ExpenseDetailItem(
     modifier: Modifier = Modifier,
-    chart: Chart,
+    chart: core.domain.model.chart.Chart,
     percent: Float,
     sum: Long
 ) {

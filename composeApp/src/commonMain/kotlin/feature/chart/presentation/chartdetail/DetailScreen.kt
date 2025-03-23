@@ -39,8 +39,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import feature.core.domain.model.Expense
-import feature.core.domain.model.Type
+import core.domain.model.Expense
+import core.domain.model.Type
 import feature.home.presentation.components.ExpenseItem
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.koin.compose.viewmodel.koinViewModel

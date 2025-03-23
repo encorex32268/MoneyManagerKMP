@@ -2,7 +2,7 @@
 
 package feature.home.presentation.add.components
 
-import LocalDarkLightMode
+import app.presentation.LocalDarkLightMode
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,13 +40,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import feature.core.presentation.navigation.NavigationLayoutType
-import feature.core.ui.calculateCalendarDarkContainerColor
-import feature.core.ui.calculateCalendarLightContainerColor
-import feature.core.ui.calculateDoneDarkContainerColor
-import feature.core.ui.calculateDoneLightContainerColor
-import feature.core.ui.calculateRemoveDarkContainerColor
-import feature.core.ui.calculateRemoveLightContainerColor
+import core.presentation.navigation.NavigationLayoutType
+import core.ui.calculateCalendarDarkContainerColor
+import core.ui.calculateCalendarLightContainerColor
+import core.ui.calculateDoneDarkContainerColor
+import core.ui.calculateDoneLightContainerColor
+import core.ui.calculateRemoveDarkContainerColor
+import core.ui.calculateRemoveLightContainerColor
 import feature.home.presentation.add.AddEvent
 import feature.home.presentation.add.AddState
 import moneymanagerkmp.composeapp.generated.resources.Res

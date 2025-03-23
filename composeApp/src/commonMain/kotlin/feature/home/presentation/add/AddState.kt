@@ -1,10 +1,10 @@
 package feature.home.presentation.add
 
-import feature.core.domain.mapper.toCategoryUi
-import feature.core.domain.model.Expense
-import feature.core.domain.model.Type
-import feature.core.presentation.CategoryList
-import feature.core.presentation.model.CategoryUi
+import core.domain.mapper.toCategoryUi
+import core.domain.model.Expense
+import core.domain.model.Type
+import core.presentation.CategoryList
+import core.presentation.model.CategoryUi
 import feature.home.presentation.add.type.TypeUi
 import kotlinx.datetime.LocalDateTime
 

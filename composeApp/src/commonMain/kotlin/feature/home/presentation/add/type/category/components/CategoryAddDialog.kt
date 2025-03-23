@@ -37,9 +37,9 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import feature.core.presentation.CategoryList
-import feature.core.presentation.model.CategoryUi
-import feature.core.presentation.noRippleClick
+import core.presentation.CategoryList
+import core.presentation.model.CategoryUi
+import core.presentation.noRippleClick
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.category_add_description
 import moneymanagerkmp.composeapp.generated.resources.description

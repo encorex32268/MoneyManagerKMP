@@ -1,7 +1,7 @@
 package feature.chart.presentation
 
-import feature.core.domain.model.Expense
-import feature.core.domain.model.Type
+import core.domain.model.Expense
+import core.domain.model.Type
 
 sealed interface ChartEvent {
     data class OnDatePick(

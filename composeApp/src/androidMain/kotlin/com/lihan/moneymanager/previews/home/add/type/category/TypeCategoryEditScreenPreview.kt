@@ -1,12 +1,12 @@
 package com.lihan.moneymanager.previews.home.add.type.category
 
-import AppTheme
+import app.presentation.AppTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
-import feature.core.domain.mapper.toCategoryUi
-import feature.core.presentation.CategoryList
+import core.domain.mapper.toCategoryUi
+import core.presentation.CategoryList
 import feature.home.presentation.add.type.TypeUi
 import feature.home.presentation.add.type.category.TypeCategoryEditScreen
 import feature.home.presentation.add.type.category.TypeCategoryEditState

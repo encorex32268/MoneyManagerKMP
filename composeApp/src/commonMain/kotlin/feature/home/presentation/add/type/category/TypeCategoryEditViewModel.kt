@@ -4,10 +4,10 @@ import UUID
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import feature.core.domain.mapper.toType
-import feature.core.domain.model.Type
-import feature.core.domain.repository.TypeRepository
-import feature.core.presentation.model.CategoryUi
+import core.domain.mapper.toType
+import core.domain.model.Type
+import core.domain.repository.TypeRepository
+import core.presentation.model.CategoryUi
 import feature.home.presentation.add.type.TypeUi
 import feature.home.presentation.add.type.TypeUiEvent
 import kotlinx.coroutines.channels.Channel

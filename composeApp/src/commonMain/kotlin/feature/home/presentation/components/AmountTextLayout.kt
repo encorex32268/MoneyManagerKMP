@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import feature.core.presentation.navigation.NavigationLayoutType
+import core.presentation.navigation.NavigationLayoutType
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.home_spending_limit
 import moneymanagerkmp.composeapp.generated.resources.total_expense

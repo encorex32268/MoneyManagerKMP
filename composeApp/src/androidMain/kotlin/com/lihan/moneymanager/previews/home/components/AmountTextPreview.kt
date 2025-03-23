@@ -1,6 +1,6 @@
 package com.lihan.moneymanager.previews.home.components
 
-import AppTheme
+import app.presentation.AppTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

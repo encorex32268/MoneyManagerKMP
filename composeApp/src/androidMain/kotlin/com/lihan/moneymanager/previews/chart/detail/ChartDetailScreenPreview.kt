@@ -1,6 +1,5 @@
 package com.lihan.moneymanager.previews.chart.detail
 
-import AppTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,11 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
+import app.presentation.AppTheme
+import core.domain.model.Expense
+import core.domain.model.Type
+import core.presentation.CategoryList
 import feature.chart.presentation.chartdetail.DetailScreen
 import feature.chart.presentation.chartdetail.DetailState
-import feature.core.domain.model.Expense
-import feature.core.domain.model.Type
-import feature.core.presentation.CategoryList
 
 @Preview(showSystemUi = true)
 @Composable

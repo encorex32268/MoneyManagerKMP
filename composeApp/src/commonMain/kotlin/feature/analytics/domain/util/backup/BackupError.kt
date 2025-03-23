@@ -1,6 +1,6 @@
 package feature.analytics.domain.util.backup
 
-import feature.core.presentation.UiText
+import core.presentation.UiText
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.backup_error_csv_data_empty
 import moneymanagerkmp.composeapp.generated.resources.backup_error_downloads_path_empty

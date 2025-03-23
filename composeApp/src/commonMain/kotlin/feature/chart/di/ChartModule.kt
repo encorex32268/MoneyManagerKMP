@@ -4,8 +4,8 @@ import feature.chart.data.repository.ChartRepositoryImpl
 import feature.chart.domain.repository.ChartRepository
 import feature.chart.presentation.ChartViewModel
 import feature.chart.presentation.chartdetail.DetailViewModel
-import feature.core.domain.model.Expense
-import feature.core.domain.model.Type
+import core.domain.model.Expense
+import core.domain.model.Type
 import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf

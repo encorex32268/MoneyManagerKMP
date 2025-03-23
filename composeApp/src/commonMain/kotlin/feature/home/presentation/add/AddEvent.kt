@@ -1,7 +1,7 @@
 package feature.home.presentation.add
 
-import feature.core.domain.model.Expense
-import feature.core.presentation.model.CategoryUi
+import core.domain.model.Expense
+import core.presentation.model.CategoryUi
 
 sealed interface AddEvent {
 

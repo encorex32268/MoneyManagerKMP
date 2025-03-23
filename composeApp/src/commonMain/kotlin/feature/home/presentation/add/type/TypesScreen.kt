@@ -45,9 +45,9 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import feature.core.presentation.Texts
-import feature.core.presentation.components.TwoButtonDialog
-import feature.core.presentation.date.DateConverter
+import core.presentation.Texts
+import core.presentation.components.TwoButtonDialog
+import core.presentation.date.DateConverter
 import feature.home.presentation.add.AddEvent
 import feature.home.presentation.reorderable.ReorderableItem
 import feature.home.presentation.reorderable.detectReorderAfterLongPress

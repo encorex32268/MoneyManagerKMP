@@ -2,10 +2,10 @@ package feature.chart.presentation.chartdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import feature.core.domain.model.Expense
-import feature.core.domain.model.Type
-import feature.core.presentation.date.DateConverter
-import feature.core.presentation.date.toDayString
+import core.domain.model.Expense
+import core.domain.model.Type
+import core.presentation.date.DateConverter
+import core.presentation.date.toDayString
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow

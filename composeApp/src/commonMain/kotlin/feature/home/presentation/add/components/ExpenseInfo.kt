@@ -15,10 +15,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import feature.core.presentation.CategoryList
-import feature.core.presentation.Texts
-import feature.core.presentation.components.CircleIcon
-import feature.core.presentation.model.CategoryUi
+import core.presentation.CategoryList
+import core.presentation.Texts
+import core.presentation.components.CircleIcon
+import core.presentation.model.CategoryUi
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.description
 import org.jetbrains.compose.resources.ExperimentalResourceApi

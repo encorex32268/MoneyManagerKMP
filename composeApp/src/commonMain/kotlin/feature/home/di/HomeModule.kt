@@ -1,6 +1,6 @@
 package feature.home.di
 
-import feature.core.domain.model.Expense
+import core.domain.model.Expense
 import feature.home.data.repository.HomeRepositoryImpl
 import feature.home.domain.repository.HomeRepository
 import feature.home.presentation.HomeViewModel

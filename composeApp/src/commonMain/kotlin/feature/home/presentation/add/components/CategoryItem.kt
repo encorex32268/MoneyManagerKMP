@@ -17,10 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import feature.core.presentation.CategoryList
-import feature.core.presentation.components.CircleIcon
-import feature.core.presentation.model.CategoryUi
-import feature.core.presentation.noRippleClick
+import core.presentation.CategoryList
+import core.presentation.components.CircleIcon
+import core.presentation.model.CategoryUi
+import core.presentation.noRippleClick
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @Composable

@@ -1,10 +1,10 @@
 package com.lihan.moneymanager.previews.home
 
-import AppTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import feature.core.domain.model.Expense
-import feature.core.presentation.CategoryList
+import app.presentation.AppTheme
+import core.domain.model.Expense
+import core.presentation.CategoryList
 import feature.home.presentation.edit.EditExpenseScreen
 import feature.home.presentation.edit.EditExpenseState
 

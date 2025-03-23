@@ -1,6 +1,6 @@
 package com.lihan.moneymanager.previews.setting.backup
 
-import AppTheme
+import app.presentation.AppTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

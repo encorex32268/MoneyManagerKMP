@@ -1,15 +1,14 @@
 package com.lihan.moneymanager.previews.home
 
-import AppTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import feature.core.domain.model.Expense
-import feature.core.presentation.CategoryList
-import feature.core.presentation.model.CategoryUi
+import app.presentation.AppTheme
+import core.domain.model.Expense
+import core.presentation.CategoryList
 import feature.home.presentation.HomeScreen
 import feature.home.presentation.HomeState
 

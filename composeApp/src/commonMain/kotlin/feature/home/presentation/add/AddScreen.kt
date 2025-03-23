@@ -54,10 +54,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import feature.core.domain.model.Expense
-import feature.core.presentation.CategoryList
-import feature.core.presentation.ObserveAsEvents
-import feature.core.presentation.navigation.NavigationLayoutType
+import core.domain.model.Expense
+import core.presentation.CategoryList
+import core.presentation.ObserveAsEvents
+import core.presentation.navigation.NavigationLayoutType
 import feature.home.presentation.add.components.CalculateLayout
 import feature.home.presentation.add.components.CategoryItem
 import kotlinx.coroutines.CoroutineScope

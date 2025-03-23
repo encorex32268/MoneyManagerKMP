@@ -1,9 +1,8 @@
 package feature.analytics.data
 
+import core.domain.model.Expense
+import core.domain.repository.ExpenseRepository
 import feature.analytics.domain.AnalyticsRepository
-import feature.core.data.MongoDB
-import feature.core.domain.model.Expense
-import feature.core.domain.repository.ExpenseRepository
 import kotlinx.coroutines.flow.Flow
 
 class AnalyticsRepositoryImpl(

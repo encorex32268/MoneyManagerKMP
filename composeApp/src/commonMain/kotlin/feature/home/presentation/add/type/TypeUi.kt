@@ -1,6 +1,6 @@
 package feature.home.presentation.add.type
 
-import feature.core.presentation.model.CategoryUi
+import core.presentation.model.CategoryUi
 import org.mongodb.kbson.BsonObjectId
 import org.mongodb.kbson.ObjectId
 

@@ -2,7 +2,6 @@
 
 package feature.analytics.presentation
 
-import LocalDarkLightMode
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -35,10 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.presentation.LocalDarkLightMode
+import core.presentation.components.DatePicker
 import feature.analytics.presentation.components.LineChart
 import feature.analytics.presentation.components.TextChip
 import feature.analytics.presentation.model.LineChartStyle
-import feature.core.presentation.components.DatePicker
 import getScreenWidth
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.backup_backup_icon

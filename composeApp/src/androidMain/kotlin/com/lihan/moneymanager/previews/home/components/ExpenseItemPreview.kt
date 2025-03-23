@@ -1,6 +1,5 @@
 package com.lihan.moneymanager.previews.home.components
 
-import AppTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,9 +9,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import feature.core.domain.model.Expense
-import feature.core.presentation.CategoryList
-import feature.core.presentation.components.DatePicker
+import app.presentation.AppTheme
+import core.domain.model.Expense
+import core.presentation.CategoryList
 import feature.home.presentation.components.ExpenseItem
 
 @Preview(showSystemUi = true)

@@ -21,11 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import feature.chart.presentation.components.ChartLayout
 import feature.chart.presentation.components.ExpenseDetailLazyGrid
-import feature.core.domain.model.Expense
-import feature.core.domain.model.Type
-import feature.core.presentation.components.DatePicker
-import feature.core.presentation.components.SpendingLimitsProgressBar
-import feature.core.presentation.navigation.NavigationLayoutType
+import core.domain.model.Expense
+import core.domain.model.Type
+import core.presentation.components.DatePicker
+import core.presentation.components.SpendingLimitsProgressBar
+import core.presentation.navigation.NavigationLayoutType
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI

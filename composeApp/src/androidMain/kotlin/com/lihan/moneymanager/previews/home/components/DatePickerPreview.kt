@@ -1,6 +1,6 @@
 package com.lihan.moneymanager.previews.home.components
 
-import AppTheme
+import app.presentation.AppTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import feature.core.presentation.components.DatePicker
+import core.presentation.components.DatePicker
 
 @Preview(showSystemUi = true)
 @Composable

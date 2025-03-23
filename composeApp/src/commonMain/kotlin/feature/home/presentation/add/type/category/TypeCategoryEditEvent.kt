@@ -1,6 +1,6 @@
 package feature.home.presentation.add.type.category
 
-import feature.core.presentation.model.CategoryUi
+import core.presentation.model.CategoryUi
 import feature.home.presentation.reorderable.ItemPosition
 
 

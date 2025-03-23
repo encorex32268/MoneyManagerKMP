@@ -1,6 +1,6 @@
 package com.lihan.moneymanager.previews.analytics
 
-import AppTheme
+import app.presentation.AppTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable

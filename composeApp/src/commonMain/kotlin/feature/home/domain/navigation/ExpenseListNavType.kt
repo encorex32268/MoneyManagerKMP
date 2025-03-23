@@ -3,7 +3,7 @@ package feature.home.domain.navigation
 import androidx.core.bundle.Bundle
 import androidx.navigation.NavType
 import com.eygraber.uri.UriCodec
-import feature.core.domain.model.Expense
+import core.domain.model.Expense
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

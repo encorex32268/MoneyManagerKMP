@@ -1,7 +1,6 @@
 package com.lihan.moneymanager
 
-import App
-import AppTheme
+import app.presentation.App
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
@@ -12,11 +11,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.RequestConfiguration
-import com.google.android.ump.ConsentRequestParameters
 import io.github.vinceglb.filekit.core.FileKit
 
 class MainActivity : ComponentActivity() {

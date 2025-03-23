@@ -1,6 +1,5 @@
 package com.lihan.moneymanager.previews.home.add.components
 
-import AppTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,11 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import feature.core.domain.mapper.toCategory
-import feature.core.domain.mapper.toCategoryUi
-import feature.core.domain.mapper.toTypeUi
-import feature.core.domain.model.Type
-import feature.core.presentation.CategoryList
+import app.presentation.AppTheme
+import core.domain.mapper.toCategory
+import core.domain.mapper.toCategoryUi
+import core.domain.mapper.toTypeUi
+import core.domain.model.Type
+import core.presentation.CategoryList
 import feature.home.presentation.add.AddState
 import feature.home.presentation.add.components.CalculateLayout
 

@@ -3,9 +3,9 @@ package feature.home.presentation.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import feature.core.domain.model.Expense
-import feature.core.domain.repository.ExpenseRepository
-import feature.core.domain.repository.TypeRepository
+import core.domain.model.Expense
+import core.domain.repository.ExpenseRepository
+import core.domain.repository.TypeRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
