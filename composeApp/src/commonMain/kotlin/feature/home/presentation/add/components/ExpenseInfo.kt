@@ -65,7 +65,8 @@ fun ExpenseInfo(
             ),
             cursorBrush = SolidColor(
                 value = MaterialTheme.colorScheme.onBackground
-            )
+            ),
+            maxLines = 1
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
