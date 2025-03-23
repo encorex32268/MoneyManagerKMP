@@ -42,6 +42,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -136,6 +137,7 @@ fun AddScreen(
 
     val bottomSheetState = rememberStandardBottomSheetState(
         skipHiddenState = false,
+        initialValue = SheetValue.Hidden
     )
     val bottomSheetScaffoldState  = rememberBottomSheetScaffoldState(
         bottomSheetState = bottomSheetState

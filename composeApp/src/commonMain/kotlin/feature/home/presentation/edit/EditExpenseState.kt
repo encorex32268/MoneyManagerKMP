@@ -5,5 +5,6 @@ import feature.core.domain.model.Type
 
 data class EditExpenseState(
     val currentExpense: Expense?= null,
-    val typeItems: List<Type> = emptyList()
+    val typeItems: List<Type> = emptyList(),
+    val isShowSaveIcon: Boolean = false
 )

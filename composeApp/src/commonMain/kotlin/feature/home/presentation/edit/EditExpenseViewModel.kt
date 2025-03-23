@@ -46,11 +46,11 @@ class EditExpenseViewModel(
             _state.value
         )
 
+
     private val _uiEvent = Channel<EditExpenseUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    private val currentText = expense.content
-
+    private var currentText = expense.content
 
     fun onEvent(event: EditExpenseEvent){
         when(event){
@@ -71,7 +71,8 @@ class EditExpenseViewModel(
                     it.copy(
                         currentExpense = state.value.currentExpense?.copy(
                             content = event.text
-                        )
+                        ),
+                        isShowSaveIcon = currentText != event.text
                     )
                 }
             }
@@ -102,8 +103,24 @@ class EditExpenseViewModel(
                 }?:return
 
             }
-
-            else                                -> Unit
+            EditExpenseEvent.OnSaveClick ->{
+                viewModelScope.launch {
+                    state.value.currentExpense?.let {
+                        if (currentText != it.content){
+                            repository.update(
+                                expense = it
+                            )
+                            currentText = it.content
+                            _state.update {
+                                it.copy(
+                                    isShowSaveIcon = false
+                                )
+                            }
+                        }
+                    }
+                    _uiEvent.send(EditExpenseUiEvent.HideKeyboard)
+                }
+            }
         }
     }
 }
