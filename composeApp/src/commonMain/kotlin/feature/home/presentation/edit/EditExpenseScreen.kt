@@ -1,9 +1,10 @@
 @file:OptIn(ExperimentalResourceApi::class, KoinExperimentalAPI::class,
-    ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class
 )
 
 package feature.home.presentation.edit
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,6 +18,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,14 +45,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -63,8 +70,10 @@ import feature.core.presentation.components.TwoButtonDialog
 import feature.core.presentation.date.toDayOfWeekStringResource
 import feature.core.presentation.date.toLocalDateTime
 import feature.core.presentation.noRippleClick
+import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_attach_money_24
+import moneymanagerkmp.composeapp.generated.resources.baseline_done
 import moneymanagerkmp.composeapp.generated.resources.baseline_sticky_note_24
 import moneymanagerkmp.composeapp.generated.resources.description
 import moneymanagerkmp.composeapp.generated.resources.dialog_delete_content
@@ -88,6 +97,8 @@ fun EditExpenseScreenRoot(
     onGoBack: () -> Unit = {},
     onGotoAddScreen: (Expense) -> Unit = {}
 ){
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
     val state by viewModel.state.collectAsStateWithLifecycle()
     ObserveAsEvents(
         events = viewModel.uiEvent,
@@ -99,6 +110,10 @@ fun EditExpenseScreenRoot(
                 onGotoAddScreen(
                     it.expense
                 )
+            }
+            EditExpenseUiEvent.HideKeyboard -> {
+                keyboardController?.hide()
+                focusManager.clearFocus()
             }
         }
     }
@@ -114,9 +129,6 @@ fun EditExpenseScreen(
     state: EditExpenseState,
     onEvent: (EditExpenseEvent) -> Unit = {}
 ) {
-    val keyboard = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
-
     var isShowDeleteDialog by remember {
         mutableStateOf(false)
     }
@@ -178,17 +190,10 @@ fun EditExpenseScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues)
-                    .verticalScroll(rememberScrollState())
-                ,
+                    .padding(paddingValues),
             ) {
                 OutlinedCard(
-                    modifier = Modifier.fillMaxWidth()
-                        .noRippleClick {
-                            keyboard?.hide()
-                            focusManager.clearFocus()
-                        }
-                        .padding(16.dp),
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(
@@ -221,20 +226,11 @@ fun EditExpenseScreen(
                         }
                     }
                 }
-                Spacer(modifier = Modifier
-                    .height(16.dp)
-                    .noRippleClick {
-                        keyboard?.hide()
-                        focusManager.clearFocus()
-                    }
-                )
+                Spacer(modifier = Modifier.height(16.dp))
                 ContentSection(
                     content = state.currentExpense.content,
-                    onValueChange = {
-                        onEvent(
-                            EditExpenseEvent.OnContentChange(it)
-                        )
-                    }
+                    onEvent = onEvent,
+                    isShowSaveIcon = state.isShowSaveIcon
                 )
             }
 
@@ -265,14 +261,14 @@ private fun CostSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            modifier = Modifier.size(16.dp),
+            modifier = Modifier.size(20.dp),
             painter = painterResource(Res.drawable.baseline_attach_money_24),
             contentDescription = null
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             modifier = Modifier.weight(1f),
-            text = cost.toMoneyString(),
+            text = cost.toString(),
             style = MaterialTheme.typography.bodyMedium
         )
     }
@@ -296,7 +292,7 @@ private fun TimestampSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            modifier = Modifier.size(16.dp),
+            modifier = Modifier.size(20.dp),
             imageVector = Icons.Outlined.DateRange,
             contentDescription = null
         )
@@ -320,7 +316,7 @@ private fun GroupSection(
             verticalAlignment = Alignment.CenterVertically
         ){
             Box(
-                modifier = Modifier.size(16.dp).background(
+                modifier = Modifier.size(20.dp).background(
                     color = Color(it.colorArgb),
                     shape = CircleShape
                 )
@@ -366,12 +362,17 @@ private fun IconSection(
 private fun ContentSection(
     modifier: Modifier = Modifier,
     content: String = "",
-    onValueChange: (String) -> Unit
+    isShowSaveIcon: Boolean,
+    onEvent: (EditExpenseEvent) -> Unit
 ){
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val scope = rememberCoroutineScope()
     OutlinedCard(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+        ,
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(
@@ -380,20 +381,42 @@ private fun ContentSection(
                 .padding(top = 24.dp)
                 .padding(horizontal = 24.dp)
         ){
-            Icon(
-                modifier = Modifier.size(16.dp),
-                imageVector = vectorResource(Res.drawable.baseline_sticky_note_24),
-                contentDescription = null
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Box(
+                    modifier = Modifier.fillMaxWidth().weight(1f),
+                ){
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        imageVector = vectorResource(Res.drawable.baseline_sticky_note_24),
+                        contentDescription = null
+                    )
+                }
+                if(isShowSaveIcon){
+                    Icon(
+                        modifier = Modifier.size(20.dp).noRippleClick {
+                            onEvent(EditExpenseEvent.OnSaveClick)
+                        },
+                        imageVector = vectorResource(Res.drawable.baseline_done),
+                        contentDescription = null
+                    )
+                }
+            }
             BasicTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(IntrinsicSize.Max)
                     .padding(16.dp)
-                    .verticalScroll(rememberScrollState())
-                ,
+                    .bringIntoViewRequester(bringIntoViewRequester),
                 value = content,
-                onValueChange = onValueChange,
+                onValueChange = {
+                    onEvent(EditExpenseEvent.OnContentChange(it))
+                    scope.launch {
+                        bringIntoViewRequester.bringIntoView()
+                    }
+                },
                 decorationBox = { it ->
                     if (content.trim().isEmpty()){
                         Text(
@@ -410,6 +433,13 @@ private fun ContentSection(
                 ),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        scope.launch {
+                            bringIntoViewRequester.bringIntoView()
+                        }
+                    }
                 ),
                 cursorBrush = SolidColor(
                     value = MaterialTheme.colorScheme.onBackground

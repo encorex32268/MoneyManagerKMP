@@ -7,4 +7,5 @@ sealed interface EditExpenseUiEvent {
     data class OnGoAddScreen(
         val expense: Expense
     ): EditExpenseUiEvent
+    data object HideKeyboard: EditExpenseUiEvent
 }

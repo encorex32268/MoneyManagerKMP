@@ -8,4 +8,5 @@ sealed interface EditExpenseEvent {
     data class OnContentChange(
         val text: String
     ): EditExpenseEvent
+    data object OnSaveClick: EditExpenseEvent
 }
