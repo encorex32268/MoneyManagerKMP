@@ -21,6 +21,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -45,6 +46,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -177,15 +179,16 @@ fun EditExpenseScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .noRippleClick {
-                        keyboard?.hide()
-                        focusManager.clearFocus()
-                    }
                     .verticalScroll(rememberScrollState())
                 ,
             ) {
                 OutlinedCard(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                        .noRippleClick {
+                            keyboard?.hide()
+                            focusManager.clearFocus()
+                        }
+                        .padding(16.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(
@@ -218,7 +221,13 @@ fun EditExpenseScreen(
                         }
                     }
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier
+                    .height(16.dp)
+                    .noRippleClick {
+                        keyboard?.hide()
+                        focusManager.clearFocus()
+                    }
+                )
                 ContentSection(
                     content = state.currentExpense.content,
                     onValueChange = {
@@ -380,7 +389,9 @@ private fun ContentSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(IntrinsicSize.Max)
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
+                ,
                 value = content,
                 onValueChange = onValueChange,
                 decorationBox = { it ->
@@ -399,6 +410,9 @@ private fun ContentSection(
                 ),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
+                ),
+                cursorBrush = SolidColor(
+                    value = MaterialTheme.colorScheme.onBackground
                 )
             )
 
