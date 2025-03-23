@@ -73,7 +73,9 @@ class AddViewModel(
                 colorArgb = -1,
                 isShow = true,
                 order = 0,
-                categories = recentlyExpenseFlow.mapIndexed { index, recentlyExpense ->
+                categories = recentlyExpenseFlow
+                    .distinctBy { it.description }
+                    .mapIndexed { index, recentlyExpense ->
                     val findType = typeFlow.find { type ->
                         type.typeIdTimestamp == recentlyExpense.typeId
                     }
