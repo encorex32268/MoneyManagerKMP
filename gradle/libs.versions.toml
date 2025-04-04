@@ -1,0 +1,98 @@
+[versions]
+agp = "8.5.2"
+android-compileSdk = "34"
+android-minSdk = "24"
+android-targetSdk = "34"
+androidx-activityCompose = "1.9.3"
+compose-plugin = "1.7.0"
+
+junit = "4.13.2"
+kotlin = "2.0.10"
+kotlinxCoroutinesCore = "1.7.0"
+libraryBase = "2.1.0"
+readmkotlin = "2.1.0"
+kotlinxSerializationJson = "1.6.1"
+
+#KotlinDateTime
+kotlinxDateTime = "0.6.0-RC.2"
+#Koin
+koin = "3.5.6"
+koinCompose = "1.1.5"
+koinComposeViewModel = "1.2.0-Beta4"
+
+#Navigation
+navigationCompose = "2.8.0-alpha08"
+
+#Uri
+uriKmpVersion = "0.0.18"
+lifecycleViewmodelCompose = "2.8.0"
+
+jetbrainsKotlinJvm = "1.9.0"
+#ColorPicker
+colorpicker = "1.1.2"
+#KeySettings
+keysettings = "1.2.0"
+#Splash
+core-splashscreen = "1.0.1"
+#Ads
+google-play-services = "23.4.0"
+#Konfig
+konfig = "0.15.1"
+#Csv
+csv = "0.12"
+#FileKit
+filekit = "0.8.1"
+
+material3WindowSizeClassMultiplatform = "0.5.0"
+
+
+[libraries]
+
+google-playServices-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "google-play-services" }
+
+compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
+
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+library-base = { module = "io.realm.kotlin:library-base", version.ref = "libraryBase" }
+library-sync = { module = "io.realm.kotlin:library-sync", version.ref = "libraryBase" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+
+kotlin-date-time = { module = "org.jetbrains.kotlinx:kotlinx-datetime" , version.ref = "kotlinxDateTime"}
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinCompose" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinComposeViewModel" }
+
+androidx-navigation = { module= "org.jetbrains.androidx.navigation:navigation-compose" , version.ref= "navigationCompose"}
+
+uri-kmp = { module = "com.eygraber:uri-kmp" , version.ref = "uriKmpVersion"}
+lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
+
+keysettings-kmp  = { module = "com.russhwolf:multiplatform-settings-no-arg" , version.ref = "keysettings"}
+core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
+
+csv = { module = "de.halfbit:csv", version.ref = "csv" }
+filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
+filekit-compose = { module = "io.github.vinceglb:filekit-compose", version.ref = "filekit" }
+
+
+material3-windowsizeclass-multiplatform = { group = "dev.chrisbanes.material3", name = "material3-window-size-class-multiplatform", version.ref = "material3WindowSizeClassMultiplatform" }
+
+
+
+
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+readlkotlin = {id = "io.realm.kotlin" , version.ref = "readmkotlin"}
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+konfigplugin = { id = "com.codingfeline.buildkonfig" , version.ref = "konfig"}

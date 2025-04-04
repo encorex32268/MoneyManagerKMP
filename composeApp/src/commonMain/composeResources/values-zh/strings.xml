@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="app_name">記帳</string>
+    <string name="home">主頁</string>
+    <string name="chart">圖表</string>
+    <string name="analytics">分析</string>
+    <string name="total">總共</string>
+    <string name="total_expense">總支出</string>
+    <string name="expense_detail">詳細</string>
+    <string name="income">收入</string>
+    <string name="expense">支出</string>
+    <string name="total_expense_item">總共：%1$s</string>
+    <string name="save_snackbar">已儲存</string>
+    <string name="success_snackbar">成功</string>
+    <string name="failed_snackbar">失敗</string>
+    <string name="dialog_ok_button">確認</string>
+    <string name="dialog_cancel_button">取消</string>
+    <string name="dialog_delete_title">刪除</string>
+    <string name="dialog_delete_content">你要刪除嗎？</string>
+
+    <string name="recently">最近</string>
+    <string name="food">食</string>
+    <string name="traffic">交通</string>
+    <string name="wear">服</string>
+    <string name="sports">運動</string>
+    <string name="shopping">購物</string>
+    <string name="health">健康</string>
+    <string name="other">其他</string>
+    <string name="life">生活</string>
+
+    <string name="description">說明</string>
+    <string name="category_add_description">例:生活</string>
+
+    <string name="monday">一</string>
+    <string name="tuesday">二</string>
+    <string name="wednesday">三</string>
+    <string name="thursday">四</string>
+    <string name="friday">五</string>
+    <string name="saturday">六</string>
+    <string name="sunday">日</string>
+
+    <string name="error">錯誤</string>
+    <string name="backup_error_downloads_path_empty">沒有下載資料夾的目錄</string>
+    <string name="backup_error_csv_data_empty">匯入的檔案沒有資料</string>
+    <string name="backup_error_restore_exception">匯入檔案發生錯誤</string>
+    <string name="backup_error_json_parse">分析時發生錯誤</string>
+
+    <string name="backup_backup">備份</string>
+    <string name="backup_import">匯入</string>
+
+    <string name="home_spending_limit">支出上限</string>
+    <string name="home_spending_limit_set">設定支出上限</string>
+    <string name="home_spending_limit_set_hint">例:10,000</string>
+
+    <string name="home_add_type_default">使用預設種類</string>
+    <string name="home_add_type_custom">自定義種類</string>
+    <string name="home_add_type_title">編集種類</string>
+        <!-- Food -->
+        <string name="food_beer">啤酒</string>
+        <string name="food_bread">麵包</string>
+        <string name="food_buy_food">買食物</string>
+        <string name="food_buy_food2">買食物</string>
+        <string name="food_cake">蛋糕</string>
+        <string name="food_coffee">咖啡</string>
+        <string name="food_cookie">餅乾</string>
+        <string name="food_drink">飲料</string>
+        <string name="food_fast_food">速食</string>
+        <string name="food_food">食物</string>
+        <string name="food_fruits">水果</string>
+        <string name="food_hamburger">漢堡</string>
+        <string name="food_hot_coffee">熱咖啡</string>
+        <string name="food_hot_tea">熱茶</string>
+        <string name="food_noodles">麵</string>
+        <string name="food_pizza">披薩</string>
+        <string name="food_rice">飯</string>
+        <string name="food_salad">沙拉</string>
+        <string name="food_seafood">海鮮</string>
+        <string name="food_vegetables">蔬菜</string>
+        <string name="food_wine">紅酒</string>
+
+        <string name="food_boxlunch">便當</string>
+        <string name="food_boxlunch2">便當</string>
+        <string name="food_delivery">外送</string>
+        <string name="food_dog">飼料</string>
+        <string name="food_foodset">套餐</string>
+        <string name="food_meal">餐點</string>
+        <string name="food_meal2">餐點</string>
+        <string name="food_sauce">醬料</string>
+        <string name="food_streetfood">小吃</string>
+        <string name="food_water">水</string>
+
+        <!-- Health -->
+        <string name="health_doctor">醫生</string>
+        <string name="health_doctor2">醫生</string>
+        <string name="health_health">健康</string>
+        <string name="health_help">幫助</string>
+        <string name="health_hospital">醫院</string>
+        <string name="health_hospital2">醫院</string>
+        <string name="health_massage">按摩</string>
+        <string name="health_pill">藥丸</string>
+        <string name="health_sick">生病</string>
+        <string name="health_tooth">牙齒</string>
+        <string name="health_calendar">定期治療</string>
+        <string name="health_card">健保卡</string>
+        <!-- Life -->
+        <string name="life_bank">銀行</string>
+        <string name="life_car">汽車</string>
+        <string name="life_hammer">錘子</string>
+        <string name="life_light_fee">電費</string>
+        <string name="life_money_income">收入</string>
+        <string name="life_money_transfer">轉賬</string>
+        <string name="life_music">音樂</string>
+        <string name="life_network_fee">網費</string>
+        <string name="life_paint">油漆</string>
+        <string name="life_phone_fee">電話費</string>
+        <string name="life_rent">房租</string>
+        <string name="life_salary">薪水</string>
+        <string name="life_save_money">存錢</string>
+        <string name="life_smart_phone_fee">手機費</string>
+        <string name="life_stock_decrease">股票下跌</string>
+        <string name="life_stock_increase">股票上漲</string>
+        <string name="life_stocks">股票</string>
+        <string name="life_taxes">稅</string>
+        <string name="life_taxes2">稅</string>
+        <string name="life_taxes3">稅</string>
+        <string name="life_video">串流媒體</string>
+        <string name="life_water_fee">水費</string>
+        <string name="life_wifi_router">WiFi路由器</string>
+        <string name="life_wifi">WiFi</string>
+
+        <string name="life_shampoo">洗髮精</string>
+        <string name="life_shampoo2">洗髮精</string>
+        <string name="life_furniture">家具</string>
+        <string name="life_makeup4">化妝品</string>
+        <string name="life_bath">沐浴</string>
+        <string name="life_tube">洗面乳</string>
+        <string name="life_tube2">洗面乳</string>
+
+
+        <!-- Other -->
+        <string name="other_bill">帳單</string>
+        <string name="other_book">書</string>
+        <string name="other_book2">書</string>
+        <string name="other_car_fee">車費</string>
+        <string name="other_car_repair">汽車維修</string>
+        <string name="other_car_wash">洗車</string>
+        <string name="other_card_fee">卡費</string>
+        <string name="other_creditcard">信用卡</string>
+        <string name="other_cuthair">理髮</string>
+        <string name="other_gamble">賭博</string>
+        <string name="other_game">遊戲</string>
+        <string name="other_iphone">iPhone</string>
+        <string name="other_job">工作</string>
+        <string name="other_karaoke">卡拉OK</string>
+        <string name="other_light_fee">電費</string>
+        <string name="other_massage">按摩</string>
+        <string name="other_money_exchange">兌換</string>
+        <string name="other_money_income">收入</string>
+        <string name="other_money_transfer">轉賬</string>
+        <string name="other_movie_theater">電影院</string>
+        <string name="other_music">音樂</string>
+        <string name="other_music2">音樂</string>
+        <string name="other_pet">寵物</string>
+        <string name="other_phone_fee">電話費</string>
+        <string name="other_repair">修理</string>
+        <string name="other_salary">薪水</string>
+        <string name="other_save_money">存錢</string>
+        <string name="other_stock_decrease">股票下跌</string>
+        <string name="other_stock_increase">股票上漲</string>
+        <string name="other_toys">玩具</string>
+        <string name="other_unknown">未知</string>
+        <string name="other_video">影片</string>
+        <string name="other_washing_machine">洗衣機</string>
+        <string name="other_water_fee">水費</string>
+
+
+        <string name="other_bitcoin">虛擬貨幣</string>
+        <string name="other_box">箱子</string>
+        <string name="other_camera">相機</string>
+        <string name="other_claw">夾娃娃</string>
+        <string name="other_cut">剪髮</string>
+        <string name="other_giftcard">禮品卡</string>
+        <string name="other_lesson">課程</string>
+        <string name="other_lesson2">課程</string>
+        <string name="other_letter">信件</string>
+        <string name="other_post">郵件</string>
+        <string name="other_stationery">文具</string>
+        <string name="other_study">學習</string>
+
+        <!-- Shopping -->
+        <string name="shopping_bag">包包</string>
+        <string name="shopping_camera">相機</string>
+        <string name="shopping_flowers">花</string>
+        <string name="shopping_gift">禮物</string>
+        <string name="shopping_glasses">眼鏡</string>
+        <string name="shopping_makeup_brush">化妝刷</string>
+        <string name="shopping_makeup">化妝品</string>
+        <string name="shopping_makeup2">化妝品</string>
+        <string name="shopping_makeup3">化妝品</string>
+        <string name="shopping_necklace">項鍊</string>
+        <string name="shopping_pc">電腦</string>
+        <string name="shopping_phone">電話</string>
+        <string name="shopping_plant">植物</string>
+        <string name="shopping_plant2">植物</string>
+        <string name="shopping_ring">戒指</string>
+        <string name="shopping_shopping">購物</string>
+        <string name="shopping_switch">遊戲</string>
+
+        <!-- Sports -->
+        <string name="sports_8ball">撞球</string>
+        <string name="sports_baseball">棒球</string>
+        <string name="sports_basketball">籃球</string>
+        <string name="sports_bowling">保齡球</string>
+        <string name="sports_boxing">拳擊</string>
+        <string name="sports_camp">露營</string>
+        <string name="sports_football">足球</string>
+        <string name="sports_golf">高爾夫球</string>
+        <string name="sports_gym">健身房</string>
+        <string name="sports_pingpong">乒乓球</string>
+        <string name="sports_skiing">滑雪</string>
+        <string name="sports_sports">運動</string>
+        <string name="sports_swim">游泳</string>
+        <string name="sports_tennis">網球</string>
+        <string name="sports_usa_football">美式足球</string>
+        <string name="sports_volley">排球</string>
+        <string name="sports_yoga">瑜伽</string>
+        <string name="sports_jumping">跳高</string>
+        <string name="sports_paragliding">滑翔傘</string>
+
+        <!-- Traffic -->
+        <string name="traffic_bicycle">腳踏車</string>
+        <string name="traffic_bus">巴士</string>
+        <string name="traffic_cable_car">纜車</string>
+        <string name="traffic_car">汽車</string>
+        <string name="traffic_city_train">電車</string>
+        <string name="traffic_highspeed_train">高鐵</string>
+        <string name="traffic_highway_bus">高速巴士</string>
+        <string name="traffic_motobike">機車</string>
+        <string name="traffic_parking">停車</string>
+        <string name="traffic_plane">飛機</string>
+        <string name="traffic_ship">船</string>
+        <string name="traffic_taxi">計程車</string>
+        <string name="traffic_train_ticket">車票</string>
+        <string name="traffic_train">火車</string>
+
+        <!-- Wear -->
+        <string name="wear_baby">嬰兒服</string>
+        <string name="wear_bag">包包</string>
+        <string name="wear_bag2">包包</string>
+        <string name="wear_bag3">包包</string>
+        <string name="wear_cap">帽子</string>
+        <string name="wear_dress">洋裝</string>
+        <string name="wear_hat">帽子</string>
+        <string name="wear_shirts">襯衫</string>
+        <string name="wear_shoes">鞋子</string>
+        <string name="wear_shorts">短褲</string>
+        <string name="wear_skirt">裙子</string>
+        <string name="wear_socks">襪子</string>
+        <string name="wear_trousers">長褲</string>
+
+
+</resources>

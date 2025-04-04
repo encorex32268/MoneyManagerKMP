@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="app_name">家計簿</string>
+    <string name="home">ホーム</string>
+    <string name="chart">チャート</string>
+    <string name="analytics">分析</string>
+    <string name="total">合計</string>
+    <string name="total_expense">支出合計</string>
+    <string name="expense_detail">詳細</string>
+    <string name="income">収入</string>
+    <string name="expense">支出</string>
+    <string name="total_expense_item">合計：%1$s</string>
+    <string name="save_snackbar">保存しました</string>
+    <string name="success_snackbar">成功</string>
+    <string name="failed_snackbar">失敗</string>
+    <string name="dialog_ok_button">OK</string>
+    <string name="dialog_cancel_button">キャンセル</string>
+    <string name="dialog_delete_title">削除</string>
+    <string name="dialog_delete_content">削除しますか？</string>
+    <string name="recently">最近</string>
+    <string name="food">食</string>
+    <string name="traffic">交通</string>
+    <string name="wear">服</string>
+    <string name="sports">運動</string>
+    <string name="shopping">買い物</string>
+    <string name="health">健康</string>
+    <string name="other">その他</string>
+    <string name="life">生活</string>
+
+    <string name="description">メモ</string>
+    <string name="category_add_description">例:ローン</string>
+
+    <string name="monday">月</string>
+    <string name="tuesday">火</string>
+    <string name="wednesday">水</string>
+    <string name="thursday">木</string>
+    <string name="friday">金</string>
+    <string name="saturday">土</string>
+    <string name="sunday">日</string>
+
+    <string name="error">エラー</string>
+    <string name="backup_error_downloads_path_empty">ダウンロードフォルダのディレクトリが存在しません</string>
+    <string name="backup_error_csv_data_empty">インポートされたファイルにデータが含まれていません</string>
+    <string name="backup_error_restore_exception">インポート中にエラーが発生しました</string>
+    <string name="backup_error_json_parse">分析中にエラーが発生しました</string>
+
+
+    <string name="backup_backup">バックアップ</string>
+    <string name="backup_import">インポート</string>
+
+    <string name="home_spending_limit">支出上限</string>
+    <string name="home_spending_limit_set">支出上限設定</string>
+    <string name="home_spending_limit_set_hint">例:10,000</string>
+
+    <string name="home_add_type_default">デフォルトの種類を使用する</string>
+    <string name="home_add_type_custom">自分で作る</string>
+    <string name="home_add_type_title">種類編集</string>
+
+    <!-- Food -->
+        <string name="food_beer">ビール</string>
+        <string name="food_bread">パン</string>
+        <string name="food_buy_food">買い物</string>
+        <string name="food_buy_food2">買い物</string>
+        <string name="food_cake">ケーキ</string>
+        <string name="food_coffee">コーヒー</string>
+        <string name="food_cookie">お菓子</string>
+        <string name="food_drink">飲み物</string>
+        <string name="food_fast_food">ファストフード</string>
+        <string name="food_food">食べ物</string>
+        <string name="food_fruits">果物</string>
+        <string name="food_hamburger">ハンバーガー</string>
+        <string name="food_hot_coffee">ホットコーヒー</string>
+        <string name="food_hot_tea">ホットティー</string>
+        <string name="food_noodles">麺</string>
+        <string name="food_pizza">ピザ</string>
+        <string name="food_rice">ご飯</string>
+        <string name="food_salad">サラダ</string>
+        <string name="food_seafood">シーフード</string>
+        <string name="food_vegetables">野菜</string>
+        <string name="food_wine">ワイン</string>
+
+        <string name="food_boxlunch">弁当</string>
+        <string name="food_boxlunch2">弁当</string>
+        <string name="food_delivery">デリバリー</string>
+        <string name="food_dog">ドッグフード</string>
+        <string name="food_foodset">セットメニュー</string>
+        <string name="food_meal">食事</string>
+        <string name="food_meal2">食事</string>
+        <string name="food_sauce">ソース</string>
+        <string name="food_streetfood">屋台料理</string>
+        <string name="food_water">水</string>
+
+        <!-- Health -->
+        <string name="health_doctor">医者</string>
+        <string name="health_doctor2">医者</string>
+        <string name="health_health">健康</string>
+        <string name="health_help">ヘルプ</string>
+        <string name="health_hospital">病院</string>
+        <string name="health_hospital2">病院</string>
+        <string name="health_massage">マッサージ</string>
+        <string name="health_pill">薬</string>
+        <string name="health_sick">病気</string>
+        <string name="health_tooth">歯</string>
+
+        <string name="health_calendar">定期</string>
+        <string name="health_card">保険カード</string>
+
+
+
+    <!-- Life -->
+        <string name="life_bank">銀行</string>
+        <string name="life_car">車</string>
+        <string name="life_hammer">ハンマー</string>
+        <string name="life_light_fee">電気代</string>
+        <string name="life_money_income">収入</string>
+        <string name="life_money_transfer">送金</string>
+        <string name="life_music">音楽</string>
+        <string name="life_network_fee">ネット料金</string>
+        <string name="life_paint">塗料</string>
+        <string name="life_phone_fee">電話料金</string>
+        <string name="life_rent">家賃</string>
+        <string name="life_salary">給料</string>
+        <string name="life_save_money">貯金</string>
+        <string name="life_smart_phone_fee">スマホ代</string>
+        <string name="life_stock_decrease">株価下落</string>
+        <string name="life_stock_increase">株価上昇</string>
+        <string name="life_stocks">株</string>
+        <string name="life_taxes">税金</string>
+        <string name="life_taxes2">税金</string>
+        <string name="life_taxes3">税金</string>
+        <string name="life_video">ビデオ</string>
+        <string name="life_water_fee">水道代</string>
+        <string name="life_wifi_router">WiFiルーター</string>
+        <string name="life_wifi">WiFi</string>
+
+        <string name="life_shampoo">シャンプー</string>
+        <string name="life_shampoo2">シャンプー</string>
+        <string name="life_furniture">家具</string>
+        <string name="life_makeup4">化粧品</string>
+        <string name="life_bath">入浴</string>
+        <string name="life_tube">洗顔</string>
+        <string name="life_tube2">洗顔</string>
+
+        <!-- Other -->
+        <string name="other_bill">請求書</string>
+        <string name="other_book">本</string>
+        <string name="other_book2">本</string>
+        <string name="other_car_fee">車料金</string>
+        <string name="other_car_repair">車修理</string>
+        <string name="other_car_wash">洗車</string>
+        <string name="other_card_fee">カード料金</string>
+        <string name="other_creditcard">クレジットカード</string>
+        <string name="other_cuthair">カット</string>
+        <string name="other_gamble">ギャンブル</string>
+        <string name="other_game">ゲーム</string>
+        <string name="other_iphone">iPhone</string>
+        <string name="other_job">仕事</string>
+        <string name="other_karaoke">カラオケ</string>
+        <string name="other_light_fee">電気代</string>
+        <string name="other_massage">マッサージ</string>
+        <string name="other_money_exchange">両替</string>
+        <string name="other_money_income">収入</string>
+        <string name="other_money_transfer">送金</string>
+        <string name="other_movie_theater">映画館</string>
+        <string name="other_music">音楽</string>
+        <string name="other_music2">音楽</string>
+        <string name="other_pet">ペット</string>
+        <string name="other_phone_fee">電話料金</string>
+        <string name="other_repair">修理</string>
+        <string name="other_salary">給料</string>
+        <string name="other_save_money">貯金</string>
+        <string name="other_stock_decrease">株価下落</string>
+        <string name="other_stock_increase">株価上昇</string>
+        <string name="other_toys">おもちゃ</string>
+        <string name="other_unknown">不明</string>
+        <string name="other_video">ビデオ</string>
+        <string name="other_washing_machine">洗濯機</string>
+        <string name="other_water_fee">水道料金</string>
+
+        <string name="other_bitcoin">仮想通貨</string>
+        <string name="other_box">ボックス</string>
+        <string name="other_camera">カメラ</string>
+        <string name="other_claw">キャプチャー</string>
+        <string name="other_cut">カット</string>
+        <string name="other_giftcard">ギフトカード</string>
+        <string name="other_lesson">レッスン</string>
+        <string name="other_lesson2">レッスン</string>
+        <string name="other_letter">手紙</string>
+        <string name="other_post">郵便</string>
+        <string name="other_stationery">文房具</string>
+        <string name="other_study">勉強</string>
+
+        <!-- Shopping -->
+        <string name="shopping_bag">バッグ</string>
+        <string name="shopping_camera">カメラ</string>
+        <string name="shopping_flowers">花</string>
+        <string name="shopping_gift">ギフト</string>
+        <string name="shopping_glasses">メガネ</string>
+        <string name="shopping_makeup_brush">メイクブラシ</string>
+        <string name="shopping_makeup">メイク</string>
+        <string name="shopping_makeup2">メイク</string>
+        <string name="shopping_makeup3">メイク</string>
+        <string name="shopping_necklace">ネックレス</string>
+        <string name="shopping_pc">パソコン</string>
+        <string name="shopping_phone">電話</string>
+        <string name="shopping_plant">植物</string>
+        <string name="shopping_plant2">植物</string>
+        <string name="shopping_ring">リング</string>
+        <string name="shopping_shopping">ショッピング</string>
+        <string name="shopping_switch">ゲーム</string>
+
+        <!-- Sports -->
+        <string name="sports_8ball">ビリヤード</string>
+        <string name="sports_baseball">野球</string>
+        <string name="sports_basketball">バスケットボール</string>
+        <string name="sports_bowling">ボウリング</string>
+        <string name="sports_boxing">ボクシング</string>
+        <string name="sports_camp">キャンプ</string>
+        <string name="sports_football">サッカー</string>
+        <string name="sports_golf">ゴルフ</string>
+        <string name="sports_gym">ジム</string>
+        <string name="sports_pingpong">卓球</string>
+        <string name="sports_skiing">スキー</string>
+        <string name="sports_sports">スポーツ</string>
+        <string name="sports_swim">水泳</string>
+        <string name="sports_tennis">テニス</string>
+        <string name="sports_usa_football">アメリカンフットボール</string>
+        <string name="sports_volley">バレーボール</string>
+        <string name="sports_yoga">ヨガ</string>
+        <string name="sports_jumping">ジャンプ</string>
+        <string name="sports_paragliding">パラグライダー</string>
+
+        <!-- Traffic -->
+        <string name="traffic_bicycle">自転車</string>
+        <string name="traffic_bus">バス</string>
+        <string name="traffic_cable_car">ケーブルカー</string>
+        <string name="traffic_car">車</string>
+        <string name="traffic_city_train">電車</string>
+        <string name="traffic_highspeed_train">新幹線</string>
+        <string name="traffic_highway_bus">高速バス</string>
+        <string name="traffic_motobike">バイク</string>
+        <string name="traffic_parking">駐車</string>
+        <string name="traffic_plane">飛行機</string>
+        <string name="traffic_ship">船</string>
+        <string name="traffic_taxi">タクシー</string>
+        <string name="traffic_train_ticket">チケット</string>
+        <string name="traffic_train">電車</string>
+
+        <!-- Wear -->
+        <string name="wear_baby">赤ちゃん服</string>
+        <string name="wear_bag">バッグ</string>
+        <string name="wear_bag2">バッグ</string>
+        <string name="wear_bag3">バッグ</string>
+        <string name="wear_cap">キャップ</string>
+        <string name="wear_dress">ドレス</string>
+        <string name="wear_hat">帽子</string>
+        <string name="wear_shirts">シャツ</string>
+        <string name="wear_shoes">靴</string>
+        <string name="wear_shorts">ショーツ</string>
+        <string name="wear_skirt">スカート</string>
+        <string name="wear_socks">靴下</string>
+        <string name="wear_trousers">ズボン</string>
+
+
+
+</resources>

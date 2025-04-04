@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="app_name">MoneyManager</string>
+
+    <string name="home">Home</string>
+    <string name="chart">Chart</string>
+    <string name="analytics">Analytics</string>
+    <string name="total">Total</string>
+    <string name="total_expense">TotalExpense</string>
+    <string name="expense_detail">Detail</string>
+    <string name="income">Income</string>
+    <string name="expense">Expense</string>
+    <string name="total_expense_item">Total : %1$s</string>
+    <string name="save_snackbar">Saved</string>
+    <string name="success_snackbar">Succeed</string>
+    <string name="failed_snackbar">Failed</string>
+    <string name="dialog_ok_button">OK</string>
+    <string name="dialog_cancel_button">Cancel</string>
+    <string name="dialog_delete_title">Delete</string>
+    <string name="dialog_delete_content">Do you want to delete this?</string>
+
+    <string name="recently">Recently</string>
+    <string name="food">Food</string>
+    <string name="traffic">Traffic</string>
+    <string name="wear">Wear</string>
+    <string name="sports">Sports</string>
+    <string name="shopping">Shopping</string>
+    <string name="health">Health</string>
+    <string name="other">Other</string>
+    <string name="life">Life</string>
+
+    <string name="description">Description...</string>
+    <string name="category_add_description">Ex:Food...</string>
+    <string name="monday">Mon</string>
+    <string name="tuesday">Tue</string>
+    <string name="wednesday">Wed</string>
+    <string name="thursday">Thu</string>
+    <string name="friday">Fri</string>
+    <string name="saturday">Sat</string>
+    <string name="sunday">Sun</string>
+
+    <string name="error">Error</string>
+    <string name="backup_error_downloads_path_empty">The directory for the download folder does not exist.</string>
+    <string name="backup_error_csv_data_empty">The imported file contains no data.</string>
+    <string name="backup_error_restore_exception">An error occurred while importing the file.</string>
+    <string name="backup_error_json_parse">An error occurred during the analysis.</string>
+    <string name="backup_backup">Backup</string>
+    <string name="backup_import">Import</string>
+
+    <string name="home_spending_limit">SpendingLimits</string>
+    <string name="home_spending_limit_set">Set Your Spending Limits</string>
+    <string name="home_spending_limit_set_hint">Ex:10,000</string>
+
+    <string name="home_add_type_default">Use Default Type</string>
+    <string name="home_add_type_custom">Make It Myself</string>
+    <string name="home_add_type_title">Edit Type</string>
+
+
+
+        <!-- Food -->
+        <string name="food_beer">Beer</string>
+        <string name="food_bread">Bread</string>
+        <string name="food_buy_food">Buy Food</string>
+        <string name="food_buy_food2">Buy Food</string>
+        <string name="food_cake">Cake</string>
+        <string name="food_coffee">Coffee</string>
+        <string name="food_cookie">Cookie</string>
+        <string name="food_drink">Drink</string>
+        <string name="food_fast_food">Fast　Food</string>
+        <string name="food_food">Food</string>
+        <string name="food_fruits">Fruits</string>
+        <string name="food_hamburger">Hamburger</string>
+        <string name="food_hot_coffee">Hot　Coffee</string>
+        <string name="food_hot_tea">Hot Tea</string>
+        <string name="food_noodles">Noodles</string>
+        <string name="food_pizza">Pizza</string>
+        <string name="food_rice">Rice</string>
+        <string name="food_salad">Salad</string>
+        <string name="food_seafood">Seafood</string>
+        <string name="food_vegetables">Vegetables</string>
+        <string name="food_wine">Wine</string>
+
+        <string name="food_boxlunch">Box Lunch</string>
+        <string name="food_boxlunch2">Box Lunch</string>
+        <string name="food_delivery">Delivery</string>
+        <string name="food_dog">DogFood</string>
+        <string name="food_foodset">FoodSet</string>
+        <string name="food_meal">Meal</string>
+        <string name="food_meal2">Meal</string>
+        <string name="food_sauce">Sauce</string>
+        <string name="food_streetfood">StreetFood</string>
+        <string name="food_water">Water</string>
+
+        <!-- Health -->
+        <string name="health_doctor">Doctor</string>
+        <string name="health_doctor2">Doctor</string>
+        <string name="health_health">Health</string>
+        <string name="health_help">Help</string>
+        <string name="health_hospital">Hospital</string>
+        <string name="health_hospital2">Hospital</string>
+        <string name="health_massage">Massage</string>
+        <string name="health_pill">Pill</string>
+        <string name="health_sick">Sick</string>
+        <string name="health_tooth">Tooth</string>
+
+        <string name="health_calendar">Regular</string>
+        <string name="health_card">Card</string>
+
+
+
+        <!-- Life -->
+        <string name="life_bank">Bank</string>
+        <string name="life_car">Car</string>
+        <string name="life_hammer">Hammer</string>
+        <string name="life_light_fee">ElectricityBill</string>
+        <string name="life_money_income">Income</string>
+        <string name="life_money_transfer">Transfer</string>
+        <string name="life_music">Music</string>
+        <string name="life_network_fee">Network Fee</string>
+        <string name="life_paint">Paint</string>
+        <string name="life_phone_fee">Phone Fee</string>
+        <string name="life_rent">Rent</string>
+        <string name="life_salary">Salary</string>
+        <string name="life_save_money">Save Money</string>
+        <string name="life_smart_phone_fee">PhoneBill</string>
+        <string name="life_stock_decrease">Stock Decrease</string>
+        <string name="life_stock_increase">Stock Increase</string>
+        <string name="life_stocks">Stocks</string>
+        <string name="life_taxes">Taxes</string>
+        <string name="life_taxes2">Taxes</string>
+        <string name="life_taxes3">Taxes</string>
+        <string name="life_video">Video</string>
+        <string name="life_water_fee">WaterBill</string>
+        <string name="life_wifi_router">WiFi Router</string>
+        <string name="life_wifi">WiFi</string>
+
+        <string name="life_shampoo">Shampoo</string>
+        <string name="life_shampoo2">Shampoo</string>
+        <string name="life_furniture">Furniture</string>
+        <string name="life_makeup4">Makeup</string>
+        <string name="life_bath">Bath</string>
+        <string name="life_tube">FaceWash</string>
+        <string name="life_tube2">FaceWash</string>
+
+        <!-- Other -->
+        <string name="other_bill">Bill</string>
+        <string name="other_book">Book</string>
+        <string name="other_book2">Book</string>
+        <string name="other_car_fee">Car Fee</string>
+        <string name="other_car_repair">Car Repair</string>
+        <string name="other_car_wash">Car Wash</string>
+        <string name="other_card_fee">Card Fee</string>
+        <string name="other_creditcard">Credit Card</string>
+        <string name="other_cuthair">Cut Hair</string>
+        <string name="other_gamble">Gamble</string>
+        <string name="other_game">Game</string>
+        <string name="other_iphone">iPhone</string>
+        <string name="other_job">Job</string>
+        <string name="other_karaoke">Karaoke</string>
+        <string name="other_light_fee">Electricity</string>
+        <string name="other_massage">Massage</string>
+        <string name="other_money_exchange">Money Exchange</string>
+        <string name="other_money_income">Income</string>
+        <string name="other_money_transfer">Transfer</string>
+        <string name="other_movie_theater">Movie Theater</string>
+        <string name="other_music">Music</string>
+        <string name="other_music2">Music</string>
+        <string name="other_pet">Pet</string>
+        <string name="other_phone_fee">PhoneBill</string>
+        <string name="other_repair">Repair</string>
+        <string name="other_salary">Salary</string>
+        <string name="other_save_money">Save Money</string>
+        <string name="other_stock_decrease">Stock Decrease</string>
+        <string name="other_stock_increase">Stock Increase</string>
+        <string name="other_toys">Toys</string>
+        <string name="other_unknown">Unknown</string>
+        <string name="other_video">Video</string>
+        <string name="other_washing_machine">Washing Machine</string>
+        <string name="other_water_fee">Water</string>
+
+        <string name="other_bitcoin">Crypto</string>
+        <string name="other_box">Box</string>
+        <string name="other_camera">Camera</string>
+        <string name="other_claw">Claw</string>
+        <string name="other_cut">cut</string>
+        <string name="other_giftcard">GiftCard</string>
+        <string name="other_lesson">Lesson</string>
+        <string name="other_lesson2">Lesson</string>
+        <string name="other_letter">Letter</string>
+        <string name="other_post">Post</string>
+        <string name="other_stationery">Stationery</string>
+        <string name="other_study">Study</string>
+
+
+
+        <!-- Shopping -->
+        <string name="shopping_bag">Bag</string>
+        <string name="shopping_camera">Camera</string>
+        <string name="shopping_flowers">Flowers</string>
+        <string name="shopping_gift">Gift</string>
+        <string name="shopping_glasses">Glasses</string>
+        <string name="shopping_makeup_brush">Makeup Brush</string>
+        <string name="shopping_makeup">Makeup</string>
+        <string name="shopping_makeup2">Makeup</string>
+        <string name="shopping_makeup3">Makeup</string>
+        <string name="shopping_necklace">Necklace</string>
+        <string name="shopping_pc">PC</string>
+        <string name="shopping_phone">Phone</string>
+        <string name="shopping_plant">Plant</string>
+        <string name="shopping_plant2">Plant</string>
+        <string name="shopping_ring">Ring</string>
+        <string name="shopping_shopping">Shopping</string>
+        <string name="shopping_switch">Game</string>
+
+        <!-- Sports -->
+        <string name="sports_8ball">Billiard</string>
+        <string name="sports_baseball">Baseball</string>
+        <string name="sports_basketball">Basketball</string>
+        <string name="sports_bowling">Bowling</string>
+        <string name="sports_boxing">Boxing</string>
+        <string name="sports_camp">Camping</string>
+        <string name="sports_football">Football</string>
+        <string name="sports_golf">Golf</string>
+        <string name="sports_gym">Gym</string>
+        <string name="sports_pingpong">Ping Pong</string>
+        <string name="sports_skiing">Skiing</string>
+        <string name="sports_sports">Sports</string>
+        <string name="sports_swim">Swimming</string>
+        <string name="sports_tennis">Tennis</string>
+        <string name="sports_usa_football">Football</string>
+        <string name="sports_volley">Volleyball</string>
+        <string name="sports_yoga">Yoga</string>
+
+        <string name="sports_jumping">Jumping</string>
+        <string name="sports_paragliding">Paragliding</string>
+
+        <!-- Traffic -->
+        <string name="traffic_bicycle">Bicycle</string>
+        <string name="traffic_bus">Bus</string>
+        <string name="traffic_cable_car">Cable Car</string>
+        <string name="traffic_car">Car</string>
+        <string name="traffic_city_train">City Train</string>
+        <string name="traffic_highspeed_train">High-speed Train</string>
+        <string name="traffic_highway_bus">Highway Bus</string>
+        <string name="traffic_motobike">Motorbike</string>
+        <string name="traffic_parking">Parking</string>
+        <string name="traffic_plane">Plane</string>
+        <string name="traffic_ship">Ship</string>
+        <string name="traffic_taxi">Taxi</string>
+        <string name="traffic_train_ticket">Ticket</string>
+        <string name="traffic_train">Train</string>
+
+        <!-- Wear -->
+        <string name="wear_baby">BabyClothes</string>
+        <string name="wear_bag">Bag</string>
+        <string name="wear_bag2">Bag</string>
+        <string name="wear_bag3">Bag</string>
+        <string name="wear_cap">Cap</string>
+        <string name="wear_dress">Dress</string>
+        <string name="wear_hat">Hat</string>
+        <string name="wear_shirts">Shirts</string>
+        <string name="wear_shoes">Shoes</string>
+        <string name="wear_shorts">Shorts</string>
+        <string name="wear_skirt">Skirt</string>
+        <string name="wear_socks">Socks</string>
+        <string name="wear_trousers">Trousers</string>
+
+
+
+
+
+
+
+</resources>
