@@ -20,4 +20,16 @@
 - [LineChart](https://github.com/philipplackner/CryptoTracker/blob/master/app/src/main/java/com/plcoding/cryptotracker/crypto/presentation/coin_detail/LineChart.kt) LineChart
 
 
+
+### local.properties
+Be Empty
+```
+Ad_Android_ID_Debug=
+Ad_Android_ID_Release=
+
+AdUnitID_Android_Debug=
+AdUnitID_Android_Release=
+
+AdUnitID_iOS=
+```
   
