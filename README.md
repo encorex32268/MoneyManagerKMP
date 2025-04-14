@@ -29,14 +29,14 @@ This is my MoneyManagerApp.
 ### iOS Screenshots
 <table>
 <tr>
-    <td><img src="https://github.com/encorex32268/QRCodeScannerApp/blob/master/screenshot_ios/screenshotlight1.png" width="300"></td>
-    <td><img src="https://github.com/encorex32268/QRCodeScannerApp/blob/master/screenshot_ios/screenshotlight2.png" width="300"></td>
-    <td><img src="https://github.com/encorex32268/QRCodeScannerApp/blob/master/screenshot_ios/screenshotlight3.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_ios/screenshotlight1.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_ios/screenshotlight2.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_ios/screenshotlight3.png" width="300"></td>
   </tr>
 <tr>
-    <td><img src="https://github.com/encorex32268/QRCodeScannerApp/blob/master/screenshot_ios/screenshotdark1.png" width="300"></td>
-    <td><img src="https://github.com/encorex32268/QRCodeScannerApp/blob/master/screenshot_ios/screenshotdark2.png" width="300"></td>
-    <td><img src="https://github.com/encorex32268/QRCodeScannerApp/blob/master/screenshot_ios/screenshotdark3.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_ios/screenshotdark1.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_ios/screenshotdark2.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_ios/screenshotdark3.png" width="300"></td>
   </tr>
 </table>
 
@@ -44,14 +44,14 @@ This is my MoneyManagerApp.
 ### Android Screenshots
 <table>
 <tr>
-    <td><img src="https://github.com/encorex32268/QRCodeScannerApp/blob/master/screenshot_android/screenshotlight1.png" width="300"></td>
-    <td><img src="https://github.com/encorex32268/QRCodeScannerApp/blob/master/screenshot_android/screenshotlight2.png" width="300"></td>
-    <td><img src="https://github.com/encorex32268/QRCodeScannerApp/blob/master/screenshot_android/screenshotlight3.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/screenshotlight1.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/screenshotlight2.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/screenshotlight3.png" width="300"></td>
   </tr>
 <tr>
-    <td><img src="https://github.com/encorex32268/QRCodeScannerApp/blob/master/screenshot_android/screenshotdark1.png" width="300"></td>
-    <td><img src="https://github.com/encorex32268/QRCodeScannerApp/blob/master/screenshot_android/screenshotdark2.png" width="300"></td>
-    <td><img src="https://github.com/encorex32268/QRCodeScannerApp/blob/master/screenshot_android/screenshotdark3.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/screenshotdark1.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/screenshotdark2.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/screenshotdark3.png" width="300"></td>
   </tr>
 </table>
 
