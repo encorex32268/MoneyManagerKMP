@@ -113,6 +113,7 @@ fun HomeScreen(
                 .padding(it)
         ) {
             DatePicker(
+                modifier = Modifier.fillMaxWidth().padding(12.dp),
                 year = state.nowDateYear.toIntOrNull()?:0,
                 month = state.nowDateMonth.toIntOrNull()?:0,
                 onDateChange = { year , month ->

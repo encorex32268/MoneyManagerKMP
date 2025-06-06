@@ -5,37 +5,46 @@ package core.presentation.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import core.domain.util.zeroStringDisplay
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @Composable
 fun DatePicker(
-    modifier: Modifier = Modifier,
     year: Int,
     month: Int,
-    onDateChange: (Int,Int) -> Unit
+    onDateChange: (Int,Int) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val dateString = remember(year,month){
         "${year}/${zeroStringDisplay(month)}"
     }
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         IconButton(
+            colors = IconButtonDefaults.iconButtonColors(
+                containerColor = MaterialTheme.colorScheme.secondary
+            ),
             onClick = {
                 when(month - 1){
                     0 -> {
@@ -55,7 +64,8 @@ fun DatePicker(
         ){
             Icon(
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                contentDescription = null
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.background
             )
         }
 
@@ -66,10 +76,15 @@ fun DatePicker(
                 .weight(1f),
             textAlign = TextAlign.Center,
             text = dateString,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge.copy(
+                letterSpacing = 10.sp
+            )
 
         )
         IconButton(
+            colors = IconButtonDefaults.iconButtonColors(
+                containerColor = MaterialTheme.colorScheme.secondary
+            ),
             onClick = {
                 when(month + 1){
                     13 -> {
@@ -89,7 +104,8 @@ fun DatePicker(
         ){
             Icon(
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
-                contentDescription = null
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.background
             )
         }
     }
