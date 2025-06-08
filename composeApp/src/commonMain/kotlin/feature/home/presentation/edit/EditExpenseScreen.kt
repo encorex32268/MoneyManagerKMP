@@ -49,14 +49,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -66,7 +63,7 @@ import core.domain.model.Type
 import core.presentation.CategoryList
 import core.presentation.ObserveAsEvents
 import core.presentation.components.CircleIcon
-import core.presentation.components.TwoButtonDialog
+import core.presentation.components.DeleteDialog
 import core.presentation.date.toDayOfWeekStringResource
 import core.presentation.date.toLocalDateTime
 import core.presentation.noRippleClick
@@ -76,8 +73,6 @@ import moneymanagerkmp.composeapp.generated.resources.baseline_attach_money_24
 import moneymanagerkmp.composeapp.generated.resources.baseline_done
 import moneymanagerkmp.composeapp.generated.resources.baseline_sticky_note_24
 import moneymanagerkmp.composeapp.generated.resources.description
-import moneymanagerkmp.composeapp.generated.resources.dialog_delete_content
-import moneymanagerkmp.composeapp.generated.resources.dialog_delete_title
 import moneymanagerkmp.composeapp.generated.resources.expense_detail
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -86,7 +81,6 @@ import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
-import toMoneyString
 
 @Composable
 fun EditExpenseScreenRoot(
@@ -238,9 +232,7 @@ fun EditExpenseScreen(
 
     }
     if (isShowDeleteDialog){
-        TwoButtonDialog(
-            title = stringResource(Res.string.dialog_delete_title),
-            content = stringResource(Res.string.dialog_delete_content),
+        DeleteDialog(
             onConfirmButtonClick = {
                 onEvent(EditExpenseEvent.OnDelete)
             },

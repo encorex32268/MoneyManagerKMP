@@ -1,5 +1,6 @@
 package feature.home.presentation.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,18 +8,27 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import core.domain.model.Expense
 import core.domain.model.Type
@@ -53,6 +63,9 @@ fun ExpenseItem(
         val date = remember(localDateTime){
             "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} $dayOfWeekString"
         }
+        var itemTotalValueWidth by remember {
+            mutableStateOf(0)
+        }
         OutlinedCard(
             modifier = modifier,
             shape = RoundedCornerShape(16.dp)
@@ -66,7 +79,8 @@ fun ExpenseItem(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         modifier = Modifier.weight(1f),
@@ -77,8 +91,22 @@ fun ExpenseItem(
                         )
                     )
                     Text(
+                        onTextLayout = {
+                            itemTotalValueWidth = it.size.width
+                        },
                         text = total.toMoneyString(),
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            textAlign = TextAlign.End
+                        )
+                    )
+                }
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ){
+                    HorizontalDivider(
+                        modifier = Modifier.width( with(LocalDensity.current){ itemTotalValueWidth.toDp() }),
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
                 items.forEach {expense ->

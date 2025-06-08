@@ -5,7 +5,6 @@
 package feature.home.presentation.add.type
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,10 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
@@ -33,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,21 +43,16 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import core.presentation.components.TwoButtonDialog
+import core.presentation.components.DeleteDialog
 import core.presentation.date.DateConverter
-import feature.home.presentation.add.AddEvent
+import feature.home.presentation.add.type.components.ColorPickerDialog
 import feature.home.presentation.reorderable.ReorderableItem
 import feature.home.presentation.reorderable.detectReorderAfterLongPress
 import feature.home.presentation.reorderable.rememberReorderableLazyListState
 import feature.home.presentation.reorderable.reorderable
-import feature.home.presentation.add.type.components.ColorPickerDialog
 import moneymanagerkmp.composeapp.generated.resources.Res
-import moneymanagerkmp.composeapp.generated.resources.baseline_edit_note_24
 import moneymanagerkmp.composeapp.generated.resources.baseline_visibility_24
 import moneymanagerkmp.composeapp.generated.resources.baseline_visibility_off_24
-import moneymanagerkmp.composeapp.generated.resources.dialog_delete_content
-import moneymanagerkmp.composeapp.generated.resources.dialog_delete_title
-import moneymanagerkmp.composeapp.generated.resources.expense
 import moneymanagerkmp.composeapp.generated.resources.home_add_type_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -369,11 +362,9 @@ private fun OnHideTypeItem(
 
     }
     if (isShowDeleteDialog){
-        TwoButtonDialog(
-            title = stringResource(Res.string.dialog_delete_title),
-            content = stringResource(Res.string.dialog_delete_content),
+        DeleteDialog(
             onConfirmButtonClick = {
-               onDelete(item)
+                onDelete(item)
             },
             onDismissRequest = {
                 isShowDeleteDialog = false
