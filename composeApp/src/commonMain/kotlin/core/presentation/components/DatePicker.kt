@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,9 +43,6 @@ fun DatePicker(
         horizontalArrangement = Arrangement.Center
     ) {
         IconButton(
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.secondary
-            ),
             onClick = {
                 when(month - 1){
                     0 -> {
@@ -64,8 +62,7 @@ fun DatePicker(
         ){
             Icon(
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.background
+                contentDescription = null
             )
         }
 
@@ -77,14 +74,13 @@ fun DatePicker(
             textAlign = TextAlign.Center,
             text = dateString,
             style = MaterialTheme.typography.bodyLarge.copy(
-                letterSpacing = 10.sp
+                letterSpacing = 5.sp,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp
             )
 
         )
         IconButton(
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.secondary
-            ),
             onClick = {
                 when(month + 1){
                     13 -> {
@@ -104,8 +100,7 @@ fun DatePicker(
         ){
             Icon(
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.background
+                contentDescription = null
             )
         }
     }

@@ -113,7 +113,7 @@ fun HomeScreen(
                 .padding(it)
         ) {
             DatePicker(
-                modifier = Modifier.fillMaxWidth().padding(12.dp),
+                modifier = Modifier.fillMaxWidth(),
                 year = state.nowDateYear.toIntOrNull()?:0,
                 month = state.nowDateMonth.toIntOrNull()?:0,
                 onDateChange = { year , month ->
@@ -133,7 +133,8 @@ fun HomeScreen(
                         onEvent = onEvent,
                         onExpenseLimitClick = {
                             onEvent(HomeEvent.OnExpenseLimitClick)
-                        }
+                        }     ,
+                        isDebug = isDebug
                     )
                 }
                 else -> {
@@ -142,16 +143,13 @@ fun HomeScreen(
                         onEvent = onEvent,
                         onExpenseLimitClick = {
                             onEvent(HomeEvent.OnExpenseLimitClick)
-                        }
+                        }                   ,
+                        isDebug = isDebug
                     )
                 }
             }
 
-            if (!isDebug){
-                AdMobBannerController.AdMobBannerCompose(
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+
 
         }
     }
@@ -161,10 +159,13 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenNaviBottom(
     state: HomeState,
+    isDebug: Boolean,
     onEvent: (HomeEvent) -> Unit = {},
-    onExpenseLimitClick: () -> Unit = {}
+    onExpenseLimitClick: () -> Unit = {},
+    modifier: Modifier = Modifier
 ){
     Column(
+        modifier =  modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         AmountTextLayout(
@@ -202,7 +203,12 @@ private fun HomeScreenNaviBottom(
                 )
             }
             item {
-                Spacer(modifier = Modifier.height(100.dp))
+                Spacer(modifier = Modifier.height(20.dp))
+                if (!isDebug){
+                    AdMobBannerController.AdMobBannerCompose(
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }
@@ -213,6 +219,7 @@ private fun HomeScreenNaviBottom(
 @Composable
 private fun HomeScreenNaviRail(
     state: HomeState,
+    isDebug: Boolean,
     onEvent: (HomeEvent) -> Unit = {},
     onExpenseLimitClick: () -> Unit = {}
 
@@ -250,7 +257,12 @@ private fun HomeScreenNaviRail(
                 )
             }
             item {
-                Spacer(modifier = Modifier.height(100.dp))
+                Spacer(modifier = Modifier.height(20.dp))
+                if (!isDebug){
+                    AdMobBannerController.AdMobBannerCompose(
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }

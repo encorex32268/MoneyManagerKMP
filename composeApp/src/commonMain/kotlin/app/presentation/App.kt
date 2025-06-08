@@ -86,11 +86,7 @@ fun App(){
                     .navigationBarsPadding()
                 ,
                 bottomBar = {
-                    AnimatedVisibility(
-                        visible = isMainCurrentDestination(currentDestination) && (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION),
-                        enter = slideInVertically(),
-                        exit = slideOutVertically(),
-                    ){
+                    if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION)       {
                         AppNavigationBottom(
                             itemSelectedIndex = itemSelectedIndex,
                             onBarItemClick = { index , name ->
@@ -130,11 +126,7 @@ fun App(){
                         .fillMaxSize()
                         .padding(paddingValues)
                 ) {
-                    AnimatedVisibility(
-                        visible = (isMainCurrentDestination(currentDestination) && navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL),
-                        enter = slideInHorizontally(initialOffsetX = { -it }),
-                        exit = shrinkHorizontally() + fadeOut(),
-                    ) {
+                    if (navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL)     {
                         Row {
                             AppNavigationRail(
                                 itemSelectedIndex = itemSelectedIndex,
@@ -171,6 +163,7 @@ fun App(){
                                 color = MaterialTheme.colorScheme.surfaceContainerHighest,
                             )
                         }
+
                     }
                     NavHost(
                         modifier = Modifier.fillMaxSize(),
