@@ -86,7 +86,10 @@ fun App(){
                     .navigationBarsPadding()
                 ,
                 bottomBar = {
-                    if (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION)       {
+                    if (
+                        isMainCurrentDestination(currentDestination)&&
+                        navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION
+                        )       {
                         AppNavigationBottom(
                             itemSelectedIndex = itemSelectedIndex,
                             onBarItemClick = { index , name ->
@@ -126,7 +129,9 @@ fun App(){
                         .fillMaxSize()
                         .padding(paddingValues)
                 ) {
-                    if (navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL)     {
+                    if (
+                        isMainCurrentDestination(currentDestination)&&
+                        navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL)     {
                         Row {
                             AppNavigationRail(
                                 itemSelectedIndex = itemSelectedIndex,
