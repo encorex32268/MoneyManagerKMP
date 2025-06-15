@@ -4,12 +4,6 @@
 
 package app.presentation
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -55,6 +49,7 @@ val LocalDarkLightMode = compositionLocalOf { false }
 @Composable
 @Preview
 fun App(){
+    
     val viewModel = koinViewModel<AppViewModel>()
     val appState by viewModel.state.collectAsStateWithLifecycle()
     CompositionLocalProvider( LocalDarkLightMode provides appState.isDarkMode){
@@ -100,7 +95,7 @@ fun App(){
                                         navOptions = when(name){
                                             Route.Home.route -> {
                                                 navOptions {
-                                                    popUpTo(navController.graph.startDestinationId) {
+                                                    popUpTo(navController.graph.startDestinationRoute?: Route.Home.route) {
                                                         inclusive = true
                                                     }
                                                     launchSingleTop = true
@@ -143,7 +138,7 @@ fun App(){
                                             navOptions = when(name){
                                                 Route.Home.route -> {
                                                     navOptions {
-                                                        popUpTo(navController.graph.startDestinationId) {
+                                                        popUpTo(navController.graph.startDestinationRoute?: Route.Home.route) {
                                                             inclusive = true
                                                         }
                                                         launchSingleTop = true

@@ -20,7 +20,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun DeleteDialog(
-    title : String = stringResource(Res.string.dialog_delete_title),,
+    title : String = stringResource(Res.string.dialog_delete_title),
     content : String = stringResource(Res.string.dialog_delete_content),
     onDismissRequest : () -> Unit = {},
     onConfirmButtonClick : () -> Unit = {},

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-    <string name="app_name">MoneyManager</string>
-
+    <string name="app_name">Qash</string>
     <string name="home">Home</string>
     <string name="chart">Chart</string>
     <string name="analytics">Analytics</string>

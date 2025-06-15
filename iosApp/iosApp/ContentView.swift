@@ -24,29 +24,30 @@ struct ComposeView: UIViewControllerRepresentable {
 
 struct ContentView: View {
     var body: some View {
-        Group{
+        Group {
             ComposeView().ignoresSafeArea(.keyboard)
-        }.onAppear {
-            self.requestAppTrackingTransparencyAuthorization()
         }
-    }
-    
-    func requestAppTrackingTransparencyAuthorization() {
-        GADMobileAds.sharedInstance().requestConfiguration.tagForUnderAgeOfConsent = true
-           if #available(iOS 14.5, *) {
-               DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                   ATTrackingManager.requestTrackingAuthorization { (status) in
-                       GADMobileAds.sharedInstance().start(completionHandler: nil)
-                   }
-               }
-               
-            } else {
-                GADMobileAds.sharedInstance().start(completionHandler: nil)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                requestAppTrackingTransparencyAuthorization()
             }
         }
+    }
 
-
+    func requestAppTrackingTransparencyAuthorization() {
+        GADMobileAds.sharedInstance().requestConfiguration.tagForUnderAgeOfConsent = true
+        if #available(iOS 14, *) {
+            ATTrackingManager.requestTrackingAuthorization { status in
+                DispatchQueue.main.async{
+                    GADMobileAds.sharedInstance().start(completionHandler: nil)
+                }
+            }
+        } else {
+            GADMobileAds.sharedInstance().start(completionHandler: nil)
+        }
+    }
 }
+
 
 
 

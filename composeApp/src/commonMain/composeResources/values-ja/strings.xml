@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-    <string name="app_name">家計簿</string>
+    <string name="app_name">Qash</string>
     <string name="home">ホーム</string>
     <string name="chart">チャート</string>
     <string name="analytics">分析</string>
