@@ -10,10 +10,12 @@
     <supports-screens
         android:smallScreens="true"
         android:normalScreens="true"
-        android:largeScreens="false"
+        android:largeScreens="true"
         android:xlargeScreens="false"
-        android:resizeable="false"
-        android:anyDensity="true" />
+        android:resizeable="true"
+        android:anyDensity="true"
+        android:largestWidthLimitDp="600"
+        />
 
     <application
         android:name=".MoneyManagerApp"

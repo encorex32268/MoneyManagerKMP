@@ -35,7 +35,7 @@ fun DatePicker(
     modifier: Modifier = Modifier
 ) {
     val dateString = remember(year,month){
-        "${year}/${zeroStringDisplay(month)}"
+        "${year}-${zeroStringDisplay(month)}"
     }
     Row(
         modifier = modifier.fillMaxWidth().padding(horizontal = 8.dp),
@@ -74,9 +74,9 @@ fun DatePicker(
             textAlign = TextAlign.Center,
             text = dateString,
             style = MaterialTheme.typography.bodyLarge.copy(
-                letterSpacing = 5.sp,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 18.sp
+                fontWeight = FontWeight.Medium,
+                fontSize = 18.sp,
+                letterSpacing = 1.sp
             )
 
         )
