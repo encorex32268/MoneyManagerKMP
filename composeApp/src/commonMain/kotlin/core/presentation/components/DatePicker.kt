@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -61,6 +62,7 @@ fun DatePicker(
             }
         ){
             Icon(
+                modifier = Modifier.size(32.dp),
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
                 contentDescription = null
             )
@@ -99,6 +101,7 @@ fun DatePicker(
             }
         ){
             Icon(
+                modifier = Modifier.size(32.dp),
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
                 contentDescription = null
             )
