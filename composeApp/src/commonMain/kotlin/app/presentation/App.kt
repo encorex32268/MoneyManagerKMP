@@ -19,6 +19,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,15 +48,20 @@ import org.koin.core.annotation.KoinExperimentalAPI
 val LocalDarkLightMode = compositionLocalOf { false }
 
 @Composable
-@Preview
-fun App(){
-    
+fun App(
+    onModeChanged: (isDarkMode: Boolean) -> Unit = {}
+){
+
     val viewModel = koinViewModel<AppViewModel>()
     val appState by viewModel.state.collectAsStateWithLifecycle()
     CompositionLocalProvider( LocalDarkLightMode provides appState.isDarkMode){
+        val darkLightMode = LocalDarkLightMode.current
         AppTheme(
-            darkTheme = LocalDarkLightMode.current
+            darkTheme = darkLightMode
         ){
+            LaunchedEffect(appState){
+                onModeChanged(appState.isDarkMode)
+            }
             val navController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination?.route

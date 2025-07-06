@@ -85,7 +85,6 @@ material3-windowsizeclass-multiplatform = { group = "dev.chrisbanes.material3", 
 
 
 
-
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }

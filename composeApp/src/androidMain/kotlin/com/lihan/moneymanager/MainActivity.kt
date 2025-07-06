@@ -1,18 +1,14 @@
 package com.lihan.moneymanager
 
-import app.presentation.App
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.ui.platform.LocalContext
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
+import app.presentation.App
 import com.google.android.gms.ads.MobileAds
 import io.github.vinceglb.filekit.core.FileKit
 
@@ -24,7 +20,12 @@ class MainActivity : ComponentActivity() {
         MobileAds.initialize(this)
         FileKit.init(this)
         setContent {
-            App()
+            App(
+                onModeChanged = { isDarkMode ->
+                    WindowCompat.getInsetsController(window, window.decorView)
+                        .isAppearanceLightStatusBars = !isDarkMode
+                }
+            )
         }
     }
 }
