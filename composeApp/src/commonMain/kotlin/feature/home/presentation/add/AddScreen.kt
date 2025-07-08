@@ -37,6 +37,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
@@ -52,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import core.domain.model.Expense
@@ -65,6 +67,7 @@ import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_edit_note_24
 import moneymanagerkmp.composeapp.generated.resources.expense
+import moneymanagerkmp.composeapp.generated.resources.expense_detail
 import moneymanagerkmp.composeapp.generated.resources.home_add_type_custom
 import moneymanagerkmp.composeapp.generated.resources.home_add_type_default
 import moneymanagerkmp.composeapp.generated.resources.recently
@@ -161,10 +164,11 @@ fun AddScreen(
     BottomSheetScaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
                 title = {
                     Text(
                         text = stringResource(Res.string.expense),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.titleMedium
                     )
                 },
                 navigationIcon = {
@@ -251,7 +255,7 @@ fun AddScreen(
         }
     ){
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.background)
         ) {
             if (shouldShowDefaultButtons && !state.isLoading){
                 Column(
@@ -435,7 +439,9 @@ private fun ItemSection(
             if (state.recentlyItems?.categories?.isNotEmpty() == true) {
                 Text(
                     text = stringResource(Res.string.recently),
-                    style = MaterialTheme.typography.titleSmall
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        fontWeight = FontWeight.Bold
+                    )
                 )
                 FlowRow(
                     modifier = Modifier.fillMaxWidth(),
@@ -494,7 +500,9 @@ private fun ItemSection(
                         Spacer(Modifier.width(4.dp))
                         Text(
                             text = it.name,
-                            style = MaterialTheme.typography.titleSmall
+                            style = MaterialTheme.typography.titleSmall.copy(
+                                fontWeight = FontWeight.Bold
+                            )
                         )
 
                     }

@@ -2,6 +2,7 @@ package feature.home.presentation.add.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
@@ -33,7 +34,7 @@ fun ExpenseInfo(
     onValueChange: (String) -> Unit,
 ){
     Row(
-        modifier = modifier,
+        modifier = modifier.padding(end = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CircleIcon(

@@ -41,12 +41,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.presentation.navigation.NavigationLayoutType
+import core.ui.bgColor
 import core.ui.calculateCalendarDarkContainerColor
 import core.ui.calculateCalendarLightContainerColor
 import core.ui.calculateDoneDarkContainerColor
 import core.ui.calculateDoneLightContainerColor
 import core.ui.calculateRemoveDarkContainerColor
 import core.ui.calculateRemoveLightContainerColor
+import core.ui.highlightColor
 import feature.home.presentation.add.AddEvent
 import feature.home.presentation.add.AddState
 import moneymanagerkmp.composeapp.generated.resources.Res
@@ -344,7 +346,7 @@ private fun NumberButton(
                 onEvent(AddEvent.OnCostChange(text))
             }
             .background(
-                color = MaterialTheme.colorScheme.background,
+                color = MaterialTheme.colorScheme.highlightColor(),
                 shape = shape
             )
         ,

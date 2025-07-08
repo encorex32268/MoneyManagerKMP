@@ -48,6 +48,7 @@ import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_sticky_note_24
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
+import toDateString
 import toMoneyString
 
 @Composable
@@ -68,7 +69,8 @@ fun ExpenseItem(
         }
         val dayOfWeekString = stringResource(localDateTime.toDayOfWeekStringResource())
         val date = remember(localDateTime){
-            "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} $dayOfWeekString"
+            val dateString = toDateString(localDateTime.monthNumber,localDateTime.dayOfMonth)
+            "$dateString $dayOfWeekString"
         }
         var itemTotalValueWidth by remember {
             mutableStateOf(0)

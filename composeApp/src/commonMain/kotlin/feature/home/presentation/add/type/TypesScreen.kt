@@ -31,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -53,6 +54,7 @@ import feature.home.presentation.reorderable.reorderable
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_visibility_24
 import moneymanagerkmp.composeapp.generated.resources.baseline_visibility_off_24
+import moneymanagerkmp.composeapp.generated.resources.expense_detail
 import moneymanagerkmp.composeapp.generated.resources.home_add_type_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -113,10 +115,11 @@ fun TypesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
                 title = {
                     Text(
                         text = stringResource(Res.string.home_add_type_title),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.titleMedium
                     )
                 },
                 navigationIcon = {

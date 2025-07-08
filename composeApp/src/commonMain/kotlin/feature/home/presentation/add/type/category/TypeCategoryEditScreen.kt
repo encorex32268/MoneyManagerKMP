@@ -32,6 +32,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -57,8 +58,10 @@ import feature.home.presentation.reorderable.rememberReorderableLazyGridState
 import feature.home.presentation.reorderable.reorderable
 import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
+import moneymanagerkmp.composeapp.generated.resources.expense_detail
 import moneymanagerkmp.composeapp.generated.resources.save_snackbar
 import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
 
@@ -142,6 +145,7 @@ fun TypeCategoryEditScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
                 title = {
                     Row(
                         modifier = Modifier
@@ -164,7 +168,7 @@ fun TypeCategoryEditScreen(
                         Text(
                             modifier = Modifier.padding(horizontal = 8.dp),
                             text = state.typeUi.name,
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.titleMedium
                         )
                         Icon(
                             modifier = Modifier.size(16.dp),

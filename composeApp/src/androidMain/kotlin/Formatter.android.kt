@@ -12,3 +12,7 @@ actual fun Long.toMoneyString(): String {
         maximumFractionDigits = 0
     }.format(this)
 }
+
+actual fun toDateString(month: Int, day: Int): String {
+    return String.format(locale = Locale.getDefault(),"%02d/%02d",month,day)
+}

@@ -19,3 +19,7 @@ actual fun Long.toMoneyString(): String {
     return formatter.stringFromNumber(
         number = NSNumber(long = this)) ?: ""
 }
+
+actual fun toDateString(month: Int, day: Int): String {
+    return NSString.stringWithFormat("%02d/%02d",month,day)
+}
