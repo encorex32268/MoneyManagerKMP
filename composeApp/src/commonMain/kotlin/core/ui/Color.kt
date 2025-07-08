@@ -6,6 +6,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import app.presentation.LocalDarkLightMode
 
 val calculateRemoveLightContainerColor = Color(0xFFFFD9DD)
 val calculateCalendarLightContainerColor = Color(0xFFe8efff)
@@ -71,7 +72,8 @@ val Info = Color(0xFF8DA0BF)
 
 val ColorScheme.textColor
     get() = @Composable{
-        if (isSystemInDarkTheme()){
+        val darkLightMode = LocalDarkLightMode.current
+        if (darkLightMode){
             Color(0xFFf2f2f2)
         }else{
             Color(0xFF0a0a0a)
@@ -80,7 +82,8 @@ val ColorScheme.textColor
 
 val ColorScheme.textMutedColor
     get() = @Composable{
-        if (isSystemInDarkTheme()){
+        val darkLightMode = LocalDarkLightMode.current
+        if (darkLightMode){
             Color(0xFFB0B0B0)
         }else{
             Color(0xFF474747)
@@ -89,16 +92,28 @@ val ColorScheme.textMutedColor
 
 val ColorScheme.borderColor
     get() = @Composable {
-        if (isSystemInDarkTheme()){
+        val darkLightMode = LocalDarkLightMode.current
+        if (darkLightMode){
             Color(0xFF474747)
         }else{
             Color(0xFF808080)
         }
     }
 
+val ColorScheme.bgColor
+    get() = @Composable {
+        val darkLightMode = LocalDarkLightMode.current
+        if (darkLightMode){
+            Color(0xFF0A0A0A)
+        }else{
+            Color(0xFFF2F2F2)
+        }
+    }
+
  val ColorScheme.highlightColor
     get() = @Composable {
-        if (isSystemInDarkTheme()){
+        val darkLightMode = LocalDarkLightMode.current
+        if (darkLightMode){
             Color(0xFF636363)
         }else{
             Color(0xFFFFFFFF)

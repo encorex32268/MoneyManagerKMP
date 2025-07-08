@@ -39,6 +39,7 @@ import core.presentation.components.CircleIcon
 import core.presentation.date.toDayOfWeekStringResource
 import core.presentation.date.toLocalDateTime
 import core.presentation.noRippleClick
+import core.ui.bgColor
 import core.ui.borderColor
 import core.ui.highlightColor
 import core.ui.textColor
@@ -76,7 +77,7 @@ fun ExpenseItem(
             modifier = modifier,
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.outlinedCardColors(
-                containerColor = MaterialTheme.colorScheme.highlightColor()
+                containerColor = MaterialTheme.colorScheme.bgColor()
             ),
             border = BorderStroke(0.25.dp, color = MaterialTheme.colorScheme.borderColor())
         ) {
@@ -146,9 +147,7 @@ fun ExpenseItem(
                         ){
                             Text(
                                 text = expense.description,
-                                style = MaterialTheme.typography.labelMedium.copy(
-                                    color = MaterialTheme.colorScheme.textMutedColor()
-                                )
+                                style = MaterialTheme.typography.labelMedium
                             )
                             if (expense.content.trim().isNotEmpty()){
                                 Spacer(modifier = Modifier.width(4.dp))

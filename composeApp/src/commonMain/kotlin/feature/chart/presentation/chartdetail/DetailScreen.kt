@@ -27,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,7 +43,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import core.domain.model.Expense
 import core.domain.model.Type
 import feature.home.presentation.components.ExpenseItem
+import moneymanagerkmp.composeapp.generated.resources.Res
+import moneymanagerkmp.composeapp.generated.resources.expense_detail
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
@@ -73,7 +77,13 @@ fun DetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {},
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+                title = {
+                    Text(
+                        text = stringResource(Res.string.expense_detail),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                },
                 navigationIcon = {
                     IconButton(
                         onClick = onBack

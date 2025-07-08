@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import app.presentation.LocalDarkLightMode
 import core.presentation.noRippleClick
+import core.ui.textColor
 
 @Composable
 fun CircleIcon(
@@ -54,7 +55,7 @@ fun CircleIcon(
                             if (isClicked) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground
                         }
                         else -> {
-                            MaterialTheme.colorScheme.onBackground
+                            MaterialTheme.colorScheme.textColor()
                         }
                     }
             )

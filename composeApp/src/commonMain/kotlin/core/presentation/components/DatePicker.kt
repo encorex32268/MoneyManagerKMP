@@ -65,8 +65,7 @@ fun DatePicker(
             Icon(
                 modifier = Modifier.size(32.dp),
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.textColor()
+                contentDescription = null
             )
         }
 
@@ -101,8 +100,7 @@ fun DatePicker(
             Icon(
                 modifier = Modifier.size(32.dp),
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.textColor()
+                contentDescription = null
             )
         }
     }

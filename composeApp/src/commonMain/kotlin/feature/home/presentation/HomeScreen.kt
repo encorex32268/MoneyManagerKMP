@@ -107,8 +107,7 @@ fun HomeScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription =null,
-                    tint = MaterialTheme.colorScheme.textColor()
+                    contentDescription =null
                 )
             }
         }

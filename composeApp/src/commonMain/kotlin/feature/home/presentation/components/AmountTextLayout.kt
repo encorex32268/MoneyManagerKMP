@@ -182,8 +182,7 @@ private fun AmountSection(
                     .size(12.dp)
                     .align(Alignment.CenterVertically),
                 imageVector = Icons.Default.Edit,
-                contentDescription = "SpendingLimit Edit",
-                tint = MaterialTheme.colorScheme.textColor()
+                contentDescription = "SpendingLimit Edit"
             )
 
         }

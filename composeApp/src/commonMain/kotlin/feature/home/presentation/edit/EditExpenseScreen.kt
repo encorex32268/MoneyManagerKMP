@@ -32,6 +32,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -41,6 +42,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -67,6 +69,7 @@ import core.presentation.components.DeleteDialog
 import core.presentation.date.toDayOfWeekStringResource
 import core.presentation.date.toLocalDateTime
 import core.presentation.noRippleClick
+import core.ui.bgColor
 import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_attach_money_24
@@ -129,10 +132,11 @@ fun EditExpenseScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
                 title = {
                     Text(
                         text = stringResource(Res.string.expense_detail),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.titleMedium
                     )
                 },
                 navigationIcon = {
@@ -188,7 +192,10 @@ fun EditExpenseScreen(
             ) {
                 OutlinedCard(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.outlinedCardColors(
+                        containerColor = MaterialTheme.colorScheme.bgColor()
+                    ),
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth()

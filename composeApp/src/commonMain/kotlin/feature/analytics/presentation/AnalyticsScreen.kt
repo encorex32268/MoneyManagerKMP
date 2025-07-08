@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.presentation.LocalDarkLightMode
 import core.presentation.components.DatePicker
+import core.ui.textColor
 import feature.analytics.presentation.components.LineChart
 import feature.analytics.presentation.components.TextChip
 import feature.analytics.presentation.model.LineChartStyle
@@ -113,6 +115,7 @@ fun AnalyticsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
                 title = {},
                 actions = {
                     IconButton(
@@ -163,7 +166,7 @@ fun AnalyticsScreen(
             ){
                 DateFilter.entries.forEach { dateFilter ->
                     TextChip(
-                        modifier = Modifier.size(36.dp),
+                        modifier = Modifier.size(32.dp),
                         text = dateFilter.text,
                         onClick = {
                             onEvent(AnalyticsEvent.OnDateFilterChange(dateFilter))
