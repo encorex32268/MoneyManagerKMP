@@ -26,6 +26,7 @@ import core.ui.limitsColor_0_50_Color
 import core.ui.limitsColor_50_70_Color
 import core.ui.limitsColor_70_90_Color
 import core.ui.limitsColor_0_50_Color
+import core.ui.limitsColor_100_Color
 import core.ui.limitsColor_50_70_Color
 import core.ui.limitsColor_70_90_Color
 import format
@@ -62,14 +63,12 @@ fun SpendingLimitsProgressBar(
     }
     val animatedProgress = progress * animatable.value
 
-    val errorColor = MaterialTheme.colorScheme.error
-
     val limitOverColor = remember(spendingLimit , totalExpense){
         when(progress){
             in 0.0f..0.5f -> limitsColor_0_50_Color
             in 0.5f..0.7f -> limitsColor_50_70_Color
             in 0.7f..0.9f -> limitsColor_70_90_Color
-            else -> errorColor
+            else -> limitsColor_100_Color
         }
     }
     Column(
@@ -100,7 +99,9 @@ fun SpendingLimitsProgressBar(
                 }
                 Text(
                     text = totalExpense.toMoneyString(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = FontWeight.ExtraBold
+                    ),
                     color = limitOverColor
                 )
                 Text(
@@ -132,9 +133,9 @@ fun SpendingLimitsProgressBar(
                 drawStopIndicator = {}
             )
             Text(
+                modifier = Modifier.padding(bottom = 4.dp),
                 text =  "${(progress * 100).toDouble().format(1)}%",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    fontSize = 16.sp,
+                style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.ExtraBold
                 ),
                 color = limitOverColor

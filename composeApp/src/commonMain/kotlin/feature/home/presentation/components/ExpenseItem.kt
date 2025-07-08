@@ -1,5 +1,6 @@
 package feature.home.presentation.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +39,10 @@ import core.presentation.components.CircleIcon
 import core.presentation.date.toDayOfWeekStringResource
 import core.presentation.date.toLocalDateTime
 import core.presentation.noRippleClick
+import core.ui.borderColor
+import core.ui.highlightColor
+import core.ui.textColor
+import core.ui.textMutedColor
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_sticky_note_24
 import org.jetbrains.compose.resources.stringResource
@@ -68,7 +74,11 @@ fun ExpenseItem(
         }
         OutlinedCard(
             modifier = modifier,
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.outlinedCardColors(
+                containerColor = MaterialTheme.colorScheme.highlightColor()
+            ),
+            border = BorderStroke(0.25.dp, color = MaterialTheme.colorScheme.borderColor())
         ) {
 
             Column(
@@ -87,7 +97,7 @@ fun ExpenseItem(
                         text = date,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontSize = 14.sp,
-                            fontWeight = FontWeight.Normal
+                            fontWeight = FontWeight.Medium
                         )
                     )
                     Text(
@@ -95,7 +105,7 @@ fun ExpenseItem(
                             itemTotalValueWidth = it.size.width
                         },
                         text = total.toMoneyString(),
-                        style = MaterialTheme.typography.bodyLarge.copy(
+                        style = MaterialTheme.typography.titleMedium.copy(
                             textAlign = TextAlign.End
                         )
                     )
@@ -136,20 +146,25 @@ fun ExpenseItem(
                         ){
                             Text(
                                 text = expense.description,
-                                style = MaterialTheme.typography.labelMedium
+                                style = MaterialTheme.typography.labelMedium.copy(
+                                    color = MaterialTheme.colorScheme.textMutedColor()
+                                )
                             )
                             if (expense.content.trim().isNotEmpty()){
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Icon(
                                     modifier = Modifier.size(12.dp),
                                     imageVector = vectorResource(Res.drawable.baseline_sticky_note_24),
-                                    contentDescription = null
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.textColor()
                                 )
                             }
                         }
                         Text(
                             text = expense.cost.toMoneyString(),
-                            style = MaterialTheme.typography.labelMedium
+                            style = MaterialTheme.typography.labelMedium.copy(
+                                color = MaterialTheme.colorScheme.textMutedColor()
+                            )
                         )
                     }
                 }

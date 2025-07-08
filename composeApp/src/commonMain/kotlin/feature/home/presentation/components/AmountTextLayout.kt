@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.presentation.navigation.NavigationLayoutType
+import core.ui.limitsColor_100_Color
+import core.ui.textColor
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.home_spending_limit
 import moneymanagerkmp.composeapp.generated.resources.total_expense
@@ -147,8 +149,6 @@ private fun AmountSection(
     expenseLimit: Long,
     onExpenseLimitClick: () -> Unit = {}
 ) {
-
-    val errorColor = MaterialTheme.colorScheme.error
     val onBackgroundColor = MaterialTheme.colorScheme.onBackground
 
     Row(
@@ -162,7 +162,7 @@ private fun AmountSection(
             title = stringResource(Res.string.total_expense),
             text = totalExpense.toMoneyString(),
             textStyle = MaterialTheme.typography.labelLarge.copy(
-                color = if (totalExpense > expenseLimit && expenseLimit != 0L) errorColor else onBackgroundColor,
+                color = if (totalExpense > expenseLimit && expenseLimit != 0L) limitsColor_100_Color else onBackgroundColor,
                 fontSize = 24.sp
             )
         )
@@ -182,7 +182,8 @@ private fun AmountSection(
                     .size(12.dp)
                     .align(Alignment.CenterVertically),
                 imageVector = Icons.Default.Edit,
-                contentDescription = "SpendingLimit Edit"
+                contentDescription = "SpendingLimit Edit",
+                tint = MaterialTheme.colorScheme.textColor()
             )
 
         }
@@ -209,7 +210,7 @@ fun AmountText(
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.titleSmall
         )
         Spacer(modifier = Modifier.width(4.dp))
 

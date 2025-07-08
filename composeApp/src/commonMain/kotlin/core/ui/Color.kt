@@ -1,7 +1,10 @@
 package core.ui
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 val calculateRemoveLightContainerColor = Color(0xFFFFD9DD)
@@ -12,9 +15,10 @@ val calculateRemoveDarkContainerColor = Color(0xFF52393c)
 val calculateCalendarDarkContainerColor = Color(0xFF37404e)
 val calculateDoneDarkContainerColor = Color(0xFF29462a)
 
-val limitsColor_0_50_Color = Color(0xFF73ff5d)
-val limitsColor_50_70_Color = Color(0xFFFFD700)
-val limitsColor_70_90_Color = Color(0xFFff9c41)
+val limitsColor_0_50_Color = Color(0xFF81C784)
+val limitsColor_50_70_Color = Color(0xFFFFD54F)
+val limitsColor_70_90_Color = Color(0xFFFFB74D)
+val limitsColor_100_Color = Color(0xFFE57373)
 
 
 val primaryLight = Color(0xFF5D5F5F)
@@ -33,7 +37,75 @@ val errorLight = Color(0xFFBA1A1A)
 val onErrorLight = Color(0xFFFFFFFF)
 val errorContainerLight = Color(0xFFFFDAD6)
 val onErrorContainerLight = Color(0xFF410002)
-val backgroundLight = Color(0xFFFCF8F8)
+val backgroundLight = Color(0xFFf6f6f6) // fix old: 0xFFFCF8F8 new: 0xFFe6e6e6
+
+val BgDark = Color(0xFF030303)
+val Bg = Color(0xFF0A0A0A)
+val BgLight = Color(0xFF171717)
+val Text = Color(0xFFF2F2F2)
+val TextMuted = Color(0xFFB0B0B0)
+val Highlight = Color(0xFF636363)
+val Border = Color(0xFF474747)
+val BorderMuted = Color(0xFF2E2E2E)
+val Primary = Color(0xFF92B2F2)
+val Secondary = Color(0xFFCFAB63)
+val Danger = Color(0xFFBB928B)
+val Warning = Color(0xFFA6A17D)
+val Success = Color(0xFF85A894)
+val Info = Color(0xFF8DA0BF)
+
+//val LightBgDark = Color(0xFFE6E6E6)
+//val LightBg = Color(0xFFF2F2F2)
+//val LightBgLight = Color(0xFFFFFFFF)
+//val LightText = Color(0xFF0A0A0A)
+//val LightTextMuted = Color(0xFF474747)
+//val LightHighlight = Color(0xFFFFFFFF) // 考慮用作onColor
+//val LightBorder = Color(0xFF808080)
+//val LightBorderMuted = Color(0xFF9E9E9E)
+//val LightPrimary = Color(0xFF2B457D)
+//val LightSecondary = Color(0xFF473400)
+//val LightDanger = Color(0xFF7F5953)
+//val LightWarning = Color(0xFF6B6543)
+//val LightSuccess = Color(0xFF4A6D5A)
+//val LightInfo = Color(0xFF526380)
+
+val ColorScheme.textColor
+    get() = @Composable{
+        if (isSystemInDarkTheme()){
+            Color(0xFFf2f2f2)
+        }else{
+            Color(0xFF0a0a0a)
+        }
+    }
+
+val ColorScheme.textMutedColor
+    get() = @Composable{
+        if (isSystemInDarkTheme()){
+            Color(0xFFB0B0B0)
+        }else{
+            Color(0xFF474747)
+        }
+    }
+
+val ColorScheme.borderColor
+    get() = @Composable {
+        if (isSystemInDarkTheme()){
+            Color(0xFF474747)
+        }else{
+            Color(0xFF808080)
+        }
+    }
+
+ val ColorScheme.highlightColor
+    get() = @Composable {
+        if (isSystemInDarkTheme()){
+            Color(0xFF636363)
+        }else{
+            Color(0xFFFFFFFF)
+        }
+    }
+
+
 val onBackgroundLight = Color(0xFF1C1B1B)
 val surfaceLight = Color(0xFFFCF8F8)
 val onSurfaceLight = Color(0xFF1C1B1B)

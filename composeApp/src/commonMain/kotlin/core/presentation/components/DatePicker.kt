@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.domain.util.zeroStringDisplay
+import core.ui.textColor
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @Composable
@@ -64,7 +65,8 @@ fun DatePicker(
             Icon(
                 modifier = Modifier.size(32.dp),
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                contentDescription = null
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.textColor()
             )
         }
 
@@ -75,11 +77,7 @@ fun DatePicker(
                 .weight(1f),
             textAlign = TextAlign.Center,
             text = dateString,
-            style = MaterialTheme.typography.bodyLarge.copy(
-                fontWeight = FontWeight.Medium,
-                fontSize = 18.sp,
-                letterSpacing = 1.sp
-            )
+            style = MaterialTheme.typography.titleLarge
 
         )
         IconButton(
@@ -103,7 +101,8 @@ fun DatePicker(
             Icon(
                 modifier = Modifier.size(32.dp),
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
-                contentDescription = null
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.textColor()
             )
         }
     }

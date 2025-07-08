@@ -20,6 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +40,7 @@ import core.presentation.navigation.NavigationLayoutType
 import feature.home.presentation.components.AmountTextLayout
 import feature.home.presentation.components.ExpenseItem
 import core.presentation.noRippleClick
+import core.ui.textColor
 import feature.home.presentation.components.SpendingLimitDialog
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -105,7 +107,8 @@ fun HomeScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription =null
+                    contentDescription =null,
+                    tint = MaterialTheme.colorScheme.textColor()
                 )
             }
         }
