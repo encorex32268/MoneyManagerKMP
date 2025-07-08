@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -46,7 +47,7 @@ fun SpendingLimitsProgressBar(
     val isDarkMode = LocalDarkLightMode.current
     val animatable = remember(isDarkMode) { Animatable(0f) }
 
-    LaunchedEffect(spendingLimit, totalExpense) {
+    LaunchedEffect(Unit) {
         animatable.animateTo(
             targetValue = 1f,
             animationSpec = tween(
@@ -54,6 +55,9 @@ fun SpendingLimitsProgressBar(
                 easing = LinearOutSlowInEasing
             )
         )
+    }
+    val isShowProgressBar = remember(spendingLimit){
+        spendingLimit > 0
     }
 
     val progress = if (spendingLimit > 0) {
@@ -71,78 +75,83 @@ fun SpendingLimitsProgressBar(
             else -> limitsColor_100_Color
         }
     }
-    Column(
-        modifier = modifier.padding(8.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ){
-        if (isShowLimitAndExpense){
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ){
+    if (isShowProgressBar){
+        Column(
+            modifier = modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ){
+            if (isShowLimitAndExpense){
                 Row(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
                 ){
+                    Row(
+                        modifier = Modifier.weight(1f)
+                    ){
+                        Text(
+                            text = stringResource(Res.string.total_expense),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Text(
+                            text = " / ",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Text(
+                            text = stringResource(Res.string.home_spending_limit),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                     Text(
-                        text = stringResource(Res.string.total_expense),
-                        style = MaterialTheme.typography.bodyMedium
+                        text = totalExpense.toMoneyString(),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.ExtraBold
+                        ),
+                        color = limitOverColor
                     )
                     Text(
                         text = " / ",
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = stringResource(Res.string.home_spending_limit),
+                        text = spendingLimit.toMoneyString(),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .height(36.dp)
+                        .padding(8.dp),
+                    progress = {
+                        animatedProgress
+                    },
+                    strokeCap = StrokeCap.Round,
+                    color = limitOverColor,
+                    drawStopIndicator = {}
+                )
                 Text(
-                    text = totalExpense.toMoneyString(),
+                    modifier = Modifier.padding(bottom = 4.dp),
+                    text =  "${(progress * 100).toDouble().format(1)}%",
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.ExtraBold
                     ),
                     color = limitOverColor
                 )
-                Text(
-                    text = " / ",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Text(
-                    text = spendingLimit.toMoneyString(),
-                    style = MaterialTheme.typography.bodyMedium
-                )
             }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ){
 
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .height(36.dp)
-                    .padding(8.dp),
-                progress = {
-                    animatedProgress
-                },
-                strokeCap = StrokeCap.Round,
-                color = limitOverColor,
-                drawStopIndicator = {}
-            )
-            Text(
-                modifier = Modifier.padding(bottom = 4.dp),
-                text =  "${(progress * 100).toDouble().format(1)}%",
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontWeight = FontWeight.ExtraBold
-                ),
-                color = limitOverColor
-            )
+
         }
 
-
+    }else {
+        Spacer(modifier = modifier.padding(4.dp))
     }
 
 

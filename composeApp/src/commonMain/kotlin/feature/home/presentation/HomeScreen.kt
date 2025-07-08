@@ -178,7 +178,8 @@ private fun HomeScreenNaviBottom(
             totalExpense = state.totalExpense,
             expenseLimit = state.expenseLimit,
             navigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION,
-            onExpenseLimitClick = onExpenseLimitClick
+            onExpenseLimitClick = onExpenseLimitClick,
+            limitOverColor = state.limitOverColor
         )
         SpendingLimitsProgressBar(
             modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -238,7 +239,8 @@ private fun HomeScreenNaviRail(
             totalExpense = state.totalExpense,
             expenseLimit = state.expenseLimit,
             navigationLayoutType = NavigationLayoutType.NAVIGATION_RAIL,
-            onExpenseLimitClick = onExpenseLimitClick
+            onExpenseLimitClick = onExpenseLimitClick,
+            limitOverColor = state.limitOverColor
         )
         Spacer(modifier = Modifier.width(8.dp))
         LazyColumn(

@@ -23,14 +23,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.presentation.LocalDarkLightMode
 import core.presentation.navigation.NavigationLayoutType
 import core.ui.limitsColor_100_Color
+import core.ui.limitsColor_50_70_Color
 import core.ui.textColor
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.home_spending_limit
@@ -43,6 +50,7 @@ fun AmountTextLayout(
     modifier: Modifier = Modifier,
     totalExpense: Long,
     expenseLimit: Long,
+    limitOverColor: Color,
     navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION,
     onExpenseLimitClick: () -> Unit = {}
 ) {
@@ -54,7 +62,8 @@ fun AmountTextLayout(
                 AmountTextLayoutNaviBottom(
                     totalExpense = totalExpense,
                     expenseLimit = expenseLimit,
-                    onExpenseLimitClick = onExpenseLimitClick
+                    onExpenseLimitClick = onExpenseLimitClick,
+                    limitOverColor = limitOverColor
                 )
             }
         }
@@ -65,7 +74,8 @@ fun AmountTextLayout(
                 AmountTextLayoutNaviRail(
                     totalExpense = totalExpense,
                     expenseLimit = expenseLimit,
-                    onExpenseLimitClick = onExpenseLimitClick
+                    onExpenseLimitClick = onExpenseLimitClick,
+                    limitOverColor = limitOverColor
                 )
             }
         }
@@ -76,9 +86,9 @@ fun AmountTextLayout(
 private fun AmountTextLayoutNaviRail(
     totalExpense: Long,
     expenseLimit: Long,
+    limitOverColor: Color,
     onExpenseLimitClick: () -> Unit = {}
 ){
-    val errorColor = MaterialTheme.colorScheme.error
     val onBackgroundColor = MaterialTheme.colorScheme.onBackground
 
     Column(
@@ -89,9 +99,9 @@ private fun AmountTextLayoutNaviRail(
             title = stringResource(Res.string.total_expense),
             text = totalExpense.toMoneyString(),
             textStyle = MaterialTheme.typography.labelLarge.copy(
-                color = if (totalExpense > expenseLimit && expenseLimit != 0L) errorColor else onBackgroundColor,
+                color = if (totalExpense > expenseLimit && expenseLimit != 0L) limitsColor_100_Color else onBackgroundColor,
                 fontSize = 24.sp
-            )
+            ),
         )
         Row(
             modifier = Modifier.clickable {
@@ -119,7 +129,9 @@ private fun AmountTextLayoutNaviRail(
 private fun AmountTextLayoutNaviBottom(
     totalExpense: Long,
     expenseLimit: Long,
+    limitOverColor: Color,
     onExpenseLimitClick: () -> Unit = {}
+
 ){
     Row(
         modifier = Modifier
@@ -135,7 +147,8 @@ private fun AmountTextLayoutNaviBottom(
                 .padding(vertical = 4.dp),
             totalExpense =  totalExpense,
             expenseLimit =  expenseLimit,
-            onExpenseLimitClick = onExpenseLimitClick
+            onExpenseLimitClick = onExpenseLimitClick,
+            limitOverColor = limitOverColor
         )
 
     }
@@ -147,10 +160,14 @@ private fun AmountSection(
     modifier: Modifier = Modifier,
     totalExpense: Long,
     expenseLimit: Long,
+    limitOverColor: Color,
     onExpenseLimitClick: () -> Unit = {}
 ) {
-    val onBackgroundColor = MaterialTheme.colorScheme.onBackground
 
+    val startColor = MaterialTheme.colorScheme.textColor()
+    val totalTextColor = remember(expenseLimit){
+        if (expenseLimit != 0L) limitOverColor else startColor
+    }
     Row(
         modifier = modifier.clickable {
             onExpenseLimitClick()
@@ -162,8 +179,8 @@ private fun AmountSection(
             title = stringResource(Res.string.total_expense),
             text = totalExpense.toMoneyString(),
             textStyle = MaterialTheme.typography.labelLarge.copy(
-                color = if (totalExpense > expenseLimit && expenseLimit != 0L) limitsColor_100_Color else onBackgroundColor,
-                fontSize = 24.sp
+                fontSize = 24.sp,
+                color = totalTextColor
             )
         )
         AmountText(
@@ -188,6 +205,8 @@ private fun AmountSection(
         }
     }
 }
+
+
 
 @Composable
 fun AmountText(
