@@ -163,11 +163,15 @@ private fun AmountSection(
     limitOverColor: Color,
     onExpenseLimitClick: () -> Unit = {}
 ) {
-
-    val startColor = MaterialTheme.colorScheme.textColor()
-    val totalTextColor = remember(expenseLimit){
-        if (expenseLimit != 0L) limitOverColor else startColor
-    }
+    val textStyle = if (expenseLimit != 0L) {
+            MaterialTheme.typography.labelLarge.copy(
+                fontSize = 24.sp,
+                color = limitOverColor
+            )
+        }else{
+            MaterialTheme.typography.labelLarge.copy(
+                fontSize = 24.sp,
+            ) }
     Row(
         modifier = modifier.clickable {
             onExpenseLimitClick()
@@ -178,10 +182,7 @@ private fun AmountSection(
         AmountText(
             title = stringResource(Res.string.total_expense),
             text = totalExpense.toMoneyString(),
-            textStyle = MaterialTheme.typography.labelLarge.copy(
-                fontSize = 24.sp,
-                color = totalTextColor
-            )
+            textStyle = textStyle
         )
         AmountText(
             title = "",

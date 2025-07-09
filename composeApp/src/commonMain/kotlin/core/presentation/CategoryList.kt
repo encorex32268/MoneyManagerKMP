@@ -2222,6 +2222,8 @@ object CategoryList {
         }
     }
 
+
+
     fun getColorByTypeId(id: Long): Color {
         return Color(
             when (id) {

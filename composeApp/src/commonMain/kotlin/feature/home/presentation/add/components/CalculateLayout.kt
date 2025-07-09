@@ -59,6 +59,7 @@ import moneymanagerkmp.composeapp.generated.resources.dialog_ok_button
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
+import toDateString
 
 @OptIn(
     ExperimentalMaterial3Api::class
@@ -322,7 +323,7 @@ private fun CalendarButton(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "$month/$day",
+                text = toDateString(month,day),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.labelMedium
             )

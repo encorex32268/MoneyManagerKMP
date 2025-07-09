@@ -40,7 +40,9 @@ import core.presentation.date.toDayOfWeekStringResource
 import core.presentation.date.toLocalDateTime
 import core.presentation.noRippleClick
 import core.ui.bgColor
+import core.ui.bglightColor
 import core.ui.borderColor
+import core.ui.borderMutedColor
 import core.ui.highlightColor
 import core.ui.textColor
 import core.ui.textMutedColor
@@ -79,7 +81,7 @@ fun ExpenseItem(
             modifier = modifier,
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.outlinedCardColors(
-                containerColor = MaterialTheme.colorScheme.bgColor()
+                containerColor = MaterialTheme.colorScheme.bglightColor()
             ),
             border = BorderStroke(0.25.dp, color = MaterialTheme.colorScheme.borderColor())
         ) {
@@ -156,16 +158,13 @@ fun ExpenseItem(
                                 Icon(
                                     modifier = Modifier.size(12.dp),
                                     imageVector = vectorResource(Res.drawable.baseline_sticky_note_24),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.textColor()
+                                    contentDescription = null
                                 )
                             }
                         }
                         Text(
                             text = expense.cost.toMoneyString(),
-                            style = MaterialTheme.typography.labelMedium.copy(
-                                color = MaterialTheme.colorScheme.textMutedColor()
-                            )
+                            style = MaterialTheme.typography.labelMedium
                         )
                     }
                 }

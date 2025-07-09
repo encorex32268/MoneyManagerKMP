@@ -100,6 +100,16 @@ val ColorScheme.borderColor
         }
     }
 
+val ColorScheme.borderMutedColor
+    get() = @Composable {
+        val darkLightMode = LocalDarkLightMode.current
+        if (darkLightMode){
+            Color(0xFF2E2E2E)
+        }else{
+            Color(0xFF9E9E9E)
+        }
+    }
+
 val ColorScheme.bgColor
     get() = @Composable {
         val darkLightMode = LocalDarkLightMode.current
@@ -107,6 +117,15 @@ val ColorScheme.bgColor
             Color(0xFF0A0A0A)
         }else{
             Color(0xFFF2F2F2)
+        }
+    }
+val ColorScheme.bglightColor
+    get() = @Composable {
+        val darkLightMode = LocalDarkLightMode.current
+        if (darkLightMode){
+            Color(0xFF171717)
+        }else{
+            Color(0xFFFFFFFF)
         }
     }
 
