@@ -82,8 +82,7 @@ fun ExpenseItem(
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.outlinedCardColors(
                 containerColor = MaterialTheme.colorScheme.bglightColor()
-            ),
-            border = BorderStroke(0.25.dp, color = MaterialTheme.colorScheme.borderColor())
+            )
         ) {
 
             Column(

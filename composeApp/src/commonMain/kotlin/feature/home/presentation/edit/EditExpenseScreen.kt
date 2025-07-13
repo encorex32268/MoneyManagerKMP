@@ -70,6 +70,7 @@ import core.presentation.date.toDayOfWeekStringResource
 import core.presentation.date.toLocalDateTime
 import core.presentation.noRippleClick
 import core.ui.bgColor
+import core.ui.bglightColor
 import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_attach_money_24
@@ -194,8 +195,8 @@ fun EditExpenseScreen(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.outlinedCardColors(
-                        containerColor = MaterialTheme.colorScheme.bgColor()
-                    ),
+                        containerColor = MaterialTheme.colorScheme.bglightColor()
+                    )
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth()
@@ -372,7 +373,10 @@ private fun ContentSection(
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
         ,
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = MaterialTheme.colorScheme.bglightColor()
+        )
     ) {
         Column(
             modifier = Modifier
