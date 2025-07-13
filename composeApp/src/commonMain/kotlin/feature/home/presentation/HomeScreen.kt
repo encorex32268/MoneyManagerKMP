@@ -41,6 +41,7 @@ import feature.home.presentation.components.AmountTextLayout
 import feature.home.presentation.components.ExpenseItem
 import core.presentation.noRippleClick
 import core.ui.textColor
+import feature.home.domain.mapper.toExpense
 import feature.home.presentation.components.SpendingLimitDialog
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -64,7 +65,7 @@ fun HomeScreenRoot(
             when(event){
                 HomeEvent.OnGotoAddScreen   -> onGotoAddScreen()
                 is HomeEvent.OnGotoEditScreen  -> {
-                    onGotoEditScreen(event.expense)
+                    onGotoEditScreen(event.expenseUi.toExpense())
                 }
                 HomeEvent.OnExpenseLimitClick -> {
                     isShowExpenseLimitDialog = true
@@ -202,10 +203,9 @@ private fun HomeScreenNaviBottom(
                 ExpenseItem(
                     modifier = Modifier.fillMaxWidth(),
                     items = expenses,
-                    onItemClick = { expense ->
-                        onEvent(HomeEvent.OnGotoEditScreen(expense = expense))
-                    },
-                    types = state.typesItem
+                    onItemClick = { expenseUi ->
+                        onEvent(HomeEvent.OnGotoEditScreen(expenseUi = expenseUi))
+                    }
                 )
             }
             item {
@@ -257,10 +257,11 @@ private fun HomeScreenNaviRail(
                 ExpenseItem(
                     modifier = Modifier.fillMaxWidth(),
                     items = expenses,
-                    onItemClick = { expense ->
-                        onEvent(HomeEvent.OnGotoEditScreen(expense = expense))
-                    },
-                    types = state.typesItem
+                    onItemClick = { expenseUi ->
+                        onEvent(HomeEvent.OnGotoEditScreen(
+                            expenseUi = expenseUi
+                        ))
+                    }
                 )
             }
             item {

@@ -2,7 +2,6 @@ import com.codingfeline.buildkonfig.compiler.FieldSpec
 import org.jetbrains.compose.internal.utils.localPropertiesFile
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)

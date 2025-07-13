@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import core.domain.model.Expense
 import core.domain.model.Type
+import feature.home.domain.mapper.toExpenseUi
 import feature.home.presentation.components.ExpenseItem
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.expense_detail
@@ -127,12 +128,15 @@ fun DetailScreen(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 text = state.total.toMoneyString()
             )
-            state.items.forEach {
+            state.items.forEach { pair ->
+                val expenses = remember(pair.second){
+                    pair.second.map { expense -> expense.toExpenseUi() }
+                }
                 ExpenseItem(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
-                    items = it.second,
+                    items = expenses,
                     isClick = false
                 )
             }

@@ -13,6 +13,7 @@ import app.presentation.AppTheme
 import core.domain.model.Expense
 import core.presentation.CategoryList
 import feature.home.presentation.components.ExpenseItem
+import feature.home.presentation.model.ExpenseUi
 
 @Preview(showSystemUi = true)
 @Composable
@@ -27,14 +28,14 @@ fun ExpenseItemPreview(){
         ){
             ExpenseItem(
                 items = listOf(
-                    Expense(
+                    ExpenseUi(
                         categoryId = CategoryList.items.random().id,
                         typeId = CategoryList.HEALTH,
                         description = "Tester",
                         content = "123",
                         cost = 100
                     ),
-                    Expense(
+                    ExpenseUi(
                         categoryId = CategoryList.items.random().id,
                         typeId = CategoryList.FOOD,
                         description = "Tester2",

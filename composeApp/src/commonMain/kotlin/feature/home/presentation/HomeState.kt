@@ -7,15 +7,15 @@ import core.ui.limitsColor_0_50_Color
 import core.ui.limitsColor_100_Color
 import core.ui.limitsColor_50_70_Color
 import core.ui.limitsColor_70_90_Color
+import feature.home.presentation.model.ExpenseUi
 
 data class HomeState(
     val totalExpense: Long = 0,
     val expenseLimit: Long = 0,
-    val items:  List<Pair<String, List<Expense>>> = emptyList(),
     val nowDateYear: String = "",
     val nowDateMonth: String = "",
     val nowDateDayOfMonth: String = "",
-    val typesItem: List<Type> = emptyList()
+    val items:  List<Pair<String, List<ExpenseUi>>> = emptyList()
 ){
     val limitOverColor: Color
         get() {

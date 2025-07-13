@@ -46,6 +46,7 @@ import core.ui.borderMutedColor
 import core.ui.highlightColor
 import core.ui.textColor
 import core.ui.textMutedColor
+import feature.home.presentation.model.ExpenseUi
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_sticky_note_24
 import org.jetbrains.compose.resources.stringResource
@@ -56,15 +57,13 @@ import toMoneyString
 @Composable
 fun ExpenseItem(
     modifier: Modifier = Modifier,
-    items: List<Expense>,
-    types: List<Type> = emptyList(),
-    onItemClick: (Expense) -> Unit = {},
+    items: List<ExpenseUi>,
+    onItemClick: (ExpenseUi) -> Unit = {},
     isClick: Boolean = true
 ){
     if (items.isNotEmpty()){
         val total = remember(items){
-            val expenseItems = items.filterNot { it.isIncome }
-            expenseItems.sumOf { it.cost }
+            items.sumOf { it.cost }
         }
         val localDateTime  = remember(items){
             (items.firstOrNull()?.timestamp?:0L).toLocalDateTime()
@@ -124,6 +123,13 @@ fun ExpenseItem(
                     )
                 }
                 items.forEach {expense ->
+                    val backgroundColor = remember(expense.type){
+                        if (expense.type == null) {
+                            CategoryList.getColorByTypeId(expense.typeId)
+                        }else{
+                            Color(expense.type.colorArgb)
+                        }
+                    }
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -134,14 +140,11 @@ fun ExpenseItem(
                         ,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        val findType = types.find {
-                            it.typeIdTimestamp == expense.typeId
-                        }
                         CircleIcon(
                             modifier = Modifier.size(36.dp),
                             isClicked = isClick,
                             image = CategoryList.getCategoryIconById(expense.categoryId.toLong()),
-                            backgroundColor = if (findType == null) CategoryList.getColorByTypeId(expense.typeId) else Color(findType.colorArgb),
+                            backgroundColor = backgroundColor
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Row(

@@ -44,6 +44,7 @@ csv = "0.12"
 filekit = "0.8.1"
 
 material3WindowSizeClassMultiplatform = "0.5.0"
+coreKtx = "1.16.0"
 
 
 [libraries]
@@ -81,6 +82,7 @@ filekit-compose = { module = "io.github.vinceglb:filekit-compose", version.ref =
 
 
 material3-windowsizeclass-multiplatform = { group = "dev.chrisbanes.material3", name = "material3-window-size-class-multiplatform", version.ref = "material3WindowSizeClassMultiplatform" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 
 
@@ -95,3 +97,4 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 konfigplugin = { id = "com.codingfeline.buildkonfig" , version.ref = "konfig"}
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

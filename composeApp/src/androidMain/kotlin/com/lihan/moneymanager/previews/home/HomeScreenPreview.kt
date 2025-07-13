@@ -11,6 +11,7 @@ import core.domain.model.Expense
 import core.presentation.CategoryList
 import feature.home.presentation.HomeScreen
 import feature.home.presentation.HomeState
+import feature.home.presentation.model.ExpenseUi
 
 @androidx.compose.runtime.Composable
 @androidx.compose.ui.tooling.preview.Preview(
@@ -20,12 +21,12 @@ fun HomeScreenPreview() {
     val expenses = remember {
         listOf(
             "11/21" to (0..10).map {
-                Expense(
+                ExpenseUi(
                     categoryId = CategoryList.FOOD.toInt() + it,
                     typeId = CategoryList.FOOD,
                     description = "Test - ${it}",
                     cost = (1000 * it).toLong(),
-                    content = if (it%2 == 0)"1234" else ""
+                    content = if (it % 2 == 0) "1234" else ""
                 )
             }
         )
