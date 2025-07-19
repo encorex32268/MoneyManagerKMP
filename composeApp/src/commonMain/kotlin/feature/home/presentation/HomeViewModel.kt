@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val repository: HomeRepository,
-    private val typeRepository: TypeRepository,
     private val spendingLimitRepository: SpendingLimitRepository
 ): ViewModel() {
 

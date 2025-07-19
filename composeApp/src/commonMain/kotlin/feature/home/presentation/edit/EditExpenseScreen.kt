@@ -177,14 +177,9 @@ fun EditExpenseScreen(
             )
         }
     ){ paddingValues ->
-        state.currentExpense?.let {
-            val type = remember {
-                state.typeItems.find { type ->
-                    type.typeIdTimestamp == it.typeId
-                }
-            }
+        state.currentExpenseUi?.let { expenseUi ->
             val colorArgb = remember {
-                type?.colorArgb ?:CategoryList.getColorByTypeId(it.typeId).toArgb()
+                expenseUi.type?.colorArgb ?:CategoryList.getColorByTypeId(expenseUi.typeId).toArgb()
             }
             Column(
                 modifier = Modifier
@@ -206,9 +201,9 @@ fun EditExpenseScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ){
                         IconSection(
-                            iconId = it.categoryId,
+                            iconId = expenseUi.categoryId,
                             colorArgb = colorArgb,
-                            description = it.description
+                            description = expenseUi.description
                         )
                         HorizontalDivider(
                             modifier = Modifier.padding(8.dp)
@@ -220,17 +215,17 @@ fun EditExpenseScreen(
                             ,
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ){
-                            GroupSection(type = type)
+                            GroupSection(type = expenseUi.type)
                             TimestampSection(
-                                timestamp = it.timestamp
+                                timestamp = expenseUi.timestamp
                             )
-                            CostSection(cost = it.cost)
+                            CostSection(cost = expenseUi.cost)
                         }
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 ContentSection(
-                    content = state.currentExpense.content,
+                    content = expenseUi.content,
                     onEvent = onEvent,
                     isShowSaveIcon = state.isShowSaveIcon
                 )

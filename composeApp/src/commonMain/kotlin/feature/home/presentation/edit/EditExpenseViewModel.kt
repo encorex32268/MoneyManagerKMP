@@ -2,19 +2,15 @@ package feature.home.presentation.edit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import core.domain.model.Expense
 import core.domain.repository.ExpenseRepository
-import core.domain.repository.TypeRepository
+import feature.home.domain.mapper.toExpense
+import feature.home.domain.mapper.toExpenseUi
+import feature.home.presentation.model.ExpenseUi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.internal.ChannelFlow
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -23,23 +19,18 @@ import kotlinx.coroutines.launch
 
 class EditExpenseViewModel(
     private val expense: Expense,
-    private val repository: ExpenseRepository,
-    private val typeRepository: TypeRepository
+    private val repository: ExpenseRepository
 ): ViewModel() {
+
+    private var hasInitialLoadedData = false
 
     private val _state = MutableStateFlow(EditExpenseState())
     val state = _state
         .onStart {
-            val types = typeRepository.getTypes()
-            val expenseById = repository.getExpense(expense)
-            combine(types , expenseById){ dataTypes , dataExpense ->
-                _state.update {
-                    it.copy(
-                        currentExpense = dataExpense,
-                        typeItems = dataTypes
-                    )
-                }
-            }.launchIn(viewModelScope)
+            if (!hasInitialLoadedData){
+                initData()
+                hasInitialLoadedData = true
+            }
         }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000L),
@@ -54,73 +45,109 @@ class EditExpenseViewModel(
 
     fun onEvent(event: EditExpenseEvent){
         when(event){
-            EditExpenseEvent.OnDelete -> {
-                state.value.currentExpense?.let {
-                    viewModelScope.launch {
-                        repository.delete(
-                            expense = it
-                        )
-                        _uiEvent.send(EditExpenseUiEvent.OnBack)
-                    }
-                }?:return
+            EditExpenseEvent.OnDelete -> onDelete()
+            is EditExpenseEvent.OnContentChange -> onContentChange(event.text)
+            EditExpenseEvent.OnBackClick -> onBackClick()
+            EditExpenseEvent.OnGoAddScreenClick -> onGoAddScreenClick()
+            EditExpenseEvent.OnSaveClick -> onSaveClick()
+        }
+    }
 
+    private fun initData(){
+        viewModelScope.launch {
+            val dbExpense = repository.getExpense(expense).firstOrNull()
+            if (dbExpense == null) return@launch
+            _state.update {
+                it.copy(
+                    currentExpenseUi = dbExpense.toExpenseUi()
+                )
             }
+        }
 
-            is EditExpenseEvent.OnContentChange -> {
+
+    }
+
+    private fun onSaveClick() {
+        val currentState = _state.value
+        val expenseUi = currentState.currentExpenseUi
+        updateExpense(
+            expenseUi = expenseUi,
+            onUpdateDone = {
+                currentText = expenseUi?.content?:currentText
                 _state.update {
                     it.copy(
-                        currentExpense = state.value.currentExpense?.copy(
-                            content = event.text
-                        ),
-                        isShowSaveIcon = currentText != event.text
+                        isShowSaveIcon = false
                     )
                 }
-            }
-
-            EditExpenseEvent.OnBackClick        -> {
                 viewModelScope.launch {
-                    state.value.currentExpense?.let {
-                        if (currentText != it.content){
-                            repository.update(
-                                expense = it
-                            )
-                        }
-                    }
-                    _uiEvent.send(EditExpenseUiEvent.OnBack)
-                }
-            }
-
-            EditExpenseEvent.OnGoAddScreenClick -> {
-                state.value.currentExpense?.let {
-                    viewModelScope.launch {
-                        if (currentText != it.content) {
-                            repository.update(
-                                expense = it
-                            )
-                        }
-                        _uiEvent.send(EditExpenseUiEvent.OnGoAddScreen(it))
-                    }
-                }?:return
-
-            }
-            EditExpenseEvent.OnSaveClick ->{
-                viewModelScope.launch {
-                    state.value.currentExpense?.let {
-                        if (currentText != it.content){
-                            repository.update(
-                                expense = it
-                            )
-                            currentText = it.content
-                            _state.update {
-                                it.copy(
-                                    isShowSaveIcon = false
-                                )
-                            }
-                        }
-                    }
                     _uiEvent.send(EditExpenseUiEvent.HideKeyboard)
                 }
             }
+        )
+
+    }
+
+    private fun onGoAddScreenClick() {
+        val currentState = _state.value
+        val expenseUi = currentState.currentExpenseUi
+        updateExpense(
+            expenseUi = expenseUi,
+            onUpdateDone = {
+                viewModelScope.launch {
+                    _uiEvent.send(EditExpenseUiEvent.OnGoAddScreen(expense))
+                }
+            }
+        )
+    }
+
+    private fun onBackClick() {
+        val currentState = _state.value
+        updateExpense(
+            expenseUi = currentState.currentExpenseUi,
+            onUpdateDone = {
+                viewModelScope.launch {
+                    _uiEvent.send(EditExpenseUiEvent.OnBack)
+                }
+            }
+        )
+    }
+
+    private fun onContentChange(text: String) {
+        val currentState = _state.value
+        val contentChangExpense = currentState.currentExpenseUi?.copy(
+            content = text
+        )
+        _state.update {
+            it.copy(
+                currentExpenseUi = contentChangExpense,
+                isShowSaveIcon = currentText != text
+            )
+        }
+    }
+
+    private fun onDelete() {
+        val currentExpenseUi = _state.value.currentExpenseUi
+        currentExpenseUi?.let { expenseUi ->
+            viewModelScope.launch {
+                repository.delete(expense = expenseUi.toExpense())
+                _uiEvent.send(EditExpenseUiEvent.OnBack)
+            }
+        }?:return
+    }
+
+
+    private fun updateExpense(
+        expenseUi: ExpenseUi?,
+        onUpdateDone: () -> Unit = {}
+    ){
+        if (expenseUi == null) return
+        viewModelScope.launch {
+            if (currentText != expenseUi.content){
+                repository.update(
+                    expense = expenseUi.toExpense()
+                )
+            }
+            onUpdateDone()
         }
     }
 }
