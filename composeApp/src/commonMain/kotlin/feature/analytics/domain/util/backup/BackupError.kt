@@ -8,19 +8,20 @@ import moneymanagerkmp.composeapp.generated.resources.backup_error_json_parse
 import moneymanagerkmp.composeapp.generated.resources.backup_error_restore_exception
 
 sealed interface BackupError {
-    enum class Error {
+    enum class LocalError : BackupError {
         DOWNLOADS_PATH_IS_EMPTY,
         CSV_DATA_IE_EMPTY,
         RESTORE_EXCEPTION,
         JSON_DECODE_ERROR
     }
+    //Network Backup ...
 }
 
-fun BackupError.Error.toUiText(): UiText {
-   return when(this){
-        BackupError.Error.DOWNLOADS_PATH_IS_EMPTY -> UiText.StringResourceId(Res.string.backup_error_downloads_path_empty)
-        BackupError.Error.CSV_DATA_IE_EMPTY       -> UiText.StringResourceId(Res.string.backup_error_csv_data_empty)
-        BackupError.Error.RESTORE_EXCEPTION       -> UiText.StringResourceId(Res.string.backup_error_restore_exception)
-        BackupError.Error.JSON_DECODE_ERROR       -> UiText.StringResourceId(Res.string.backup_error_json_parse)
+fun BackupError.toUiText(): UiText {
+    return when (this) {
+        BackupError.LocalError.DOWNLOADS_PATH_IS_EMPTY -> UiText.StringResourceId(Res.string.backup_error_downloads_path_empty)
+        BackupError.LocalError.CSV_DATA_IE_EMPTY -> UiText.StringResourceId(Res.string.backup_error_csv_data_empty)
+        BackupError.LocalError.RESTORE_EXCEPTION -> UiText.StringResourceId(Res.string.backup_error_restore_exception)
+        BackupError.LocalError.JSON_DECODE_ERROR -> UiText.StringResourceId(Res.string.backup_error_json_parse)
     }
 }

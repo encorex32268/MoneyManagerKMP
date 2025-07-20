@@ -18,6 +18,7 @@
     <string name="dialog_delete_title">Delete</string>
     <string name="dialog_delete_content">Do you want to delete this?</string>
 
+
     <string name="recently">Recently</string>
     <string name="food">Food</string>
     <string name="traffic">Traffic</string>
@@ -45,6 +46,9 @@
     <string name="backup_error_json_parse">An error occurred during the analysis.</string>
     <string name="backup_backup">Backup</string>
     <string name="backup_import">Import</string>
+    <string name="backup_local">Device</string>
+    <string name="backup_cloud">Google Drive</string>
+
 
     <string name="home_spending_limit">SpendingLimits</string>
     <string name="home_spending_limit_set">Set Your Spending Limits</string>

@@ -3,6 +3,7 @@
 package feature.analytics.presentation.backup
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,19 +35,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import core.presentation.ObserveAsEvents
 import core.presentation.UiText
 import core.presentation.components.OneButtonDialog
+import core.ui.bglightColor
+import core.ui.borderColor
+import core.ui.highlightColor
+import core.ui.textColor
 import feature.analytics.domain.util.backup.toUiText
+import feature.analytics.presentation.backup.components.BackupCardSection
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
 import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.backup_backup
+import moneymanagerkmp.composeapp.generated.resources.backup_cloud
+import moneymanagerkmp.composeapp.generated.resources.backup_cloud_import
 import moneymanagerkmp.composeapp.generated.resources.backup_import
+import moneymanagerkmp.composeapp.generated.resources.backup_local
 import moneymanagerkmp.composeapp.generated.resources.error
+import moneymanagerkmp.composeapp.generated.resources.expense
 import moneymanagerkmp.composeapp.generated.resources.failed_snackbar
 import moneymanagerkmp.composeapp.generated.resources.success_snackbar
 import org.jetbrains.compose.resources.getString
@@ -103,7 +114,12 @@ fun BackupScreenRoot(
         },
         topBar = {
             TopAppBar(
-                title = {},
+                title = {
+                    Text(
+                        text = stringResource(Res.string.backup_backup),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                },
                 navigationIcon = {
                     IconButton(
                         onClick = onBackClick
@@ -151,62 +167,24 @@ fun BackupScreen(
     onEvent: (BackupEvent) -> Unit = {}
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ){
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .border(
-                    width = 1.dp ,
-                    color = Color.Black ,
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .clip(RoundedCornerShape(16.dp))
-                .padding(32.dp)
-            ,
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround
-        ){
-            Column (
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable(
-                        onClick = {
-                            onEvent(BackupEvent.OnBackup)
-                        }
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ){
-                Image(
-                    painter = painterResource(Res.drawable.backup_backup),
-                    contentDescription = "backup image"
-                )
-                Text(
-                    text = stringResource(Res.string.backup_backup),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable {
-                        onEvent(BackupEvent.OnImport(null))
-                    },
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ){
-                Image(
-                    painter = painterResource(Res.drawable.backup_import),
-                    contentDescription = "import image"
-                )
-                Text(
-                    text = stringResource(Res.string.backup_import),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
-        }
+        BackupCardSection(
+            title = stringResource(Res.string.backup_local),
+            onEvent = onEvent,
+            backupImage = painterResource(Res.drawable.backup_backup),
+            restoreImage = painterResource(Res.drawable.backup_import)
+        )
+        BackupCardSection(
+            title = stringResource(Res.string.backup_cloud),
+            onEvent = {
+                //ios not open yet
+                onEvent(it)
+            },
+            backupImage = painterResource(Res.drawable.backup_cloud),
+            restoreImage = painterResource(Res.drawable.backup_cloud_import)
+        )
     }
 
 }

@@ -17,6 +17,9 @@
     <string name="dialog_cancel_button">キャンセル</string>
     <string name="dialog_delete_title">削除</string>
     <string name="dialog_delete_content">削除しますか？</string>
+    <string name="backup_local">デバイス</string>
+    <string name="backup_cloud">Google Drive</string>
+
     <string name="recently">最近</string>
     <string name="food">食</string>
     <string name="traffic">交通</string>

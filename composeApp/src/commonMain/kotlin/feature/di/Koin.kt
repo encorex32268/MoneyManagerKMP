@@ -15,6 +15,10 @@ import core.domain.repository.SpendingLimitRepository
 import core.domain.repository.TypeRepository
 import feature.home.di.homeModule
 import io.realm.kotlin.Realm
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -22,6 +26,11 @@ import org.koin.dsl.module
 
 
 private val appModule = module {
+
+    single<CoroutineScope> {
+        CoroutineScope(SupervisorJob())
+    }
+
     single<Realm> {
         RealmFactory().build()
     }

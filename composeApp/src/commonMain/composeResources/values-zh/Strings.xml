@@ -18,6 +18,8 @@
     <string name="dialog_cancel_button">取消</string>
     <string name="dialog_delete_title">刪除</string>
     <string name="dialog_delete_content">你要刪除嗎？</string>
+    <string name="backup_local">裝置</string>
+    <string name="backup_cloud">Google Drive</string>
 
     <string name="recently">最近</string>
     <string name="food">食</string>
