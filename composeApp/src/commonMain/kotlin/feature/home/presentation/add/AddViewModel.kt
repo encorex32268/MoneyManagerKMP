@@ -35,11 +35,11 @@ import org.jetbrains.compose.resources.getString
 class AddViewModel(
     private val repository: ExpenseRepository,
     private val typeRepository: TypeRepository,
-    private val expense: Expense?=null,
-    private val keySettings: DefaultKeySettings
-): ViewModel() {
+    private val keySettings: DefaultKeySettings,
+    private val expense: Expense? = null
+) : ViewModel() {
 
-    companion object{
+    companion object {
         private const val COST_MAX_LENGTH = 10
         private const val CLOSE_AD = "moneymanagerclose"
         private const val OPEN_AD = "moneymanageropen"
@@ -51,41 +51,44 @@ class AddViewModel(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     private val _state = MutableStateFlow(AddState(currentExpense = expense))
-    val state = _state.onStart{
-            if (!isInitialed){
-                setUpData()
-                isInitialed  = true
-            }
+    val state = _state.onStart {
+        if (!isInitialed) {
+            setUpData()
+            isInitialed = true
         }
+    }
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000L),
             _state.value
         )
 
-    fun onEvent(event: AddEvent){
-        when(event){
+    fun onEvent(event: AddEvent) {
+        when (event) {
             AddEvent.OnBack -> Unit
             AddEvent.OnGoToCategoryEditClick -> Unit
             is AddEvent.OnDescriptionChange -> onDescriptionChange(event.description)
-            is AddEvent.OnCostChange        -> onCostChange(event.text)
-            AddEvent.OnDeleteTextClick      -> onDeleteTextClick()
-            is AddEvent.OnSelectedDate      -> onDateSelected(event.timestamp)
-            is AddEvent.OnItemSelected      -> onItemSelected(
-                categoryUi = event.categoryUi ,
-                description = event.description,
-                isRecently = event.isRecently)
-            AddEvent.OnSaveClick            -> onSaveClick()
+            is AddEvent.OnCostChange -> onCostChange(event.text)
+            AddEvent.OnDeleteTextClick -> onDeleteTextClick()
+            is AddEvent.OnSelectedDate -> onDateSelected(event.timestamp)
+            is AddEvent.OnItemSelected -> {
+                onItemSelected(
+                    categoryUi = event.categoryUi,
+                    description = event.description,
+                    isRecently = event.isRecently
+                )
+            }
+            AddEvent.OnSaveClick -> onSaveClick()
             AddEvent.CreateDefaultType -> createDefaultType()
         }
     }
 
     private fun createDefaultType() {
-        viewModelScope.launch{
+        viewModelScope.launch {
             val types = mutableListOf<Type>()
             val defaultCategories = CategoryList.items.groupBy { it.typeId }
             defaultCategories.onEachIndexed { index, entry ->
-                val typeId = entry.key?:0
+                val typeId = entry.key ?: 0
                 val typeName = CategoryList.getTypeStringById(typeId = typeId)
                 val typeColor = CategoryList.getColorByTypeId(id = typeId).toArgb()
                 types.add(
@@ -110,10 +113,10 @@ class AddViewModel(
         }
     }
 
-    private fun onSaveClick(){
+    private fun onSaveClick() {
         viewModelScope.launch {
             val nowDate = DateConverter.getNowDate()
-            val stateNowDate = state.value.nowLocalDateTime?: nowDate
+            val stateNowDate = state.value.nowLocalDateTime ?: nowDate
             val expenseIsToday = (nowDate.year == stateNowDate.year) &&
                     (nowDate.monthNumber == stateNowDate.monthNumber) &&
                     (nowDate.dayOfMonth == stateNowDate.dayOfMonth)
@@ -128,26 +131,26 @@ class AddViewModel(
                 nanosecond = if (!expenseIsToday) 0 else nowDate.nanosecond
             ).toTimestamp()
 
-            if(state.value.currentExpense == null){
+            if (state.value.currentExpense == null) {
                 val expense = Expense(
-                    typeId = state.value.categoryUi?.typeId?:0,
-                    categoryId = state.value.categoryUi?.id?:0,
+                    typeId = state.value.categoryUi?.typeId ?: 0,
+                    categoryId = state.value.categoryUi?.id ?: 0,
                     description = state.value.description,
-                    cost = state.value.cost.toLongOrNull()?:0L,
+                    cost = state.value.cost.toLongOrNull() ?: 0L,
                     timestamp = timestamp
                 )
                 repository.insert(
                     expense
                 )
-            }else{
-                val updateExpense =  Expense(
+            } else {
+                val updateExpense = Expense(
                     description = state.value.description,
-                    typeId = state.value.categoryUi?.typeId?:0,
-                    categoryId = state.value.categoryUi?.id?:0,
-                    cost = state.value.cost.toLongOrNull()?:0L,
+                    typeId = state.value.categoryUi?.typeId ?: 0,
+                    categoryId = state.value.categoryUi?.id ?: 0,
+                    cost = state.value.cost.toLongOrNull() ?: 0L,
                     id = state.value.currentExpense!!.id,
                     timestamp = timestamp,
-                    content = state.value.currentExpense?.content?:""
+                    content = state.value.currentExpense?.content ?: ""
                 )
                 repository.update(
                     updateExpense
@@ -164,14 +167,14 @@ class AddViewModel(
         description: String,
         isRecently: Boolean
     ) {
-        if(isRecently){
+        if (isRecently) {
             _state.update {
                 it.copy(
                     recentlyItems = state.value.recentlyItems?.copy(
                         categories = state.value.recentlyItems!!.categories.map {
-                            if (categoryUi?.typeId == it.typeId && categoryUi?.order == it.order){
+                            if (categoryUi?.typeId == it.typeId && categoryUi?.order == it.order) {
                                 it.copy(isClick = true)
-                            }else{
+                            } else {
                                 it.copy(isClick = false)
                             }
                         }
@@ -185,7 +188,7 @@ class AddViewModel(
                     }
                 )
             }
-        }else{
+        } else {
             _state.update {
                 it.copy(
                     recentlyItems = state.value.recentlyItems?.copy(
@@ -196,9 +199,9 @@ class AddViewModel(
                     types = state.value.types.map {
                         it.copy(
                             categories = it.categories.map { category ->
-                                if (categoryUi?.typeId == category.typeId && categoryUi?.order == category.order){
+                                if (categoryUi?.typeId == category.typeId && categoryUi?.order == category.order) {
                                     category.copy(isClick = true)
-                                }else{
+                                } else {
                                     category.copy(isClick = false)
                                 }
                             }
@@ -216,7 +219,7 @@ class AddViewModel(
         }
     }
 
-    private fun onDateSelected(timestamp: Long){
+    private fun onDateSelected(timestamp: Long) {
         val localDateTime = timestamp.toLocalDateTime()
         _state.update {
             it.copy(
@@ -228,7 +231,7 @@ class AddViewModel(
         }
     }
 
-    private fun onDeleteTextClick(){
+    private fun onDeleteTextClick() {
         val currentCost = state.value.cost
         if (currentCost.trim().isEmpty()) return
         _state.update {
@@ -238,9 +241,9 @@ class AddViewModel(
         }
     }
 
-    private fun onCostChange(costString: String){
+    private fun onCostChange(costString: String) {
         val currentCost = state.value.cost
-        if (currentCost.length > COST_MAX_LENGTH)  return
+        if (currentCost.length > COST_MAX_LENGTH) return
         _state.update {
             it.copy(
                 cost = currentCost + costString
@@ -249,11 +252,12 @@ class AddViewModel(
     }
 
     private fun onDescriptionChange(description: String) {
-        when(description){
+        when (description) {
             CLOSE_AD -> {
                 keySettings.setCloseAdBanner(true)
                 AdMobBannerController.setCloseAdMobBanner(true)
             }
+
             OPEN_AD -> {
                 keySettings.setCloseAdBanner(false)
                 AdMobBannerController.setCloseAdMobBanner(false)
@@ -271,7 +275,7 @@ class AddViewModel(
         val localDateTime = expense?.timestamp?.toLocalDateTime() ?: DateConverter.getNowDate()
         val recentlyExpense = repository.getRecentlyExpenses()
         val types = typeRepository.getTypes()
-        combine(recentlyExpense,types){ recentlyExpenseFlow , typeFlow ->
+        combine(recentlyExpense, types) { recentlyExpenseFlow, typeFlow ->
             var isIconClicked = false
             val recentlyType = TypeUi(
                 typeIdTimestamp = -1,
@@ -284,10 +288,12 @@ class AddViewModel(
                         val findType = typeFlow.find { type ->
                             type.typeIdTimestamp == recentlyExpense.typeId
                         }
-                        val colorArgb = findType?.colorArgb ?:CategoryList.getColorByTypeId(recentlyExpense.typeId).toArgb()
+                        val colorArgb = findType?.colorArgb ?: CategoryList.getColorByTypeId(
+                            recentlyExpense.typeId
+                        ).toArgb()
 
                         val isSameIconFound = recentlyExpense.idString == expense?.idString
-                        if (isSameIconFound){
+                        if (isSameIconFound) {
                             isIconClicked = true
                         }
                         CategoryUi(
@@ -300,7 +306,7 @@ class AddViewModel(
                         )
                     }
             )
-            val typeFlowResult =  typeFlow.filter { it.isShow }.mapIndexed { _, type ->
+            val typeFlowResult = typeFlow.filter { it.isShow }.mapIndexed { _, type ->
                 type.toTypeUi().copy(
                     categories = type.categories.map {
                         it.toCategoryUi().copy(
@@ -321,12 +327,13 @@ class AddViewModel(
                     dayOfMonth = localDateTime.dayOfMonth,
                     nowLocalDateTime = localDateTime,
                     currentExpense = expense,
-                    cost = expense?.let { expense.cost.toString() }?:"0",
+                    cost = expense?.let { expense.cost.toString() } ?: "0",
                     categoryUi = expense?.let {
                         val findType = typeFlow.find { type ->
                             type.typeIdTimestamp == it.typeId
                         }
-                        val colorArgb = findType?.colorArgb ?:CategoryList.getColorByTypeId(it.typeId).toArgb()
+                        val colorArgb =
+                            findType?.colorArgb ?: CategoryList.getColorByTypeId(it.typeId).toArgb()
                         CategoryUi(
                             typeId = expense.typeId,
                             id = expense.categoryId,
@@ -336,7 +343,7 @@ class AddViewModel(
                             colorArgb = colorArgb
                         )
                     },
-                    description = expense?.description?:"",
+                    description = expense?.description ?: "",
                     isLoading = false
                 )
             }

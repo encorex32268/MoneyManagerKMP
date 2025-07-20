@@ -220,6 +220,9 @@ private fun CalculateKeyboard(
                 modifier = numberButtonModifier, text = "000", onEvent =  onEvent
             )
         }
+        val backgroundColor = remember(isDarkMode){
+            if (isDarkMode) calculateRemoveDarkContainerColor else calculateRemoveLightContainerColor
+        }
 
         Column(
             modifier = Modifier.weight(1f),
@@ -232,14 +235,15 @@ private fun CalculateKeyboard(
                 onClick = {
                     onEvent(AddEvent.OnDeleteTextClick)
                 },
-                backgroundColor = if (isDarkMode) calculateRemoveDarkContainerColor else calculateRemoveLightContainerColor
+                backgroundColor = backgroundColor
             )
             CalendarButton(
-                modifier = Modifier.aspectRatio(aspectRatio / 2),
+                modifier = Modifier.aspectRatio(aspectRatio / 2.0625f),
                 month = month.toInt(),
                 day = day.toInt(),
                 onClick = onCalendarButtonClick,
-                backgroundColor = if (isDarkMode) calculateCalendarDarkContainerColor else calculateCalendarLightContainerColor
+                backgroundColor = backgroundColor,
+                contentDescription = "calendar button"
             )
             CalculateIconButton(
                 modifier = numberButtonModifier,
@@ -248,7 +252,7 @@ private fun CalculateKeyboard(
                 onClick = {
                     onEvent(AddEvent.OnSaveClick)
                 },
-                backgroundColor = if (isDarkMode) calculateDoneDarkContainerColor else calculateDoneLightContainerColor
+                backgroundColor = backgroundColor
             )
         }
 
@@ -298,7 +302,8 @@ private fun CalendarButton(
     day: Int = 6,
     onClick: () -> Unit = {},
     shape: Shape = RoundedCornerShape(16.dp),
-    backgroundColor: Color
+    backgroundColor: Color,
+    contentDescription: String? = null
 ){
     Box(
         modifier = modifier
@@ -319,7 +324,7 @@ private fun CalendarButton(
         ){
             Icon(
                 imageVector = Icons.Outlined.DateRange,
-                contentDescription = null,
+                contentDescription = contentDescription,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
