@@ -220,8 +220,14 @@ private fun CalculateKeyboard(
                 modifier = numberButtonModifier, text = "000", onEvent =  onEvent
             )
         }
-        val backgroundColor = remember(isDarkMode){
+        val removeBackgroundColor = remember(isDarkMode){
             if (isDarkMode) calculateRemoveDarkContainerColor else calculateRemoveLightContainerColor
+        }
+        val calendarBackgroundColor = remember(isDarkMode){
+            if (isDarkMode) calculateCalendarDarkContainerColor else calculateCalendarLightContainerColor
+        }
+        val doneBackgroundColor = remember(isDarkMode){
+            if (isDarkMode) calculateDoneDarkContainerColor else calculateDoneLightContainerColor
         }
 
         Column(
@@ -235,14 +241,14 @@ private fun CalculateKeyboard(
                 onClick = {
                     onEvent(AddEvent.OnDeleteTextClick)
                 },
-                backgroundColor = backgroundColor
+                backgroundColor = removeBackgroundColor
             )
             CalendarButton(
                 modifier = Modifier.aspectRatio(aspectRatio / 2.0625f),
                 month = month.toInt(),
                 day = day.toInt(),
                 onClick = onCalendarButtonClick,
-                backgroundColor = backgroundColor,
+                backgroundColor = calendarBackgroundColor,
                 contentDescription = "calendar button"
             )
             CalculateIconButton(
@@ -252,7 +258,7 @@ private fun CalculateKeyboard(
                 onClick = {
                     onEvent(AddEvent.OnSaveClick)
                 },
-                backgroundColor = backgroundColor
+                backgroundColor = doneBackgroundColor
             )
         }
 

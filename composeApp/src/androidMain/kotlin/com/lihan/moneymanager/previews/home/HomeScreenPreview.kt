@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import app.presentation.AppTheme
+import core.domain.FOOD
 import core.domain.model.Expense
 import core.presentation.CategoryList
 import feature.home.presentation.HomeScreen
@@ -22,8 +23,8 @@ fun HomeScreenPreview() {
         listOf(
             "11/21" to (0..10).map {
                 ExpenseUi(
-                    categoryId = CategoryList.FOOD.toInt() + it,
-                    typeId = CategoryList.FOOD,
+                    categoryId = FOOD.toInt() + it,
+                    typeId = FOOD,
                     description = "Test - ${it}",
                     cost = (1000 * it).toLong(),
                     content = if (it % 2 == 0) "1234" else ""

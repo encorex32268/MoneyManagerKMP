@@ -7,6 +7,7 @@ import core.domain.mapper.toCategoryEntity
 import core.domain.mapper.toType
 import core.domain.mapper.toTypeEntity
 import io.realm.kotlin.Realm
+import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.flow.Flow
@@ -68,7 +69,7 @@ class TypeRepositoryImpl(
     }
 
     override suspend fun updateAllSortedTypes(types: List<Type>) {
-        realm.writeBlocking {
+        realm.write{
             types.map { type ->
                 val queriedTask = query<TypeEntity>(
                     query = "id == $0",type.id
@@ -87,19 +88,36 @@ class TypeRepositoryImpl(
     }
 
     override suspend fun restore(types: List<Type>) {
-        realm.writeBlocking {
+        realm.write{
             val dbTypes = this.query<TypeEntity>().find().map { it.toType() }
-            val dbTypesIdStringList = dbTypes.map { it.typeIdHex }
-            val restoreExpenses = mutableListOf<Type>()
+            val restoreTypes = types
+            val restoreTimestamp = restoreTypes.map { it.typeIdTimestamp }
+            val dbTimestamp = dbTypes.map { it.typeIdTimestamp }
 
-            types.forEach {
-                if (it.typeIdHex !in dbTypesIdStringList){
-                    restoreExpenses.add(it)
+            val existsTypes = dbTypes.map { type ->
+                val dbTypeTimestamp = type.typeIdTimestamp
+                if (dbTypeTimestamp in restoreTimestamp){
+                    val restoreType = types.find { it.typeIdTimestamp == dbTypeTimestamp }
+                    AppLogger.d("TypeRepository Restore" , "RestoreType: $restoreType")
+                    val dbTypeCategories = type.categories
+                    val restoreCategories = restoreType?.categories?:emptyList()
+
+                    type.copy(
+                        categories = (dbTypeCategories + restoreCategories).distinct()
+                    )
+                }else{
+                    type
                 }
             }
-            restoreExpenses.forEach {
+
+            val notExistsTypes = restoreTypes.filterNot { it.typeIdTimestamp in dbTimestamp }
+
+            val lastTypes = existsTypes + notExistsTypes
+
+            lastTypes.forEach {
                 this.copyToRealm(
                     instance = it.toTypeEntity(),
+                    updatePolicy = UpdatePolicy.ALL
                 )
             }
 

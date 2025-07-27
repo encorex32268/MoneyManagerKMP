@@ -1,5 +1,6 @@
 package core.domain.repository
 
+import core.domain.model.Expense
 import core.domain.model.SpendingLimit
 import kotlinx.coroutines.flow.Flow
 
@@ -9,4 +10,6 @@ interface SpendingLimitRepository {
     suspend fun insert(spendingLimit: SpendingLimit)
     suspend fun update(spendingLimit: SpendingLimit)
     suspend fun delete(spendingLimit: SpendingLimit)
+
+    suspend fun restore(spendingLimits: List<SpendingLimit>)
 }

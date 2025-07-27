@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.domain.model.Expense
 import core.domain.repository.ExpenseRepository
+import core.domain.repository.TypeRepository
 import feature.home.domain.mapper.toExpense
 import feature.home.domain.mapper.toExpenseUi
 import feature.home.presentation.model.ExpenseUi
@@ -19,7 +20,8 @@ import kotlinx.coroutines.launch
 
 class EditExpenseViewModel(
     private val expense: Expense,
-    private val repository: ExpenseRepository
+    private val repository: ExpenseRepository,
+    private val typeRepository: TypeRepository
 ): ViewModel() {
 
     private var hasInitialLoadedData = false
@@ -57,9 +59,21 @@ class EditExpenseViewModel(
         viewModelScope.launch {
             val dbExpense = repository.getExpense(expense).firstOrNull()
             if (dbExpense == null) return@launch
+            val types = typeRepository.getTypes().firstOrNull()?:emptyList()
+            var expenseUi = dbExpense.toExpenseUi()
+
+            //Find Background Color by TypeId
+            if (types.isNotEmpty()){
+                val currentType = types.find { it.typeIdTimestamp == dbExpense.typeId }
+                currentType?.let {
+                    expenseUi = expenseUi.copy(
+                        colorRGB = it.colorArgb
+                    )
+                }
+            }
             _state.update {
                 it.copy(
-                    currentExpenseUi = dbExpense.toExpenseUi()
+                    currentExpenseUi = expenseUi
                 )
             }
         }

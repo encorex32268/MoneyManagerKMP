@@ -1,15 +1,20 @@
 package feature.analytics.data
 
+import AppLogger
 import core.domain.model.Category
 import core.domain.model.Expense
+import core.domain.model.SpendingLimit
 import core.domain.model.Type
 import core.domain.repository.ExpenseRepository
+import core.domain.repository.SpendingLimitRepository
 import core.domain.repository.TypeRepository
 import core.presentation.date.DateConverter
 import core.presentation.date.toStringDateYMDByTimestamp
+import core.presentation.date.toTimestamp
 import de.halfbit.csv.Csv
 import de.halfbit.csv.buildCsv
 import de.halfbit.csv.parseCsv
+import feature.analytics.domain.BackupData
 import feature.analytics.domain.BackupRepository
 import feature.analytics.domain.BackupResult
 import feature.analytics.domain.util.backup.BackupError
@@ -26,11 +31,13 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+
 class BackupRepositoryImpl(
     private val expenseRepository: ExpenseRepository,
     private val typeRepository: TypeRepository,
+    private val spendingLimitRepository: SpendingLimitRepository,
     private val coroutineScope: CoroutineScope
-): BackupRepository{
+) : BackupRepository {
 
     companion object {
         private const val NO = "No"
@@ -52,8 +59,13 @@ class BackupRepositoryImpl(
         private const val TYPE_CATEGORIES = "Type_categories"
         private const val TYPE_OBJ_ID = "Type_id"
 
+        private const val SPENDING_LIMIT_ID = "ID"
+        private const val SPENDING_LIMIT_YEAR = "Year"
+        private const val SPENDING_LIMIT_MONTH = "Month"
+        private const val SPENDING_LIMIT_LIMIT = "Limit"
+
     }
-    
+
     override suspend fun backup(): BackupResult {
         val nowTimestamp = DateConverter.getNowDateTimestamp()
         val downloadsPath = getDownloadsPath()
@@ -67,17 +79,21 @@ class BackupRepositoryImpl(
             year = nowDate.year,
             month = nowDate.monthNumber
         )
-        
-        val expensesDeferred = coroutineScope.async { expenseRepository.getExpenseByTime(
-            startTimeOfMonth = monthTimestampLongRange.first,
-            endTimeOfMonth = monthTimestampLongRange.second
-        )}
+
+        val expensesDeferred = coroutineScope.async {
+            expenseRepository.getExpenseByTime(
+                startTimeOfMonth = monthTimestampLongRange.first,
+                endTimeOfMonth = monthTimestampLongRange.second
+            )
+        }
 
         val types = coroutineScope.async { typeRepository.getTypes() }
-
+        val spendingLimit = coroutineScope.async { spendingLimitRepository.getAll() }
+        AppLogger.d("BackupRepository","SpendingLimit: ${spendingLimit.await().firstOrNull()}")
         val csv = buildCsv(
-            expensesDeferred.await().firstOrNull()?:emptyList(),
-            types.await().firstOrNull()?:emptyList()
+            expensesDeferred.await().firstOrNull() ?: emptyList(),
+            types.await().firstOrNull() ?: emptyList(),
+            spendingLimit.await().firstOrNull()?:emptyList()
         )
 
         FileKit.saveFile(
@@ -88,10 +104,9 @@ class BackupRepositoryImpl(
         )
 
         return BackupResult()
-        
+
     }
 
-    
 
     override suspend fun restoreData(platformFile: PlatformFile): BackupResult {
         var result = BackupResult()
@@ -99,44 +114,170 @@ class BackupRepositoryImpl(
             platformFile.readBytes().decodeToString()
         }
         val csv = parseCsv(jsonString)
-        if (csv.data.isEmpty()){
+        if (csv.data.isEmpty()) {
             return BackupResult(
                 error = BackupError.LocalError.CSV_DATA_IE_EMPTY
             )
         }
-        val expenses = parseExpenses(csv)
-        val types = parseTypes(csv)
+        val backupData = parse(csv)
+
+        AppLogger.d("BackupRepository", " Restore ${backupData.expenses}")
+        AppLogger.d("BackupRepository", " Restore ${backupData.types}")
+        AppLogger.d("BackupRepository", " Restore ${backupData.spendingLimits}")
 
         val jobExpenseRestore = coroutineScope.async {
             try {
-                expenseRepository.restore(expenses)
-            }catch (e: Exception){
+                expenseRepository.restore(backupData.expenses)
+            } catch (e: Exception) {
+                AppLogger.d("BackupRepository", " Restore Expense Error ${e.message}")
                 result = result.copy(
                     error = BackupError.LocalError.RESTORE_EXCEPTION
                 )
-                return@async
             }
         }
         val jobTypeRestore = coroutineScope.async {
             try {
-                typeRepository.restore(types)
-            }catch (e: Exception){
+                typeRepository.restore(backupData.types)
+            } catch (e: Exception) {
+                AppLogger.d("BackupRepository", " Restore Type Error ${e.message}")
                 result = result.copy(
                     error = BackupError.LocalError.RESTORE_EXCEPTION
                 )
-                return@async
             }
         }
 
-        awaitAll(jobExpenseRestore,jobTypeRestore)
+        val jobSpendingLimitRestore = coroutineScope.async {
+            try {
+                spendingLimitRepository.restore(backupData.spendingLimits)
+            } catch (e: Exception) {
+                AppLogger.d("BackupRepository", " Restore Spending Error ${e.message}")
+                result = result.copy(
+                    error = BackupError.LocalError.RESTORE_EXCEPTION
+                )
+            }
+        }
+
+        awaitAll(
+            jobExpenseRestore,
+            jobTypeRestore,
+            jobSpendingLimitRestore
+        )
 
         return result
     }
 
+    private fun parse(csv: Csv): BackupData {
+        val types = mutableListOf<Type>()
+        val expenses = mutableListOf<Expense>()
+        val spendingLimits = mutableListOf<SpendingLimit>()
+
+
+        csv.data.mapIndexed { index,dataRow ->
+            AppLogger.d("BackupRepository Parse", "$dataRow")
+            //如果有No 就等於先增 Expense
+            val isUpsertExpense = !dataRow.value(NO).isNullOrBlank()
+            val isType = !dataRow.value(TYPE_NO).isNullOrEmpty()
+            val isSpending = !dataRow.value(SPENDING_LIMIT_ID).isNullOrEmpty()
+
+            //先新增 Expense
+            //類別ID TYPE -> 1752673560278
+            //如果之前版本有 10010 ? -> 如果有的話 給他新的 Time
+            val typeId = dataRow.value(TYPE)?.toLongOrNull()?:0
+
+            //Icon Id -> 一個id 對應 一個 icon ex: 10012, food Icon
+            val categoryId = dataRow.value(CATEGORY)?.toIntOrNull() ?: 0
+            val description = dataRow.value(DESCRIPTION) ?: ""
+            val cost = dataRow.value(COST)?.toLongOrNull() ?: 0
+            val content = dataRow.value(CONTENT) ?: ""
+            val idString = dataRow.value(OBJ_ID) ?: ""
+            val date = dataRow.value(DATE)?.substringBefore("&")?.toLongOrNull() ?: 0L
+
+            AppLogger.d("BackupRepository Parse","isSpending: $isSpending")
+             when {
+                isUpsertExpense && typeId != 0L-> {
+                    val expense = Expense(
+                        idString = idString,
+                        categoryId = categoryId,
+                        typeId = typeId,
+                        description = description,
+                        isIncome = false,
+                        content = content,
+                        timestamp = date,
+                        cost = cost
+                    )
+                    AppLogger.d("BackupRepository Restore", "Expense:${expense}")
+                    expenses.add(expense)
+                }
+
+                 isType -> {
+                    //1752673560278
+                    val typeDate = dataRow.value(TYPE_DATE)?.substringBefore("&")
+                    val typeDateTimestamp = typeDate?.toLongOrNull() ?: (DateConverter.getNowDate()
+                        .toTimestamp() + index + 1)
+                    val typeName = dataRow.value(TYPE_NAME) ?: ""
+                    val typeColorArgb = dataRow.value(TYPE_COLOR_ARGB)?.toIntOrNull() ?: 0
+                    val typeOrder = dataRow.value(TYPE_ORDER)
+                    val typeIdHex = dataRow.value(TYPE_OBJ_ID) ?: ""
+                    val typeCategory = runCatching {
+                        val json = dataRow.value(TYPE_CATEGORIES).orEmpty()
+                        if (json.isBlank()) emptyList() else Json.decodeFromString<List<Category>>(
+                            json
+                        ).map {
+                            it.copy(
+                                typeId = typeDateTimestamp
+                            )
+                        }
+                    }.getOrElse { exception ->
+                        exception.printStackTrace()
+                        emptyList()
+                    }
+                    if (typeIdHex.isNotEmpty() && typeOrder != null && typeDate?.isNotEmpty() == true) {
+                        val type = Type(
+                            typeIdHex = typeIdHex,
+                            typeIdTimestamp = typeDateTimestamp,
+                            name = typeName,
+                            colorArgb = typeColorArgb,
+                            order = typeOrder.toIntOrNull() ?: 0,
+                            isShow = true,
+                            categories = typeCategory
+                        )
+                        types.add(type)
+                        AppLogger.d("BackRepository Restore", "Types:${type}")
+                    }
+                }
+
+                isSpending -> {
+                    AppLogger.d("BackupRepository Parse","SpendingLimit: isSpending ${isSpending}")
+                    val year = dataRow.value(SPENDING_LIMIT_YEAR)?.toIntOrNull()?:0
+                    val month = dataRow.value(SPENDING_LIMIT_MONTH)?.toIntOrNull()?:0
+                    val limit = dataRow.value(SPENDING_LIMIT_LIMIT)?.toLongOrNull()?:0
+                    AppLogger.d("BackupRepository Parse","SpendingLimit: $year/$month/$limit")
+                    val canRestore = year != 0 && month != 0 && limit != 0L
+                    if (canRestore){
+                        val spendingLimit = SpendingLimit(
+                            year = year,
+                            month = month,
+                            limit = limit
+                        )
+                        spendingLimits.add(spendingLimit)
+                        AppLogger.d("BackRepository Restore", "Spending:${spendingLimits}")
+                    }
+                }
+            }
+        }
+
+        return BackupData(
+            expenses = expenses,
+            types = types,
+            spendingLimits = spendingLimits
+        )
+    }
+
     private fun buildCsv(
         expenses: List<Expense>,
-        types: List<Type>
-    ): Csv{
+        types: List<Type>,
+        spendingLimit: List<SpendingLimit>
+    ): Csv {
         val csv = buildCsv {
             row {
                 value(NO)
@@ -156,7 +297,10 @@ class BackupRepositoryImpl(
                 value(TYPE_IS_SHOW)
                 value(TYPE_CATEGORIES)
                 value(TYPE_OBJ_ID)
-
+                value(SPENDING_LIMIT_ID)
+                value(SPENDING_LIMIT_YEAR)
+                value(SPENDING_LIMIT_MONTH)
+                value(SPENDING_LIMIT_LIMIT)
             }
             expenses.sortedBy { it.timestamp }.forEachIndexed { index, expense ->
                 row {
@@ -192,67 +336,35 @@ class BackupRepositoryImpl(
                     value(type.typeIdHex)
                 }
             }
+            spendingLimit.forEachIndexed { index , limit ->
+                row {
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value("")
+                    value(limit.id.toHexString())
+                    value("${limit.year}")
+                    value("${limit.month}")
+                    value("${limit.limit}")
+                }
+            }
+
         }
         return csv
     }
 
-    private fun parseExpenses(csv: Csv): List<Expense>{
-        return csv.data.map {
-            val datRow = it
-            val typeId = datRow.value(TYPE)?.toLongOrNull() ?: 0
-            val categoryId = datRow.value(CATEGORY)?.toIntOrNull() ?: 0
-            val description = datRow.value(DESCRIPTION) ?: ""
-            val cost = datRow.value(COST)?.toLongOrNull() ?: 0
-            val date = datRow.value(DATE)?.split("&")?.get(0)?.toLongOrNull() ?: 0
-            val isIncomeString = datRow.value(IS_INCOME) ?: "false"
-            val content = datRow.value(CONTENT) ?: ""
-            val idString = datRow.value(OBJ_ID) ?: ""
-            Expense(
-                idString = idString,
-                categoryId = categoryId,
-                typeId = typeId,
-                description = description,
-                isIncome = isIncomeString == "true",
-                content = content,
-                timestamp = date,
-                cost = cost
-            )
-        }
-    }
 
-    private fun parseTypes(csv: Csv): List<Type> {
-        val types = mutableListOf<Type>()
-
-        csv.data.forEach { datRow ->
-            val typeDate = datRow.value(TYPE_DATE)
-            val typeName = datRow.value(TYPE_NAME)?:""
-            val typeColorArgb = datRow.value(TYPE_COLOR_ARGB)?.toIntOrNull()?:0
-            val typeOrder = datRow.value(TYPE_ORDER)
-            val typeIsShow = datRow.value(TYPE_IS_SHOW) == "true"
-            val typeCategory = runCatching {
-                val json = datRow.value(TYPE_CATEGORIES).orEmpty()
-                if (json.isBlank()) emptyList() else Json.decodeFromString<List<Category>>(json)
-            }.getOrElse {
-                throw Exception(BackupError.LocalError.JSON_DECODE_ERROR.name)
-                emptyList()
-            }
-
-            val typeIdHex = datRow.value(TYPE_OBJ_ID)?:""
-            if (typeIdHex.isNotEmpty() && typeOrder != null && typeDate.isNullOrEmpty()){
-                types.add(
-                    Type(
-                        typeIdHex = typeIdHex,
-                        typeIdTimestamp = typeDate?.toLongOrNull()?:1,
-                        name = typeName,
-                        colorArgb = typeColorArgb,
-                        order = typeOrder.toIntOrNull()?:1,
-                        isShow = typeIsShow,
-                        categories = typeCategory
-                    )
-                )
-            }
-        }
-        return types
-    }
-    
 }

@@ -31,7 +31,8 @@ val homeModule = module {
     viewModel{ (expense: Expense) ->
         EditExpenseViewModel(
             expense = get { parametersOf(expense) },
-            repository = get()
+            repository = get(),
+            typeRepository = get()
         )
     }
     viewModelOf(::TypeViewModel)

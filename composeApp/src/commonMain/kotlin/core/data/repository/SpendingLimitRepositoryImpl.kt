@@ -1,11 +1,18 @@
 package core.data.repository
 
+import core.data.model.ExpenseEntity
 import core.data.model.SpendingLimitEntity
-import core.domain.model.SpendingLimit
-import core.domain.repository.SpendingLimitRepository
+import core.data.model.TypeEntity
+import core.domain.mapper.toExpense
+import core.domain.mapper.toExpenseEntity
 import core.domain.mapper.toSpendLimitEntity
 import core.domain.mapper.toSpendingLimit
+import core.domain.mapper.toType
+import core.domain.mapper.toTypeEntity
+import core.domain.model.SpendingLimit
+import core.domain.repository.SpendingLimitRepository
 import io.realm.kotlin.Realm
+import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -77,6 +84,18 @@ class SpendingLimitRepositoryImpl(
             if (queriedSpendingLimitEntity == null) return@write
             findLatest(queriedSpendingLimitEntity)?.let { currentSpendingLimit ->
                 delete(currentSpendingLimit)
+            }
+        }
+    }
+
+    override suspend fun restore(spendingLimits: List<SpendingLimit>) {
+        AppLogger.d("SpendingLimit","spending${spendingLimits}")
+        realm.write {
+            spendingLimits.forEach { entity ->
+                this.copyToRealm(
+                    instance = entity.toSpendLimitEntity(),
+                    updatePolicy = UpdatePolicy.ALL
+                )
             }
         }
     }

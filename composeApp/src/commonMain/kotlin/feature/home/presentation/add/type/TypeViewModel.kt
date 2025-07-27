@@ -10,6 +10,7 @@ import core.domain.model.Category
 import core.domain.model.Type
 import core.domain.repository.ExpenseRepository
 import core.domain.repository.TypeRepository
+import core.domain.util.FileLogger
 import core.presentation.CategoryList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -37,9 +38,6 @@ class TypeViewModel(
     val state = _state.onStart {
         viewModelScope.launch {
             repository.getTypes()
-                .filter {
-                    !isCancel.value
-                }
                 .collectLatest { data ->
 
                     val items = data.map { it.toTypeUi() }
@@ -49,7 +47,8 @@ class TypeViewModel(
                     val itemsNotShowing = data.map { it.toTypeUi() }
                         .filter { !it.isShow }
                         .sortedBy { it.order }
-
+                    AppLogger.d("TypeViewModel","Items Showing ${items}")
+                    AppLogger.d("TypeViewModel","Items itemsNotShowing ${itemsNotShowing}")
                     _state.update {
                         it.copy(
                             items = items,
@@ -68,7 +67,6 @@ class TypeViewModel(
     )
 
     private var currentItems = emptyList<TypeUi>()
-    private var isCancel = MutableStateFlow(false)
 
     fun onEvent(event: TypeEvent){
         when(event){

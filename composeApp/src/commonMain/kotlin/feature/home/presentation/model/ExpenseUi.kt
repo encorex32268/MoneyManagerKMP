@@ -11,5 +11,6 @@ data class ExpenseUi(
     val type: Type? = null,
     val cost: Long = 0,
     val timestamp: Long = 0,
-    val content: String = ""
+    val content: String = "",
+    val colorRGB: Int? = null
 )

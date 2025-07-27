@@ -133,7 +133,7 @@ class HomeViewModel(
                             it.timestamp.toDayString()
                         }
                         .toList()
-
+                    AppLogger.d("HomeViewModel","$dataGroup")
                     _state.update {
                         it.copy(
                             totalExpense = totalExpense,

@@ -10,9 +10,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import app.presentation.AppTheme
+import core.domain.FOOD
 import core.domain.model.Expense
 import core.domain.model.Type
-import core.presentation.CategoryList
 import feature.chart.presentation.chartdetail.DetailScreen
 import feature.chart.presentation.chartdetail.DetailState
 
@@ -23,8 +23,8 @@ fun ChartDetailScreenPreview() {
         listOf(
             "11/21" to (0..10).map {
                 Expense(
-                    categoryId = CategoryList.FOOD.toInt() + it,
-                    typeId = CategoryList.FOOD,
+                    categoryId = FOOD.toInt() + it,
+                    typeId =FOOD,
                     description = "Test - ${it}",
                     cost = (1000 * it).toLong(),
                     content = if (it%2 == 0)"1234" else ""

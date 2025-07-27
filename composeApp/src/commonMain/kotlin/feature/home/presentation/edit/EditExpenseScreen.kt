@@ -202,7 +202,7 @@ fun EditExpenseScreen(
                     ){
                         IconSection(
                             iconId = expenseUi.categoryId,
-                            colorArgb = colorArgb,
+                            colorArgb = expenseUi.colorRGB?:colorArgb,
                             description = expenseUi.description
                         )
                         HorizontalDivider(

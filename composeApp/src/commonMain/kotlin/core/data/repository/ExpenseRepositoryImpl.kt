@@ -6,6 +6,7 @@ import core.domain.mapper.toExpenseEntity
 import core.domain.model.Expense
 import core.domain.repository.ExpenseRepository
 import io.realm.kotlin.Realm
+import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.query.Sort
 import kotlinx.coroutines.flow.Flow
@@ -142,22 +143,16 @@ class ExpenseRepositoryImpl(
     override suspend fun restore(
         expenseList: List<Expense>
     ) {
-        realm.writeBlocking {
+        realm.write {
             val dbExpenses = this.query<ExpenseEntity>().find().map { it.toExpense() }
-            val dbExpensesIdStringList = dbExpenses.map { it.idString }
-            val restoreExpenses = mutableListOf<Expense>()
-
-            expenseList.forEach {
-                if (it.idString !in dbExpensesIdStringList){
-                    restoreExpenses.add(it)
-                }
-            }
+            val dbExpensesIdStringList = dbExpenses.map { it.timestamp.toString() }
+            val restoreExpenses = expenseList.filterNot { it.timestamp.toString() in dbExpensesIdStringList }
             restoreExpenses.forEach {
                 this.copyToRealm(
                     instance = it.toExpenseEntity(),
+                    updatePolicy = UpdatePolicy.ALL
                 )
             }
-
         }
     }
 }

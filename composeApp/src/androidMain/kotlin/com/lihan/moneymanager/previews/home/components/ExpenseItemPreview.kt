@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import app.presentation.AppTheme
+import core.domain.FOOD
+import core.domain.HEALTH
 import core.domain.model.Expense
 import core.presentation.CategoryList
 import feature.home.presentation.components.ExpenseItem
@@ -30,14 +32,14 @@ fun ExpenseItemPreview(){
                 items = listOf(
                     ExpenseUi(
                         categoryId = CategoryList.items.random().id,
-                        typeId = CategoryList.HEALTH,
+                        typeId = HEALTH,
                         description = "Tester",
                         content = "123",
                         cost = 100
                     ),
                     ExpenseUi(
                         categoryId = CategoryList.items.random().id,
-                        typeId = CategoryList.FOOD,
+                        typeId = FOOD,
                         description = "Tester2",
                         content = "",
                         cost = 300

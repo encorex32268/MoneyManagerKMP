@@ -3,6 +3,7 @@ package core.presentation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import core.domain.*
 import core.domain.model.Category
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.food
@@ -202,17 +203,8 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-object CategoryList {
 
-    const val RECENTLY = 9010L
-    const val FOOD = 10010L
-    const val TRAFFIC = 20010L
-    const val LIFE = 30010L
-    const val HEALTH = 40010L
-    const val SPORTS = 50010L
-    const val WEAR = 60010L
-    const val SHOPPING = 70010L
-    const val OTHER = 80010L
+object CategoryList {
 
     val items = kotlin.run {
         (1..31).map {

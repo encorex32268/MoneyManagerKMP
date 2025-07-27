@@ -479,7 +479,7 @@ private fun ItemSection(
         items(
             items = state.types,
             key = {
-                it.typeIdTimestamp
+                it.typeIdHex
             }
         ) {
             if (it.categories.isNotEmpty()) {
