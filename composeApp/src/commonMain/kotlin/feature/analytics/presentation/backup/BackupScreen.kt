@@ -178,15 +178,15 @@ fun BackupScreen(
             backupImage = painterResource(Res.drawable.backup_backup),
             restoreImage = painterResource(Res.drawable.backup_import)
         )
-        BackupCardSection(
-            title = stringResource(Res.string.backup_cloud),
-            onEvent = {
-                //ios not open yet
-                onEvent(it)
-            },
-            backupImage = painterResource(Res.drawable.backup_cloud),
-            restoreImage = painterResource(Res.drawable.backup_cloud_import)
-        )
+//        BackupCardSection(
+//            title = stringResource(Res.string.backup_cloud),
+//            onEvent = {
+//                //ios not open yet
+//                onEvent(it)
+//            },
+//            backupImage = painterResource(Res.drawable.backup_cloud),
+//            restoreImage = painterResource(Res.drawable.backup_cloud_import)
+//        )
     }
 
 }

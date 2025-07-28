@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import core.ui.bglightColor
 import core.ui.borderColor
@@ -27,7 +26,6 @@ import feature.analytics.presentation.backup.BackupEvent
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.backup_backup
 import moneymanagerkmp.composeapp.generated.resources.backup_import
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -68,7 +66,9 @@ fun BackupCardSection(
                     .clickable(
                         onClick = {
                             onEvent(BackupEvent.OnBackup)
-                        }
+                        },
+                        interactionSource = null,
+                        indication = null
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -86,9 +86,13 @@ fun BackupCardSection(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .clickable {
-                        onEvent(BackupEvent.OnImport(null))
-                    },
+                    .clickable(
+                        onClick = {
+                            onEvent(BackupEvent.OnImport(null))
+                        },
+                        indication = null,
+                        interactionSource = null
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ){
