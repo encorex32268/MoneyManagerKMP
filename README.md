@@ -1,5 +1,5 @@
 
-# Kotlin Multiplatform App - MoneyManager 1.5.0
+# Kotlin Multiplatform App - Qash 1.5.0
 
 ## 📌 Introduction
 
@@ -8,8 +8,8 @@
 This is my MoneyManagerApp.
 
 ## 📱 App Store Link
-- [AppStore - MoneyManager](https://apps.apple.com/us/app/moneymanager-expensetracker/id6503697767) iOS App
-- [GooglePlayStore - MoneyManager](https://play.google.com/store/apps/details?id=com.lihan.moneymanager) Android App
+- [AppStore - Qash](https://apps.apple.com/us/app/moneymanager-expensetracker/id6503697767) iOS App
+- [GooglePlayStore - Qash](https://play.google.com/store/apps/details?id=com.lihan.moneymanager) Android App
 
 ## 🏗️ Tech Stack
 
