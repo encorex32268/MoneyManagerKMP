@@ -44,14 +44,25 @@ This is my MoneyManagerApp.
 ### Android Screenshots
 <table>
 <tr>
-    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/screenshotlight1.png" width="300"></td>
-    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/screenshotlight2.png" width="300"></td>
-    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/screenshotlight3.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/LScreenshot_20250709_233310.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/LScreenshot_20250709_233323.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/LScreenshot_20250709_233335.png" width="300"></td>
   </tr>
 <tr>
-    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/screenshotdark1.png" width="300"></td>
-    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/screenshotdark2.png" width="300"></td>
-    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/screenshotdark3.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/LScreenshot_20250709_233303.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/LScreenshot_20250709_233253.png" width="300"></td>
+  </tr>
+</table>
+
+<table>
+<tr>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/Screenshot_20250709_233146.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/Screenshot_20250709_233217.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/Screenshot_20250709_233233.png" width="300"></td>
+  </tr>
+<tr>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/Screenshot_20250709_233159.png" width="300"></td>
+    <td><img src="https://github.com/encorex32268/MoneyManagerKMP/blob/master/screenshot_android/Screenshot_20250709_233246.png" width="300"></td>
   </tr>
 </table>
 
