@@ -1,5 +1,5 @@
 
-# Kotlin Multiplatform App - MoneyManager 1.3.8
+# Kotlin Multiplatform App - MoneyManager 1.5.0
 
 ## 📌 Introduction
 
