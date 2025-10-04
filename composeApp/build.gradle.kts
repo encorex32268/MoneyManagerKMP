@@ -103,6 +103,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 25
         versionName = "1.5.0"
+        multiDexEnabled = true
     }
     packaging {
         resources {

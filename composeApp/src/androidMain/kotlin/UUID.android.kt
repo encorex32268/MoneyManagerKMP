@@ -1,8 +1,7 @@
-import java.util.UUID
 
 actual class UUID{
 
-    val uuid = UUID.randomUUID()
+    val uuid = java.util.UUID.randomUUID()
 
     actual fun generateUUID(): String {
         return uuid.toString()

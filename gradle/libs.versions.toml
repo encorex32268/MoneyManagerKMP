@@ -1,5 +1,5 @@
 [versions]
-agp = "8.6.0"
+agp = "8.11.2"
 android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -9,7 +9,7 @@ compose-plugin = "1.7.0"
 junit = "4.13.2"
 kotlin = "2.0.10"
 kotlinxCoroutinesCore = "1.7.0"
-libraryBase = "2.1.0"
+libraryBase = "2.3.0"
 readmkotlin = "2.1.0"
 kotlinxSerializationJson = "1.6.1"
 
