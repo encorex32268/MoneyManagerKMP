@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -170,6 +172,12 @@ private fun HomeScreenNaviBottom(
     onExpenseLimitClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ){
+    val listState = rememberLazyListState()
+    LaunchedEffect(state.items.size){
+        if (state.items.isNotEmpty()){
+            listState.scrollToItem(0)
+        }
+    }
     Column(
         modifier =  modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -194,7 +202,8 @@ private fun HomeScreenNaviBottom(
                 .weight(1f)
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+            state = listState
         ){
             items(
                 items = state.items,
@@ -230,6 +239,13 @@ private fun HomeScreenNaviRail(
     onExpenseLimitClick: () -> Unit = {}
 
 ){
+    val listState = rememberLazyListState()
+    LaunchedEffect(state.items.size){
+        if (state.items.isNotEmpty()){
+            listState.scrollToItem(0)
+        }
+    }
+
     Row(
         modifier = Modifier.fillMaxWidth()
     ){
@@ -248,7 +264,8 @@ private fun HomeScreenNaviRail(
                 .fillMaxWidth()
                 .weight(1f)
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            state = listState
         ){
             items(
                 items = state.items,
