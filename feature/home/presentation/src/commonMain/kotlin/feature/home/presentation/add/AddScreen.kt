@@ -1,5 +1,5 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class,
-    ExperimentalLayoutApi::class, KoinExperimentalAPI::class, ExperimentalMaterial3Api::class
+    KoinExperimentalAPI::class
 )
 
 package feature.home.presentation.add
@@ -10,18 +10,17 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.TopAppBar
@@ -427,118 +426,108 @@ private fun ItemSection(
     modifier: Modifier = Modifier,
     state: AddState,
     onEvent: (AddEvent) -> Unit,
-    scope: CoroutineScope?=null,
+    scope: CoroutineScope? = null,
     bottomSheetScaffoldState: BottomSheetScaffoldState? = null,
     maxItemsInEachRow: Int = 4
 ) {
-
-    LazyColumn(
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(maxItemsInEachRow),
         modifier = modifier
     ) {
-        item {
-            if (state.recentlyItems?.categories?.isNotEmpty() == true) {
+        val recentCategories = state.recentlyItems?.categories
+        if (!recentCategories.isNullOrEmpty()) {
+            item(
+                key = "recently_header",
+                span = { GridItemSpan(maxLineSpan) },
+                contentType = "header"
+            ) {
                 Text(
                     text = stringResource(Res.string.recently),
                     style = MaterialTheme.typography.titleSmall.copy(
                         fontWeight = FontWeight.Bold
                     )
                 )
-                FlowRow(
+            }
+            itemsIndexed(
+                items = recentCategories,
+                key = { index, categoryUi -> "recent_${index}_${categoryUi.id}" },
+                contentType = { _, _ -> "category_item" }
+            ) { _, categoryUi ->
+                val categoryNameRes =
+                    CategoryList.getCategoryDescriptionById(categoryUi.id.toLong())
+                CategoryItem(
                     modifier = Modifier.fillMaxWidth(),
-                    maxItemsInEachRow = maxItemsInEachRow,
-                ) {
-                    val categories = state.recentlyItems.categories
-                    categories.forEach { categoryUi ->
-                        val categoryNameRes =
-                            CategoryList.getCategoryDescriptionById(categoryUi.id.toLong())
-                        CategoryItem(
-                            modifier = Modifier.weight(1f),
-                            isClicked = categoryUi.isClick,
-                            categoryUi = categoryUi,
-                            onItemClick = {
-                                onEvent(
-                                    AddEvent.OnItemSelected(
-                                        categoryUi = categoryUi,
-                                        description = categoryUi.name.ifEmpty { categoryNameRes },
-                                        isRecently = true
-                                    )
-                                )
-                                scope?.launch {
-                                    bottomSheetScaffoldState?.bottomSheetState?.expand()
-                                }
-                            }
+                    isClicked = categoryUi.isClick,
+                    categoryUi = categoryUi,
+                    onItemClick = {
+                        onEvent(
+                            AddEvent.OnItemSelected(
+                                categoryUi = categoryUi,
+                                description = categoryUi.name.ifEmpty { categoryNameRes },
+                                isRecently = true
+                            )
                         )
+                        scope?.launch {
+                            bottomSheetScaffoldState?.bottomSheetState?.expand()
+                        }
                     }
-                    repeat(maxItemsInEachRow - categories.size % maxItemsInEachRow) {
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
+                )
             }
         }
 
-        items(
-            items = state.types,
-            key = {
-                it.typeIdHex
-            }
-        ) {
-            if (it.categories.isNotEmpty()) {
-                Column(
-                    modifier = Modifier.fillMaxWidth()
+        state.types.forEach { typeUi ->
+            if (typeUi.categories.isNotEmpty()) {
+                item(
+                    key = "header_${typeUi.typeIdHex}",
+                    span = { GridItemSpan(maxLineSpan) },
+                    contentType = "header"
                 ) {
-                    Spacer(modifier = Modifier.height(8.dp))
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Box(
-                            modifier = Modifier.size(24.dp).background(
-                                color = Color(it.colorArgb),
-                                shape = RoundedCornerShape(8.dp)
-                            )
+                            modifier = Modifier
+                                .size(24.dp)
+                                .background(
+                                    color = Color(typeUi.colorArgb),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
                         )
                         Spacer(Modifier.width(4.dp))
                         Text(
-                            text = it.name,
+                            text = typeUi.name,
                             style = MaterialTheme.typography.titleSmall.copy(
                                 fontWeight = FontWeight.Bold
                             )
                         )
-
                     }
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        maxItemsInEachRow = maxItemsInEachRow,
-                    ) {
-                        it.categories.forEach { categoryUi ->
-                            CategoryItem(
-                                modifier = Modifier.weight(1f),
-                                isClicked = categoryUi.isClick,
-                                categoryUi = categoryUi,
-                                onItemClick = {
-                                    onEvent(
-                                        AddEvent.OnItemSelected(
-                                            categoryUi = categoryUi,
-                                            description = categoryUi.name
-                                        )
-                                    )
-                                    scope?.launch {
-                                        bottomSheetScaffoldState?.bottomSheetState?.expand()
-                                    }
-                                }
-                            )
-
-                        }
-                        repeat(maxItemsInEachRow - it.categories.size % maxItemsInEachRow) {
-                            Spacer(modifier = Modifier.weight(1f))
-                        }
-
-                    }
-
                 }
-
+                itemsIndexed(
+                    items = typeUi.categories,
+                    key = { index, categoryUi -> "cat_${typeUi.typeIdHex}_${index}_${categoryUi.id}" },
+                    contentType = { _, _ -> "category_item" }
+                ) { _, categoryUi ->
+                    CategoryItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        isClicked = categoryUi.isClick,
+                        categoryUi = categoryUi,
+                        onItemClick = {
+                            onEvent(
+                                AddEvent.OnItemSelected(
+                                    categoryUi = categoryUi,
+                                    description = categoryUi.name
+                                )
+                            )
+                            scope?.launch {
+                                bottomSheetScaffoldState?.bottomSheetState?.expand()
+                            }
+                        }
+                    )
+                }
             }
         }
     }
-
 }
