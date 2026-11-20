@@ -36,4 +36,18 @@ class DefaultKeySettings(
             defaultValue = false
         )
     }
+
+    override fun setRealmMigrated(isMigrated: Boolean) {
+        settings.set(
+            key = KeySettings.IS_REALM_MIGRATED,
+            value = isMigrated
+        )
+    }
+
+    override fun isRealmMigrated(): Boolean {
+        return settings.get(
+            key = KeySettings.IS_REALM_MIGRATED,
+            defaultValue = false
+        )
+    }
 }

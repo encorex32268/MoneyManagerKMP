@@ -3,23 +3,11 @@ package core.domain.mapper
 import core.data.model.ExpenseEntity
 import core.domain.model.Expense
 
-fun Expense.toExpenseEntity() : ExpenseEntity {
-
-    return ExpenseEntity(
-        id = id,
-        typeId = typeId,
-        categoryId = categoryId,
-        description = description,
-        isIncome = isIncome,
-        cost = cost,
-        timestamp = timestamp,
-        content = content
-    )
-}
-
-fun ExpenseEntity.toExpense() : Expense {
+fun ExpenseEntity.toExpense(): Expense {
+    val hexId = id.toHexString()
     return Expense(
-        id = id,
+        id = hexId,
+        idString = hexId,
         typeId = typeId,
         categoryId = categoryId,
         description = description,

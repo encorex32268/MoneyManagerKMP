@@ -5,16 +5,7 @@ import core.domain.model.SpendingLimit
 
 fun SpendingLimitEntity.toSpendingLimit(): SpendingLimit {
     return SpendingLimit(
-        id = id,
-        year = year,
-        month = month,
-        limit = limit
-    )
-}
-
-fun SpendingLimit.toSpendLimitEntity(): SpendingLimitEntity {
-    return SpendingLimitEntity(
-        id = id,
+        id = id.toHexString(),
         year = year,
         month = month,
         limit = limit

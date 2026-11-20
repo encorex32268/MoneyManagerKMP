@@ -1,10 +1,10 @@
 package feature.home.presentation.model
 
+import UUID
 import core.domain.model.Type
-import org.mongodb.kbson.ObjectId
 
 data class ExpenseUi(
-    val id: ObjectId = ObjectId(),
+    val id: String = UUID().generateUUID(),
     val categoryId: Int,
     val typeId: Long,
     val description: String,

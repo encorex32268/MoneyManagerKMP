@@ -9,6 +9,8 @@ dependencies {
     compileOnly(libs.jetbrains.compose.gradlePlugin)
     compileOnly(libs.buildkonfig.gradlePlugin)
     compileOnly(libs.buildkonfig.compiler)
+    compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.androidx.room.gradle.plugin)
 }
 
 gradlePlugin {
@@ -40,6 +42,10 @@ gradlePlugin {
         register("buildkonfig") {
             id = "com.lihan.moneymanager.convention.buildkonfig"
             implementationClass = "BuildKonfigConventionPlugin"
+        }
+        register("room") {
+            id = "com.lihan.moneymanager.convention.room"
+            implementationClass = "RoomConventionPlugin"
         }
     }
 }

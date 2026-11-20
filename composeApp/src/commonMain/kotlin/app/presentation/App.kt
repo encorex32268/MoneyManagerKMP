@@ -64,6 +64,9 @@ fun App(
             LaunchedEffect(appState){
                 onModeChanged(appState.isDarkMode)
             }
+            if (!appState.isMigrationReady) {
+                return@AppTheme
+            }
             val navController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination?.route

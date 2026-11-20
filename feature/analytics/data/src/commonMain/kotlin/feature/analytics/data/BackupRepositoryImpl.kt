@@ -355,7 +355,7 @@ class BackupRepositoryImpl(
                     value("")
                     value("")
                     value("")
-                    value(limit.id.toHexString())
+                    value(limit.id)
                     value("${limit.year}")
                     value("${limit.month}")
                     value("${limit.limit}")

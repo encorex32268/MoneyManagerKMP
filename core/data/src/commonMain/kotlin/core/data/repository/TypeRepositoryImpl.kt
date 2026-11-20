@@ -1,128 +1,68 @@
 package core.data.repository
 
-import core.data.model.TypeEntity
+import AppLogger
+import core.data.database.dao.TypeDao
+import core.data.database.mapper.toRoomTypeAndCategories
+import core.data.database.mapper.toType
 import core.domain.model.Type
 import core.domain.repository.TypeRepository
-import core.domain.mapper.toCategoryEntity
-import core.domain.mapper.toType
-import core.domain.mapper.toTypeEntity
-import io.realm.kotlin.Realm
-import io.realm.kotlin.UpdatePolicy
-import io.realm.kotlin.ext.query
-import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class TypeRepositoryImpl(
-    private val realm: Realm
-): TypeRepository {
+    private val typeDao: TypeDao
+) : TypeRepository {
+
     override fun getTypes(): Flow<List<Type>> {
-        return realm.query(
-            clazz = TypeEntity::class
-        ).find().asFlow().map {
-            it.list.toList().map { typeEntity ->
-                typeEntity.toType()
-            }
+        return typeDao.getTypes().map { list ->
+            list.map { it.toType() }
         }
     }
 
     override suspend fun update(type: Type) {
-        realm.write {
-            try {
-                val queriedTask = query<TypeEntity>(
-                    query = "id == $0",type.id
-                )
-                    .find()
-                    .first()
-                queriedTask.apply {
-                    name = type.name
-                    colorArgb = type.colorArgb
-                    order = type.order
-                    isShow = type.isShow
-                    categories = type.categories.map { it.toCategoryEntity() }.toRealmList()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                println(e)
-            }
-        }
+        val (typeEntity, categoryEntities) = type.toRoomTypeAndCategories()
+        typeDao.upsertTypeWithCategories(typeEntity, categoryEntities)
     }
 
     override suspend fun insert(type: Type) {
-        realm.write {
-            copyToRealm(type.toTypeEntity())
-        }
+        val (typeEntity, categoryEntities) = type.toRoomTypeAndCategories()
+        typeDao.upsertTypeWithCategories(typeEntity, categoryEntities)
     }
 
     override suspend fun delete(type: Type) {
-        realm.write {
-            val queriedTypeEntity = query<TypeEntity>(
-                query = "id == $0", type.id
-            )
-                .first()
-                .find()
-            if (queriedTypeEntity == null) return@write
-            findLatest(queriedTypeEntity)?.let { currentType ->
-                delete(currentType)
-            }
-        }
+        typeDao.deleteTypeById(type.id)
     }
 
     override suspend fun updateAllSortedTypes(types: List<Type>) {
-        realm.write{
-            types.map { type ->
-                val queriedTask = query<TypeEntity>(
-                    query = "id == $0",type.id
-                )
-                    .find()
-                    .first()
-                queriedTask.apply {
-                    name = type.name
-                    colorArgb = type.colorArgb
-                    order = type.order
-                    isShow = type.isShow
-                    categories = type.categories.map { it.toCategoryEntity() }.toRealmList()
-                }
-            }
-        }
+        typeDao.upsertAllTypesWithCategories(
+            types.map { it.toRoomTypeAndCategories() }
+        )
     }
 
     override suspend fun restore(types: List<Type>) {
-        realm.write{
-            val dbTypes = this.query<TypeEntity>().find().map { it.toType() }
-            val restoreTypes = types
-            val restoreTimestamp = restoreTypes.map { it.typeIdTimestamp }
-            val dbTimestamp = dbTypes.map { it.typeIdTimestamp }
+        val dbTypes = typeDao.getTypesOnce().map { it.toType() }
+        val restoreTimestamps = types.map { it.typeIdTimestamp }.toSet()
+        val dbTimestamps = dbTypes.map { it.typeIdTimestamp }.toSet()
 
-            val existsTypes = dbTypes.map { type ->
-                val dbTypeTimestamp = type.typeIdTimestamp
-                if (dbTypeTimestamp in restoreTimestamp){
-                    val restoreType = types.find { it.typeIdTimestamp == dbTypeTimestamp }
-                    AppLogger.d("TypeRepository Restore" , "RestoreType: $restoreType")
-                    val dbTypeCategories = type.categories
-                    val restoreCategories = restoreType?.categories?:emptyList()
-
-                    type.copy(
-                        categories = (dbTypeCategories + restoreCategories).distinct()
-                    )
-                }else{
-                    type
-                }
-            }
-
-            val notExistsTypes = restoreTypes.filterNot { it.typeIdTimestamp in dbTimestamp }
-
-            val lastTypes = existsTypes + notExistsTypes
-
-            lastTypes.forEach {
-                this.copyToRealm(
-                    instance = it.toTypeEntity(),
-                    updatePolicy = UpdatePolicy.ALL
+        val existsTypes = dbTypes.map { type ->
+            if (type.typeIdTimestamp in restoreTimestamps) {
+                val restoreType = types.find { it.typeIdTimestamp == type.typeIdTimestamp }
+                AppLogger.d("TypeRepository Restore", "RestoreType: $restoreType")
+                val dbTypeCategories = type.categories
+                val restoreCategories = restoreType?.categories ?: emptyList()
+                type.copy(
+                    categories = (dbTypeCategories + restoreCategories).distinct()
                 )
+            } else {
+                type
             }
-
         }
+
+        val notExistsTypes = types.filterNot { it.typeIdTimestamp in dbTimestamps }
+        val finalTypes = existsTypes + notExistsTypes
+
+        typeDao.upsertAllTypesWithCategories(
+            finalTypes.map { it.toRoomTypeAndCategories() }
+        )
     }
-
-
 }

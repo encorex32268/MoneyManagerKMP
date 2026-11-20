@@ -18,7 +18,7 @@ Each module SHALL obey clean architecture dependency rules: `domain` modules dep
 
 #### Scenario: Isolating domain from data and UI
 - **WHEN** `:core:domain` or any `:feature:*:domain` module is compiled
-- **THEN** it has zero dependencies on Realm entities, Compose UI, or presentation models
+- **THEN** it has zero dependencies on database libraries (`kbson`, Realm, Room), Compose UI, or presentation models, and uses pure Kotlin `String` IDs
 
 #### Scenario: Preventing cross-feature coupling
 - **WHEN** `:feature:home:*`, `:feature:chart:*`, or `:feature:analytics:*` modules are compiled
@@ -32,8 +32,8 @@ All modules containing Compose UI (`:core:designsystem`, `:core:presentation`, `
 - **THEN** it compiles and renders the localized resource on both Android and iOS at runtime
 
 ### Requirement: Realm persistence compatibility
-The `:core:data` module SHALL retain the existing MongoDB Realm schema entities, `RealmFactory`, and `RealmMigration` so existing local user data remains readable after restructuring.
+The `:core:data` module SHALL retain the existing MongoDB Realm schema entities, `RealmFactory`, and `RealmMigration` in a read-only migration capacity for this transition release so existing local user data is automatically migrated to Room on startup.
 
 #### Scenario: Opening existing database after update
-- **WHEN** the restructured app launches on a device with existing Realm data
-- **THEN** expenses, categories, types, and spending limits load without data loss or schema mismatch
+- **WHEN** the updated app launches on a device with existing Realm data
+- **THEN** expenses, categories, types, and spending limits are migrated to Room without data loss or schema mismatch

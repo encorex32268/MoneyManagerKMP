@@ -1,8 +1,7 @@
 package core.domain.model
 
+import UUID
 import kotlinx.serialization.Serializable
-import org.mongodb.kbson.BsonObjectId
-import org.mongodb.kbson.ObjectId
 
 /**
  * year | month | limit
@@ -12,9 +11,8 @@ import org.mongodb.kbson.ObjectId
  */
 @Serializable
 data class SpendingLimit(
-    val id: ObjectId = BsonObjectId(),
+    val id: String = UUID().generateUUID(),
     val year: Int,
-    val month:Int,
+    val month: Int,
     val limit: Long
 )
-

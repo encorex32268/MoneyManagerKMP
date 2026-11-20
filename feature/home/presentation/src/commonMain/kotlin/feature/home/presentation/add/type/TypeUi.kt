@@ -1,12 +1,11 @@
 package feature.home.presentation.add.type
 
+import UUID
 import core.presentation.model.CategoryUi
-import org.mongodb.kbson.BsonObjectId
-import org.mongodb.kbson.ObjectId
 
 data class TypeUi(
-    val id: ObjectId = BsonObjectId(),
-    val typeIdHex: String = id.toHexString(),
+    val id: String = UUID().generateUUID(),
+    val typeIdHex: String = id,
     val typeIdTimestamp: Long,
     val name: String,
     val colorArgb: Int,

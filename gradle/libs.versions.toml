@@ -13,6 +13,9 @@ compose-plugin = "1.7.0"
 
 junit = "4.13.2"
 kotlin = "2.0.10"
+ksp = "2.0.10-1.0.24"
+room = "2.7.0-alpha11"
+sqlite = "2.5.0-alpha11"
 kotlinxCoroutinesCore = "1.7.0"
 libraryBase = "2.3.0"
 readmkotlin = "2.1.0"
@@ -60,6 +63,13 @@ compose-gradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compile
 jetbrains-compose-gradlePlugin = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "compose-plugin" }
 buildkonfig-gradlePlugin = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-gradle-plugin", version.ref = "konfig" }
 buildkonfig-compiler = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-compiler", version.ref = "konfig" }
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+androidx-room-gradle-plugin = { module = "androidx.room:room-gradle-plugin", version.ref = "room" }
+
+# Room & SQLite
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
 # Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
@@ -77,6 +87,7 @@ compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", vers
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesCore" }
 library-base = { module = "io.realm.kotlin:library-base", version.ref = "libraryBase" }
 library-sync = { module = "io.realm.kotlin:library-sync", version.ref = "libraryBase" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
@@ -120,6 +131,8 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 konfigplugin = { id = "com.codingfeline.buildkonfig", version.ref = "konfig" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "room" }
 
 # Convention plugins
 convention-kmp-library = { id = "com.lihan.moneymanager.convention.kmp.library", version = "unspecified" }
@@ -129,3 +142,4 @@ convention-cmp-application = { id = "com.lihan.moneymanager.convention.cmp.appli
 convention-android-application = { id = "com.lihan.moneymanager.convention.android.application", version = "unspecified" }
 convention-android-application-compose = { id = "com.lihan.moneymanager.convention.android.application.compose", version = "unspecified" }
 convention-buildkonfig = { id = "com.lihan.moneymanager.convention.buildkonfig", version = "unspecified" }
+convention-room = { id = "com.lihan.moneymanager.convention.room", version = "unspecified" }
