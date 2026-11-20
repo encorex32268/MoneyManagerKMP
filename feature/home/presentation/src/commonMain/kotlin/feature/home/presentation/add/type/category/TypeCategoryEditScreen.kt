@@ -100,7 +100,7 @@ fun TypeCategoryEditScreenRoot(
     ){
         TypeCategoryEditScreen(
             state = state,
-            onEvent = viewModel::onEvent,
+            onEvent = viewModel::onAction,
             navigationLayoutType = navigationLayoutType
         )
 

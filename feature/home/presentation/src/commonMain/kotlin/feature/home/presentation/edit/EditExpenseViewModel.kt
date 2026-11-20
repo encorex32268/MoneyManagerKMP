@@ -45,7 +45,7 @@ class EditExpenseViewModel(
 
     private var currentText = expense.content
 
-    fun onEvent(event: EditExpenseEvent){
+    fun onAction(event: EditExpenseEvent){
         when(event){
             EditExpenseEvent.OnDelete -> onDelete()
             is EditExpenseEvent.OnContentChange -> onContentChange(event.text)

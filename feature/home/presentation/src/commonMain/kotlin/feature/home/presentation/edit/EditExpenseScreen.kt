@@ -117,7 +117,7 @@ fun EditExpenseScreenRoot(
     }
     EditExpenseScreen(
         state = state,
-        onEvent = viewModel::onEvent,
+        onEvent = viewModel::onAction,
     )
 }
 

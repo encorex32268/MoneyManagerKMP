@@ -74,7 +74,7 @@ fun HomeScreenRoot(
                 }
                 else -> Unit
             }
-            viewModel.onEvent(event)
+            viewModel.onAction(event)
         },
         navigationLayoutType = navigationLayoutType,
     )
@@ -84,7 +84,7 @@ fun HomeScreenRoot(
                 isShowExpenseLimitDialog = false
             },
             onConfirmButtonClick = {
-                viewModel.onEvent(
+                viewModel.onAction(
                     HomeEvent.OnSpendingLimitChange(it)
                 )
             }

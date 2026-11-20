@@ -34,7 +34,7 @@ class TypeCategoryEditViewModel(
     private val currentTypeUi = typeUi
 
 
-    fun onEvent(event: TypeCategoryEditEvent){
+    fun onAction(event: TypeCategoryEditEvent){
         when(event){
             TypeCategoryEditEvent.OnBackClick -> {
                 viewModelScope.launch {
@@ -42,21 +42,19 @@ class TypeCategoryEditViewModel(
                     val stateValueStringJson = json.encodeToString(state.value.typeUi.toType())
                     val currentValueStringJson = json.encodeToString(currentTypeUi.toType())
 
-                    if (stateValueStringJson != currentValueStringJson){
-                        viewModelScope.launch {
-                            val updateData = state.value.typeUi.copy(
-                                categories = state.value.typeUi.categories.mapIndexed { index, categoryUi ->
-                                    categoryUi.copy(
-                                        order = index,
-                                        typeId = state.value.typeUi.typeIdTimestamp,
-                                        colorArgb = state.value.typeUi.colorArgb
-                                    )
-                                },
-                            )
-                            repository.update(
-                                type =updateData.toType()
-                            )
-                        }
+                    if (stateValueStringJson != currentValueStringJson) {
+                        val updateData = state.value.typeUi.copy(
+                            categories = state.value.typeUi.categories.mapIndexed { index, categoryUi ->
+                                categoryUi.copy(
+                                    order = index,
+                                    typeId = state.value.typeUi.typeIdTimestamp,
+                                    colorArgb = state.value.typeUi.colorArgb
+                                )
+                            },
+                        )
+                        repository.update(
+                            type = updateData.toType()
+                        )
                     }
                     _uiEvent.send(TypeCategoryEditUiEvent.OnBack)
                 }

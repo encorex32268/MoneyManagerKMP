@@ -63,7 +63,7 @@ class AddViewModel(
             _state.value
         )
 
-    fun onEvent(event: AddEvent) {
+    fun onAction(event: AddEvent) {
         when (event) {
             AddEvent.OnBack -> Unit
             AddEvent.OnGoToCategoryEditClick -> Unit

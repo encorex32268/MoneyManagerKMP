@@ -1,145 +1,102 @@
 package feature.home.presentation.add.type
 
-import androidx.compose.ui.graphics.toArgb
+import AppLogger
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import core.domain.KeySettings
 import core.domain.mapper.toType
 import core.domain.mapper.toTypeUi
-import core.domain.model.Category
-import core.domain.model.Type
 import core.domain.repository.ExpenseRepository
 import core.domain.repository.TypeRepository
-import core.domain.util.FileLogger
-import core.presentation.CategoryList
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TypeViewModel(
     private val repository: TypeRepository,
     private val expenseRepository: ExpenseRepository
-): ViewModel() {
+) : ViewModel() {
 
-    private val _state = MutableStateFlow(TypesState())
-    val state = _state.onStart {
-        viewModelScope.launch {
-            repository.getTypes()
-                .collectLatest { data ->
+    private val reorderedItems = MutableStateFlow<List<TypeUi>?>(null)
 
-                    val items = data.map { it.toTypeUi() }
-                        .filter { it.isShow }
-                        .sortedBy { it.order }
-
-                    val itemsNotShowing = data.map { it.toTypeUi() }
-                        .filter { !it.isShow }
-                        .sortedBy { it.order }
-                    AppLogger.d("TypeViewModel","Items Showing ${items}")
-                    AppLogger.d("TypeViewModel","Items itemsNotShowing ${itemsNotShowing}")
-                    _state.update {
-                        it.copy(
-                            items = items,
-                            itemsNotShowing = itemsNotShowing
-                        )
-                    }
-                    if (currentItems.isEmpty()){
-                        currentItems = items
-                    }
-                }
-        }
+    val state: StateFlow<TypesState> = combine(
+        repository.getTypes(),
+        reorderedItems
+    ) { data, draggedItems ->
+        val mapped = data.map { it.toTypeUi() }
+        val items = draggedItems ?: mapped.filter { it.isShow }.sortedBy { it.order }
+        val itemsNotShowing = mapped.filter { !it.isShow }.sortedBy { it.order }
+        AppLogger.d("TypeViewModel", "Items Showing $items")
+        AppLogger.d("TypeViewModel", "Items itemsNotShowing $itemsNotShowing")
+        TypesState(
+            items = items,
+            itemsNotShowing = itemsNotShowing
+        )
     }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000L),
-        _state.value
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = TypesState()
     )
 
-    private var currentItems = emptyList<TypeUi>()
-
-    fun onEvent(event: TypeEvent){
-        when(event){
-            is TypeEvent.OnItemMove -> {
-                var data = state.value.items
-                data = data.toMutableList().apply {
-                    add(event.toItemPosition.index, removeAt(event.fromItemPosition.index))
-                }
-                _state.update {
-                    it.copy(
-                        items = data
-                    )
-                }
-            }
-            is TypeEvent.OnNew         -> {
-                val typeUi = event.type
-                if (typeUi.name.isEmpty() || typeUi.colorArgb ==0) return
-                viewModelScope.launch {
-                    repository.insert(
-                        type = typeUi.toType()
-                    )
-                }
-            }
-            is TypeEvent.OnHide        -> {
-                viewModelScope.launch {
-                    repository.update(
-                        type = event.type.copy(
-                            isShow = false
-                        ).toType()
-                    )
-                }
-            }
-            is TypeEvent.OnDelete      -> {
-                viewModelScope.launch {
-                    val deleteTypeJob = this.launch {
-                        repository.delete(event.type.toType())
-                    }
-
-                    val deleteExpenseJob = this.launch {
-                        expenseRepository.getExpenseByTypeId(event.type.typeIdTimestamp)
-                            .collectLatest { items ->
-                                items.forEach {
-                                    expenseRepository.delete(it)
-                                }
-                                this.cancel()
-                            }
-                    }
-                    deleteTypeJob.join()
-                    deleteExpenseJob.join()
-                }
-
-            }
-
-            is TypeEvent.OnShow        -> {
-                viewModelScope.launch {
-                    repository.update(
-                        type = event.type.copy(
-                            isShow = true
-                        ).toType()
-                    )
-                }
-            }
-
-            is TypeEvent.OnDragEnd     -> {
-                viewModelScope.launch {
-                    repository.updateAllSortedTypes(
-                        state.value.items.mapIndexed { index, typeUi ->
-                            typeUi.copy(order = index).toType()
-                        }
-                    )
-                }
-            }
+    fun onAction(event: TypeEvent) {
+        when (event) {
+            is TypeEvent.OnItemMove -> onItemMove(event)
+            is TypeEvent.OnNew -> onNew(event.type)
+            is TypeEvent.OnHide -> onHide(event.type)
+            is TypeEvent.OnDelete -> onDelete(event.type)
+            is TypeEvent.OnShow -> onShow(event.type)
+            is TypeEvent.OnDragEnd -> onDragEnd()
             else -> Unit
+        }
+    }
+
+    private fun onItemMove(event: TypeEvent.OnItemMove) {
+        val current = state.value.items.toMutableList()
+        current.add(event.toItemPosition.index, current.removeAt(event.fromItemPosition.index))
+        reorderedItems.value = current
+    }
+
+    private fun onNew(typeUi: TypeUi) {
+        if (typeUi.name.isEmpty() || typeUi.colorArgb == 0) return
+        viewModelScope.launch {
+            repository.insert(type = typeUi.toType())
+        }
+    }
+
+    private fun onHide(typeUi: TypeUi) {
+        viewModelScope.launch {
+            repository.update(type = typeUi.copy(isShow = false).toType())
+        }
+    }
+
+    private fun onDelete(typeUi: TypeUi) {
+        viewModelScope.launch {
+            repository.delete(typeUi.toType())
+            val expenses = expenseRepository
+                .getExpenseByTypeId(typeUi.typeIdTimestamp)
+                .first()
+            expenses.forEach { expenseRepository.delete(it) }
+        }
+    }
+
+    private fun onShow(typeUi: TypeUi) {
+        viewModelScope.launch {
+            repository.update(type = typeUi.copy(isShow = true).toType())
+        }
+    }
+
+    private fun onDragEnd() {
+        val itemsToSave = state.value.items
+        viewModelScope.launch {
+            repository.updateAllSortedTypes(
+                itemsToSave.mapIndexed { index, typeUi ->
+                    typeUi.copy(order = index).toType()
+                }
+            )
+            reorderedItems.value = null
         }
     }
 }

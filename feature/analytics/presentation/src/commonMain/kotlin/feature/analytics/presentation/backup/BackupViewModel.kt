@@ -38,7 +38,7 @@ class BackupViewModel(
     val uiEvent = _uiEvent.receiveAsFlow()
 
 
-    fun onEvent(event: BackupEvent) {
+    fun onAction(event: BackupEvent) {
         when (event) {
             BackupEvent.OnBackup -> backup()
             is BackupEvent.OnImport -> {

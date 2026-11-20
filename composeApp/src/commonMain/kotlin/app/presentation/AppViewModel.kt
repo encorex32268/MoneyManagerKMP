@@ -35,7 +35,7 @@ class AppViewModel(
             _state.value
         )
 
-    fun onEvent(event: AppEvent) {
+    fun onAction(event: AppEvent) {
         when (event) {
             AppEvent.DarkLightChange -> {
                 val currentMode = state.value.isDarkMode

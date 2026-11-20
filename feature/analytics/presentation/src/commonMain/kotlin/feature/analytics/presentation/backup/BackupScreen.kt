@@ -79,7 +79,7 @@ fun BackupScreenRoot(
         mode = PickerMode.Single,
     ){ platformFile ->
         platformFile?.let {
-            viewModel.onEvent(
+            viewModel.onAction(
                 BackupEvent.OnImport(platformFile)
             )
         }
@@ -143,7 +143,7 @@ fun BackupScreenRoot(
                     is BackupEvent.OnImport -> {
                         singleFilePicker.launch()
                     }
-                    else               -> viewModel.onEvent(event)
+                    else               -> viewModel.onAction(event)
                 }
             },
         )

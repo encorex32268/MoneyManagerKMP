@@ -75,7 +75,7 @@ fun TypesScreenRoot(
                 TypeEvent.OnBackClick -> onBack()
                 else -> Unit
             }
-            viewModel.onEvent(it)
+            viewModel.onAction(it)
         },
         navigateToTypeCategoryEdit = navigateToTypeCategoryEdit,
     )

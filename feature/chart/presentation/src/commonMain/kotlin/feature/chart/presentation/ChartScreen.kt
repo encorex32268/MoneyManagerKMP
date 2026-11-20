@@ -50,7 +50,7 @@ fun ChartScreenRoot(
                 }
                 else -> Unit
             }
-            viewModel.onEvent(event)
+            viewModel.onAction(event)
         },
         navigationLayoutType = navigationLayoutType
     )

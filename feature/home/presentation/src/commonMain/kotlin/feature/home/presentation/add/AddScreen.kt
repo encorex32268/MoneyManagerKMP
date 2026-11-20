@@ -108,7 +108,7 @@ fun AddScreenRoot(
                         AddEvent.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
                         else -> Unit
                     }
-                    viewModel.onEvent(event)
+                    viewModel.onAction(event)
                 }
             )
         }
@@ -121,7 +121,7 @@ fun AddScreenRoot(
                         AddEvent.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
                         else -> Unit
                     }
-                    viewModel.onEvent(event)
+                    viewModel.onAction(event)
                 }
             )
         }

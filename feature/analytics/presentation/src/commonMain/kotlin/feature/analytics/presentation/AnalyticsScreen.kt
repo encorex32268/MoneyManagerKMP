@@ -69,7 +69,7 @@ fun AnalyticsScreenRoot(
                 AnalyticsEvent.OnDarkLightModeSwitch -> onDarkLightModeSwitch()
                 else -> Unit
             }
-            viewModel.onEvent(event)
+            viewModel.onAction(event)
         }
     )
 
