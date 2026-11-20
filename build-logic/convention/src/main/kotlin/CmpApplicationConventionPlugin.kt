@@ -1,0 +1,54 @@
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryExtension
+import com.lihan.moneymanager.convention.configureIosTargets
+import com.lihan.moneymanager.convention.libs
+import com.lihan.moneymanager.convention.pathToPackageName
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.api.plugins.ExtensionAware
+import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+
+class CmpApplicationConventionPlugin : Plugin<Project> {
+    override fun apply(target: Project) {
+        with(target) {
+            with(pluginManager) {
+                apply("com.android.kotlin.multiplatform.library")
+                apply("org.jetbrains.kotlin.multiplatform")
+                apply("org.jetbrains.compose")
+                apply("org.jetbrains.kotlin.plugin.compose")
+                apply("org.jetbrains.kotlin.plugin.serialization")
+            }
+
+            extensions.configure<KotlinMultiplatformExtension> {
+                (this as ExtensionAware).extensions.configure<KotlinMultiplatformAndroidLibraryExtension> {
+                    compileSdk = libs.findVersion("projectCompileSdkVersion").get().toString().toInt()
+                    minSdk = libs.findVersion("projectMinSdkVersion").get().toString().toInt()
+                    namespace = pathToPackageName()
+                    experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
+                }
+
+                applyDefaultHierarchyTemplate()
+
+                compilerOptions {
+                    freeCompilerArgs.add("-Xexpect-actual-classes")
+                    freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
+                }
+            }
+
+            configureIosTargets()
+
+            dependencies {
+                "commonMainImplementation"(libs.findLibrary("jetbrains-compose-ui").get())
+                "commonMainImplementation"(libs.findLibrary("jetbrains-compose-foundation").get())
+                "commonMainImplementation"(libs.findLibrary("jetbrains-compose-material3").get())
+                "commonMainImplementation"(libs.findLibrary("jetbrains-compose-runtime").get())
+                "commonMainImplementation"(libs.findLibrary("jetbrains-compose-components-resources").get())
+                "commonMainImplementation"(libs.findLibrary("jetbrains-compose-components-uiToolingPreview").get())
+
+                "androidMainImplementation"(platform(libs.findLibrary("androidx-compose-bom").get()))
+                "androidMainImplementation"(libs.findLibrary("androidx-compose-ui-tooling").get())
+            }
+        }
+    }
+}

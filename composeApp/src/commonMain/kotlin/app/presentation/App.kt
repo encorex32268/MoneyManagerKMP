@@ -31,21 +31,23 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import app.presentation.navigation.Route
 import core.presentation.navigation.AppNavigationBottom
 import core.presentation.navigation.AppNavigationRail
 import core.presentation.navigation.NavigationLayoutType
 import core.presentation.navigation.bottomNavigationItems
 import core.presentation.navigation.calculateNavigationLayout
+import feature.analytics.presentation.navigation.AnalyticsRoutes
 import feature.analytics.presentation.navigation.analyticsGraph
+import feature.chart.presentation.navigation.ChartRoutes
 import feature.chart.presentation.navigation.chartGraph
+import feature.home.presentation.navigation.HomeRoutes
 import feature.home.presentation.navigation.homeGraph
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
 
-val LocalDarkLightMode = compositionLocalOf { false }
+// LocalDarkLightMode moved to :core:designsystem AppTheme.kt
 
 @Composable
 fun App(
@@ -68,8 +70,8 @@ fun App(
             var itemSelectedIndex by remember(currentDestination) {
                 mutableStateOf(
                     when(currentDestination){
-                        Route.Chart.route->1
-                        Route.Analytics.route -> 2
+                        ChartRoutes.CHART -> 1
+                        AnalyticsRoutes.ANALYTICS -> 2
                         else -> 0
                     }
                 )
@@ -99,9 +101,9 @@ fun App(
                                     navController.navigate(
                                         route = name,
                                         navOptions = when(name){
-                                            Route.Home.route -> {
+                                            HomeRoutes.HOME -> {
                                                 navOptions {
-                                                    popUpTo(navController.graph.startDestinationRoute?: Route.Home.route) {
+                                                    popUpTo(navController.graph.startDestinationRoute?: HomeRoutes.HOME) {
                                                         inclusive = true
                                                     }
                                                     launchSingleTop = true
@@ -109,7 +111,7 @@ fun App(
                                             }
                                             else -> {
                                                 navOptions {
-                                                    popUpTo(Route.Home.route) {
+                                                    popUpTo(HomeRoutes.HOME) {
                                                         inclusive = false
                                                     }
                                                     launchSingleTop = true
@@ -142,9 +144,9 @@ fun App(
                                         navController.navigate(
                                             route = name,
                                             navOptions = when(name){
-                                                Route.Home.route -> {
+                                                HomeRoutes.HOME -> {
                                                     navOptions {
-                                                        popUpTo(navController.graph.startDestinationRoute?: Route.Home.route) {
+                                                        popUpTo(navController.graph.startDestinationRoute?: HomeRoutes.HOME) {
                                                             inclusive = true
                                                         }
                                                         launchSingleTop = true
@@ -152,7 +154,7 @@ fun App(
                                                 }
                                                 else -> {
                                                     navOptions {
-                                                        popUpTo(Route.Home.route) {
+                                                        popUpTo(HomeRoutes.HOME) {
                                                             inclusive = false
                                                         }
                                                         launchSingleTop = true
@@ -174,7 +176,7 @@ fun App(
                     NavHost(
                         modifier = Modifier.fillMaxSize(),
                         navController = navController,
-                        startDestination = Route.HomeGraph.route
+                        startDestination = HomeRoutes.GRAPH
                     ){
 
                         homeGraph(

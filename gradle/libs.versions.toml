@@ -1,9 +1,14 @@
 [versions]
 agp = "8.11.2"
-android-compileSdk = "36"
-android-minSdk = "24"
-android-targetSdk = "35"
+projectApplicationId = "com.lihan.moneymanager"
+projectCompileSdkVersion = "36"
+projectMinSdkVersion = "24"
+projectTargetSdkVersion = "35"
+projectVersionCode = "26"
+projectVersionName = "1.5.1"
+
 androidx-activityCompose = "1.9.3"
+androidx-compose-bom = "2024.10.01"
 compose-plugin = "1.7.0"
 
 junit = "4.13.2"
@@ -48,53 +53,79 @@ coreKtx = "1.16.0"
 
 
 [libraries]
+# Gradle plugins for build-logic
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+compose-gradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
+jetbrains-compose-gradlePlugin = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "compose-plugin" }
+buildkonfig-gradlePlugin = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-gradle-plugin", version.ref = "konfig" }
+buildkonfig-compiler = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-compiler", version.ref = "konfig" }
+
+# Compose
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+jetbrains-compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-plugin" }
+jetbrains-compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-plugin" }
+jetbrains-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-plugin" }
+jetbrains-compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-plugin" }
+jetbrains-compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-plugin" }
+jetbrains-compose-components-uiToolingPreview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose-plugin" }
 
 google-playServices-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "google-play-services" }
-
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
-
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 library-base = { module = "io.realm.kotlin:library-base", version.ref = "libraryBase" }
 library-sync = { module = "io.realm.kotlin:library-sync", version.ref = "libraryBase" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 
-
-kotlin-date-time = { module = "org.jetbrains.kotlinx:kotlinx-datetime" , version.ref = "kotlinxDateTime"}
+kotlin-date-time = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinCompose" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinComposeViewModel" }
 
-androidx-navigation = { module= "org.jetbrains.androidx.navigation:navigation-compose" , version.ref= "navigationCompose"}
-
-uri-kmp = { module = "com.eygraber:uri-kmp" , version.ref = "uriKmpVersion"}
+androidx-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uriKmpVersion" }
 lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 
-keysettings-kmp  = { module = "com.russhwolf:multiplatform-settings-no-arg" , version.ref = "keysettings"}
+keysettings-kmp = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "keysettings" }
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
 
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
 filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
 filekit-compose = { module = "io.github.vinceglb:filekit-compose", version.ref = "filekit" }
 
-
 material3-windowsizeclass-multiplatform = { group = "dev.chrisbanes.material3", name = "material3-window-size-class-multiplatform", version.ref = "material3WindowSizeClassMultiplatform" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 
+[bundles]
+koin-common = ["koin-core", "koin-compose", "koin-compose-viewmodel"]
 
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-readlkotlin = {id = "io.realm.kotlin" , version.ref = "readmkotlin"}
+readlkotlin = { id = "io.realm.kotlin", version.ref = "readmkotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
-konfigplugin = { id = "com.codingfeline.buildkonfig" , version.ref = "konfig"}
+konfigplugin = { id = "com.codingfeline.buildkonfig", version.ref = "konfig" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
+# Convention plugins
+convention-kmp-library = { id = "com.lihan.moneymanager.convention.kmp.library", version = "unspecified" }
+convention-cmp-library = { id = "com.lihan.moneymanager.convention.cmp.library", version = "unspecified" }
+convention-cmp-feature = { id = "com.lihan.moneymanager.convention.cmp.feature", version = "unspecified" }
+convention-cmp-application = { id = "com.lihan.moneymanager.convention.cmp.application", version = "unspecified" }
+convention-android-application = { id = "com.lihan.moneymanager.convention.android.application", version = "unspecified" }
+convention-android-application-compose = { id = "com.lihan.moneymanager.convention.android.application.compose", version = "unspecified" }
+convention-buildkonfig = { id = "com.lihan.moneymanager.convention.buildkonfig", version = "unspecified" }
