@@ -46,3 +46,7 @@ dependencies {
 //    implementation(libs.google.playServices.ads)
     implementation(libs.filekit.core)
 }
+
+tasks.matching { it.name.startsWith("merge") && it.name.endsWith("Assets") }.configureEach {
+    dependsOn(":core:designsystem:assembleAndroidMainResources")
+}
