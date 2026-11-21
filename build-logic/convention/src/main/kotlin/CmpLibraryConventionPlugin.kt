@@ -23,6 +23,7 @@ class CmpLibraryConventionPlugin : Plugin<Project> {
                 // Android previews: KMP modules cannot use debugImplementation.
                 "androidMainImplementation"(platform(libs.findLibrary("androidx-compose-bom").get()))
                 "androidMainImplementation"(libs.findLibrary("androidx-compose-ui-tooling").get())
+                "androidMainImplementation"(libs.findLibrary("androidx-compose-ui-tooling-preview").get())
             }
         }
     }
