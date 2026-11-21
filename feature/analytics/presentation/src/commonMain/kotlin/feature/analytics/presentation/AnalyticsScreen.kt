@@ -63,10 +63,10 @@ fun AnalyticsScreenRoot(
     val state by viewModel.state.collectAsStateWithLifecycle()
     AnalyticsScreen(
         state = state,
-        onEvent = { event ->
+        onAction = { event ->
             when(event){
-                AnalyticsEvent.OnBackupClick         -> onBackupClick()
-                AnalyticsEvent.OnDarkLightModeSwitch -> onDarkLightModeSwitch()
+                AnalyticsAction.OnBackupClick         -> onBackupClick()
+                AnalyticsAction.OnDarkLightModeSwitch -> onDarkLightModeSwitch()
                 else -> Unit
             }
             viewModel.onAction(event)
@@ -78,7 +78,7 @@ fun AnalyticsScreenRoot(
 @Composable
 fun AnalyticsScreen(
     state: AnalyticsState,
-    onEvent: (AnalyticsEvent) -> Unit = {},
+    onAction: (AnalyticsAction) -> Unit = {},
 ) {
 
     val chartLineColor = MaterialTheme.colorScheme.onBackground
@@ -120,7 +120,7 @@ fun AnalyticsScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            onEvent(AnalyticsEvent.OnDarkLightModeSwitch)
+                            onAction(AnalyticsAction.OnDarkLightModeSwitch)
                         }
                     ){
                         Icon(
@@ -136,7 +136,7 @@ fun AnalyticsScreen(
                     }
                     IconButton(
                         onClick = {
-                            onEvent(AnalyticsEvent.OnBackupClick)
+                            onAction(AnalyticsAction.OnBackupClick)
                         }
                     ){
                         Icon(
@@ -169,7 +169,7 @@ fun AnalyticsScreen(
                         modifier = Modifier.size(32.dp),
                         text = dateFilter.text,
                         onClick = {
-                            onEvent(AnalyticsEvent.OnDateFilterChange(dateFilter))
+                            onAction(AnalyticsAction.OnDateFilterChange(dateFilter))
                         },
                         isSelected = state.dateFilter.text == dateFilter.text
                     )
@@ -180,8 +180,8 @@ fun AnalyticsScreen(
                     year = state.nowDateYear.toIntOrNull()?:0,
                     month = state.nowDateMonth.toIntOrNull()?:0,
                     onDateChange = { year , month ->
-                        onEvent(
-                            AnalyticsEvent.OnDatePick(
+                        onAction(
+                            AnalyticsAction.OnDatePick(
                                 year = year,
                                 month = month
                             )
@@ -194,7 +194,7 @@ fun AnalyticsScreen(
                     state = state,
                     lineChartStyle = lineChartStyle,
                     expenseLineChartProgress = expenseLineChartProgress,
-                    onEvent = onEvent
+                    onAction = onAction
                 )
             }
         }
@@ -211,7 +211,7 @@ private fun ColumnScope.ExpenseSection(
     state: AnalyticsState,
     lineChartStyle: LineChartStyle,
     expenseLineChartProgress: Animatable<Float, AnimationVector1D>,
-    onEvent: (AnalyticsEvent) -> Unit
+    onAction: (AnalyticsAction) -> Unit
 ) {
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 8.dp),
@@ -247,10 +247,24 @@ private fun ColumnScope.ExpenseSection(
             animationProgress = expenseLineChartProgress.value,
             selectedDataPoint = state.selectedDataPoint,
             onSelectedDataPoint = {
-                onEvent(AnalyticsEvent.OnSelectDataPoint(it))
+                onAction(AnalyticsAction.OnSelectDataPoint(it))
             }
         )
 
+    }
+}
+
+@org.jetbrains.compose.ui.tooling.preview.Preview
+@Composable
+private fun AnalyticsScreenPreview() {
+    app.presentation.AppTheme {
+        AnalyticsScreen(
+            state = AnalyticsState(
+                nowDateYear = "2026",
+                nowDateMonth = "11",
+                expenseSum = 1500L
+            )
+        )
     }
 }
 

@@ -80,7 +80,7 @@ fun BackupScreenRoot(
     ){ platformFile ->
         platformFile?.let {
             viewModel.onAction(
-                BackupEvent.OnImport(platformFile)
+                BackupAction.OnImport(platformFile)
             )
         }
     }
@@ -137,10 +137,10 @@ fun BackupScreenRoot(
     ){
         BackupScreen(
             modifier = Modifier.fillMaxSize().padding(it),
-            onEvent = { event ->
+            onAction = { event ->
                 when(event){
-                    BackupEvent.OnBackClick -> onBackClick()
-                    is BackupEvent.OnImport -> {
+                    BackupAction.OnBackClick -> onBackClick()
+                    is BackupAction.OnImport -> {
                         singleFilePicker.launch()
                     }
                     else               -> viewModel.onAction(event)
@@ -166,7 +166,7 @@ fun BackupScreenRoot(
 @Composable
 fun BackupScreen(
     modifier: Modifier = Modifier,
-    onEvent: (BackupEvent) -> Unit = {}
+    onAction: (BackupAction) -> Unit = {}
 ) {
     Column(
         modifier = modifier,
@@ -174,20 +174,28 @@ fun BackupScreen(
     ){
         BackupCardSection(
             title = stringResource(Res.string.backup_local),
-            onEvent = onEvent,
+            onAction = onAction,
             backupImage = painterResource(Res.drawable.backup_backup),
             restoreImage = painterResource(Res.drawable.backup_import)
         )
 //        BackupCardSection(
 //            title = stringResource(Res.string.backup_cloud),
-//            onEvent = {
+//            onAction = {
 //                //ios not open yet
-//                onEvent(it)
+//                onAction(it)
 //            },
 //            backupImage = painterResource(Res.drawable.backup_cloud),
 //            restoreImage = painterResource(Res.drawable.backup_cloud_import)
 //        )
     }
 
+}
+
+@org.jetbrains.compose.ui.tooling.preview.Preview
+@Composable
+private fun BackupScreenPreview() {
+    app.presentation.AppTheme {
+        BackupScreen()
+    }
 }
 

@@ -63,23 +63,23 @@ class AddViewModel(
             _state.value
         )
 
-    fun onAction(event: AddEvent) {
+    fun onAction(event: AddAction) {
         when (event) {
-            AddEvent.OnBack -> Unit
-            AddEvent.OnGoToCategoryEditClick -> Unit
-            is AddEvent.OnDescriptionChange -> onDescriptionChange(event.description)
-            is AddEvent.OnCostChange -> onCostChange(event.text)
-            AddEvent.OnDeleteTextClick -> onDeleteTextClick()
-            is AddEvent.OnSelectedDate -> onDateSelected(event.timestamp)
-            is AddEvent.OnItemSelected -> {
+            AddAction.OnBack -> Unit
+            AddAction.OnGoToCategoryEditClick -> Unit
+            is AddAction.OnDescriptionChange -> onDescriptionChange(event.description)
+            is AddAction.OnCostChange -> onCostChange(event.text)
+            AddAction.OnDeleteTextClick -> onDeleteTextClick()
+            is AddAction.OnSelectedDate -> onDateSelected(event.timestamp)
+            is AddAction.OnItemSelected -> {
                 onItemSelected(
                     categoryUi = event.categoryUi,
                     description = event.description,
                     isRecently = event.isRecently
                 )
             }
-            AddEvent.OnSaveClick -> onSaveClick()
-            AddEvent.CreateDefaultType -> createDefaultType()
+            AddAction.OnSaveClick -> onSaveClick()
+            AddAction.CreateDefaultType -> createDefaultType()
         }
     }
 

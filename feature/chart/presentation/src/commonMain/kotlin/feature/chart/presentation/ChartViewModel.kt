@@ -64,9 +64,9 @@ class ChartViewModel(
             initialValue = ChartState()
         )
 
-    fun onAction(event: ChartEvent) {
+    fun onAction(event: ChartAction) {
         when (event) {
-            is ChartEvent.OnDatePick -> {
+            is ChartAction.OnDatePick -> {
                 selectedMonthYear.value = MonthYear(year = event.year, month = event.month)
             }
             else -> Unit

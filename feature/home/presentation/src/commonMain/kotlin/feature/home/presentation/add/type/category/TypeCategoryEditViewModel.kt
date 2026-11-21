@@ -34,9 +34,9 @@ class TypeCategoryEditViewModel(
     private val currentTypeUi = typeUi
 
 
-    fun onAction(event: TypeCategoryEditEvent){
+    fun onAction(event: TypeCategoryEditAction){
         when(event){
-            TypeCategoryEditEvent.OnBackClick -> {
+            TypeCategoryEditAction.OnBackClick -> {
                 viewModelScope.launch {
                     val json = Json
                     val stateValueStringJson = json.encodeToString(state.value.typeUi.toType())
@@ -59,7 +59,7 @@ class TypeCategoryEditViewModel(
                     _uiEvent.send(TypeCategoryEditUiEvent.OnBack)
                 }
             }
-            TypeCategoryEditEvent.OnSaveClick   -> {
+            TypeCategoryEditAction.OnSaveClick   -> {
                 val updateData = state.value.typeUi.copy(
                     categories = state.value.typeUi.categories.mapIndexed { index, categoryUi ->
                         categoryUi.copy(
@@ -77,7 +77,7 @@ class TypeCategoryEditViewModel(
                 }
 
             }
-            is TypeCategoryEditEvent.OnItemAdd ->{
+            is TypeCategoryEditAction.OnItemAdd ->{
                 val eventItem = event.categoryUi
                 if (eventItem.name.trim().isEmpty()) return
                 val newItem = CategoryUi(
@@ -102,7 +102,7 @@ class TypeCategoryEditViewModel(
                 }
 
             }
-            is TypeCategoryEditEvent.OnItemRemove ->{
+            is TypeCategoryEditAction.OnItemRemove ->{
                 val newItems = state.value.typeUi.categories.toMutableList().apply {
                     remove(event.categoryUi)
                 }
@@ -114,7 +114,7 @@ class TypeCategoryEditViewModel(
                     )
                 }
             }
-            is TypeCategoryEditEvent.OnItemMove -> {
+            is TypeCategoryEditAction.OnItemMove -> {
                 var newItems = state.value.typeUi.categories
                 newItems = newItems.toMutableList().apply {
                     add(event.toItemPosition.index, removeAt(event.fromItemPosition.index))
@@ -128,7 +128,7 @@ class TypeCategoryEditViewModel(
                 }
             }
 
-            is TypeCategoryEditEvent.OnTypeEdit -> {
+            is TypeCategoryEditAction.OnTypeEdit -> {
                 _state.update {
                     it.copy(
                         typeUi = state.value.typeUi.copy(

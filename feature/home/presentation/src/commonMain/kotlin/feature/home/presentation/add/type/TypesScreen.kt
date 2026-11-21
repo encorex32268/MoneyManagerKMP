@@ -70,9 +70,9 @@ fun TypesScreenRoot(
     val state by viewModel.state.collectAsState()
     TypesScreen(
         state = state,
-        onEvent = {
+        onAction = {
             when(it){
-                TypeEvent.OnBackClick -> onBack()
+                TypeAction.OnBackClick -> onBack()
                 else -> Unit
             }
             viewModel.onAction(it)
@@ -86,7 +86,7 @@ fun TypesScreenRoot(
 @Composable
 fun TypesScreen(
     state: TypesState,
-    onEvent: (TypeEvent) -> Unit ={},
+    onAction: (TypeAction) -> Unit ={},
     navigateToTypeCategoryEdit: (TypeUi) -> Unit = {}
 ) {
     var isShowColorPicker by remember {
@@ -98,15 +98,15 @@ fun TypesScreen(
 
     val listState = rememberReorderableLazyListState(
         onMove = { from, to ->
-            onEvent(
-                TypeEvent.OnItemMove(
+            onAction(
+                TypeAction.OnItemMove(
                     from,to
                 )
             )
         },
         onDragEnd = { startIndex, endIndex ->
-            onEvent(
-                TypeEvent.OnDragEnd(
+            onAction(
+                TypeAction.OnDragEnd(
                     startIndex, endIndex
                 )
             )
@@ -125,7 +125,7 @@ fun TypesScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            onEvent(TypeEvent.OnBackClick)
+                            onAction(TypeAction.OnBackClick)
                         }
                     ){
                         Icon(
@@ -214,8 +214,8 @@ fun TypesScreen(
                             }
                             IconButton(
                                 onClick = {
-                                    onEvent(
-                                        TypeEvent.OnHide(item)
+                                    onAction(
+                                        TypeAction.OnHide(item)
                                     )
                                 }
                             ){
@@ -252,13 +252,13 @@ fun TypesScreen(
                         modifier = Modifier.padding(4.dp),
                         item = it,
                         onDelete = {
-                            onEvent(
-                                TypeEvent.OnDelete(it)
+                            onAction(
+                                TypeAction.OnDelete(it)
                             )
                         },
                         onShow = {
-                            onEvent(
-                                TypeEvent.OnShow(it)
+                            onAction(
+                                TypeAction.OnShow(it)
                             )
                         }
                     )
@@ -283,8 +283,8 @@ fun TypesScreen(
             },
             onDone = { colorArgb , name ->
                 if (currentType == null){
-                    onEvent(
-                        TypeEvent.OnNew(
+                    onAction(
+                        TypeAction.OnNew(
                             TypeUi(
                                 name = name,
                                 colorArgb = colorArgb,
@@ -372,6 +372,16 @@ private fun OnHideTypeItem(
             onDismissRequest = {
                 isShowDeleteDialog = false
             }
+        )
+    }
+}
+
+@org.jetbrains.compose.ui.tooling.preview.Preview
+@Composable
+private fun TypesScreenPreview() {
+    app.presentation.AppTheme {
+        TypesScreen(
+            state = TypesState()
         )
     }
 }

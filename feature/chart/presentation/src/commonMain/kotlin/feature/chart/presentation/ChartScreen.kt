@@ -29,6 +29,7 @@ import core.presentation.components.DatePicker
 import core.presentation.components.SpendingLimitsProgressBar
 import core.presentation.navigation.NavigationLayoutType
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -43,9 +44,9 @@ fun ChartScreenRoot(
     val state by viewModel.state.collectAsStateWithLifecycle()
     ChartScreen(
         state = state,
-        onEvent = { event ->
+        onAction = { event ->
             when(event){
-                is ChartEvent.OnGotoDetail ->{
+                is ChartAction.OnGotoDetail ->{
                     onGotoDetail(event.expenses , event.type)
                 }
                 else -> Unit
@@ -59,7 +60,7 @@ fun ChartScreenRoot(
 @Composable
 fun ChartScreen(
     state: ChartState,
-    onEvent: (ChartEvent) -> Unit = {},
+    onAction: (ChartAction) -> Unit = {},
     isDebug: Boolean = false,
     navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ){
@@ -73,8 +74,8 @@ fun ChartScreen(
             year = state.nowDateYear.toIntOrNull()?:0,
             month = state.nowDateMonth.toIntOrNull()?:0,
             onDateChange = { year , month ->
-                onEvent(
-                    ChartEvent.OnDatePick(
+                onAction(
+                    ChartAction.OnDatePick(
                         year = year,
                         month = month
                     )
@@ -118,8 +119,8 @@ fun ChartScreen(
                         items = state.items,
                         sumTotal = state.totalExpense,
                         onItemClick = {
-                            onEvent(
-                                ChartEvent.OnGotoDetail(
+                            onAction(
+                                ChartAction.OnGotoDetail(
                                     expenses = it.items,
                                     type = it.type
                                 )
@@ -156,6 +157,43 @@ private fun ChartDataSection(
                 content()
             }
         }
+    }
+}
+
+@Preview
+@Composable
+internal fun ChartScreenPreview() {
+    val sampleType = Type(
+        id = "1",
+        typeIdTimestamp = 0L,
+        name = "Food",
+        colorArgb = 0xFF4CAF50.toInt(),
+        order = 0
+    )
+    val sampleExpense = Expense(
+        id = "1",
+        categoryId = 1,
+        typeId = 1L,
+        description = "Lunch",
+        cost = 1500L,
+        type = sampleType
+    )
+    val sampleChart = core.domain.model.chart.Chart(
+        type = sampleType,
+        items = listOf(sampleExpense)
+    )
+
+    app.presentation.AppTheme {
+        ChartScreen(
+            state = ChartState(
+                items = listOf(sampleChart),
+                totalExpense = 1500,
+                spendingLimit = 20000,
+                nowDateYear = "2026",
+                nowDateMonth = "11"
+            ),
+            isDebug = true
+        )
     }
 }
 

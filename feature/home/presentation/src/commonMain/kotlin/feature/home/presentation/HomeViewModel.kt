@@ -74,15 +74,15 @@ class HomeViewModel(
             initialValue = HomeState()
         )
 
-    fun onAction(event: HomeEvent) {
+    fun onAction(event: HomeAction) {
         when (event) {
-            is HomeEvent.OnDatePick -> {
+            is HomeAction.OnDatePick -> {
                 selectedMonthYear.value = MonthYear(year = event.year, month = event.month)
             }
-            is HomeEvent.OnSpendingLimitChange -> onSpendingLimitChange(event.expenseLimitText)
-            HomeEvent.OnExpenseLimitClick -> Unit
-            HomeEvent.OnGotoAddScreen -> Unit
-            is HomeEvent.OnGotoEditScreen -> Unit
+            is HomeAction.OnSpendingLimitChange -> onSpendingLimitChange(event.expenseLimitText)
+            HomeAction.OnExpenseLimitClick -> Unit
+            HomeAction.OnGotoAddScreen -> Unit
+            is HomeAction.OnGotoEditScreen -> Unit
         }
     }
 

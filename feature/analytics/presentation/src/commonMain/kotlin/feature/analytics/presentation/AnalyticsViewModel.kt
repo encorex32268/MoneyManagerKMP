@@ -63,11 +63,11 @@ class AnalyticsViewModel(
         initialValue = AnalyticsState()
     )
 
-    fun onAction(event: AnalyticsEvent) {
+    fun onAction(event: AnalyticsAction) {
         when (event) {
-            is AnalyticsEvent.OnDateFilterChange -> onDateFilterChange(event.dateFilter)
-            is AnalyticsEvent.OnSelectDataPoint -> onSelectDataPoint(event.dataPoint)
-            is AnalyticsEvent.OnDatePick -> onDatePick(event.year, event.month)
+            is AnalyticsAction.OnDateFilterChange -> onDateFilterChange(event.dateFilter)
+            is AnalyticsAction.OnSelectDataPoint -> onSelectDataPoint(event.dataPoint)
+            is AnalyticsAction.OnDatePick -> onDatePick(event.year, event.month)
             else -> Unit
         }
     }

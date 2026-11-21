@@ -2,22 +2,22 @@ package feature.analytics.presentation
 
 import feature.analytics.presentation.model.DataPoint
 
-sealed interface AnalyticsEvent {
+sealed interface AnalyticsAction {
 
     data class OnDateFilterChange(
         val dateFilter: DateFilter
-    ): AnalyticsEvent
+    ): AnalyticsAction
 
-    data object OnBackupClick: AnalyticsEvent
+    data object OnBackupClick: AnalyticsAction
 
     data class OnSelectDataPoint(
         val dataPoint: DataPoint
-    ): AnalyticsEvent
+    ): AnalyticsAction
 
     data class OnDatePick(
         val year: Int?=null,
         val month: Int?=null
-    ): AnalyticsEvent
+    ): AnalyticsAction
 
-    data object OnDarkLightModeSwitch: AnalyticsEvent
+    data object OnDarkLightModeSwitch: AnalyticsAction
 }

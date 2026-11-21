@@ -38,10 +38,10 @@ class BackupViewModel(
     val uiEvent = _uiEvent.receiveAsFlow()
 
 
-    fun onAction(event: BackupEvent) {
+    fun onAction(event: BackupAction) {
         when (event) {
-            BackupEvent.OnBackup -> backup()
-            is BackupEvent.OnImport -> {
+            BackupAction.OnBackup -> backup()
+            is BackupAction.OnImport -> {
                 event.platformFile?.let {
                     restoreData(it)
                 }

@@ -174,3 +174,21 @@ private fun AutoSizeText(
     )
 }
 
+@org.jetbrains.compose.ui.tooling.preview.Preview
+@Composable
+private fun DetailScreenPreview() {
+    app.presentation.AppTheme {
+        DetailScreen(
+            state = DetailState(
+                total = 1500L,
+                type = core.domain.model.Type(
+                    typeIdTimestamp = 0L,
+                    name = "Food",
+                    colorArgb = -1710479,
+                    order = 0
+                )
+            )
+        )
+    }
+}
+

@@ -41,19 +41,19 @@ class TypeViewModel(
         initialValue = TypesState()
     )
 
-    fun onAction(event: TypeEvent) {
+    fun onAction(event: TypeAction) {
         when (event) {
-            is TypeEvent.OnItemMove -> onItemMove(event)
-            is TypeEvent.OnNew -> onNew(event.type)
-            is TypeEvent.OnHide -> onHide(event.type)
-            is TypeEvent.OnDelete -> onDelete(event.type)
-            is TypeEvent.OnShow -> onShow(event.type)
-            is TypeEvent.OnDragEnd -> onDragEnd()
+            is TypeAction.OnItemMove -> onItemMove(event)
+            is TypeAction.OnNew -> onNew(event.type)
+            is TypeAction.OnHide -> onHide(event.type)
+            is TypeAction.OnDelete -> onDelete(event.type)
+            is TypeAction.OnShow -> onShow(event.type)
+            is TypeAction.OnDragEnd -> onDragEnd()
             else -> Unit
         }
     }
 
-    private fun onItemMove(event: TypeEvent.OnItemMove) {
+    private fun onItemMove(event: TypeAction.OnItemMove) {
         val current = state.value.items.toMutableList()
         current.add(event.toItemPosition.index, current.removeAt(event.fromItemPosition.index))
         reorderedItems.value = current

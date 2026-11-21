@@ -117,7 +117,7 @@ fun EditExpenseScreenRoot(
     }
     EditExpenseScreen(
         state = state,
-        onEvent = viewModel::onAction,
+        onAction = viewModel::onAction,
     )
 }
 
@@ -125,7 +125,7 @@ fun EditExpenseScreenRoot(
 @Composable
 fun EditExpenseScreen(
     state: EditExpenseState,
-    onEvent: (EditExpenseEvent) -> Unit = {}
+    onAction: (EditExpenseAction) -> Unit = {}
 ) {
     var isShowDeleteDialog by remember {
         mutableStateOf(false)
@@ -143,7 +143,7 @@ fun EditExpenseScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            onEvent(EditExpenseEvent.OnBackClick)
+                            onAction(EditExpenseAction.OnBackClick)
                         }
                     ) {
                         Icon(
@@ -155,7 +155,7 @@ fun EditExpenseScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            onEvent(EditExpenseEvent.OnGoAddScreenClick)
+                            onAction(EditExpenseAction.OnGoAddScreenClick)
                         }
                     ) {
                         Icon(
@@ -226,7 +226,7 @@ fun EditExpenseScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 ContentSection(
                     content = expenseUi.content,
-                    onEvent = onEvent,
+                    onAction = onAction,
                     isShowSaveIcon = state.isShowSaveIcon
                 )
             }
@@ -237,7 +237,7 @@ fun EditExpenseScreen(
     if (isShowDeleteDialog){
         DeleteDialog(
             onConfirmButtonClick = {
-                onEvent(EditExpenseEvent.OnDelete)
+                onAction(EditExpenseAction.OnDelete)
             },
             onDismissRequest = {
                 isShowDeleteDialog = false
@@ -358,7 +358,7 @@ private fun ContentSection(
     modifier: Modifier = Modifier,
     content: String = "",
     isShowSaveIcon: Boolean,
-    onEvent: (EditExpenseEvent) -> Unit
+    onAction: (EditExpenseAction) -> Unit
 ){
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val scope = rememberCoroutineScope()
@@ -395,7 +395,7 @@ private fun ContentSection(
                 if(isShowSaveIcon){
                     Icon(
                         modifier = Modifier.size(20.dp).noRippleClick {
-                            onEvent(EditExpenseEvent.OnSaveClick)
+                            onAction(EditExpenseAction.OnSaveClick)
                         },
                         imageVector = vectorResource(Res.drawable.baseline_done),
                         contentDescription = null
@@ -410,7 +410,7 @@ private fun ContentSection(
                     .bringIntoViewRequester(bringIntoViewRequester),
                 value = content,
                 onValueChange = {
-                    onEvent(EditExpenseEvent.OnContentChange(it))
+                    onAction(EditExpenseAction.OnContentChange(it))
                     scope.launch {
                         bringIntoViewRequester.bringIntoView()
                     }
@@ -445,6 +445,16 @@ private fun ContentSection(
             )
 
         }
+    }
+}
+
+@org.jetbrains.compose.ui.tooling.preview.Preview
+@Composable
+private fun EditExpenseScreenPreview() {
+    app.presentation.AppTheme {
+        EditExpenseScreen(
+            state = EditExpenseState()
+        )
     }
 }
 

@@ -100,7 +100,7 @@ fun TypeCategoryEditScreenRoot(
     ){
         TypeCategoryEditScreen(
             state = state,
-            onEvent = viewModel::onAction,
+            onAction = viewModel::onAction,
             navigationLayoutType = navigationLayoutType
         )
 
@@ -111,7 +111,7 @@ fun TypeCategoryEditScreenRoot(
 @Composable
 fun TypeCategoryEditScreen(
     state: TypeCategoryEditState,
-    onEvent: (TypeCategoryEditEvent) -> Unit = {},
+    onAction: (TypeCategoryEditAction) -> Unit = {},
     navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION
 ) {
 
@@ -127,8 +127,8 @@ fun TypeCategoryEditScreen(
     }
     val reorderState = rememberReorderableLazyGridState(
         onMove = { from , to ->
-            onEvent(
-                TypeCategoryEditEvent.OnItemMove(
+            onAction(
+                TypeCategoryEditAction.OnItemMove(
                     from , to
                 )
             )
@@ -181,8 +181,8 @@ fun TypeCategoryEditScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            onEvent(
-                                TypeCategoryEditEvent.OnBackClick
+                            onAction(
+                                TypeCategoryEditAction.OnBackClick
                             )
                         }
                     ) {
@@ -196,8 +196,8 @@ fun TypeCategoryEditScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            onEvent(
-                                TypeCategoryEditEvent.OnSaveClick
+                            onAction(
+                                TypeCategoryEditAction.OnSaveClick
                             )
                         },
                     ) {
@@ -255,8 +255,8 @@ fun TypeCategoryEditScreen(
                                     isClicked = isDragging,
                                     isNeedDeleteIcon = true,
                                     onDeleteClick = {
-                                        onEvent(
-                                            TypeCategoryEditEvent.OnItemRemove(item)
+                                        onAction(
+                                            TypeCategoryEditAction.OnItemRemove(item)
                                         )
                                     }
                                 )
@@ -308,8 +308,8 @@ fun TypeCategoryEditScreen(
                 isShowAddDialog = false
             },
             onDone = {
-                onEvent(
-                    TypeCategoryEditEvent.OnItemAdd(
+                onAction(
+                    TypeCategoryEditAction.OnItemAdd(
                         categoryUi = it
                     )
                 )
@@ -322,8 +322,8 @@ fun TypeCategoryEditScreen(
                 isShowColorPicker = false
             },
             onDone = { colorArgb , name ->
-                onEvent(
-                    TypeCategoryEditEvent.OnTypeEdit(
+                onAction(
+                    TypeCategoryEditAction.OnTypeEdit(
                         name = name,
                         colorArgb = colorArgb
                     )
@@ -358,6 +358,23 @@ private fun ItemsSection(
                 content()
             }
         }
+    }
+}
+
+@org.jetbrains.compose.ui.tooling.preview.Preview
+@Composable
+private fun TypeCategoryEditScreenPreview() {
+    app.presentation.AppTheme {
+        TypeCategoryEditScreen(
+            state = TypeCategoryEditState(
+                typeUi = feature.home.presentation.add.type.TypeUi(
+                    typeIdTimestamp = 0L,
+                    name = "Food",
+                    colorArgb = -1710479,
+                    order = 0
+                )
+            )
+        )
     }
 }
 

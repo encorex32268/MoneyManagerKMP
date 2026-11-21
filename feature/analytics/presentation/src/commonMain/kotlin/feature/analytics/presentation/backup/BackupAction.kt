@@ -2,10 +2,10 @@ package feature.analytics.presentation.backup
 
 import io.github.vinceglb.filekit.core.PlatformFile
 
-sealed interface BackupEvent {
-    data object OnBackup: BackupEvent
+sealed interface BackupAction {
+    data object OnBackup: BackupAction
     data class OnImport(
         val platformFile: PlatformFile?
-    ): BackupEvent
-    data object OnBackClick: BackupEvent
+    ): BackupAction
+    data object OnBackClick: BackupAction
 }

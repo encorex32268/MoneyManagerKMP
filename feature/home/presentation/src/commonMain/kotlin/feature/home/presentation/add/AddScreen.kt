@@ -101,10 +101,10 @@ fun AddScreenRoot(
         NavigationLayoutType.BOTTOM_NAVIGATION -> {
             AddScreen(
                 state = state,
-                onEvent = { event ->
+                onAction = { event ->
                     when(event){
-                        AddEvent.OnBack                  -> onGoBack()
-                        AddEvent.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
+                        AddAction.OnBack                  -> onGoBack()
+                        AddAction.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
                         else -> Unit
                     }
                     viewModel.onAction(event)
@@ -114,10 +114,10 @@ fun AddScreenRoot(
         else -> {
             AddScreenNaviRail(
                 state = state,
-                onEvent = { event ->
+                onAction = { event ->
                     when(event){
-                        AddEvent.OnBack                  -> onGoBack()
-                        AddEvent.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
+                        AddAction.OnBack                  -> onGoBack()
+                        AddAction.OnGoToCategoryEditClick -> onGoToCategoryEditClick()
                         else -> Unit
                     }
                     viewModel.onAction(event)
@@ -131,7 +131,7 @@ fun AddScreenRoot(
 @Composable
 fun AddScreen(
     state: AddState,
-    onEvent: (AddEvent) -> Unit = {},
+    onAction: (AddAction) -> Unit = {},
     isDebug: Boolean = false,
 ){
     val keyboard = LocalSoftwareKeyboardController.current
@@ -173,7 +173,7 @@ fun AddScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            onEvent(AddEvent.OnBack)
+                            onAction(AddAction.OnBack)
                         }
                     ){
                         Icon(
@@ -185,7 +185,7 @@ fun AddScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            onEvent(AddEvent.OnGoToCategoryEditClick)
+                            onAction(AddAction.OnGoToCategoryEditClick)
                         }
                     ) {
                         Icon(
@@ -246,7 +246,7 @@ fun AddScreen(
                         )
                     }
                 ,
-                onEvent = onEvent,
+                onAction = onAction,
                 month = state.monthNumber.toString(),
                 day = state.dayOfMonth.toString(),
                 state = state
@@ -264,7 +264,7 @@ fun AddScreen(
                 ){
                     Button(
                         onClick = {
-                            onEvent(AddEvent.CreateDefaultType)
+                            onAction(AddAction.CreateDefaultType)
                         }
                     ){
                         Text(
@@ -274,7 +274,7 @@ fun AddScreen(
                     }
                     Button(
                         onClick = {
-                            onEvent(AddEvent.OnGoToCategoryEditClick)
+                            onAction(AddAction.OnGoToCategoryEditClick)
                         }
                     ){
                         Text(
@@ -287,7 +287,7 @@ fun AddScreen(
                 ItemSection(
                     modifier = Modifier.fillMaxWidth().weight(1f).padding(8.dp),
                     state = state,
-                    onEvent = onEvent,
+                    onAction = onAction,
                     scope = scope,
                     bottomSheetScaffoldState = bottomSheetScaffoldState,
                 )
@@ -307,7 +307,7 @@ fun AddScreen(
 @Composable
 fun AddScreenNaviRail(
     state: AddState,
-    onEvent: (AddEvent) -> Unit = {}
+    onAction: (AddAction) -> Unit = {}
 ){
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -326,7 +326,7 @@ fun AddScreenNaviRail(
                 ) {
                     IconButton(
                         onClick = {
-                            onEvent(AddEvent.OnBack)
+                            onAction(AddAction.OnBack)
                         }
                     ) {
                         Icon(
@@ -341,7 +341,7 @@ fun AddScreenNaviRail(
                     )
                     IconButton(
                         onClick = {
-                            onEvent(AddEvent.OnGoToCategoryEditClick)
+                            onAction(AddAction.OnGoToCategoryEditClick)
                         }
                     ) {
                         Icon(
@@ -358,7 +358,7 @@ fun AddScreenNaviRail(
                     ){
                         Button(
                             onClick = {
-                                onEvent(AddEvent.CreateDefaultType)
+                                onAction(AddAction.CreateDefaultType)
                             }
                         ){
                             Text(
@@ -368,7 +368,7 @@ fun AddScreenNaviRail(
                         }
                         Button(
                             onClick = {
-                                onEvent(AddEvent.OnGoToCategoryEditClick)
+                                onAction(AddAction.OnGoToCategoryEditClick)
                             }
                         ){
                             Text(
@@ -384,7 +384,7 @@ fun AddScreenNaviRail(
                             .weight(1f)
                             .padding(8.dp),
                         state = state,
-                        onEvent = onEvent,
+                        onAction = onAction,
                         maxItemsInEachRow = 8
                     )
 
@@ -406,7 +406,7 @@ fun AddScreenNaviRail(
                             )
                         }
                     ,
-                    onEvent = onEvent,
+                    onAction = onAction,
                     month = state.monthNumber.toString(),
                     day = state.dayOfMonth.toString(),
                     state = state,
@@ -425,7 +425,7 @@ fun AddScreenNaviRail(
 private fun ItemSection(
     modifier: Modifier = Modifier,
     state: AddState,
-    onEvent: (AddEvent) -> Unit,
+    onAction: (AddAction) -> Unit,
     scope: CoroutineScope? = null,
     bottomSheetScaffoldState: BottomSheetScaffoldState? = null,
     maxItemsInEachRow: Int = 4
@@ -460,8 +460,8 @@ private fun ItemSection(
                     isClicked = categoryUi.isClick,
                     categoryUi = categoryUi,
                     onItemClick = {
-                        onEvent(
-                            AddEvent.OnItemSelected(
+                        onAction(
+                            AddAction.OnItemSelected(
                                 categoryUi = categoryUi,
                                 description = categoryUi.name.ifEmpty { categoryNameRes },
                                 isRecently = true
@@ -515,8 +515,8 @@ private fun ItemSection(
                         isClicked = categoryUi.isClick,
                         categoryUi = categoryUi,
                         onItemClick = {
-                            onEvent(
-                                AddEvent.OnItemSelected(
+                            onAction(
+                                AddAction.OnItemSelected(
                                     categoryUi = categoryUi,
                                     description = categoryUi.name
                                 )
@@ -529,5 +529,16 @@ private fun ItemSection(
                 }
             }
         }
+    }
+}
+
+@org.jetbrains.compose.ui.tooling.preview.Preview
+@Composable
+private fun AddScreenPreview() {
+    app.presentation.AppTheme {
+        AddScreen(
+            state = AddState(isLoading = false),
+            isDebug = true
+        )
     }
 }

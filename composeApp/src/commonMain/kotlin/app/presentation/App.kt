@@ -193,7 +193,7 @@ fun App(
                         analyticsGraph(
                             navController = navController,
                             onDarkLightModeSwitch = {
-                                viewModel.onAction(AppEvent.DarkLightChange)
+                                viewModel.onAction(AppAction.DarkLightChange)
                             }
                         )
                     }

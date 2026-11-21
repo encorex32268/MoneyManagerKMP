@@ -45,13 +45,13 @@ class EditExpenseViewModel(
 
     private var currentText = expense.content
 
-    fun onAction(event: EditExpenseEvent){
+    fun onAction(event: EditExpenseAction){
         when(event){
-            EditExpenseEvent.OnDelete -> onDelete()
-            is EditExpenseEvent.OnContentChange -> onContentChange(event.text)
-            EditExpenseEvent.OnBackClick -> onBackClick()
-            EditExpenseEvent.OnGoAddScreenClick -> onGoAddScreenClick()
-            EditExpenseEvent.OnSaveClick -> onSaveClick()
+            EditExpenseAction.OnDelete -> onDelete()
+            is EditExpenseAction.OnContentChange -> onContentChange(event.text)
+            EditExpenseAction.OnBackClick -> onBackClick()
+            EditExpenseAction.OnGoAddScreenClick -> onGoAddScreenClick()
+            EditExpenseAction.OnSaveClick -> onSaveClick()
         }
     }
 

@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import core.ui.bglightColor
 import core.ui.borderColor
 import core.ui.textColor
-import feature.analytics.presentation.backup.BackupEvent
+import feature.analytics.presentation.backup.BackupAction
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.backup_backup
 import moneymanagerkmp.composeapp.generated.resources.backup_import
@@ -31,7 +31,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun BackupCardSection(
     title: String,
-    onEvent: (BackupEvent) -> Unit,
+    onAction: (BackupAction) -> Unit,
     backupImage: Painter,
     restoreImage: Painter,
     modifier: Modifier = Modifier
@@ -65,7 +65,7 @@ fun BackupCardSection(
                     .weight(1f)
                     .clickable(
                         onClick = {
-                            onEvent(BackupEvent.OnBackup)
+                            onAction(BackupAction.OnBackup)
                         },
                         interactionSource = null,
                         indication = null
@@ -88,7 +88,7 @@ fun BackupCardSection(
                     .weight(1f)
                     .clickable(
                         onClick = {
-                            onEvent(BackupEvent.OnImport(null))
+                            onAction(BackupAction.OnImport(null))
                         },
                         indication = null,
                         interactionSource = null

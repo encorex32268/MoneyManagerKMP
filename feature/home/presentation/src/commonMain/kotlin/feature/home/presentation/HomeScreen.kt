@@ -63,13 +63,13 @@ fun HomeScreenRoot(
     }
     HomeScreen(
         state = state,
-        onEvent = { event ->
+        onAction = { event ->
             when(event){
-                HomeEvent.OnGotoAddScreen   -> onGotoAddScreen()
-                is HomeEvent.OnGotoEditScreen  -> {
+                HomeAction.OnGotoAddScreen   -> onGotoAddScreen()
+                is HomeAction.OnGotoEditScreen  -> {
                     onGotoEditScreen(event.expenseUi.toExpense())
                 }
-                HomeEvent.OnExpenseLimitClick -> {
+                HomeAction.OnExpenseLimitClick -> {
                     isShowExpenseLimitDialog = true
                 }
                 else -> Unit
@@ -85,7 +85,7 @@ fun HomeScreenRoot(
             },
             onConfirmButtonClick = {
                 viewModel.onAction(
-                    HomeEvent.OnSpendingLimitChange(it)
+                    HomeAction.OnSpendingLimitChange(it)
                 )
             }
         )
@@ -96,7 +96,7 @@ fun HomeScreenRoot(
 @Composable
 fun HomeScreen(
     state: HomeState,
-    onEvent: (HomeEvent) -> Unit,
+    onAction: (HomeAction) -> Unit,
     isDebug: Boolean = false,
     navigationLayoutType: NavigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION,
 ){
@@ -105,7 +105,7 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    onEvent(HomeEvent.OnGotoAddScreen)
+                    onAction(HomeAction.OnGotoAddScreen)
                 }
             ) {
                 Icon(
@@ -125,8 +125,8 @@ fun HomeScreen(
                 year = state.nowDateYear.toIntOrNull()?:0,
                 month = state.nowDateMonth.toIntOrNull()?:0,
                 onDateChange = { year , month ->
-                    onEvent(
-                        HomeEvent.OnDatePick(
+                    onAction(
+                        HomeAction.OnDatePick(
                             year = year,
                             month = month
                         )
@@ -138,9 +138,9 @@ fun HomeScreen(
                 NavigationLayoutType.BOTTOM_NAVIGATION -> {
                     HomeScreenNaviBottom(
                         state = state,
-                        onEvent = onEvent,
+                        onAction = onAction,
                         onExpenseLimitClick = {
-                            onEvent(HomeEvent.OnExpenseLimitClick)
+                            onAction(HomeAction.OnExpenseLimitClick)
                         }     ,
                         isDebug = isDebug
                     )
@@ -148,9 +148,9 @@ fun HomeScreen(
                 else -> {
                     HomeScreenNaviRail(
                         state = state,
-                        onEvent = onEvent,
+                        onAction = onAction,
                         onExpenseLimitClick = {
-                            onEvent(HomeEvent.OnExpenseLimitClick)
+                            onAction(HomeAction.OnExpenseLimitClick)
                         }                   ,
                         isDebug = isDebug
                     )
@@ -168,7 +168,7 @@ fun HomeScreen(
 private fun HomeScreenNaviBottom(
     state: HomeState,
     isDebug: Boolean,
-    onEvent: (HomeEvent) -> Unit = {},
+    onAction: (HomeAction) -> Unit = {},
     onExpenseLimitClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ){
@@ -213,7 +213,7 @@ private fun HomeScreenNaviBottom(
                     modifier = Modifier.fillMaxWidth(),
                     items = expenses,
                     onItemClick = { expenseUi ->
-                        onEvent(HomeEvent.OnGotoEditScreen(expenseUi = expenseUi))
+                        onAction(HomeAction.OnGotoEditScreen(expenseUi = expenseUi))
                     }
                 )
             }
@@ -227,15 +227,13 @@ private fun HomeScreenNaviBottom(
             }
         }
     }
-
 }
-
 
 @Composable
 private fun HomeScreenNaviRail(
     state: HomeState,
     isDebug: Boolean,
-    onEvent: (HomeEvent) -> Unit = {},
+    onAction: (HomeAction) -> Unit = {},
     onExpenseLimitClick: () -> Unit = {}
 
 ){
@@ -275,7 +273,7 @@ private fun HomeScreenNaviRail(
                     modifier = Modifier.fillMaxWidth(),
                     items = expenses,
                     onItemClick = { expenseUi ->
-                        onEvent(HomeEvent.OnGotoEditScreen(
+                        onAction(HomeAction.OnGotoEditScreen(
                             expenseUi = expenseUi
                         ))
                     }
@@ -290,5 +288,23 @@ private fun HomeScreenNaviRail(
                 }
             }
         }
+    }
+}
+
+@org.jetbrains.compose.ui.tooling.preview.Preview
+@Composable
+private fun HomeScreenPreview() {
+    app.presentation.AppTheme {
+        HomeScreen(
+            state = HomeState(
+                totalExpense = 1500,
+                expenseLimit = 20000,
+                nowDateYear = "2026",
+                nowDateMonth = "11",
+                nowDateDayOfMonth = "21"
+            ),
+            onAction = {},
+            isDebug = true
+        )
     }
 }

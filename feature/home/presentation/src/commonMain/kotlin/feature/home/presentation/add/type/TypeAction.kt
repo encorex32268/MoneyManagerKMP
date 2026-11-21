@@ -2,32 +2,32 @@ package feature.home.presentation.add.type
 
 import feature.home.presentation.reorderable.ItemPosition
 
-sealed interface TypeEvent {
+sealed interface TypeAction {
     data class OnNew(
         val type: TypeUi
-    ): TypeEvent
+    ): TypeAction
 
     data class OnHide(
         val type: TypeUi
-    ): TypeEvent
+    ): TypeAction
 
     data class OnShow(
         val type: TypeUi
-    ): TypeEvent
+    ): TypeAction
 
     data class OnItemMove(
         val fromItemPosition: ItemPosition,
         val toItemPosition: ItemPosition
-    ): TypeEvent
+    ): TypeAction
 
     data class OnDelete(
         val type: TypeUi
-    ): TypeEvent
+    ): TypeAction
 
     data class OnDragEnd(
         val startIndex: Int,
         val endIndex: Int
-    ): TypeEvent
+    ): TypeAction
 
-    data object OnBackClick: TypeEvent
+    data object OnBackClick: TypeAction
 }

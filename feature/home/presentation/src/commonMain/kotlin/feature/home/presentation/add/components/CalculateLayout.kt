@@ -49,7 +49,7 @@ import core.ui.calculateDoneLightContainerColor
 import core.ui.calculateRemoveDarkContainerColor
 import core.ui.calculateRemoveLightContainerColor
 import core.ui.highlightColor
-import feature.home.presentation.add.AddEvent
+import feature.home.presentation.add.AddAction
 import feature.home.presentation.add.AddState
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_done
@@ -67,7 +67,7 @@ import toDateString
 @Composable
 fun CalculateLayout(
     modifier: Modifier = Modifier,
-    onEvent: (AddEvent) -> Unit = {},
+    onAction: (AddAction) -> Unit = {},
     month: String = "",
     day: String = "",
     state: AddState,
@@ -91,8 +91,8 @@ fun CalculateLayout(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        onEvent(
-                            AddEvent.OnSelectedDate(
+                        onAction(
+                            AddAction.OnSelectedDate(
                             timestamp = datePickerState.selectedDateMillis?:0L)
                         )
                         isShowDialog.value = false
@@ -132,7 +132,7 @@ fun CalculateLayout(
                 .fillMaxWidth()
                 .padding(8.dp),
             onValueChange = {
-                onEvent(AddEvent.OnDescriptionChange(it))
+                onAction(AddAction.OnDescriptionChange(it))
             },
             categoryUi = state.categoryUi,
             description = state.description,
@@ -141,7 +141,7 @@ fun CalculateLayout(
         Spacer(modifier = Modifier.height(8.dp))
         CalculateKeyboard(
             onCalendarButtonClick = { isShowDialog.value = true },
-            onEvent = onEvent,
+            onAction = onAction,
             month = month,
             day = day,
             aspectRatio = numberButtonAspectRatio
@@ -156,7 +156,7 @@ private fun CalculateKeyboard(
     month: String = "",
     day : String = "",
     aspectRatio: Float = 1.25f,
-    onEvent: (AddEvent) -> Unit = {},
+    onAction: (AddAction) -> Unit = {},
     isDarkMode: Boolean = LocalDarkLightMode.current
 ){
     val numberButtonModifier = remember(aspectRatio){
@@ -172,34 +172,16 @@ private fun CalculateKeyboard(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             NumberButton(
-                modifier = numberButtonModifier, text = "7", onEvent =  onEvent
+                modifier = numberButtonModifier, text = "7", onAction =  onAction
             )
             NumberButton(
-                modifier = numberButtonModifier, text = "4", onEvent =  onEvent
+                modifier = numberButtonModifier, text = "4", onAction =  onAction
             )
             NumberButton(
-                modifier = numberButtonModifier, text = "1", onEvent =  onEvent
+                modifier = numberButtonModifier, text = "1", onAction =  onAction
             )
             NumberButton(
-                modifier = numberButtonModifier, text = "0", onEvent =  onEvent
-            )
-        }
-
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            NumberButton(
-                modifier = numberButtonModifier, text = "8", onEvent =  onEvent
-            )
-            NumberButton(
-                modifier = numberButtonModifier, text = "5", onEvent =  onEvent
-            )
-            NumberButton(
-                modifier = numberButtonModifier, text = "2", onEvent =  onEvent
-            )
-            NumberButton(
-                modifier = numberButtonModifier, text = "00", onEvent =  onEvent
+                modifier = numberButtonModifier, text = "0", onAction =  onAction
             )
         }
 
@@ -208,16 +190,34 @@ private fun CalculateKeyboard(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             NumberButton(
-                modifier = numberButtonModifier, text = "9", onEvent =  onEvent
+                modifier = numberButtonModifier, text = "8", onAction =  onAction
             )
             NumberButton(
-                modifier = numberButtonModifier, text = "6", onEvent =  onEvent
+                modifier = numberButtonModifier, text = "5", onAction =  onAction
             )
             NumberButton(
-                modifier = numberButtonModifier, text = "3" , onEvent =  onEvent
+                modifier = numberButtonModifier, text = "2", onAction =  onAction
             )
             NumberButton(
-                modifier = numberButtonModifier, text = "000", onEvent =  onEvent
+                modifier = numberButtonModifier, text = "00", onAction =  onAction
+            )
+        }
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            NumberButton(
+                modifier = numberButtonModifier, text = "9", onAction =  onAction
+            )
+            NumberButton(
+                modifier = numberButtonModifier, text = "6", onAction =  onAction
+            )
+            NumberButton(
+                modifier = numberButtonModifier, text = "3" , onAction =  onAction
+            )
+            NumberButton(
+                modifier = numberButtonModifier, text = "000", onAction =  onAction
             )
         }
         val removeBackgroundColor = remember(isDarkMode){
@@ -239,7 +239,7 @@ private fun CalculateKeyboard(
                 icon = vectorResource(Res.drawable.baseline_remove),
                 contentDescription = "remove button",
                 onClick = {
-                    onEvent(AddEvent.OnDeleteTextClick)
+                    onAction(AddAction.OnDeleteTextClick)
                 },
                 backgroundColor = removeBackgroundColor
             )
@@ -256,7 +256,7 @@ private fun CalculateKeyboard(
                 icon = vectorResource(Res.drawable.baseline_done),
                 contentDescription = "done button",
                 onClick = {
-                    onEvent(AddEvent.OnSaveClick)
+                    onAction(AddAction.OnSaveClick)
                 },
                 backgroundColor = doneBackgroundColor
             )
@@ -348,14 +348,14 @@ private fun CalendarButton(
 private fun NumberButton(
     modifier: Modifier = Modifier,
     text: String,
-    onEvent: (AddEvent) -> Unit = {},
+    onAction: (AddAction) -> Unit = {},
     shape: Shape = RoundedCornerShape(24.dp)
 ){
     Box(
         modifier = modifier
             .clip(shape)
             .clickable {
-                onEvent(AddEvent.OnCostChange(text))
+                onAction(AddAction.OnCostChange(text))
             }
             .background(
                 color = MaterialTheme.colorScheme.highlightColor(),

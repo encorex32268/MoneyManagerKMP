@@ -4,26 +4,26 @@ import core.presentation.model.CategoryUi
 import feature.home.presentation.reorderable.ItemPosition
 
 
-sealed interface TypeCategoryEditEvent {
+sealed interface TypeCategoryEditAction {
 
-    data object OnBackClick: TypeCategoryEditEvent
+    data object OnBackClick: TypeCategoryEditAction
 
-    data object OnSaveClick: TypeCategoryEditEvent
+    data object OnSaveClick: TypeCategoryEditAction
     data class OnTypeEdit(
         val name: String,
         val colorArgb: Int
-    ): TypeCategoryEditEvent
+    ): TypeCategoryEditAction
 
     data class OnItemMove(
         val fromItemPosition: ItemPosition,
         val toItemPosition: ItemPosition
-    ): TypeCategoryEditEvent
+    ): TypeCategoryEditAction
 
     data class OnItemRemove(
         val categoryUi: CategoryUi
-    ): TypeCategoryEditEvent
+    ): TypeCategoryEditAction
 
     data class OnItemAdd(
         val categoryUi: CategoryUi
-    ): TypeCategoryEditEvent
+    ): TypeCategoryEditAction
 }
