@@ -53,7 +53,7 @@ filekit = "0.8.1"
 
 material3WindowSizeClassMultiplatform = "0.5.0"
 coreKtx = "1.16.0"
-composeCharts = "0.1.7"
+composeCharts = "0.1.10"
 
 
 [libraries]
