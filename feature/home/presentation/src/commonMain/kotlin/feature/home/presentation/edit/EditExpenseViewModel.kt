@@ -57,8 +57,7 @@ class EditExpenseViewModel(
 
     private fun initData(){
         viewModelScope.launch {
-            val dbExpense = repository.getExpense(expense).firstOrNull()
-            if (dbExpense == null) return@launch
+            val dbExpense = repository.getExpense(expense).firstOrNull() ?: return@launch
             val types = typeRepository.getTypes().firstOrNull()?:emptyList()
             var expenseUi = dbExpense.toExpenseUi()
 

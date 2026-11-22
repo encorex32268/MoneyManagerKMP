@@ -34,7 +34,6 @@ import org.jetbrains.compose.resources.getString
 class AddViewModel(
     private val repository: ExpenseRepository,
     private val typeRepository: TypeRepository,
-    private val keySettings: KeySettings,
     private val expense: Expense? = null,
     private val recentlyLabelProvider: suspend () -> String = { getString(Res.string.recently) }
 ) : ViewModel() {
