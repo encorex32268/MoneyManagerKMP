@@ -23,3 +23,15 @@ build
 
 composeApp/release/
 composeApp/debug/
+
+# AI / spec tooling & local screenshots
+openspec/
+.agents/
+AGENTS.md
+screenshots_ai/
+
+# Signing keys & certificates
+*.jks
+*.keystore
+*.der
+*.pem
