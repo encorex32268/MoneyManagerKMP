@@ -18,6 +18,7 @@ class KmpLibraryConventionPlugin : Plugin<Project> {
             dependencies {
                 "commonMainImplementation"(libs.findLibrary("kotlinx-serialization-json").get())
                 "commonTestImplementation"(libs.findLibrary("kotlin-test").get())
+                "commonTestImplementation"(libs.findLibrary("kotlinx-coroutines-test").get())
             }
         }
     }
