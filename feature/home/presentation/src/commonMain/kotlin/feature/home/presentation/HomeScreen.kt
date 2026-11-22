@@ -214,11 +214,6 @@ private fun HomeScreenNaviBottom(
             }
             item {
                 Spacer(modifier = Modifier.height(20.dp))
-                if (!isDebug){
-                    AdMobBannerController.AdMobBannerCompose(
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
             }
         }
     }
@@ -276,11 +271,6 @@ private fun HomeScreenNaviRail(
             }
             item {
                 Spacer(modifier = Modifier.height(20.dp))
-                if (!isDebug){
-                    AdMobBannerController.AdMobBannerCompose(
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
             }
         }
     }

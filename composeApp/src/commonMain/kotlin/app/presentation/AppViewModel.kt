@@ -1,6 +1,5 @@
 package app.presentation
 
-import AdMobBannerController
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.data.migration.RealmToRoomMigrator
@@ -20,9 +19,6 @@ class AppViewModel(
     val state = _state
         .onStart {
             realmToRoomMigrator.migrateIfNeeded()
-            AdMobBannerController.setCloseAdMobBanner(
-                isClose = keySettings.getCloseAdBanner()
-            )
             _state.update {
                 it.copy(
                     isDarkMode = keySettings.getDarkLightMode(),

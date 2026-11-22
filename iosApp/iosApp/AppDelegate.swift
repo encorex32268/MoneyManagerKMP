@@ -9,8 +9,6 @@
 import Foundation
 
 import SwiftUI
-import GoogleMobileAds
-import AppTrackingTransparency
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

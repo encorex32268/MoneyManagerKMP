@@ -9,20 +9,6 @@ class DefaultKeySettings(
     private val settings: Settings
 ): KeySettings {
 
-    override fun setCloseAdBanner(isClosed: Boolean) {
-        settings.set(
-            key = KeySettings.CLOSE_AD_BANNER,
-            value = isClosed
-        )
-    }
-
-    override fun getCloseAdBanner(): Boolean {
-        return settings.get(
-            key = KeySettings.CLOSE_AD_BANNER,
-            defaultValue = false
-        )
-    }
-
     override fun setDarkLightMode(isDark: Boolean) {
         settings.set(
             key = KeySettings.IS_DARK_THEME,

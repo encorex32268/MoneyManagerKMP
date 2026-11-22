@@ -3,7 +3,7 @@ agp = "8.11.2"
 projectApplicationId = "com.lihan.moneymanager"
 projectCompileSdkVersion = "36"
 projectMinSdkVersion = "24"
-projectTargetSdkVersion = "35"
+projectTargetSdkVersion = "36"
 projectVersionCode = "26"
 projectVersionName = "1.5.1"
 
@@ -42,8 +42,6 @@ colorpicker = "1.1.2"
 keysettings = "1.2.0"
 #Splash
 core-splashscreen = "1.0.1"
-#Ads
-google-play-services = "23.4.0"
 #Konfig
 konfig = "0.15.1"
 #Csv
@@ -83,7 +81,6 @@ jetbrains-compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", 
 jetbrains-compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-plugin" }
 jetbrains-compose-components-uiToolingPreview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose-plugin" }
 
-google-playServices-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "google-play-services" }
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 

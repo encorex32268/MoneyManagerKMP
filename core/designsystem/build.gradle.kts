@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.convention.cmp.library)
-    alias(libs.plugins.convention.buildkonfig)
 }
 
 compose.resources {
@@ -19,7 +18,6 @@ kotlin {
         }
         androidMain {
             dependencies {
-//                implementation(libs.google.playServices.ads)
             }
         }
     }

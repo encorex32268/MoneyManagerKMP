@@ -4,7 +4,6 @@
 
 package feature.home.presentation.add
 
-import AdMobBannerController
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -305,11 +304,6 @@ fun AddScreen(
                     onAction = onAction,
                     scope = scope,
                     bottomSheetScaffoldState = bottomSheetScaffoldState,
-                )
-            }
-            if (!isDebug) {
-                AdMobBannerController.AdMobBannerCompose(
-                    modifier = Modifier.fillMaxWidth()
                 )
             }
 

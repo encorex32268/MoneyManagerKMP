@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import app.presentation.App
-// import com.google.android.gms.ads.MobileAds
 import io.github.vinceglb.filekit.core.FileKit
 
 class MainActivity : ComponentActivity() {
@@ -15,7 +14,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         enableEdgeToEdge()
-//        MobileAds.initialize(this)
         FileKit.init(this)
         setContent {
             App(

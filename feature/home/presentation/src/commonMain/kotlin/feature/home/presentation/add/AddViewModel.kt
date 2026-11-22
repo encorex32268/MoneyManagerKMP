@@ -1,6 +1,5 @@
 package feature.home.presentation.add
 
-import AdMobBannerController
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -36,13 +35,12 @@ class AddViewModel(
     private val repository: ExpenseRepository,
     private val typeRepository: TypeRepository,
     private val keySettings: KeySettings,
-    private val expense: Expense? = null
+    private val expense: Expense? = null,
+    private val recentlyLabelProvider: suspend () -> String = { getString(Res.string.recently) }
 ) : ViewModel() {
 
     companion object {
         private const val COST_MAX_LENGTH = 10
-        private const val CLOSE_AD = "moneymanagerclose"
-        private const val OPEN_AD = "moneymanageropen"
     }
 
     private var isInitialed = false
@@ -257,17 +255,6 @@ class AddViewModel(
     }
 
     private fun onDescriptionChange(description: String) {
-        when (description) {
-            CLOSE_AD -> {
-                keySettings.setCloseAdBanner(true)
-                AdMobBannerController.setCloseAdMobBanner(true)
-            }
-
-            OPEN_AD -> {
-                keySettings.setCloseAdBanner(false)
-                AdMobBannerController.setCloseAdMobBanner(false)
-            }
-        }
         _state.update {
             it.copy(
                 description = description
@@ -284,7 +271,7 @@ class AddViewModel(
             var isIconClicked = false
             val recentlyType = TypeUi(
                 typeIdTimestamp = -1,
-                name = getString(Res.string.recently),
+                name = recentlyLabelProvider(),
                 colorArgb = -1,
                 isShow = true,
                 order = 0,
