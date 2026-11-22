@@ -16,13 +16,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,7 +34,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,13 +44,10 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import core.presentation.components.DeleteDialog
 import core.presentation.date.DateConverter
 import feature.home.presentation.add.type.components.ColorPickerDialog
-import feature.home.presentation.reorderable.ReorderableItem
-import feature.home.presentation.reorderable.detectReorderAfterLongPress
-import feature.home.presentation.reorderable.rememberReorderableLazyListState
-import feature.home.presentation.reorderable.reorderable
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_visibility_24
 import moneymanagerkmp.composeapp.generated.resources.baseline_visibility_off_24
@@ -67,7 +64,7 @@ fun TypesScreenRoot(
     onBack: () -> Unit = {},
     navigateToTypeCategoryEdit: (TypeUi) -> Unit = {}
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     TypesScreen(
         state = state,
         onAction = {
@@ -96,22 +93,6 @@ fun TypesScreen(
         mutableStateOf<TypeUi?>(null)
     }
 
-    val listState = rememberReorderableLazyListState(
-        onMove = { from, to ->
-            onAction(
-                TypeAction.OnItemMove(
-                    from,to
-                )
-            )
-        },
-        onDragEnd = { startIndex, endIndex ->
-            onAction(
-                TypeAction.OnDragEnd(
-                    startIndex, endIndex
-                )
-            )
-        }
-    )
     Scaffold(
         topBar = {
             TopAppBar(
@@ -156,75 +137,71 @@ fun TypesScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ){
             LazyColumn(
-                state = listState.listState,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .padding(horizontal = 8.dp)
-                    .reorderable(listState)
-                    .detectReorderAfterLongPress(listState),
+                    .padding(horizontal = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(
+                itemsIndexed(
                     items = state.items,
-                    key = {
-                        it.typeIdHex
-                    }
-                ) { item ->
-                    ReorderableItem(
-                        modifier = Modifier.padding(4.dp),
-                        reorderableState = listState,
-                        key = item.typeIdTimestamp
-                    ) { isDragging ->
-                        Row (
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ){
+                    key = { _, item -> item.typeIdHex }
+                ) { index, item ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem()
+                            .padding(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            enabled = index > 0,
+                            onClick = {
+                                onAction(TypeAction.OnMoveUp(item))
+                            }
+                        ) {
                             Icon(
-                                imageVector = Icons.Default.Menu,
+                                imageVector = Icons.Default.KeyboardArrowUp,
                                 contentDescription = null
                             )
-                            Spacer(modifier = Modifier.padding(4.dp))
-                            Box(
-                                modifier = Modifier
-                                    .background(
-                                        color = Color(item.colorArgb),
-                                        shape = CircleShape
-                                    )
-                                    .size(24.dp)
+                        }
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = Color(item.colorArgb),
+                                    shape = CircleShape
+                                )
+                                .size(24.dp)
+                        )
+                        Text(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(horizontal = 8.dp),
+                            text = item.name,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        IconButton(
+                            onClick = {
+                                navigateToTypeCategoryEdit(item)
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = null
                             )
-                            Text(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(horizontal = 8.dp)
-                                ,
-                                text = item.name,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            IconButton(
-                                onClick = {
-                                    navigateToTypeCategoryEdit(item)
-                                }
-                            ){
-                                Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = null
+                        }
+                        IconButton(
+                            onClick = {
+                                onAction(
+                                    TypeAction.OnHide(item)
                                 )
                             }
-                            IconButton(
-                                onClick = {
-                                    onAction(
-                                        TypeAction.OnHide(item)
-                                    )
-                                }
-                            ){
-                                Icon(
-                                    imageVector = vectorResource(Res.drawable.baseline_visibility_24),
-                                    contentDescription = null
-                                )
-                            }
-
+                        ) {
+                            Icon(
+                                imageVector = vectorResource(Res.drawable.baseline_visibility_24),
+                                contentDescription = null
+                            )
                         }
                     }
                 }
@@ -243,10 +220,7 @@ fun TypesScreen(
                     .padding(horizontal = 8.dp)
             ){
                 items(
-                    items = state.itemsNotShowing,
-                    key = {
-                        it.typeIdHex
-                    }
+                    items = state.itemsNotShowing
                 ){
                     OnHideTypeItem(
                         modifier = Modifier.padding(4.dp),
@@ -318,11 +292,16 @@ private fun OnHideTypeItem(
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ){
-        Icon(
+        IconButton(
             modifier = Modifier.alpha(0f),
-            imageVector = Icons.Default.Menu,
-            contentDescription = null,
-        )
+            enabled = false,
+            onClick = {},
+        ) {
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowUp,
+                contentDescription = null,
+            )
+        }
         Spacer(modifier = Modifier.padding(4.dp))
         Box(
             modifier = Modifier

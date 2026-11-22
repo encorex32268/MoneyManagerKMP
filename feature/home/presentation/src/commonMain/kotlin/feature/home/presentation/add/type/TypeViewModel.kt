@@ -7,11 +7,10 @@ import core.domain.mapper.toType
 import core.domain.mapper.toTypeUi
 import core.domain.repository.ExpenseRepository
 import core.domain.repository.TypeRepository
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -20,43 +19,49 @@ class TypeViewModel(
     private val expenseRepository: ExpenseRepository
 ) : ViewModel() {
 
-    private val reorderedItems = MutableStateFlow<List<TypeUi>?>(null)
-
-    val state: StateFlow<TypesState> = combine(
-        repository.getTypes(),
-        reorderedItems
-    ) { data, draggedItems ->
-        val mapped = data.map { it.toTypeUi() }
-        val items = draggedItems ?: mapped.filter { it.isShow }.sortedBy { it.order }
-        val itemsNotShowing = mapped.filter { !it.isShow }.sortedBy { it.order }
-        AppLogger.d("TypeViewModel", "Items Showing $items")
-        AppLogger.d("TypeViewModel", "Items itemsNotShowing $itemsNotShowing")
-        TypesState(
-            items = items,
-            itemsNotShowing = itemsNotShowing
+    val state: StateFlow<TypesState> = repository.getTypes()
+        .map { data ->
+            val mapped = data.map { it.toTypeUi() }
+            val items = mapped.filter { it.isShow }.sortedBy { it.order }
+            val itemsNotShowing = mapped.filter { !it.isShow }.sortedBy { it.order }
+            AppLogger.d("TypeViewModel", "Items Showing $items")
+            AppLogger.d("TypeViewModel", "Items itemsNotShowing $itemsNotShowing")
+            TypesState(
+                items = items,
+                itemsNotShowing = itemsNotShowing
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = TypesState()
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000L),
-        initialValue = TypesState()
-    )
 
     fun onAction(event: TypeAction) {
         when (event) {
-            is TypeAction.OnItemMove -> onItemMove(event)
+            is TypeAction.OnMoveUp -> onMoveUp(event.type)
             is TypeAction.OnNew -> onNew(event.type)
             is TypeAction.OnHide -> onHide(event.type)
             is TypeAction.OnDelete -> onDelete(event.type)
             is TypeAction.OnShow -> onShow(event.type)
-            is TypeAction.OnDragEnd -> onDragEnd()
             else -> Unit
         }
     }
 
-    private fun onItemMove(event: TypeAction.OnItemMove) {
+    private fun onMoveUp(typeUi: TypeUi) {
         val current = state.value.items.toMutableList()
-        current.add(event.toItemPosition.index, current.removeAt(event.fromItemPosition.index))
-        reorderedItems.value = current
+        val index = current.indexOfFirst { it.typeIdHex == typeUi.typeIdHex }
+        if (index <= 0) return
+
+        val moved = current.removeAt(index)
+        current.add(index - 1, moved)
+
+        viewModelScope.launch {
+            repository.updateAllSortedTypes(
+                current.mapIndexed { newIndex, item ->
+                    item.copy(order = newIndex).toType()
+                }
+            )
+        }
     }
 
     private fun onNew(typeUi: TypeUi) {
@@ -85,18 +90,6 @@ class TypeViewModel(
     private fun onShow(typeUi: TypeUi) {
         viewModelScope.launch {
             repository.update(type = typeUi.copy(isShow = true).toType())
-        }
-    }
-
-    private fun onDragEnd() {
-        val itemsToSave = state.value.items
-        viewModelScope.launch {
-            repository.updateAllSortedTypes(
-                itemsToSave.mapIndexed { index, typeUi ->
-                    typeUi.copy(order = index).toType()
-                }
-            )
-            reorderedItems.value = null
         }
     }
 }
