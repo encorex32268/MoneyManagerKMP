@@ -1,0 +1,120 @@
+format_version: "13"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+project_type: android
+
+app:
+  envs:
+    - PROJECT_LOCATION: "."
+    - MODULE: "androidApp"
+    - PACKAGE_NAME: "com.lihan.moneymanager"
+    # Set to "true" in Bitrise Env Vars once credentials are configured
+    - ENABLE_FIREBASE_DEPLOY: "false"
+    - ENABLE_PLAY_DEPLOY: "false"
+
+trigger_map:
+  - pull_request_target_branch: "master"
+    workflow: ci_test_and_build
+  - pull_request_target_branch: "main"
+    workflow: ci_test_and_build
+  - push_branch: "master"
+    workflow: deploy_android
+  - push_branch: "main"
+    workflow: deploy_android
+
+workflows:
+  ci_test_and_build:
+    description: "Run KMP unit tests and build Android Debug APK on Pull Requests"
+    steps:
+      - git-clone@8: {}
+      - restore-gradle-cache@2: {}
+      - set-java-version@1:
+          inputs:
+            - set_java_version: "21"
+      - install-missing-android-tools@3:
+          inputs:
+            - gradlew_path: ./gradlew
+      - script@1:
+          title: Prepare local.properties for BuildKonfig
+          inputs:
+            - content: |-
+                #!/usr/bin/env bash
+                set -euo pipefail
+                {
+                  echo "AdUnitID_Android_Debug=${AD_UNIT_ID_ANDROID_DEBUG:-}"
+                  echo "AdUnitID_Android_Release=${AD_UNIT_ID_ANDROID_RELEASE:-}"
+                  echo "AdUnitID_iOS=${AD_UNIT_ID_IOS:-}"
+                } >> local.properties
+      - gradle-runner@3:
+          title: Run KMP & Android Unit Tests
+          inputs:
+            - gradlew_path: ./gradlew
+            - gradle_task: testAndroidHostTest testDebugUnitTest --console=plain
+      - android-build@1:
+          title: Build Android Debug APK
+          inputs:
+            - project_location: $PROJECT_LOCATION
+            - module: $MODULE
+            - variant: debug
+            - build_type: apk
+      - save-gradle-cache@1: {}
+      - deploy-to-bitrise-io@2: {}
+
+  deploy_android:
+    description: "Run tests, build & sign Release AAB, and deploy to Firebase / Google Play"
+    steps:
+      - git-clone@8: {}
+      - restore-gradle-cache@2: {}
+      - set-java-version@1:
+          inputs:
+            - set_java_version: "21"
+      - install-missing-android-tools@3:
+          inputs:
+            - gradlew_path: ./gradlew
+      - script@1:
+          title: Prepare local.properties for BuildKonfig
+          inputs:
+            - content: |-
+                #!/usr/bin/env bash
+                set -euo pipefail
+                {
+                  echo "AdUnitID_Android_Debug=${AD_UNIT_ID_ANDROID_DEBUG:-}"
+                  echo "AdUnitID_Android_Release=${AD_UNIT_ID_ANDROID_RELEASE:-}"
+                  echo "AdUnitID_iOS=${AD_UNIT_ID_IOS:-}"
+                } >> local.properties
+      - gradle-runner@3:
+          title: Run KMP & Android Unit Tests
+          inputs:
+            - gradlew_path: ./gradlew
+            - gradle_task: testAndroidHostTest testDebugUnitTest --console=plain
+      - android-build@1:
+          title: Build Android Release AAB
+          inputs:
+            - project_location: $PROJECT_LOCATION
+            - module: $MODULE
+            - variant: release
+            - build_type: aab
+            - arguments: -Pbuildkonfig.flavor=release
+      - sign-apk@2:
+          title: Sign Release AAB
+          run_if: '{{enveq "BITRISEIO_ANDROID_KEYSTORE_URL" "" | not}}'
+          inputs:
+            - android_app: $BITRISE_AAB_PATH
+      - firebase-app-distribution@0:
+          title: Deploy to Firebase App Distribution
+          run_if: '{{enveq "ENABLE_FIREBASE_DEPLOY" "true"}}'
+          inputs:
+            - app_path: $BITRISE_SIGNED_AAB_PATH
+            - firebase_token: $FIREBASE_TOKEN
+            - app: $FIREBASE_ANDROID_APP_ID
+            - groups: $FIREBASE_TEST_GROUPS
+      - google-play-deploy@3:
+          title: Deploy to Google Play (Internal Track)
+          run_if: '{{enveq "ENABLE_PLAY_DEPLOY" "true"}}'
+          inputs:
+            - service_account_json_key_path: $GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_URL
+            - package_name: $PACKAGE_NAME
+            - app_path: $BITRISE_SIGNED_AAB_PATH
+            - track: internal
+      - save-gradle-cache@1: {}
+      - deploy-to-bitrise-io@2: {}
