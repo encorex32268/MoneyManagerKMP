@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import core.domain.model.Expense
 import core.presentation.components.DatePicker
-import core.presentation.components.SpendingLimitsProgressBar
 import core.presentation.navigation.NavigationLayoutType
 import feature.home.presentation.components.AmountTextLayout
 import feature.home.presentation.components.ExpenseItem
@@ -183,20 +182,16 @@ private fun HomeScreenNaviBottom(
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         AmountTextLayout(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             totalExpense = state.totalExpense,
             expenseLimit = state.expenseLimit,
             navigationLayoutType = NavigationLayoutType.BOTTOM_NAVIGATION,
             onExpenseLimitClick = onExpenseLimitClick,
             limitOverColor = state.limitOverColor
         )
-        SpendingLimitsProgressBar(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
-            totalExpense = state.totalExpense,
-            spendingLimit = state.expenseLimit,
-            isShowLimitAndExpense = false
-        )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(14.dp))
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
