@@ -5,24 +5,36 @@
 package feature.home.presentation.add
 
 import AdMobBannerController
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -44,8 +56,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -421,6 +436,12 @@ fun AddScreenNaviRail(
 
 }
 
+private data class CategorySectionChip(
+    val key: String,
+    val label: String,
+    val colorArgb: Int?,
+)
+
 @Composable
 private fun ItemSection(
     modifier: Modifier = Modifier,
@@ -430,86 +451,138 @@ private fun ItemSection(
     bottomSheetScaffoldState: BottomSheetScaffoldState? = null,
     maxItemsInEachRow: Int = 4
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(maxItemsInEachRow),
-        modifier = modifier
-    ) {
-        val recentCategories = state.recentlyItems?.categories
-        if (!recentCategories.isNullOrEmpty()) {
-            item(
-                key = "recently_header",
-                span = { GridItemSpan(maxLineSpan) },
-                contentType = "header"
-            ) {
-                Text(
-                    text = stringResource(Res.string.recently),
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.Bold
+    val recentCategories = state.recentlyItems?.categories
+    val recentlyTitle = stringResource(Res.string.recently)
+
+    val sectionChips = remember(recentCategories, state.types, recentlyTitle) {
+        buildList {
+            if (!recentCategories.isNullOrEmpty()) {
+                add(
+                    CategorySectionChip(
+                        key = "recently",
+                        label = recentlyTitle,
+                        colorArgb = null,
                     )
                 )
             }
-            itemsIndexed(
-                items = recentCategories,
-                key = { index, categoryUi -> "recent_${index}_${categoryUi.id}" },
-                contentType = { _, _ -> "category_item" }
-            ) { _, categoryUi ->
-                val categoryNameRes =
-                    CategoryList.getCategoryDescriptionById(categoryUi.id.toLong())
-                CategoryItem(
-                    modifier = Modifier.fillMaxWidth(),
-                    isClicked = categoryUi.isClick,
-                    categoryUi = categoryUi,
-                    onItemClick = {
-                        onAction(
-                            AddAction.OnItemSelected(
-                                categoryUi = categoryUi,
-                                description = categoryUi.name.ifEmpty { categoryNameRes },
-                                isRecently = true
-                            )
+            state.types.forEach { typeUi ->
+                if (typeUi.categories.isNotEmpty()) {
+                    add(
+                        CategorySectionChip(
+                            key = typeUi.typeIdHex,
+                            label = typeUi.name,
+                            colorArgb = typeUi.colorArgb,
                         )
-                        scope?.launch {
-                            bottomSheetScaffoldState?.bottomSheetState?.expand()
-                        }
-                    }
-                )
+                    )
+                }
             }
         }
+    }
 
-        state.types.forEach { typeUi ->
-            if (typeUi.categories.isNotEmpty()) {
-                item(
-                    key = "header_${typeUi.typeIdHex}",
-                    span = { GridItemSpan(maxLineSpan) },
-                    contentType = "header"
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(24.dp)
-                                .background(
-                                    color = Color(typeUi.colorArgb),
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                        )
-                        Spacer(Modifier.width(4.dp))
-                        Text(
-                            text = typeUi.name,
-                            style = MaterialTheme.typography.titleSmall.copy(
-                                fontWeight = FontWeight.Bold
+    var selectedSectionKey by rememberSaveable { mutableStateOf<String?>(null) }
+    val activeSectionKey = remember(sectionChips, selectedSectionKey) {
+        val current = selectedSectionKey
+        if (current != null && sectionChips.any { it.key == current }) {
+            current
+        } else {
+            sectionChips.firstOrNull()?.key
+        }
+    }
+
+    Column(modifier = modifier) {
+        if (sectionChips.isNotEmpty()) {
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 4.dp),
+            ) {
+                items(
+                    items = sectionChips,
+                    key = { it.key },
+                ) { chip ->
+                    val selected = chip.key == activeSectionKey
+                    FilterChip(
+                        selected = selected,
+                        onClick = {
+                            selectedSectionKey = chip.key
+                        },
+                        label = {
+                            Text(
+                                text = chip.label,
+                                style = MaterialTheme.typography.labelLarge,
                             )
-                        )
-                    }
+                        },
+                        leadingIcon = chip.colorArgb?.let { argb ->
+                            {
+                                Box(
+                                    modifier = Modifier
+                                        .size(10.dp)
+                                        .background(
+                                            color = Color(argb),
+                                            shape = CircleShape,
+                                        )
+                                )
+                            }
+                        },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            selectedLabelColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        ),
+                    )
                 }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
+        AnimatedContent(
+            targetState = activeSectionKey,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            transitionSpec = {
+                val initialIndex = sectionChips.indexOfFirst { it.key == initialState }
+                val targetIndex = sectionChips.indexOfFirst { it.key == targetState }
+                val isForward = targetIndex >= initialIndex
+
+                (fadeIn(animationSpec = tween(180)) +
+                    slideInHorizontally(animationSpec = tween(200)) { width ->
+                        if (isForward) width / 6 else -width / 6
+                    }) togetherWith
+                    (fadeOut(animationSpec = tween(140)) +
+                        slideOutHorizontally(animationSpec = tween(160)) { width ->
+                            if (isForward) -width / 6 else width / 6
+                        })
+            },
+            label = "CategorySectionTransition",
+        ) { sectionKey ->
+            val isRecently = sectionKey == "recently"
+            val categories = remember(sectionKey, recentCategories, state.types) {
+                when (sectionKey) {
+                    "recently" -> recentCategories.orEmpty()
+                    null -> emptyList()
+                    else -> state.types.firstOrNull { it.typeIdHex == sectionKey }?.categories.orEmpty()
+                }
+            }
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(maxItemsInEachRow),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
                 itemsIndexed(
-                    items = typeUi.categories,
-                    key = { index, categoryUi -> "cat_${typeUi.typeIdHex}_${index}_${categoryUi.id}" },
+                    items = categories,
+                    key = { index, categoryUi -> "${sectionKey}_${index}_${categoryUi.id}" },
                     contentType = { _, _ -> "category_item" }
                 ) { _, categoryUi ->
+                    val description = if (isRecently) {
+                        categoryUi.name.ifEmpty {
+                            CategoryList.getCategoryDescriptionById(categoryUi.id.toLong())
+                        }
+                    } else {
+                        categoryUi.name
+                    }
                     CategoryItem(
                         modifier = Modifier.fillMaxWidth(),
                         isClicked = categoryUi.isClick,
@@ -518,7 +591,8 @@ private fun ItemSection(
                             onAction(
                                 AddAction.OnItemSelected(
                                     categoryUi = categoryUi,
-                                    description = categoryUi.name
+                                    description = description,
+                                    isRecently = isRecently,
                                 )
                             )
                             scope?.launch {
