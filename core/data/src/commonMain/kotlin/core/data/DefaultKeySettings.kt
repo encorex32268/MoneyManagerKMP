@@ -64,4 +64,18 @@ class DefaultKeySettings(
             defaultValue = KeySettings.DEFAULT_BUDGET_WARN_HIGH
         )
     }
+
+    override fun setDatabaseUpdateNoticeShown(isShown: Boolean) {
+        settings.set(
+            key = KeySettings.IS_DATABASE_UPDATE_NOTICE_SHOWN,
+            value = isShown
+        )
+    }
+
+    override fun isDatabaseUpdateNoticeShown(): Boolean {
+        return settings.get(
+            key = KeySettings.IS_DATABASE_UPDATE_NOTICE_SHOWN,
+            defaultValue = false
+        )
+    }
 }

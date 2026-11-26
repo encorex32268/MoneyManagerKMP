@@ -18,6 +18,8 @@
     <string name="dialog_cancel_button">取消</string>
     <string name="dialog_delete_title">刪除</string>
     <string name="dialog_delete_content">你要刪除嗎？</string>
+    <string name="dialog_db_update_title">版本更新提醒</string>
+    <string name="dialog_db_update_content">請更新版本。新版本將在兩週後更新，屆時將以新的資料庫為基底並移除舊的資料庫。</string>
     <string name="backup_local">裝置</string>
     <string name="backup_cloud">Google Drive</string>
 

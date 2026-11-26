@@ -17,6 +17,8 @@
     <string name="dialog_cancel_button">Cancel</string>
     <string name="dialog_delete_title">Delete</string>
     <string name="dialog_delete_content">Do you want to delete this?</string>
+    <string name="dialog_db_update_title">Update Notice</string>
+    <string name="dialog_db_update_content">Please update the app. In two weeks, a new version will be released based on the new database, and the old database will be removed.</string>
 
 
     <string name="recently">Recently</string>

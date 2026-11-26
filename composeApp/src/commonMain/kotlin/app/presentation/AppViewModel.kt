@@ -22,7 +22,8 @@ class AppViewModel(
             _state.update {
                 it.copy(
                     isDarkMode = keySettings.getDarkLightMode(),
-                    isMigrationReady = true
+                    isMigrationReady = true,
+                    showDatabaseUpdateNotice = !keySettings.isDatabaseUpdateNoticeShown()
                 )
             }
         }.stateIn(
@@ -41,6 +42,12 @@ class AppViewModel(
                     )
                 }
                 keySettings.setDarkLightMode(isDark = !currentMode)
+            }
+            AppAction.DismissDatabaseUpdateNotice -> {
+                _state.update {
+                    it.copy(showDatabaseUpdateNotice = false)
+                }
+                keySettings.setDatabaseUpdateNoticeShown(isShown = true)
             }
         }
     }
