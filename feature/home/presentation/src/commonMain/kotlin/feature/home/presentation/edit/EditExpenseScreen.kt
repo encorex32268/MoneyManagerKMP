@@ -1,20 +1,24 @@
-@file:OptIn(ExperimentalResourceApi::class, KoinExperimentalAPI::class,
-    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class
+@file:OptIn(
+    ExperimentalResourceApi::class,
+    KoinExperimentalAPI::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalFoundationApi::class,
 )
 
 package feature.home.presentation.edit
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,7 +26,6 @@ import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -32,14 +35,13 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -51,40 +53,46 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import core.domain.exts.formatAddZero
 import core.domain.model.Expense
-import core.domain.model.Type
 import core.presentation.CategoryList
 import core.presentation.ObserveAsEvents
 import core.presentation.components.CircleIcon
 import core.presentation.components.DeleteDialog
+import core.presentation.components.MoneyCard
 import core.presentation.date.toDayOfWeekStringResource
 import core.presentation.date.toLocalDateTime
-import core.presentation.noRippleClick
-import core.ui.bgColor
-import core.ui.bglightColor
+import core.ui.MoneyTheme
+import core.ui.MoneyTokens
 import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
-import moneymanagerkmp.composeapp.generated.resources.baseline_attach_money_24
-import moneymanagerkmp.composeapp.generated.resources.baseline_done
 import moneymanagerkmp.composeapp.generated.resources.baseline_sticky_note_24
+import moneymanagerkmp.composeapp.generated.resources.cd_back
+import moneymanagerkmp.composeapp.generated.resources.cd_delete
+import moneymanagerkmp.composeapp.generated.resources.cd_edit
 import moneymanagerkmp.composeapp.generated.resources.description
 import moneymanagerkmp.composeapp.generated.resources.expense_detail
+import moneymanagerkmp.composeapp.generated.resources.note_placeholder
+import moneymanagerkmp.composeapp.generated.resources.save
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
+import toMoneyString
 
 @Composable
 fun EditExpenseScreenRoot(
@@ -93,22 +101,18 @@ fun EditExpenseScreenRoot(
         parametersOf(expense)
     },
     onGoBack: () -> Unit = {},
-    onGotoAddScreen: (Expense) -> Unit = {}
-){
+    onGotoAddScreen: (Expense) -> Unit = {},
+) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val state by viewModel.state.collectAsStateWithLifecycle()
     ObserveAsEvents(
         events = viewModel.uiEvent,
-        key1 = viewModel
-    ){
-        when(it){
+        key1 = viewModel,
+    ) {
+        when (it) {
             EditExpenseUiEvent.OnBack -> onGoBack()
-            is EditExpenseUiEvent.OnGoAddScreen -> {
-                onGotoAddScreen(
-                    it.expense
-                )
-            }
+            is EditExpenseUiEvent.OnGoAddScreen -> onGotoAddScreen(it.expense)
             EditExpenseUiEvent.HideKeyboard -> {
                 keyboardController?.hide()
                 focusManager.clearFocus()
@@ -121,236 +125,201 @@ fun EditExpenseScreenRoot(
     )
 }
 
-
 @Composable
 fun EditExpenseScreen(
     state: EditExpenseState,
-    onAction: (EditExpenseAction) -> Unit = {}
+    onAction: (EditExpenseAction) -> Unit = {},
 ) {
     var isShowDeleteDialog by remember {
         mutableStateOf(false)
     }
+
     Scaffold(
+        containerColor = MoneyTheme.colors.bg,
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MoneyTheme.colors.bg,
+                    titleContentColor = MoneyTheme.colors.ink,
+                    navigationIconContentColor = MoneyTheme.colors.ink,
+                    actionIconContentColor = MoneyTheme.colors.ink,
+                ),
                 title = {
                     Text(
                         text = stringResource(Res.string.expense_detail),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleLarge,
                     )
                 },
                 navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            onAction(EditExpenseAction.OnBackClick)
-                        }
-                    ) {
+                    IconButton(onClick = { onAction(EditExpenseAction.OnBackClick) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = null
+                            contentDescription = stringResource(Res.string.cd_back),
                         )
                     }
                 },
                 actions = {
-                    IconButton(
-                        onClick = {
-                            onAction(EditExpenseAction.OnGoAddScreenClick)
-                        }
-                    ) {
+                    IconButton(onClick = { onAction(EditExpenseAction.OnGoAddScreenClick) }) {
                         Icon(
                             imageVector = Icons.Rounded.Edit,
-                            contentDescription = null
+                            contentDescription = stringResource(Res.string.cd_edit),
                         )
                     }
-                    IconButton(
-                        onClick = {
-                            isShowDeleteDialog = true
-                        }
-                    ) {
+                    IconButton(onClick = { isShowDeleteDialog = true }) {
                         Icon(
                             imageVector = Icons.Outlined.Delete,
-                            contentDescription = null
+                            contentDescription = stringResource(Res.string.cd_delete),
+                            tint = MoneyTheme.colors.budgetDanger,
                         )
                     }
-                }
+                },
             )
-        }
-    ){ paddingValues ->
+        },
+    ) { paddingValues ->
         state.currentExpenseUi?.let { expenseUi ->
-            val colorArgb = remember {
-                expenseUi.type?.colorArgb ?:CategoryList.getColorByTypeId(expenseUi.typeId).toArgb()
+            val colorArgb = remember(expenseUi) {
+                expenseUi.type?.colorArgb
+                    ?: CategoryList.getColorByTypeId(expenseUi.typeId).toArgb()
             }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = MoneyTokens.ScreenHorizontalPadding, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
-                OutlinedCard(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.outlinedCardColors(
-                        containerColor = MaterialTheme.colorScheme.bglightColor()
-                    )
+                MoneyCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(18.dp),
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .padding(top = 16.dp)
-                        ,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ){
-                        IconSection(
-                            iconId = expenseUi.categoryId,
-                            colorArgb = expenseUi.colorRGB?:colorArgb,
-                            description = expenseUi.description
-                        )
-                        HorizontalDivider(
-                            modifier = Modifier.padding(8.dp)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 14.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    ) {
+                        CircleIcon(
+                            modifier = Modifier.size(44.dp),
+                            isClicked = true,
+                            image = CategoryList.getCategoryIconById(expenseUi.categoryId.toLong()),
+                            backgroundColor = Color(expenseUi.colorRGB ?: colorArgb),
                         )
                         Column(
-                            modifier = Modifier.fillMaxWidth()
-                                .padding(horizontal = 8.dp)
-                                .padding(bottom = 8.dp)
-                            ,
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
-                        ){
-                            GroupSection(type = expenseUi.type)
-                            TimestampSection(
-                                timestamp = expenseUi.timestamp
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(2.dp),
+                        ) {
+                            Text(
+                                text = expenseUi.description,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontSize = 17.sp,
+                                    fontWeight = FontWeight.Bold,
+                                ),
+                                color = MoneyTheme.colors.ink,
                             )
-                            CostSection(cost = expenseUi.cost)
+                            expenseUi.type?.let { type ->
+                                Text(
+                                    text = type.name,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MoneyTheme.colors.muted,
+                                )
+                            }
                         }
                     }
+
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = MoneyTheme.colors.line,
+                    )
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    TimestampSection(timestamp = expenseUi.timestamp)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    CostSection(cost = expenseUi.cost)
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+
                 ContentSection(
                     content = expenseUi.content,
                     onAction = onAction,
-                    isShowSaveIcon = state.isShowSaveIcon
+                    isShowSaveIcon = state.isShowSaveIcon,
                 )
             }
-
         }
-
     }
-    if (isShowDeleteDialog){
+
+    if (isShowDeleteDialog) {
         DeleteDialog(
-            onConfirmButtonClick = {
-                onAction(EditExpenseAction.OnDelete)
-            },
-            onDismissRequest = {
-                isShowDeleteDialog = false
-            }
+            onConfirmButtonClick = { onAction(EditExpenseAction.OnDelete) },
+            onDismissRequest = { isShowDeleteDialog = false },
         )
     }
 }
 
-
 @Composable
 private fun CostSection(
-    cost: Long
+    cost: Long,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Icon(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(Res.drawable.baseline_attach_money_24),
-            contentDescription = null
+        Text(
+            modifier = Modifier.width(20.dp),
+            text = "$",
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+            color = MoneyTheme.colors.muted,
+            textAlign = TextAlign.Center,
         )
-        Spacer(modifier = Modifier.width(16.dp))
         Text(
             modifier = Modifier.weight(1f),
-            text = cost.toString(),
-            style = MaterialTheme.typography.bodyMedium
+            text = cost.toMoneyString().removePrefix("$"),
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontSize = 20.sp,
+                fontWeight = FontWeight.ExtraBold,
+            ),
+            color = MoneyTheme.colors.ink,
         )
     }
 }
 
 @Composable
 private fun TimestampSection(
-    timestamp: Long
+    timestamp: Long,
 ) {
     val dayOfWeek = stringResource(timestamp.toLocalDateTime().toDayOfWeekStringResource())
-    val date = remember(timestamp){
+    val date = remember(timestamp, dayOfWeek) {
         val localDateTime = timestamp.toLocalDateTime()
-        if (localDateTime.hour == 0 && localDateTime.minute == 0 && localDateTime.second == 0 && localDateTime.nanosecond == 0){
-            "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} (${dayOfWeek})"
-        }else{
-            "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} (${dayOfWeek}) ${localDateTime.hour.formatAddZero()}:${localDateTime.minute.formatAddZero()}:${localDateTime.second.formatAddZero()}"
+        if (localDateTime.hour == 0 && localDateTime.minute == 0 && localDateTime.second == 0 && localDateTime.nanosecond == 0) {
+            "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} ($dayOfWeek)"
+        } else {
+            "${localDateTime.monthNumber}/${localDateTime.dayOfMonth} ($dayOfWeek) ${localDateTime.hour.formatAddZero()}:${localDateTime.minute.formatAddZero()}:${localDateTime.second.formatAddZero()}"
         }
     }
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
             imageVector = Icons.Outlined.DateRange,
-            contentDescription = null
+            contentDescription = null,
+            tint = MoneyTheme.colors.muted,
         )
-        Spacer(modifier = Modifier.width(16.dp))
         Text(
             modifier = Modifier.weight(1f),
             text = date,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+            color = MoneyTheme.colors.ink,
         )
     }
-}
-
-@Composable
-private fun GroupSection(
-    modifier: Modifier = Modifier,
-    type: Type?
-) {
-    type?.let {
-        Row(
-            modifier = modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Box(
-                modifier = Modifier.size(20.dp).background(
-                    color = Color(it.colorArgb),
-                    shape = CircleShape
-                )
-            )
-            Spacer(Modifier.width(16.dp))
-            Text(
-                modifier = Modifier.weight(1f),
-                text = it.name,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-@Composable
-private fun IconSection(
-    modifier: Modifier = Modifier,
-    iconId: Int,
-    colorArgb: Int,
-    description: String
-){
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        CircleIcon(
-            modifier = Modifier.size(36.dp),
-            isClicked = true,
-            image = CategoryList.getCategoryIconById(iconId.toLong()),
-            backgroundColor = Color(colorArgb)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            modifier = Modifier.weight(1f),
-            text = description,
-            style = MaterialTheme.typography.bodyMedium
-        )
-    }
-
 }
 
 @Composable
@@ -358,93 +327,98 @@ private fun ContentSection(
     modifier: Modifier = Modifier,
     content: String = "",
     isShowSaveIcon: Boolean,
-    onAction: (EditExpenseAction) -> Unit
-){
+    onAction: (EditExpenseAction) -> Unit,
+) {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val scope = rememberCoroutineScope()
-    OutlinedCard(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-        ,
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.bglightColor()
-        )
+
+    MoneyCard(
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(18.dp),
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp)
-                .padding(horizontal = 24.dp)
-        ){
+                .padding(bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Box(
-                    modifier = Modifier.fillMaxWidth().weight(1f),
-                ){
-                    Icon(
-                        modifier = Modifier.size(20.dp),
-                        imageVector = vectorResource(Res.drawable.baseline_sticky_note_24),
-                        contentDescription = null
-                    )
-                }
-                if(isShowSaveIcon){
-                    Icon(
-                        modifier = Modifier.size(20.dp).noRippleClick {
-                            onAction(EditExpenseAction.OnSaveClick)
-                        },
-                        imageVector = vectorResource(Res.drawable.baseline_done),
-                        contentDescription = null
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                Icon(
+                    modifier = Modifier.size(16.dp),
+                    imageVector = vectorResource(Res.drawable.baseline_sticky_note_24),
+                    contentDescription = null,
+                    tint = MoneyTheme.colors.muted,
+                )
+                Text(
+                    text = stringResource(Res.string.description),
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                    color = MoneyTheme.colors.muted,
+                )
+            }
+            if (isShowSaveIcon) {
+                Surface(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable { onAction(EditExpenseAction.OnSaveClick) },
+                    shape = CircleShape,
+                    color = MoneyTheme.colors.surfaceAlt,
+                ) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+                        text = stringResource(Res.string.save),
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                        color = MoneyTheme.colors.ink,
                     )
                 }
             }
-            BasicTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Max)
-                    .padding(16.dp)
-                    .bringIntoViewRequester(bringIntoViewRequester),
-                value = content,
-                onValueChange = {
-                    onAction(EditExpenseAction.OnContentChange(it))
+        }
+
+        BasicTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 110.dp)
+                .padding(vertical = 6.dp)
+                .bringIntoViewRequester(bringIntoViewRequester),
+            value = content,
+            onValueChange = {
+                onAction(EditExpenseAction.OnContentChange(it))
+                scope.launch {
+                    bringIntoViewRequester.bringIntoView()
+                }
+            },
+            decorationBox = { innerTextField ->
+                Box {
+                    if (content.trim().isEmpty()) {
+                        Text(
+                            text = stringResource(Res.string.note_placeholder),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MoneyTheme.colors.muted,
+                        )
+                    }
+                    innerTextField()
+                }
+            },
+            textStyle = MaterialTheme.typography.bodyMedium.copy(
+                fontSize = 14.5.sp,
+                lineHeight = 22.sp,
+                color = MoneyTheme.colors.ink,
+            ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
                     scope.launch {
                         bringIntoViewRequester.bringIntoView()
                     }
-                },
-                decorationBox = { it ->
-                    if (content.trim().isEmpty()){
-                        Text(
-                            text = stringResource(Res.string.description),
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                color = MaterialTheme.colorScheme.secondary
-                            )
-                        )
-                    }
-                    it()
-                },
-                textStyle = MaterialTheme.typography.bodyMedium.copy(
-                    color = MaterialTheme.colorScheme.onBackground
-                ),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        scope.launch {
-                            bringIntoViewRequester.bringIntoView()
-                        }
-                    }
-                ),
-                cursorBrush = SolidColor(
-                    value = MaterialTheme.colorScheme.onBackground
-                )
-            )
-
-        }
+                }
+            ),
+            cursorBrush = SolidColor(MoneyTheme.colors.ink),
+        )
     }
 }
 
@@ -452,9 +426,6 @@ private fun ContentSection(
 @Composable
 private fun EditExpenseScreenPreview() {
     app.presentation.AppTheme {
-        EditExpenseScreen(
-            state = EditExpenseState()
-        )
+        EditExpenseScreen(state = EditExpenseState())
     }
 }
-

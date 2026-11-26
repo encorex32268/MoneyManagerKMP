@@ -13,7 +13,13 @@ import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 
 val homePresentationModule = module {
-    viewModelOf(::HomeViewModel)
+    viewModel {
+        HomeViewModel(
+            repository = get(),
+            spendingLimitRepository = get(),
+            keySettings = get(),
+        )
+    }
     viewModel { (expense: Expense) ->
         AddViewModel(
             expense = expense,

@@ -1,8 +1,8 @@
 package feature.home.presentation.add.type.category.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,15 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,112 +29,157 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import core.presentation.CategoryList
+import core.presentation.components.CircleIcon
 import core.presentation.model.CategoryUi
 import core.presentation.noRippleClick
+import core.ui.MoneyTheme
+import core.ui.MoneyTokens
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.category_add_description
-import moneymanagerkmp.composeapp.generated.resources.description
+import moneymanagerkmp.composeapp.generated.resources.dialog_cancel_button
+import moneymanagerkmp.composeapp.generated.resources.dialog_ok_button
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CategoryAddDialog(
     categoryUi: CategoryUi,
+    groupColorArgb: Int? = null,
     onDismissRequest: () -> Unit = {},
-    onDone: (CategoryUi) -> Unit = {}
+    onDone: (CategoryUi) -> Unit = {},
 ) {
+    var currentCategoryUi by remember { mutableStateOf(categoryUi) }
+    val badgeColor = groupColorArgb?.let { Color(it) }
+        ?: categoryUi.colorArgb?.let { Color(it) }
+        ?: MoneyTokens.CatFood
 
-    var currentCategoryUi by remember {
-        mutableStateOf(categoryUi)
-    }
-    Dialog(
-        onDismissRequest = onDismissRequest,
-        content = {
-            val keyboard = LocalSoftwareKeyboardController.current
-            val focusManager = LocalFocusManager.current
-            Box(
+    Dialog(onDismissRequest = onDismissRequest) {
+        val keyboard = LocalSoftwareKeyboardController.current
+        val focusManager = LocalFocusManager.current
+
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .noRippleClick {
+                    keyboard?.hide()
+                    focusManager.clearFocus(true)
+                },
+            shape = RoundedCornerShape(MoneyTokens.ModalRadius),
+            color = MoneyTheme.colors.surface,
+            shadowElevation = 12.dp,
+        ) {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .noRippleClick {
-                        keyboard?.hide()
-                        focusManager.clearFocus(true)
-                    }
-                    .background(
-                        color = MaterialTheme.colorScheme.background,
-                        shape = RoundedCornerShape(24.dp)
-                    )
-                ,
-                contentAlignment = Alignment.Center
-            ){
+                    .padding(22.dp),
+            ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    Icon(
-                        modifier = Modifier
-                            .size(24.dp),
-                        painter = CategoryList.getCategoryIconById(categoryUi.id.toLong()),
-                        contentDescription = null
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    CircleIcon(
+                        modifier = Modifier.size(42.dp),
+                        isClicked = true,
+                        image = CategoryList.getCategoryIconById(categoryUi.id.toLong()),
+                        backgroundColor = badgeColor,
                     )
-                    Spacer(Modifier.width(12.dp))
+                    Text(
+                        text = stringResource(Res.string.category_add_description),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MoneyTheme.colors.ink,
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(14.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(44.dp)
+                        .background(
+                            color = MoneyTheme.colors.bg,
+                            shape = RoundedCornerShape(13.dp),
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = MoneyTheme.colors.line,
+                            shape = RoundedCornerShape(13.dp),
+                        )
+                        .padding(horizontal = 14.dp),
+                    contentAlignment = Alignment.CenterStart,
+                ) {
                     BasicTextField(
-                        modifier = Modifier
-                            .fillMaxWidth(0.5f)
-                            .height(36.dp)
-                            .border(
-                                0.5.dp,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                            .padding(horizontal = 8.dp)
-                            .wrapContentHeight(Alignment.CenterVertically)
-                        ,
+                        modifier = Modifier.fillMaxWidth(),
                         value = currentCategoryUi.name,
                         onValueChange = {
-                            currentCategoryUi = currentCategoryUi.copy(
-                                name = it
-                            )
+                            currentCategoryUi = currentCategoryUi.copy(name = it)
                         },
                         maxLines = 1,
                         singleLine = true,
-                        decorationBox = {
-                            if (currentCategoryUi.name.isEmpty()){
+                        decorationBox = { innerTextField ->
+                            if (currentCategoryUi.name.isEmpty()) {
                                 Text(
                                     text = stringResource(Res.string.category_add_description),
-                                    style = MaterialTheme.typography.bodyMedium.copy(
-                                        fontSize = 12.sp
-                                    )
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MoneyTheme.colors.muted,
                                 )
                             }
-                            it()
+                            innerTextField()
                         },
-                        textStyle = MaterialTheme.typography.bodyMedium.copy(
-                            color = MaterialTheme.colorScheme.onBackground
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(
+                            color = MoneyTheme.colors.ink,
                         ),
-                        cursorBrush = SolidColor(
-                            value = MaterialTheme.colorScheme.onBackground
-                        )
+                        cursorBrush = SolidColor(MoneyTheme.colors.ink),
                     )
-                    IconButton(
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    OutlinedButton(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(44.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        border = BorderStroke(1.dp, MoneyTheme.colors.line),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MoneyTheme.colors.ink,
+                        ),
+                        onClick = onDismissRequest,
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.dialog_cancel_button),
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(44.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MoneyTheme.colors.accent,
+                            contentColor = MoneyTheme.colors.accentFg,
+                        ),
                         onClick = {
                             onDone(currentCategoryUi)
                             onDismissRequest()
-                        }) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null
+                        },
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.dialog_ok_button),
+                            style = MaterialTheme.typography.labelLarge,
                         )
                     }
-
                 }
             }
         }
-    )
+    }
 }

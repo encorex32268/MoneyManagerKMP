@@ -3,6 +3,7 @@ package feature.home.presentation
 import AppLogger
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import core.domain.KeySettings
 import core.domain.model.SpendingLimit
 import core.domain.repository.SpendingLimitRepository
 import core.presentation.date.DateConverter
@@ -23,11 +24,18 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
     private val repository: HomeRepository,
-    private val spendingLimitRepository: SpendingLimitRepository
+    private val spendingLimitRepository: SpendingLimitRepository,
+    private val keySettings: KeySettings? = null,
 ) : ViewModel() {
 
     private var currentSpendingLimit: SpendingLimit? = null
     private val selectedMonthYear = MutableStateFlow(MonthYear())
+    private val warningThresholds = MutableStateFlow(
+        Pair(
+            keySettings?.getBudgetWarnMidPercent() ?: KeySettings.DEFAULT_BUDGET_WARN_MID,
+            keySettings?.getBudgetWarnHighPercent() ?: KeySettings.DEFAULT_BUDGET_WARN_HIGH,
+        )
+    )
 
     val state: StateFlow<HomeState> = selectedMonthYear
         .flatMapLatest { (year, month) ->
@@ -36,19 +44,20 @@ class HomeViewModel(
             val targetMonth = month ?: nowDate.monthNumber
             val (startTime, endTime) = DateConverter.getMonthStartAndEndTime(
                 year = year,
-                month = month
+                month = month,
             )
 
             combine(
                 spendingLimitRepository.getSpendingLimit(
                     year = targetYear,
-                    month = targetMonth
+                    month = targetMonth,
                 ),
                 repository.getExpenseByTime(
                     startTimeOfMonth = startTime,
-                    endTimeOfMonth = endTime
-                )
-            ) { spendingLimit, data ->
+                    endTimeOfMonth = endTime,
+                ),
+                warningThresholds,
+            ) { spendingLimit, data, (warnMid, warnHigh) ->
                 currentSpendingLimit = spendingLimit
                 val expenseItems = data.filterNot { it.isIncome }
                 val totalExpense = expenseItems.sumOf { it.cost }
@@ -61,17 +70,22 @@ class HomeViewModel(
                 HomeState(
                     totalExpense = totalExpense,
                     expenseLimit = spendingLimit?.limit ?: 0L,
+                    warnMidPercent = warnMid,
+                    warnHighPercent = warnHigh,
                     nowDateYear = targetYear.toString(),
                     nowDateMonth = targetMonth.toString(),
                     nowDateDayOfMonth = nowDate.dayOfMonth.toString(),
-                    items = dataGroup
+                    items = dataGroup,
                 )
             }
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000L),
-            initialValue = HomeState()
+            initialValue = HomeState(
+                warnMidPercent = warningThresholds.value.first,
+                warnHighPercent = warningThresholds.value.second,
+            ),
         )
 
     fun onAction(event: HomeAction) {
@@ -79,14 +93,30 @@ class HomeViewModel(
             is HomeAction.OnDatePick -> {
                 selectedMonthYear.value = MonthYear(year = event.year, month = event.month)
             }
-            is HomeAction.OnSpendingLimitChange -> onSpendingLimitChange(event.expenseLimitText)
+            is HomeAction.OnSpendingLimitChange -> onSpendingLimitChange(
+                expenseLimitText = event.expenseLimitText,
+                warnMidPercent = event.warnMidPercent,
+                warnHighPercent = event.warnHighPercent,
+            )
             HomeAction.OnExpenseLimitClick -> Unit
             HomeAction.OnGotoAddScreen -> Unit
             is HomeAction.OnGotoEditScreen -> Unit
         }
     }
 
-    private fun onSpendingLimitChange(expenseLimitText: String) {
+    private fun onSpendingLimitChange(
+        expenseLimitText: String,
+        warnMidPercent: Int?,
+        warnHighPercent: Int?,
+    ) {
+        if (warnMidPercent != null && warnHighPercent != null) {
+            val mid = warnMidPercent.coerceIn(10, 85)
+            val high = warnHighPercent.coerceIn((mid + 5).coerceAtMost(95), 95)
+            keySettings?.setBudgetWarnMidPercent(mid)
+            keySettings?.setBudgetWarnHighPercent(high)
+            warningThresholds.value = mid to high
+        }
+
         val expenseLimit = expenseLimitText.toLongOrNull() ?: return
         viewModelScope.launch {
             val existing = currentSpendingLimit
@@ -102,7 +132,7 @@ class HomeViewModel(
                     SpendingLimit(
                         limit = expenseLimit,
                         year = targetYear,
-                        month = targetMonth
+                        month = targetMonth,
                     )
                 )
             }
