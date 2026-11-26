@@ -7,7 +7,7 @@ import core.domain.KeySettings
 
 class DefaultKeySettings(
     private val settings: Settings
-): KeySettings {
+) : KeySettings {
 
     override fun setDarkLightMode(isDark: Boolean) {
         settings.set(
@@ -34,6 +34,34 @@ class DefaultKeySettings(
         return settings.get(
             key = KeySettings.IS_REALM_MIGRATED,
             defaultValue = false
+        )
+    }
+
+    override fun setBudgetWarnMidPercent(percent: Int) {
+        settings.set(
+            key = KeySettings.BUDGET_WARN_MID,
+            value = percent
+        )
+    }
+
+    override fun getBudgetWarnMidPercent(): Int {
+        return settings.get(
+            key = KeySettings.BUDGET_WARN_MID,
+            defaultValue = KeySettings.DEFAULT_BUDGET_WARN_MID
+        )
+    }
+
+    override fun setBudgetWarnHighPercent(percent: Int) {
+        settings.set(
+            key = KeySettings.BUDGET_WARN_HIGH,
+            value = percent
+        )
+    }
+
+    override fun getBudgetWarnHighPercent(): Int {
+        return settings.get(
+            key = KeySettings.BUDGET_WARN_HIGH,
+            defaultValue = KeySettings.DEFAULT_BUDGET_WARN_HIGH
         )
     }
 }
