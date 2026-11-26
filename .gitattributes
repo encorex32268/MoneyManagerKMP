@@ -1,3 +1,6 @@
 # Exclude design specs and generated Room schemas from GitHub language statistics
-design/** linguist-documentation
-core/data/schemas/** linguist-generated
+# Note: Use explicit patterns (avoid **) for full GitHub Linguist / libgit2 compatibility
+*.html linguist-documentation
+design/* linguist-documentation
+design/*/* linguist-documentation
+core/data/schemas/*/*.json linguist-generated
