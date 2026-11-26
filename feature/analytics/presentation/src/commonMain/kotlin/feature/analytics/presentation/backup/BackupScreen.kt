@@ -2,17 +2,10 @@
 
 package feature.analytics.presentation.backup
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,19 +25,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import core.presentation.ObserveAsEvents
 import core.presentation.UiText
 import core.presentation.components.OneButtonDialog
-import core.ui.bglightColor
-import core.ui.borderColor
-import core.ui.highlightColor
-import core.ui.textColor
+import core.ui.MoneyTheme
 import feature.analytics.domain.util.backup.toUiText
 import feature.analytics.presentation.backup.components.BackupCardSection
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
@@ -53,12 +39,10 @@ import io.github.vinceglb.filekit.core.PickerType
 import kotlinx.coroutines.launch
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.backup_backup
-import moneymanagerkmp.composeapp.generated.resources.backup_cloud
-import moneymanagerkmp.composeapp.generated.resources.backup_cloud_import
 import moneymanagerkmp.composeapp.generated.resources.backup_import
 import moneymanagerkmp.composeapp.generated.resources.backup_local
+import moneymanagerkmp.composeapp.generated.resources.cd_back
 import moneymanagerkmp.composeapp.generated.resources.error
-import moneymanagerkmp.composeapp.generated.resources.expense
 import moneymanagerkmp.composeapp.generated.resources.failed_snackbar
 import moneymanagerkmp.composeapp.generated.resources.success_snackbar
 import org.jetbrains.compose.resources.getString
@@ -70,39 +54,36 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @Composable
 fun BackupScreenRoot(
     onBackClick: () -> Unit = {},
-    viewModel: BackupViewModel = koinViewModel()
+    viewModel: BackupViewModel = koinViewModel(),
 ) {
     val hostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val singleFilePicker = rememberFilePickerLauncher(
         type = PickerType.File(listOf("txt")),
         mode = PickerMode.Single,
-    ){ platformFile ->
+    ) { platformFile ->
         platformFile?.let {
-            viewModel.onAction(
-                BackupAction.OnImport(platformFile)
-            )
+            viewModel.onAction(BackupAction.OnImport(platformFile))
         }
     }
-    var uiText by remember {
-        mutableStateOf<UiText?>(null)
-    }
-    ObserveAsEvents(events = viewModel.uiEvent , viewModel){ event ->
-        when(event){
+    var uiText by remember { mutableStateOf<UiText?>(null) }
+
+    ObserveAsEvents(events = viewModel.uiEvent, viewModel) { event ->
+        when (event) {
             is BackupUiEvent.SendError -> {
                 scope.launch {
                     hostState.showSnackbar(
                         getString(Res.string.failed_snackbar),
-                        duration = SnackbarDuration.Short
+                        duration = SnackbarDuration.Short,
                     )
                 }
                 uiText = event.error.toUiText()
             }
-            BackupUiEvent.TaskSuccess  -> {
+            BackupUiEvent.TaskSuccess -> {
                 scope.launch {
                     hostState.showSnackbar(
                         getString(Res.string.success_snackbar),
-                        duration = SnackbarDuration.Short
+                        duration = SnackbarDuration.Short,
                     )
                 }
             }
@@ -110,40 +91,42 @@ fun BackupScreenRoot(
     }
 
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState)
-        },
+        containerColor = MoneyTheme.colors.bg,
+        snackbarHost = { SnackbarHost(hostState) },
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MoneyTheme.colors.bg,
+                    titleContentColor = MoneyTheme.colors.ink,
+                    navigationIconContentColor = MoneyTheme.colors.ink,
+                ),
                 title = {
                     Text(
                         text = stringResource(Res.string.backup_backup),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleLarge,
                     )
                 },
                 navigationIcon = {
-                    IconButton(
-                        onClick = onBackClick
-                    ){
+                    IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = "Backup Back"
+                            contentDescription = stringResource(Res.string.cd_back),
                         )
                     }
-                }
+                },
             )
-        }
-    ){
+        },
+    ) { paddingValues ->
         BackupScreen(
-            modifier = Modifier.fillMaxSize().padding(it),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(top = 8.dp),
             onAction = { event ->
-                when(event){
+                when (event) {
                     BackupAction.OnBackClick -> onBackClick()
-                    is BackupAction.OnImport -> {
-                        singleFilePicker.launch()
-                    }
-                    else               -> viewModel.onAction(event)
+                    is BackupAction.OnImport -> singleFilePicker.launch()
+                    else -> viewModel.onAction(event)
                 }
             },
         )
@@ -152,43 +135,28 @@ fun BackupScreenRoot(
             OneButtonDialog(
                 title = stringResource(Res.string.error),
                 content = errorMessage,
-                onDismissRequest = {
-                    uiText = null
-                }
+                onDismissRequest = { uiText = null },
             )
         }
-
     }
-
-
 }
 
 @Composable
 fun BackupScreen(
     modifier: Modifier = Modifier,
-    onAction: (BackupAction) -> Unit = {}
+    onAction: (BackupAction) -> Unit = {},
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ){
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
         BackupCardSection(
             title = stringResource(Res.string.backup_local),
             onAction = onAction,
             backupImage = painterResource(Res.drawable.backup_backup),
-            restoreImage = painterResource(Res.drawable.backup_import)
+            restoreImage = painterResource(Res.drawable.backup_import),
         )
-//        BackupCardSection(
-//            title = stringResource(Res.string.backup_cloud),
-//            onAction = {
-//                //ios not open yet
-//                onAction(it)
-//            },
-//            backupImage = painterResource(Res.drawable.backup_cloud),
-//            restoreImage = painterResource(Res.drawable.backup_cloud_import)
-//        )
     }
-
 }
 
 @org.jetbrains.compose.ui.tooling.preview.Preview
@@ -198,4 +166,3 @@ private fun BackupScreenPreview() {
         BackupScreen()
     }
 }
-
