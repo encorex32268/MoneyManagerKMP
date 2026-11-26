@@ -1,10 +1,9 @@
 package feature.home.presentation.components
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,9 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -23,36 +21,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import app.presentation.AppTheme
 import core.presentation.CategoryList
 import core.presentation.components.CircleIcon
-import core.presentation.components.ReceiptShape
+import core.presentation.components.MoneyCard
 import core.presentation.date.toDayOfWeekStringResource
 import core.presentation.date.toLocalDateTime
+import core.ui.MoneyTheme
+import core.ui.MoneyTokens
 import feature.home.presentation.model.ExpenseUi
-import moneymanagerkmp.composeapp.generated.resources.Res
-import moneymanagerkmp.composeapp.generated.resources.baseline_sticky_note_24
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import toDateString
 import toMoneyString
 
-private val ReceiptCardShape = ReceiptShape(
-    cornerRadius = 16.dp,
-    toothWidth = 10.dp,
-    toothHeight = 5.dp,
-)
-
+/**
+ * D3 Day Card grouping expenses for a single date.
+ */
 @Composable
 fun ExpenseItem(
     modifier: Modifier = Modifier,
@@ -71,85 +64,54 @@ fun ExpenseItem(
     val dayOfWeekString = stringResource(localDateTime.toDayOfWeekStringResource())
     val date = remember(localDateTime, dayOfWeekString) {
         val dateString = toDateString(localDateTime.monthNumber, localDateTime.dayOfMonth)
-        "$dateString $dayOfWeekString"
+        "$dateString ($dayOfWeekString)"
     }
 
-    Surface(
+    MoneyCard(
         modifier = modifier,
-        shape = ReceiptCardShape,
-        color = MaterialTheme.colorScheme.surfaceContainerLowest,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-        shadowElevation = 1.dp,
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 14.dp, bottom = 6.dp),
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 14.dp),
+                .padding(bottom = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = date,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                    ),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Text(
-                    text = total.toMoneyString(),
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.End,
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-            }
-
-            DashedReceiptDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 10.dp),
+            Text(
+                modifier = Modifier.weight(1f),
+                text = date,
+                style = MaterialTheme.typography.labelMedium,
+                color = MoneyTheme.colors.muted,
             )
+            Text(
+                text = total.toMoneyString(),
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.End,
+                ),
+                color = MoneyTheme.colors.ink,
+            )
+        }
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-            ) {
-                items.forEach { expense ->
-                    ExpenseRow(
-                        expense = expense,
-                        isClick = isClick,
-                        onClick = { onItemClick(expense) },
-                    )
-                }
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = MoneyTheme.colors.line,
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            items.forEach { expense ->
+                ExpenseRow(
+                    expense = expense,
+                    isClick = isClick,
+                    onClick = { onItemClick(expense) },
+                )
             }
         }
-    }
-}
-
-@Composable
-private fun DashedReceiptDivider(
-    modifier: Modifier = Modifier,
-) {
-    val dividerColor = MaterialTheme.colorScheme.outlineVariant
-    Canvas(
-        modifier = modifier.height(1.dp),
-    ) {
-        drawLine(
-            color = dividerColor,
-            start = Offset(0f, size.height / 2f),
-            end = Offset(size.width, size.height / 2f),
-            strokeWidth = 1.dp.toPx(),
-            pathEffect = PathEffect.dashPathEffect(
-                intervals = floatArrayOf(12f, 8f),
-                phase = 0f,
-            ),
-        )
     }
 }
 
@@ -171,7 +133,7 @@ private fun ExpenseRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(10.dp))
             .then(
                 if (isClick) {
                     Modifier.clickable(onClick = onClick)
@@ -179,35 +141,38 @@ private fun ExpenseRow(
                     Modifier
                 }
             )
-            .padding(vertical = 6.dp, horizontal = 4.dp),
+            .padding(vertical = 10.dp, horizontal = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CircleIcon(
-            modifier = Modifier.size(34.dp),
-            isClicked = isClick,
+            modifier = Modifier.size(MoneyTokens.BadgeIconSize),
+            isClicked = true,
             image = CategoryList.getCategoryIconById(expense.categoryId.toLong()),
             backgroundColor = backgroundColor,
         )
-        Spacer(modifier = Modifier.width(10.dp))
-        Row(
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(
             modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             Text(
-                modifier = Modifier.weight(1f, fill = false),
                 text = expense.description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                ),
+                color = MoneyTheme.colors.ink,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             if (expense.content.trim().isNotEmpty()) {
-                Spacer(modifier = Modifier.width(4.dp))
-                Icon(
-                    modifier = Modifier.size(14.dp),
-                    imageVector = vectorResource(Res.drawable.baseline_sticky_note_24),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                Text(
+                    text = expense.content.trim(),
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontWeight = FontWeight.Normal,
+                    ),
+                    color = MoneyTheme.colors.muted,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -215,10 +180,11 @@ private fun ExpenseRow(
         Text(
             text = expense.cost.toMoneyString(),
             style = MaterialTheme.typography.bodyMedium.copy(
-                fontWeight = FontWeight.Medium,
+                fontSize = 14.5.sp,
+                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.End,
             ),
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MoneyTheme.colors.ink,
         )
     }
 }
@@ -228,25 +194,17 @@ private val previewExpenses = listOf(
         id = "1",
         categoryId = 1,
         typeId = 1L,
-        description = "襯衫",
-        cost = 150,
+        description = "速食",
+        cost = 500,
         timestamp = 1751155200000L,
-        content = "Summer sale",
+        content = "週末跟朋友聚餐吃漢堡薯條",
     ),
     ExpenseUi(
         id = "2",
         categoryId = 2,
         typeId = 2L,
-        description = "運動",
-        cost = 900,
-        timestamp = 1751155200000L,
-    ),
-    ExpenseUi(
-        id = "3",
-        categoryId = 3,
-        typeId = 3L,
-        description = "火車",
-        cost = 60,
+        description = "飲料",
+        cost = 65,
         timestamp = 1751155200000L,
     ),
 )
@@ -300,29 +258,6 @@ private fun ExpenseItemReadOnlyPreview() {
                 .padding(16.dp),
             items = previewExpenses,
             isClick = false,
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun ExpenseItemLongTextPreview() {
-    AppTheme(darkTheme = false) {
-        ExpenseItem(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            items = listOf(
-                ExpenseUi(
-                    id = "1",
-                    categoryId = 1,
-                    typeId = 1L,
-                    description = "Supermarket weekly grocery shopping with snacks and drinks",
-                    cost = 12345,
-                    timestamp = 1751155200000L,
-                    content = "Note",
-                ),
-            ),
         )
     }
 }

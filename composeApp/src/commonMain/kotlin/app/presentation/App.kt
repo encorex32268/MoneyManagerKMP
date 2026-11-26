@@ -89,8 +89,8 @@ fun App(
                     .fillMaxSize()
                     .background(color = MaterialTheme.colorScheme.background)
                     .systemBarsPadding()
-                    .navigationBarsPadding()
-                ,
+                    .navigationBarsPadding(),
+                containerColor = MaterialTheme.colorScheme.background,
                 bottomBar = {
                     if (
                         isMainCurrentDestination(currentDestination)&&
