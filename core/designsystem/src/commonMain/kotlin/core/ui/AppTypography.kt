@@ -1,6 +1,5 @@
 package core.ui
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
@@ -9,214 +8,172 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import moneymanagerkmp.composeapp.generated.resources.Res
-import moneymanagerkmp.composeapp.generated.resources.notosanstc_bold
-import moneymanagerkmp.composeapp.generated.resources.notosanstc_extrabold
-import moneymanagerkmp.composeapp.generated.resources.notosanstc_medium
-import moneymanagerkmp.composeapp.generated.resources.notosanstc_regular
-import moneymanagerkmp.composeapp.generated.resources.notosanstc_semibold
+import moneymanagerkmp.composeapp.generated.resources.plus_jakarta_sans_bold
+import moneymanagerkmp.composeapp.generated.resources.plus_jakarta_sans_extrabold
+import moneymanagerkmp.composeapp.generated.resources.plus_jakarta_sans_medium
+import moneymanagerkmp.composeapp.generated.resources.plus_jakarta_sans_regular
+import moneymanagerkmp.composeapp.generated.resources.plus_jakarta_sans_semibold
 import org.jetbrains.compose.resources.Font
 
+private const val TABULAR_NUMS = "tnum"
 
 @Composable
-fun getTypography() : Typography {
-    val notosanstc = FontFamily(
-        fonts =listOf(
+fun getTypography(): Typography {
+    val appFontFamily = FontFamily(
+        fonts = listOf(
             Font(
-                resource = Res.font.notosanstc_regular,
+                resource = Res.font.plus_jakarta_sans_regular,
                 weight = FontWeight.Normal,
-                style = FontStyle.Normal
+                style = FontStyle.Normal,
             ),
             Font(
-                resource = Res.font.notosanstc_medium,
+                resource = Res.font.plus_jakarta_sans_medium,
                 weight = FontWeight.Medium,
-                style = FontStyle.Normal
+                style = FontStyle.Normal,
             ),
             Font(
-                resource = Res.font.notosanstc_semibold,
+                resource = Res.font.plus_jakarta_sans_semibold,
                 weight = FontWeight.SemiBold,
-                style = FontStyle.Normal
+                style = FontStyle.Normal,
             ),
             Font(
-                resource = Res.font.notosanstc_bold,
+                resource = Res.font.plus_jakarta_sans_bold,
                 weight = FontWeight.Bold,
-                style = FontStyle.Normal
+                style = FontStyle.Normal,
             ),
             Font(
-                resource = Res.font.notosanstc_extrabold,
+                resource = Res.font.plus_jakarta_sans_extrabold,
                 weight = FontWeight.ExtraBold,
-                style = FontStyle.Normal
-            )
+                style = FontStyle.Normal,
+            ),
         )
     )
 
-
-    val old =  Typography(
-        bodyLarge = TextStyle(
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.textColor()
-        ),
-        bodyMedium = TextStyle(
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Medium,
-            fontSize = 14.sp,
-            color = MaterialTheme.colorScheme.textColor()
-        ),
-        bodySmall = TextStyle(
-            fontFamily = notosanstc,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Light,
-            color = MaterialTheme.colorScheme.textColor()
-        ),
-
-        labelLarge = TextStyle(
-            fontFamily = notosanstc,
+    return Typography(
+        // Hero Total: 33sp ExtraBold (lh 1.15)
+        displaySmall = TextStyle(
+            fontFamily = appFontFamily,
             fontWeight = FontWeight.ExtraBold,
-            fontSize = 20.sp,
-            color = MaterialTheme.colorScheme.textColor()
+            fontSize = 33.sp,
+            lineHeight = 38.sp,
+            letterSpacing = (-0.8).sp,
+            fontFeatureSettings = TABULAR_NUMS,
         ),
-        labelMedium = TextStyle(
-            fontFamily = notosanstc,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Normal,
-            color = MaterialTheme.colorScheme.textColor()
+        // Numpad Amount: 28sp ExtraBold (lh 1.2)
+        headlineMedium = TextStyle(
+            fontFamily = appFontFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 28.sp,
+            lineHeight = 34.sp,
+            letterSpacing = (-0.6).sp,
+            fontFeatureSettings = TABULAR_NUMS,
         ),
-        labelSmall = TextStyle(
-            fontFamily = notosanstc,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Thin,
-            color = MaterialTheme.colorScheme.textColor()
+        // Chart Total: 22sp ExtraBold (lh 1.2)
+        headlineSmall = TextStyle(
+            fontFamily = appFontFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 22.sp,
+            lineHeight = 26.sp,
+            letterSpacing = (-0.4).sp,
+            fontFeatureSettings = TABULAR_NUMS,
         ),
-        titleSmall = TextStyle(
-            fontFamily = notosanstc,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.textColor()
-        )
-
-
-    )
-
-    val QashTypography = Typography(
-        // Display
+        headlineLarge = TextStyle(
+            fontFamily = appFontFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 32.sp,
+            lineHeight = 38.sp,
+            letterSpacing = (-0.6).sp,
+            fontFeatureSettings = TABULAR_NUMS,
+        ),
         displayLarge = TextStyle(
-            fontFamily = notosanstc, // 或 appFontFamily
-            fontWeight = FontWeight.Light,
-            fontSize = 57.sp,
-            lineHeight = 64.sp,
-            letterSpacing = (-0.25).sp
+            fontFamily = appFontFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 44.sp,
+            lineHeight = 52.sp,
+            letterSpacing = (-0.8).sp,
+            fontFeatureSettings = TABULAR_NUMS,
         ),
         displayMedium = TextStyle(
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Light,
-            fontSize = 45.sp,
-            lineHeight = 52.sp,
-            letterSpacing = 0.sp
-        ),
-        displaySmall = TextStyle(
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Normal,
+            fontFamily = appFontFamily,
+            fontWeight = FontWeight.ExtraBold,
             fontSize = 36.sp,
-            lineHeight = 44.sp,
-            letterSpacing = 0.sp
+            lineHeight = 42.sp,
+            letterSpacing = (-0.6).sp,
+            fontFeatureSettings = TABULAR_NUMS,
         ),
-
-        // Headline
-        headlineLarge = TextStyle(
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Normal,
-            fontSize = 32.sp,
-            lineHeight = 40.sp,
-            letterSpacing = 0.sp
-        ),
-        headlineMedium = TextStyle(
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Normal,
-            fontSize = 28.sp,
-            lineHeight = 36.sp,
-            letterSpacing = 0.sp
-        ),
-        headlineSmall = TextStyle(
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Normal,
-            fontSize = 24.sp,
-            lineHeight = 32.sp,
-            letterSpacing = 0.sp
-        ),
-
-        // Title
+        // Page Title: 18sp Bold (lh 1.3)
         titleLarge = TextStyle(
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Medium,
-            fontSize = 22.sp,
-            lineHeight = 28.sp,
-            letterSpacing = 0.sp
+            fontFamily = appFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+            lineHeight = 24.sp,
+            letterSpacing = (-0.2).sp,
+            fontFeatureSettings = TABULAR_NUMS,
         ),
+        // Pill / Sub Title: 16sp Bold (lh 1.3)
         titleMedium = TextStyle(
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Medium, // 通常用於次要標題，字重可略高
+            fontFamily = appFontFamily,
+            fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
-            lineHeight = 24.sp,
-            letterSpacing = 0.15.sp
+            lineHeight = 21.sp,
+            letterSpacing = (-0.1).sp,
+            fontFeatureSettings = TABULAR_NUMS,
         ),
+        // Chip / Subtitle: 13sp SemiBold (lh 1.4)
         titleSmall = TextStyle(
-            fontFamily = notosanstc,
+            fontFamily = appFontFamily,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 13.sp,
+            lineHeight = 18.sp,
+            fontFeatureSettings = TABULAR_NUMS,
+        ),
+        // Primary Item: 15sp SemiBold
+        bodyLarge = TextStyle(
+            fontFamily = appFontFamily,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 15.sp,
+            lineHeight = 22.sp,
+            fontFeatureSettings = TABULAR_NUMS,
+        ),
+        // Body / Item: 14sp Medium (lh 1.45)
+        bodyMedium = TextStyle(
+            fontFamily = appFontFamily,
             fontWeight = FontWeight.Medium,
             fontSize = 14.sp,
             lineHeight = 20.sp,
-            letterSpacing = 0.1.sp
+            fontFeatureSettings = TABULAR_NUMS,
         ),
-
-        // Body (這是您最常用來顯示內文的，例如列表項目描述、數字等)
-        bodyLarge = TextStyle( // 主要的內文，例如您的帳目列表中的金額和描述
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
-            letterSpacing = 0.5.sp
-        ),
-        bodyMedium = TextStyle( // 次要內文或更小的描述
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp,
-            lineHeight = 20.sp,
-            letterSpacing = 0.25.sp
-        ),
-        bodySmall = TextStyle( // 最細小的內文，如備註或日期
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Normal,
-            fontSize = 12.sp,
-            lineHeight = 16.sp,
-            letterSpacing = 0.4.sp
-        ),
-
-        // Label (用於 UI 元件的標籤、按鈕文字、小提示等)
-        labelLarge = TextStyle( // 按鈕文字、導航文字
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Medium,
-            fontSize = 14.sp,
-            lineHeight = 20.sp,
-            letterSpacing = 0.1.sp
-        ),
-        labelMedium = TextStyle( // 小徽章、日期選擇器、Input 欄位提示文字
-            fontFamily = notosanstc,
+        // Meta / Secondary: 12sp Medium (lh 1.35)
+        bodySmall = TextStyle(
+            fontFamily = appFontFamily,
             fontWeight = FontWeight.Medium,
             fontSize = 12.sp,
             lineHeight = 16.sp,
-            letterSpacing = 0.5.sp
+            fontFeatureSettings = TABULAR_NUMS,
         ),
-        labelSmall = TextStyle( // 最小的輔助信息、錯誤提示
-            fontFamily = notosanstc,
-            fontWeight = FontWeight.Medium,
+        // Button / Numpad Label: 14sp Bold
+        labelLarge = TextStyle(
+            fontFamily = appFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            lineHeight = 18.sp,
+            fontFeatureSettings = TABULAR_NUMS,
+        ),
+        // Date header / Badge: 12sp SemiBold
+        labelMedium = TextStyle(
+            fontFamily = appFontFamily,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 12.sp,
+            lineHeight = 16.sp,
+            fontFeatureSettings = TABULAR_NUMS,
+        ),
+        // Bottom Nav Label: 11sp SemiBold
+        labelSmall = TextStyle(
+            fontFamily = appFontFamily,
+            fontWeight = FontWeight.SemiBold,
             fontSize = 11.sp,
-            lineHeight = 16.sp,
-            letterSpacing = 0.5.sp
-        )
+            lineHeight = 15.sp,
+            fontFeatureSettings = TABULAR_NUMS,
+        ),
     )
-
-    return QashTypography
 }
-
-
-

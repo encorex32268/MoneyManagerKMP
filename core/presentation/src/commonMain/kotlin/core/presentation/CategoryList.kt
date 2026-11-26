@@ -198,6 +198,7 @@ import moneymanagerkmp.composeapp.generated.resources.wear_shorts
 import moneymanagerkmp.composeapp.generated.resources.wear_skirt
 import moneymanagerkmp.composeapp.generated.resources.wear_socks
 import moneymanagerkmp.composeapp.generated.resources.wear_trousers
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
@@ -234,667 +235,219 @@ object CategoryList {
 
     }
 
-    @OptIn(ExperimentalResourceApi::class)
+    private val categoryIconMap: Map<Long, DrawableResource> = mapOf(
+        // Food
+        FOOD + 1 to Res.drawable.food_food,
+        FOOD + 2 to Res.drawable.food_fast_food,
+        FOOD + 3 to Res.drawable.food_rice,
+        FOOD + 4 to Res.drawable.food_noodles,
+        FOOD + 5 to Res.drawable.food_fruits,
+        FOOD + 6 to Res.drawable.food_salad,
+        FOOD + 7 to Res.drawable.food_seafood,
+        FOOD + 8 to Res.drawable.food_buy_food,
+        FOOD + 9 to Res.drawable.food_pizza,
+        FOOD + 10 to Res.drawable.food_hamburger,
+        FOOD + 11 to Res.drawable.food_buy_food2,
+        FOOD + 12 to Res.drawable.food_vegetables,
+        FOOD + 13 to Res.drawable.food_cake,
+        FOOD + 14 to Res.drawable.food_cookie,
+        FOOD + 15 to Res.drawable.food_bread,
+        FOOD + 16 to Res.drawable.food_beer,
+        FOOD + 17 to Res.drawable.food_drink,
+        FOOD + 18 to Res.drawable.food_wine,
+        FOOD + 19 to Res.drawable.food_coffee,
+        FOOD + 20 to Res.drawable.food_hot_coffee,
+        FOOD + 21 to Res.drawable.food_hot_tea,
+        FOOD + 22 to Res.drawable.food_boxlunch,
+        FOOD + 23 to Res.drawable.food_boxlunch2,
+        FOOD + 24 to Res.drawable.food_delivery,
+        FOOD + 25 to Res.drawable.food_dog,
+        FOOD + 26 to Res.drawable.food_foodset,
+        FOOD + 27 to Res.drawable.food_meal,
+        FOOD + 28 to Res.drawable.food_meal2,
+        FOOD + 29 to Res.drawable.food_sauce,
+        FOOD + 30 to Res.drawable.food_streetfood,
+        FOOD + 31 to Res.drawable.food_water,
+
+        // Traffic
+        TRAFFIC + 1 to Res.drawable.traffic_train,
+        TRAFFIC + 2 to Res.drawable.traffic_city_train,
+        TRAFFIC + 3 to Res.drawable.traffic_highspeed_train,
+        TRAFFIC + 4 to Res.drawable.traffic_bus,
+        TRAFFIC + 5 to Res.drawable.traffic_highway_bus,
+        TRAFFIC + 6 to Res.drawable.traffic_bicycle,
+        TRAFFIC + 7 to Res.drawable.traffic_motobike,
+        TRAFFIC + 8 to Res.drawable.traffic_car,
+        TRAFFIC + 9 to Res.drawable.traffic_taxi,
+        TRAFFIC + 10 to Res.drawable.traffic_cable_car,
+        TRAFFIC + 11 to Res.drawable.traffic_train_ticket,
+        TRAFFIC + 12 to Res.drawable.traffic_ship,
+        TRAFFIC + 13 to Res.drawable.traffic_parking,
+        TRAFFIC + 14 to Res.drawable.traffic_plane,
+
+        // Life
+        LIFE + 1 to Res.drawable.life_rent,
+        LIFE + 2 to Res.drawable.life_car,
+        LIFE + 3 to Res.drawable.life_bank,
+        LIFE + 4 to Res.drawable.life_light_fee,
+        LIFE + 5 to Res.drawable.life_water_fee,
+        LIFE + 6 to Res.drawable.life_phone_fee,
+        LIFE + 7 to Res.drawable.life_smart_phone_fee,
+        LIFE + 8 to Res.drawable.life_network_fee,
+        LIFE + 9 to Res.drawable.life_wifi,
+        LIFE + 10 to Res.drawable.life_wifi_router,
+        LIFE + 11 to Res.drawable.life_money_transfer,
+        LIFE + 12 to Res.drawable.life_money_income,
+        LIFE + 13 to Res.drawable.life_rent,
+        LIFE + 14 to Res.drawable.life_salary,
+        LIFE + 15 to Res.drawable.life_music,
+        LIFE + 16 to Res.drawable.life_save_money,
+        LIFE + 17 to Res.drawable.life_stock_increase,
+        LIFE + 18 to Res.drawable.life_stock_decrease,
+        LIFE + 19 to Res.drawable.life_stocks,
+        LIFE + 20 to Res.drawable.life_taxes,
+        LIFE + 21 to Res.drawable.life_taxes2,
+        LIFE + 22 to Res.drawable.life_taxes3,
+        LIFE + 23 to Res.drawable.life_video,
+        LIFE + 24 to Res.drawable.life_paint,
+        LIFE + 25 to Res.drawable.life_hammer,
+        LIFE + 26 to Res.drawable.life_shampoo,
+        LIFE + 27 to Res.drawable.life_shampoo2,
+        LIFE + 28 to Res.drawable.life_furniture,
+        LIFE + 29 to Res.drawable.life_makeup4,
+        LIFE + 30 to Res.drawable.life_bath,
+        LIFE + 31 to Res.drawable.life_tube,
+        LIFE + 32 to Res.drawable.life_tube2,
+
+        // Health
+        HEALTH + 1 to Res.drawable.health_doctor2,
+        HEALTH + 2 to Res.drawable.health_doctor,
+        HEALTH + 3 to Res.drawable.health_sick,
+        HEALTH + 4 to Res.drawable.health_pill,
+        HEALTH + 5 to Res.drawable.health_health,
+        HEALTH + 6 to Res.drawable.health_tooth,
+        HEALTH + 7 to Res.drawable.health_help,
+        HEALTH + 8 to Res.drawable.health_hospital,
+        HEALTH + 9 to Res.drawable.health_hospital2,
+        HEALTH + 10 to Res.drawable.health_massage,
+        HEALTH + 11 to Res.drawable.health_calendar,
+        HEALTH + 12 to Res.drawable.health_card,
+
+        // Sports
+        SPORTS + 1 to Res.drawable.sports_sports,
+        SPORTS + 2 to Res.drawable.sports_boxing,
+        SPORTS + 3 to Res.drawable.sports_basketball,
+        SPORTS + 4 to Res.drawable.sports_baseball,
+        SPORTS + 5 to Res.drawable.sports_gym,
+        SPORTS + 6 to Res.drawable.sports_8ball,
+        SPORTS + 7 to Res.drawable.sports_tennis,
+        SPORTS + 8 to Res.drawable.sports_usa_football,
+        SPORTS + 9 to Res.drawable.sports_football,
+        SPORTS + 10 to Res.drawable.sports_yoga,
+        SPORTS + 11 to Res.drawable.sports_volley,
+        SPORTS + 12 to Res.drawable.sports_golf,
+        SPORTS + 13 to Res.drawable.sports_pingpong,
+        SPORTS + 14 to Res.drawable.sports_skiing,
+        SPORTS + 15 to Res.drawable.sports_bowling,
+        SPORTS + 16 to Res.drawable.sports_swim,
+        SPORTS + 17 to Res.drawable.sports_camp,
+        SPORTS + 18 to Res.drawable.sports_jumping,
+        SPORTS + 19 to Res.drawable.sports_paragliding,
+
+        // Wear
+        WEAR + 1 to Res.drawable.wear_shirts,
+        WEAR + 2 to Res.drawable.wear_shorts,
+        WEAR + 3 to Res.drawable.wear_dress,
+        WEAR + 4 to Res.drawable.wear_skirt,
+        WEAR + 5 to Res.drawable.wear_shoes,
+        WEAR + 6 to Res.drawable.wear_socks,
+        WEAR + 7 to Res.drawable.wear_trousers,
+        WEAR + 8 to Res.drawable.wear_cap,
+        WEAR + 9 to Res.drawable.wear_hat,
+        WEAR + 10 to Res.drawable.wear_baby,
+        WEAR + 11 to Res.drawable.wear_bag,
+        WEAR + 12 to Res.drawable.wear_bag2,
+        WEAR + 13 to Res.drawable.wear_bag3,
+
+        // Shopping
+        SHOPPING + 1 to Res.drawable.shopping_shopping,
+        SHOPPING + 2 to Res.drawable.shopping_gift,
+        SHOPPING + 3 to Res.drawable.shopping_glasses,
+        SHOPPING + 4 to Res.drawable.shopping_flowers,
+        SHOPPING + 5 to Res.drawable.shopping_makeup,
+        SHOPPING + 6 to Res.drawable.shopping_makeup2,
+        SHOPPING + 7 to Res.drawable.shopping_makeup3,
+        SHOPPING + 8 to Res.drawable.shopping_makeup_brush,
+        SHOPPING + 9 to Res.drawable.shopping_necklace,
+        SHOPPING + 10 to Res.drawable.shopping_ring,
+        SHOPPING + 11 to Res.drawable.shopping_pc,
+        SHOPPING + 12 to Res.drawable.shopping_phone,
+        SHOPPING + 13 to Res.drawable.shopping_camera,
+        SHOPPING + 14 to Res.drawable.shopping_switch,
+        SHOPPING + 15 to Res.drawable.shopping_bag,
+        SHOPPING + 16 to Res.drawable.shopping_plant,
+        SHOPPING + 17 to Res.drawable.shopping_plant2,
+
+        // Other
+        OTHER + 1 to Res.drawable.other_save_money,
+        OTHER + 2 to Res.drawable.other_washing_machine,
+        OTHER + 3 to Res.drawable.other_bill,
+        OTHER + 4 to Res.drawable.other_book,
+        OTHER + 5 to Res.drawable.other_book2,
+        OTHER + 6 to Res.drawable.other_car_repair,
+        OTHER + 7 to Res.drawable.other_car_wash,
+        OTHER + 8 to Res.drawable.other_car_fee,
+        OTHER + 9 to Res.drawable.other_card_fee,
+        OTHER + 10 to Res.drawable.other_creditcard,
+        OTHER + 11 to Res.drawable.other_light_fee,
+        OTHER + 12 to Res.drawable.other_water_fee,
+        OTHER + 13 to Res.drawable.other_book2,
+        OTHER + 14 to Res.drawable.other_pet,
+        OTHER + 15 to Res.drawable.other_phone_fee,
+        OTHER + 16 to Res.drawable.other_bill,
+        OTHER + 17 to Res.drawable.other_music,
+        OTHER + 18 to Res.drawable.other_music2,
+        OTHER + 19 to Res.drawable.other_unknown,
+        OTHER + 20 to Res.drawable.other_video,
+        OTHER + 21 to Res.drawable.other_toys,
+        OTHER + 22 to Res.drawable.other_repair,
+        OTHER + 23 to Res.drawable.other_salary,
+        OTHER + 24 to Res.drawable.other_stock_decrease,
+        OTHER + 25 to Res.drawable.other_stock_increase,
+        OTHER + 26 to Res.drawable.other_movie_theater,
+        OTHER + 27 to Res.drawable.other_money_transfer,
+        OTHER + 28 to Res.drawable.other_money_income,
+        OTHER + 29 to Res.drawable.other_money_exchange,
+        OTHER + 30 to Res.drawable.other_massage,
+        OTHER + 31 to Res.drawable.other_cuthair,
+        OTHER + 32 to Res.drawable.other_gamble,
+        OTHER + 33 to Res.drawable.other_game,
+        OTHER + 34 to Res.drawable.other_iphone,
+        OTHER + 35 to Res.drawable.other_job,
+        OTHER + 36 to Res.drawable.other_karaoke,
+        OTHER + 37 to Res.drawable.other_bitcoin,
+        OTHER + 38 to Res.drawable.other_box,
+        OTHER + 39 to Res.drawable.other_camera,
+        OTHER + 40 to Res.drawable.other_claw,
+        OTHER + 41 to Res.drawable.other_cut,
+        OTHER + 42 to Res.drawable.other_giftcard,
+        OTHER + 43 to Res.drawable.other_lesson,
+        OTHER + 44 to Res.drawable.other_lesson2,
+        OTHER + 45 to Res.drawable.other_letter,
+        OTHER + 46 to Res.drawable.other_post,
+        OTHER + 47 to Res.drawable.other_stationery,
+        OTHER + 48 to Res.drawable.other_study,
+    )
+
+    fun getCategoryIconResourceById(id: Long): DrawableResource {
+        return categoryIconMap[id] ?: Res.drawable.other_unknown
+    }
+
     @Composable
     fun getCategoryIconById(
         id: Long
     ): Painter {
-        return when (id) {
-            FOOD + 1 -> {
-                painterResource(Res.drawable.food_food)
-            }
-
-            FOOD + 2 -> {
-                painterResource(Res.drawable.food_fast_food)
-            }
-
-            FOOD + 3 -> {
-                painterResource(Res.drawable.food_rice)
-            }
-
-            FOOD + 4 -> {
-                painterResource(Res.drawable.food_noodles)
-            }
-
-            FOOD + 5 -> {
-                painterResource(Res.drawable.food_fruits)
-            }
-
-            FOOD + 6 -> {
-                painterResource(Res.drawable.food_salad)
-            }
-
-            FOOD + 7 -> {
-                painterResource(Res.drawable.food_seafood)
-            }
-
-            FOOD + 8 -> {
-                painterResource(Res.drawable.food_buy_food)
-            }
-
-            FOOD + 9 -> {
-                painterResource(Res.drawable.food_pizza)
-            }
-
-            FOOD + 10 -> {
-                painterResource(Res.drawable.food_hamburger)
-            }
-
-            FOOD + 11 -> {
-                painterResource(Res.drawable.food_buy_food2)
-            }
-
-            FOOD + 12 -> {
-                painterResource(Res.drawable.food_vegetables)
-            }
-
-            FOOD + 13 -> {
-                painterResource(Res.drawable.food_cake)
-            }
-
-            FOOD + 14 -> {
-                painterResource(Res.drawable.food_cookie)
-            }
-
-            FOOD + 15 -> {
-                painterResource(Res.drawable.food_bread)
-            }
-
-            FOOD + 16 -> {
-                painterResource(Res.drawable.food_beer)
-            }
-
-            FOOD + 17 -> {
-                painterResource(Res.drawable.food_drink)
-            }
-
-            FOOD + 18 -> {
-                painterResource(Res.drawable.food_wine)
-            }
-
-            FOOD + 19 -> {
-                painterResource(Res.drawable.food_coffee)
-            }
-
-            FOOD + 20 -> {
-                painterResource(Res.drawable.food_hot_coffee)
-            }
-
-            FOOD + 21 -> { painterResource(Res.drawable.food_hot_tea) }
-
-            FOOD + 22 -> { painterResource(Res.drawable.food_boxlunch) }
-            FOOD + 23 -> { painterResource(Res.drawable.food_boxlunch2) }
-            FOOD + 24 -> { painterResource(Res.drawable.food_delivery) }
-            FOOD + 25 -> { painterResource(Res.drawable.food_dog) }
-            FOOD + 26 -> { painterResource(Res.drawable.food_foodset) }
-            FOOD + 27 -> { painterResource(Res.drawable.food_meal) }
-            FOOD + 28 -> { painterResource(Res.drawable.food_meal2) }
-            FOOD + 29 -> { painterResource(Res.drawable.food_sauce) }
-            FOOD + 30 -> { painterResource(Res.drawable.food_streetfood) }
-            FOOD + 31 -> { painterResource(Res.drawable.food_water) }
-
-            TRAFFIC + 1 -> {
-                painterResource(Res.drawable.traffic_train)
-            }
-
-            TRAFFIC + 2 -> {
-                painterResource(Res.drawable.traffic_city_train)
-            }
-
-            TRAFFIC + 3 -> {
-                painterResource(Res.drawable.traffic_highspeed_train)
-            }
-
-            TRAFFIC + 4 -> {
-                painterResource(Res.drawable.traffic_bus)
-            }
-
-            TRAFFIC + 5 -> {
-                painterResource(Res.drawable.traffic_highway_bus)
-            }
-
-            TRAFFIC + 6 -> {
-                painterResource(Res.drawable.traffic_bicycle)
-            }
-
-            TRAFFIC + 7 -> {
-                painterResource(Res.drawable.traffic_motobike)
-            }
-
-            TRAFFIC + 8 -> {
-                painterResource(Res.drawable.traffic_car)
-            }
-
-            TRAFFIC + 9 -> {
-                painterResource(Res.drawable.traffic_taxi)
-            }
-
-            TRAFFIC + 10 -> {
-                painterResource(Res.drawable.traffic_cable_car)
-            }
-
-            TRAFFIC + 11 -> {
-                painterResource(Res.drawable.traffic_train_ticket)
-            }
-
-            TRAFFIC + 12 -> {
-                painterResource(Res.drawable.traffic_ship)
-            }
-
-            TRAFFIC + 13 -> {
-                painterResource(Res.drawable.traffic_parking)
-            }
-
-            TRAFFIC + 14 -> {
-                painterResource(Res.drawable.traffic_plane)
-            }
-
-            LIFE + 1 -> {
-                painterResource(Res.drawable.life_rent)
-            }
-
-            LIFE + 2 -> {
-                painterResource(Res.drawable.life_car)
-            }
-
-            LIFE + 3 -> {
-                painterResource(Res.drawable.life_bank)
-            }
-
-            LIFE + 4 -> {
-                painterResource(Res.drawable.life_light_fee)
-            }
-
-            LIFE + 5 -> {
-                painterResource(Res.drawable.life_water_fee)
-            }
-
-            LIFE + 6 -> {
-                painterResource(Res.drawable.life_phone_fee)
-            }
-
-            LIFE + 7 -> {
-                painterResource(Res.drawable.life_smart_phone_fee)
-            }
-
-            LIFE + 8 -> {
-                painterResource(Res.drawable.life_network_fee)
-            }
-
-            LIFE + 9 -> {
-                painterResource(Res.drawable.life_wifi)
-            }
-
-            LIFE + 10 -> {
-                painterResource(Res.drawable.life_wifi_router)
-            }
-
-            LIFE + 11 -> {
-                painterResource(Res.drawable.life_money_transfer)
-            }
-
-            LIFE + 12 -> {
-                painterResource(Res.drawable.life_money_income)
-            }
-
-            LIFE + 13 -> {
-                painterResource(Res.drawable.life_rent)
-            }
-
-            LIFE + 14 -> {
-                painterResource(Res.drawable.life_salary)
-            }
-
-            LIFE + 15 -> {
-                painterResource(Res.drawable.life_music)
-            }
-
-            LIFE + 16 -> {
-                painterResource(Res.drawable.life_save_money)
-            }
-
-            LIFE + 17 -> {
-                painterResource(Res.drawable.life_stock_increase)
-            }
-
-            LIFE + 18 -> {
-                painterResource(Res.drawable.life_stock_decrease)
-            }
-
-            LIFE + 19 -> {
-                painterResource(Res.drawable.life_stocks)
-            }
-
-            LIFE + 20 -> {
-                painterResource(Res.drawable.life_taxes)
-            }
-
-            LIFE + 21 -> {
-                painterResource(Res.drawable.life_taxes2)
-            }
-
-            LIFE + 22 -> {
-                painterResource(Res.drawable.life_taxes3)
-            }
-
-            LIFE + 23 -> {
-                painterResource(Res.drawable.life_video)
-            }
-
-            LIFE + 24 -> {
-                painterResource(Res.drawable.life_paint)
-            }
-
-            LIFE + 25 -> { painterResource(Res.drawable.life_hammer) }
-            LIFE + 26 -> { painterResource(Res.drawable.life_shampoo) }
-            LIFE + 27 -> { painterResource(Res.drawable.life_shampoo2) }
-            LIFE + 28 -> { painterResource(Res.drawable.life_furniture) }
-            LIFE + 29 -> { painterResource(Res.drawable.life_makeup4) }
-            LIFE + 30 -> { painterResource(Res.drawable.life_bath) }
-            LIFE + 31 -> { painterResource(Res.drawable.life_tube) }
-            LIFE + 32 -> { painterResource(Res.drawable.life_tube2) }
-
-            HEALTH + 1 -> {
-                painterResource(Res.drawable.health_doctor2)
-            }
-
-            HEALTH + 2 -> {
-                painterResource(Res.drawable.health_doctor)
-            }
-
-            HEALTH + 3 -> {
-                painterResource(Res.drawable.health_sick)
-            }
-
-            HEALTH + 4 -> {
-                painterResource(Res.drawable.health_pill)
-            }
-
-            HEALTH + 5 -> {
-                painterResource(Res.drawable.health_health)
-            }
-
-            HEALTH + 6 -> {
-                painterResource(Res.drawable.health_tooth)
-            }
-
-            HEALTH + 7 -> {
-                painterResource(Res.drawable.health_help)
-            }
-
-            HEALTH + 8 -> {
-                painterResource(Res.drawable.health_hospital)
-            }
-
-            HEALTH + 9 -> {
-                painterResource(Res.drawable.health_hospital2)
-            }
-
-            HEALTH + 10 -> {
-                painterResource(Res.drawable.health_massage)
-            }
-
-            SPORTS + 1 -> {
-                painterResource(Res.drawable.sports_sports)
-            }
-
-            SPORTS + 2 -> {
-                painterResource(Res.drawable.sports_boxing)
-            }
-
-            SPORTS + 3 -> {
-                painterResource(Res.drawable.sports_basketball)
-            }
-
-            SPORTS + 4 -> {
-                painterResource(Res.drawable.sports_baseball)
-            }
-
-            SPORTS + 5 -> {
-                painterResource(Res.drawable.sports_gym)
-            }
-
-            SPORTS + 6 -> {
-                painterResource(Res.drawable.sports_8ball)
-            }
-
-            SPORTS + 7 -> {
-                painterResource(Res.drawable.sports_tennis)
-            }
-
-            SPORTS + 8 -> {
-                painterResource(Res.drawable.sports_usa_football)
-            }
-
-            SPORTS + 9 -> {
-                painterResource(Res.drawable.sports_football)
-            }
-
-            SPORTS + 10 -> {
-                painterResource(Res.drawable.sports_yoga)
-            }
-
-            SPORTS + 11 -> {
-                painterResource(Res.drawable.sports_volley)
-            }
-
-            SPORTS + 12 -> {
-                painterResource(Res.drawable.sports_golf)
-            }
-
-            SPORTS + 13 -> {
-                painterResource(Res.drawable.sports_pingpong)
-            }
-
-            SPORTS + 14 -> {
-                painterResource(Res.drawable.sports_skiing)
-            }
-
-            SPORTS + 15 -> {
-                painterResource(Res.drawable.sports_bowling)
-            }
-
-            SPORTS + 16 -> {
-                painterResource(Res.drawable.sports_swim)
-            }
-
-            SPORTS + 17 -> {
-                painterResource(Res.drawable.sports_camp)
-            }
-            SPORTS + 18 -> {
-                painterResource(Res.drawable.sports_jumping)
-            }
-            SPORTS + 19 -> {
-                painterResource(Res.drawable.sports_paragliding)
-            }
-
-            WEAR + 1 -> {
-                painterResource(Res.drawable.wear_shirts)
-            }
-
-            WEAR + 2 -> {
-                painterResource(Res.drawable.wear_shorts)
-            }
-
-            WEAR + 3 -> {
-                painterResource(Res.drawable.wear_dress)
-            }
-
-            WEAR + 4 -> {
-                painterResource(Res.drawable.wear_skirt)
-            }
-
-            WEAR + 5 -> {
-                painterResource(Res.drawable.wear_shoes)
-            }
-
-            WEAR + 6 -> {
-                painterResource(Res.drawable.wear_socks)
-            }
-
-            WEAR + 7 -> {
-                painterResource(Res.drawable.wear_trousers)
-            }
-
-            WEAR + 8 -> {
-                painterResource(Res.drawable.wear_cap)
-            }
-
-            WEAR + 9 -> {
-                painterResource(Res.drawable.wear_hat)
-            }
-
-            WEAR + 10 -> {
-                painterResource(Res.drawable.wear_baby)
-            }
-
-            WEAR + 11 -> {
-                painterResource(Res.drawable.wear_bag)
-            }
-
-            WEAR + 12 -> {
-                painterResource(Res.drawable.wear_bag2)
-            }
-
-            WEAR + 13 -> {
-                painterResource(Res.drawable.wear_bag3)
-            }
-
-            SHOPPING + 1 -> {
-                painterResource(Res.drawable.shopping_shopping)
-            }
-
-            SHOPPING + 2 -> {
-                painterResource(Res.drawable.shopping_gift)
-            }
-
-            SHOPPING + 3 -> {
-                painterResource(Res.drawable.shopping_glasses)
-            }
-
-            SHOPPING + 4 -> {
-                painterResource(Res.drawable.shopping_flowers)
-            }
-
-            SHOPPING + 5 -> {
-                painterResource(Res.drawable.shopping_makeup)
-            }
-
-            SHOPPING + 6 -> {
-                painterResource(Res.drawable.shopping_makeup2)
-            }
-
-            SHOPPING + 7 -> {
-                painterResource(Res.drawable.shopping_makeup3)
-            }
-
-            SHOPPING + 8 -> {
-                painterResource(Res.drawable.shopping_makeup_brush)
-            }
-
-            SHOPPING + 9 -> {
-                painterResource(Res.drawable.shopping_necklace)
-            }
-
-            SHOPPING + 10 -> {
-                painterResource(Res.drawable.shopping_ring)
-            }
-
-            SHOPPING + 11 -> {
-                painterResource(Res.drawable.shopping_pc)
-            }
-
-            SHOPPING + 12 -> {
-                painterResource(Res.drawable.shopping_phone)
-            }
-
-            SHOPPING + 13 -> {
-                painterResource(Res.drawable.shopping_camera)
-            }
-
-            SHOPPING + 14 -> {
-                painterResource(Res.drawable.shopping_switch)
-            }
-
-            SHOPPING + 15 -> {
-                painterResource(Res.drawable.shopping_bag)
-            }
-
-            SHOPPING + 16 -> {
-                painterResource(Res.drawable.shopping_plant)
-            }
-
-            SHOPPING + 17 -> {
-                painterResource(Res.drawable.shopping_plant2)
-            }
-
-            OTHER + 1 -> {
-                painterResource(Res.drawable.other_save_money)
-            }
-
-            OTHER + 2 -> {
-                painterResource(Res.drawable.other_washing_machine)
-            }
-
-            OTHER + 3 -> {
-                painterResource(Res.drawable.other_bill)
-            }
-
-            OTHER + 4 -> {
-                painterResource(Res.drawable.other_book)
-            }
-
-            OTHER + 5 -> {
-                painterResource(Res.drawable.other_book2)
-            }
-
-            OTHER + 6 -> {
-                painterResource(Res.drawable.other_car_repair)
-            }
-
-            OTHER + 7 -> {
-                painterResource(Res.drawable.other_car_wash)
-            }
-
-            OTHER + 8 -> {
-                painterResource(Res.drawable.other_car_fee)
-            }
-
-            OTHER + 9 -> {
-                painterResource(Res.drawable.other_card_fee)
-            }
-
-            OTHER + 10 -> {
-                painterResource(Res.drawable.other_creditcard)
-            }
-
-            OTHER + 11 -> {
-                painterResource(Res.drawable.other_light_fee)
-            }
-
-            OTHER + 12 -> {
-                painterResource(Res.drawable.other_water_fee)
-            }
-
-            OTHER + 13 -> {
-                painterResource(Res.drawable.other_book2)
-            }
-
-            OTHER + 14 -> {
-                painterResource(Res.drawable.other_pet)
-            }
-
-            OTHER + 15 -> {
-                painterResource(Res.drawable.other_phone_fee)
-            }
-
-            OTHER + 16 -> {
-                painterResource(Res.drawable.other_bill)
-            }
-
-            OTHER + 17 -> {
-                painterResource(Res.drawable.other_music)
-            }
-
-            OTHER + 18 -> {
-                painterResource(Res.drawable.other_music2)
-            }
-
-            OTHER + 19 -> {
-                painterResource(Res.drawable.other_unknown)
-            }
-
-            OTHER + 20 -> {
-                painterResource(Res.drawable.other_video)
-            }
-
-            OTHER + 21 -> {
-                painterResource(Res.drawable.other_toys)
-            }
-
-            OTHER + 22 -> {
-                painterResource(Res.drawable.other_repair)
-            }
-
-            OTHER + 23 -> {
-                painterResource(Res.drawable.other_salary)
-            }
-
-            OTHER + 24 -> {
-                painterResource(Res.drawable.other_stock_decrease)
-            }
-
-            OTHER + 25 -> {
-                painterResource(Res.drawable.other_stock_increase)
-            }
-
-            OTHER + 26 -> {
-                painterResource(Res.drawable.other_movie_theater)
-            }
-
-            OTHER + 27 -> {
-                painterResource(Res.drawable.other_money_transfer)
-            }
-
-            OTHER + 28 -> {
-                painterResource(Res.drawable.other_money_income)
-            }
-
-            OTHER + 29 -> {
-                painterResource(Res.drawable.other_money_exchange)
-            }
-
-            OTHER + 30 -> {
-                painterResource(Res.drawable.other_massage)
-            }
-
-            OTHER + 31 -> {
-                painterResource(Res.drawable.other_cuthair)
-            }
-
-            OTHER + 32 -> {
-                painterResource(Res.drawable.other_gamble)
-            }
-
-            OTHER + 33 -> {
-                painterResource(Res.drawable.other_game)
-            }
-
-            OTHER + 34 -> {
-                painterResource(Res.drawable.other_iphone)
-            }
-
-            OTHER + 35 -> {
-                painterResource(Res.drawable.other_job)
-            }
-
-            OTHER + 36 -> {
-                painterResource(Res.drawable.other_karaoke)
-            }
-
-            OTHER + 37 -> { painterResource(Res.drawable.other_bitcoin) }
-            OTHER + 38 -> { painterResource(Res.drawable.other_box) }
-            OTHER + 39 -> { painterResource(Res.drawable.other_camera) }
-            OTHER + 40 -> { painterResource(Res.drawable.other_claw) }
-            OTHER + 41 -> { painterResource(Res.drawable.other_cut) }
-            OTHER + 42 -> { painterResource(Res.drawable.other_giftcard) }
-            OTHER + 43 -> { painterResource(Res.drawable.other_lesson) }
-            OTHER + 44 -> { painterResource(Res.drawable.other_lesson2) }
-            OTHER + 45 -> { painterResource(Res.drawable.other_letter) }
-            OTHER + 46 -> { painterResource(Res.drawable.other_post) }
-            OTHER + 47 -> { painterResource(Res.drawable.other_stationery) }
-            OTHER + 48 -> { painterResource(Res.drawable.other_study) }
-            HEALTH + 11 -> {
-                painterResource(Res.drawable.health_calendar)
-            }
-            HEALTH + 12 -> {
-                painterResource(Res.drawable.health_card)
-            }
-
-            else -> {
-                painterResource(Res.drawable.other_unknown)
-            }
-        }
+        return painterResource(getCategoryIconResourceById(id))
     }
 
 
