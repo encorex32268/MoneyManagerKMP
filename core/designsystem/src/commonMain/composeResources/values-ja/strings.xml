@@ -59,6 +59,47 @@
     <string name="home_add_type_custom">自分で作る</string>
     <string name="home_add_type_title">種類編集</string>
 
+    <!-- D3 Design System & Redesigned UI -->
+    <string name="home_monthly_expense_kicker">今月の支出 · タップで上限設定</string>
+    <string name="home_remaining_budget">残り %1$s / %2$s</string>
+    <string name="home_no_budget_limit">タップして月間上限を設定</string>
+    <string name="budget_warning_thresholds">警告しきい値</string>
+    <string name="budget_zone_safe">0–%1$d%% 安全</string>
+    <string name="budget_zone_warn">%1$d–%2$d%% 注意</string>
+    <string name="budget_zone_danger">%1$d%%+ 警戒</string>
+    <string name="budget_warn_mid_label">注意（黄）</string>
+    <string name="budget_warn_high_label">警戒（赤）</string>
+    <string name="save">保存</string>
+    <string name="note_placeholder">メモを入力…</string>
+    <string name="type_edit_current_categories">現在のカテゴリ（長押しで並べ替え）</string>
+    <string name="type_edit_icon_library">アイコン一覧（タップして追加）</string>
+    <string name="type_edit_item_count">%1$d 件</string>
+    <string name="analytics_title">トレンド分析</string>
+    <string name="analytics_daily_avg">平均 %1$s</string>
+    <string name="chart_monthly_total">今月の合計</string>
+    <string name="chart_group_total">グループ合計</string>
+    <string name="add_expense_title">支出を追加</string>
+    <string name="edit_expense_title">支出を編集</string>
+    <string name="cd_back">戻る</string>
+    <string name="cd_add_expense">支出を追加</string>
+    <string name="cd_edit_categories">カテゴリを編集</string>
+    <string name="cd_delete">削除</string>
+    <string name="cd_edit">編集</string>
+    <string name="cd_save">保存</string>
+    <string name="cd_previous_month">前月</string>
+    <string name="cd_next_month">翌月</string>
+    <string name="cd_toggle_theme">テーマ切替</string>
+    <string name="cd_backup">バックアップ</string>
+    <string name="cd_move_up">上へ移動</string>
+    <string name="cd_toggle_visibility">表示切替</string>
+    <string name="empty_home_title">今月の支出はまだありません</string>
+    <string name="empty_home_subtitle">下のボタンから今月の最初の支出を記録しましょう。</string>
+    <string name="empty_home_action">支出を記録</string>
+    <string name="empty_chart_title">今月のグラフデータがありません</string>
+    <string name="empty_chart_subtitle">支出を追加するか月を切り替えると、カテゴリ別の内訳が表示されます。</string>
+    <string name="empty_analytics_title">この期間のトレンドデータがありません</string>
+    <string name="empty_analytics_subtitle">別の期間に切り替えるか、支出を記録して推移を確認しましょう。</string>
+
     <!-- Food -->
         <string name="food_beer">ビール</string>
         <string name="food_bread">パン</string>

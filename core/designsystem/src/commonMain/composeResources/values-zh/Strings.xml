@@ -57,7 +57,48 @@
 
     <string name="home_add_type_default">使用預設種類</string>
     <string name="home_add_type_custom">自定義種類</string>
-    <string name="home_add_type_title">編集種類</string>
+    <string name="home_add_type_title">編輯種類</string>
+
+    <!-- D3 Design System & Redesigned UI -->
+    <string name="home_monthly_expense_kicker">本月累計支出 · 點擊設上限</string>
+    <string name="home_remaining_budget">剩餘可用 %1$s / %2$s</string>
+    <string name="home_no_budget_limit">點擊設定每月支出上限</string>
+    <string name="budget_warning_thresholds">警告門檻設定</string>
+    <string name="budget_zone_safe">0–%1$d%% 安全</string>
+    <string name="budget_zone_warn">%1$d–%2$d%% 注意</string>
+    <string name="budget_zone_danger">%1$d%%+ 警戒</string>
+    <string name="budget_warn_mid_label">注意警戒（黃色）</string>
+    <string name="budget_warn_high_label">超支警戒（紅色）</string>
+    <string name="save">儲存</string>
+    <string name="note_placeholder">點擊輸入這筆消費的備註…</string>
+    <string name="type_edit_current_categories">目前種類（長按拖曳調整順序）</string>
+    <string name="type_edit_icon_library">圖示庫（點擊圖示輸入名稱加入）</string>
+    <string name="type_edit_item_count">%1$d 項</string>
+    <string name="analytics_title">趨勢分析</string>
+    <string name="analytics_daily_avg">日均 %1$s</string>
+    <string name="chart_monthly_total">本月總花費</string>
+    <string name="chart_group_total">群組合計</string>
+    <string name="add_expense_title">新增支出</string>
+    <string name="edit_expense_title">編輯支出</string>
+    <string name="cd_back">返回</string>
+    <string name="cd_add_expense">新增支出</string>
+    <string name="cd_edit_categories">編輯種類</string>
+    <string name="cd_delete">刪除</string>
+    <string name="cd_edit">編輯</string>
+    <string name="cd_save">儲存</string>
+    <string name="cd_previous_month">上個月</string>
+    <string name="cd_next_month">下個月</string>
+    <string name="cd_toggle_theme">切換亮暗色主題</string>
+    <string name="cd_backup">資料備份與還原</string>
+    <string name="cd_move_up">往上移</string>
+    <string name="cd_toggle_visibility">隱藏或顯示</string>
+    <string name="empty_home_title">本月尚無支出紀錄</string>
+    <string name="empty_home_subtitle">點擊下方按鈕，輕鬆記下本月的第一筆花費。</string>
+    <string name="empty_home_action">記一筆支出</string>
+    <string name="empty_chart_title">本月尚無消費分布</string>
+    <string name="empty_chart_subtitle">新增支出或切換月份，即可查看各群組的花費比例。</string>
+    <string name="empty_analytics_title">此區間尚無支出趨勢</string>
+    <string name="empty_analytics_subtitle">切換其他時間區間，或新增支出以追蹤消費變化。</string>
         <!-- Food -->
         <string name="food_beer">啤酒</string>
         <string name="food_bread">麵包</string>

@@ -58,6 +58,47 @@
     <string name="home_add_type_custom">Make It Myself</string>
     <string name="home_add_type_title">Edit Type</string>
 
+    <!-- D3 Design System & Redesigned UI -->
+    <string name="home_monthly_expense_kicker">Monthly Expense · Tap to set limit</string>
+    <string name="home_remaining_budget">Remaining %1$s / %2$s</string>
+    <string name="home_no_budget_limit">Tap to set monthly spending limit</string>
+    <string name="budget_warning_thresholds">Warning Thresholds</string>
+    <string name="budget_zone_safe">0–%1$d%% Safe</string>
+    <string name="budget_zone_warn">%1$d–%2$d%% Caution</string>
+    <string name="budget_zone_danger">%1$d%%+ Alert</string>
+    <string name="budget_warn_mid_label">Caution (Yellow)</string>
+    <string name="budget_warn_high_label">Alert (Red)</string>
+    <string name="save">Save</string>
+    <string name="note_placeholder">Tap to add a note for this expense…</string>
+    <string name="type_edit_current_categories">Current Categories (Long-press to reorder)</string>
+    <string name="type_edit_icon_library">Icon Library (Tap to name &amp; add)</string>
+    <string name="type_edit_item_count">%1$d items</string>
+    <string name="analytics_title">Trend Analytics</string>
+    <string name="analytics_daily_avg">Avg %1$s</string>
+    <string name="chart_monthly_total">Monthly Total</string>
+    <string name="chart_group_total">Group Total</string>
+    <string name="add_expense_title">Add Expense</string>
+    <string name="edit_expense_title">Edit Expense</string>
+    <string name="cd_back">Back</string>
+    <string name="cd_add_expense">Add expense</string>
+    <string name="cd_edit_categories">Edit categories</string>
+    <string name="cd_delete">Delete</string>
+    <string name="cd_edit">Edit</string>
+    <string name="cd_save">Save</string>
+    <string name="cd_previous_month">Previous month</string>
+    <string name="cd_next_month">Next month</string>
+    <string name="cd_toggle_theme">Toggle theme</string>
+    <string name="cd_backup">Backup</string>
+    <string name="cd_move_up">Move up</string>
+    <string name="cd_toggle_visibility">Toggle visibility</string>
+    <string name="empty_home_title">No expenses yet</string>
+    <string name="empty_home_subtitle">Tap the button below to record your first expense for this month.</string>
+    <string name="empty_home_action">Add Expense</string>
+    <string name="empty_chart_title">No chart data</string>
+    <string name="empty_chart_subtitle">Add expenses or switch months to see your spending breakdown.</string>
+    <string name="empty_analytics_title">No trend data</string>
+    <string name="empty_analytics_subtitle">Try another time range or record expenses to track your spending trend.</string>
+
 
 
         <!-- Food -->

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,54 +13,44 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import app.presentation.LocalDarkLightMode
 import core.presentation.noRippleClick
-import core.ui.textColor
+import core.ui.MoneyTheme
+import core.ui.MoneyTokens
 
 @Composable
 fun CircleIcon(
     modifier: Modifier = Modifier,
-    image: Painter?=null,
+    image: Painter? = null,
     isClicked: Boolean = false,
-    id: Int?=null,
+    id: Int? = null,
     onItemClick: (Int) -> Unit = {},
-    backgroundColor: Color
+    backgroundColor: Color,
 ) {
-    val theme = LocalDarkLightMode.current
     Box(
         modifier = modifier
+            .clip(CircleShape)
             .background(
                 color = if (isClicked) backgroundColor else Color.Unspecified,
-                shape = CircleShape
+                shape = CircleShape,
             )
-            .clip(CircleShape)
-            .noRippleClick {
-                id?.let {
-                    onItemClick(it)
+            .then(
+                if (id != null) {
+                    Modifier.noRippleClick { onItemClick(id) }
+                } else {
+                    Modifier
                 }
-            },
-        contentAlignment = Alignment.Center
-    ){
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
         image?.let {
             Icon(
                 modifier = Modifier
                     .size(50.dp)
-                    .padding(8.dp),
+                    .padding(7.dp),
                 painter = image,
                 contentDescription = null,
-                tint =
-                    when(theme){
-                        true -> {
-                            if (isClicked) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground
-                        }
-                        else -> {
-                            MaterialTheme.colorScheme.textColor()
-                        }
-                    }
+                tint = if (isClicked) MoneyTokens.LightInk else MoneyTheme.colors.ink,
             )
         }
     }
-
 }
-
-
