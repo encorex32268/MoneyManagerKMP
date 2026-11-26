@@ -32,15 +32,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.domain.model.chart.Chart
+import core.ui.MoneyTheme
 import feature.chart.presentation.ChartState
 import format
 import moneymanagerkmp.composeapp.generated.resources.Res
-import moneymanagerkmp.composeapp.generated.resources.total
+import moneymanagerkmp.composeapp.generated.resources.chart_monthly_total
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import toMoneyString
@@ -54,14 +56,14 @@ private data class DonutSlice(
     val color: Color,
     val startAngle: Float,
     val sweepAngle: Float,
-    val percentage: Double
+    val percentage: Double,
 )
 
 @ExperimentalFoundationApi
 @Composable
 fun ChartLayout(
     modifier: Modifier = Modifier,
-    state: ChartState
+    state: ChartState,
 ) {
     val slices = remember(state.items, state.totalExpense) {
         val validItems = state.items.mapNotNull { chart ->
@@ -81,7 +83,7 @@ fun ChartLayout(
                     color = Color(chart.type.colorArgb),
                     startAngle = currentStart,
                     sweepAngle = sweep,
-                    percentage = (amount * 100.0) / total
+                    percentage = (amount * 100.0) / total,
                 )
                 currentStart += sweep
                 slice
@@ -95,12 +97,12 @@ fun ChartLayout(
     val displayedTitle = if (selectedSlice != null) {
         "${selectedSlice.chart.type.name} (${selectedSlice.percentage.format(1)}%)"
     } else {
-        stringResource(Res.string.total)
+        stringResource(Res.string.chart_monthly_total)
     }
     val displayedAmount = (selectedSlice?.amount ?: state.totalExpense).toMoneyString()
 
     var dynamicTextSize by remember(displayedAmount) {
-        mutableStateOf(24.sp)
+        mutableStateOf(22.sp)
     }
 
     val chartProgress = remember(state.items) { Animatable(0f) }
@@ -109,32 +111,32 @@ fun ChartLayout(
             targetValue = 1f,
             animationSpec = tween(
                 durationMillis = 800,
-                easing = LinearOutSlowInEasing
-            )
+                easing = LinearOutSlowInEasing,
+            ),
         )
     }
 
     Box(
         modifier = modifier,
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         if (state.totalExpense != 0L && slices.isNotEmpty()) {
             Box(
                 modifier = Modifier
-                    .padding(12.dp)
+                    .padding(6.dp)
                     .sizeIn(
-                        minWidth = 180.dp,
-                        minHeight = 180.dp,
-                        maxWidth = 260.dp,
-                        maxHeight = 260.dp
+                        minWidth = 176.dp,
+                        minHeight = 176.dp,
+                        maxWidth = 220.dp,
+                        maxHeight = 220.dp,
                     )
                     .aspectRatio(1f),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 val selectedScaleAnimations = slices.indices.map { index ->
                     animateFloatAsState(
                         targetValue = if (selectedIndex == index) 1f else 0f,
-                        animationSpec = tween(durationMillis = 250)
+                        animationSpec = tween(durationMillis = 220),
                     ).value
                 }
 
@@ -148,7 +150,7 @@ fun ChartLayout(
                                 val dy = offset.y - center.y
                                 val distance = hypot(dx, dy)
 
-                                val baseStrokePx = 30.dp.toPx()
+                                val baseStrokePx = 22.dp.toPx()
                                 val maxRadius = minOf(size.width, size.height) / 2f
                                 val outerRadius = maxRadius
                                 val innerRadius = (maxRadius - baseStrokePx).coerceAtLeast(0f)
@@ -177,16 +179,16 @@ fun ChartLayout(
                             }
                         }
                 ) {
-                    val baseStrokePx = 30.dp.toPx()
-                    val selectedExtraPx = 8.dp.toPx()
+                    val baseStrokePx = 22.dp.toPx()
+                    val selectedExtraPx = 6.dp.toPx()
                     val maxStrokePx = baseStrokePx + selectedExtraPx
                     val diameter = minOf(size.width, size.height) - maxStrokePx
                     val topLeftOffset = Offset(
                         x = (size.width - diameter) / 2f,
-                        y = (size.height - diameter) / 2f
+                        y = (size.height - diameter) / 2f,
                     )
                     val arcSize = Size(diameter, diameter)
-                    val gapDegree = if (slices.size > 1) 2f else 0f
+                    val gapDegree = if (slices.size > 1) 2.5f else 0f
 
                     slices.forEachIndexed { index, slice ->
                         val selectionFraction = selectedScaleAnimations[index]
@@ -202,39 +204,40 @@ fun ChartLayout(
                             size = arcSize,
                             style = Stroke(
                                 width = strokeWidth,
-                                cap = StrokeCap.Butt
-                            )
+                                cap = StrokeCap.Butt,
+                            ),
                         )
                     }
                 }
 
                 Column(
-                    modifier = Modifier.padding(horizontal = 40.dp),
+                    modifier = Modifier.padding(horizontal = 32.dp),
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
                         modifier = Modifier.padding(vertical = 2.dp),
                         text = displayedTitle,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        style = MaterialTheme.typography.bodySmall,
+                        color = MoneyTheme.colors.muted,
+                        style = MaterialTheme.typography.labelSmall,
                         textAlign = TextAlign.Center,
                         maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = displayedAmount,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        style = MaterialTheme.typography.labelLarge.copy(
-                            fontSize = dynamicTextSize
+                        color = MoneyTheme.colors.ink,
+                        style = MaterialTheme.typography.headlineSmall.copy(
+                            fontSize = dynamicTextSize,
+                            fontWeight = FontWeight.ExtraBold,
                         ),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         onTextLayout = {
-                            if (it.hasVisualOverflow && dynamicTextSize > 9.sp) {
-                                dynamicTextSize = (dynamicTextSize.value - 1.0F).sp
+                            if (it.hasVisualOverflow && dynamicTextSize > 10.sp) {
+                                dynamicTextSize = (dynamicTextSize.value - 1.0f).sp
                             }
-                        }
+                        },
                     )
                 }
             }
