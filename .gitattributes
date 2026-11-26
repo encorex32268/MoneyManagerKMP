@@ -1,0 +1,3 @@
+# Exclude design specs and generated Room schemas from GitHub language statistics
+design/** linguist-documentation
+core/data/schemas/** linguist-generated
