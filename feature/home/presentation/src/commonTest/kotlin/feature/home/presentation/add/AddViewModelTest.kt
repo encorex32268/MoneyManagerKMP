@@ -80,12 +80,10 @@ class AddViewModelTest {
     private fun createViewModel(
         expenseRepo: FakeAddExpenseRepository = FakeAddExpenseRepository(),
         typeRepo: FakeAddTypeRepository = FakeAddTypeRepository(),
-        keySettings: FakeKeySettings = FakeKeySettings(),
         expense: Expense? = null
     ) = AddViewModel(
         repository = expenseRepo,
         typeRepository = typeRepo,
-        keySettings = keySettings,
         expense = expense,
         recentlyLabelProvider = { "Recently" }
     )
