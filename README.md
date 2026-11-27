@@ -28,7 +28,7 @@
 Built with a focus on real-world production engineering, the project demonstrates:
 - **15-module Clean Architecture** with strict layer boundaries and custom Gradle convention plugins (`build-logic`).
 - **Unidirectional Data Flow (MVI)** across all screens with immutable state, sealed actions, and one-shot UI events.
-- **Zero-data-loss database migration** from Realm Kotlin to **Room KMP** with bundled SQLite.
+- **Offline-first persistence** powered by **Room KMP** with bundled SQLite and versioned schema exports.
 - **Custom Design System (`MoneyTheme`)** supporting Light/Dark modes and 3 locales (English, Traditional Chinese, Japanese).
 - **Automated unit testing** (`commonTest`) and **Bitrise CI/CD** pipelines for PR validation and release distribution.
 
@@ -118,7 +118,7 @@ flowchart TD
 | `iosApp` | Thin SwiftUI wrapper hosting `MainViewController` from `:composeApp` |
 | `:composeApp` | Shared Compose entry point, root navigation graph, and Koin DI assembly (`initKoin`) |
 | `:core:domain` | Pure Kotlin domain models, repository interfaces, and formatting/date utilities (zero UI/Android deps) |
-| `:core:data` | Room KMP database (`MoneyManagerDatabase`), DAOs, entities, mappers, `MultiplatformSettings`, and Realm→Room migrator |
+| `:core:data` | Room KMP database (`MoneyManagerDatabase`), DAOs, entities, mappers, AndroidX DataStore Preferences, and repository implementations |
 | `:core:designsystem` | `MoneyTheme` tokens, `Plus Jakarta Sans` typography, vector icons, shared components, and Compose Multiplatform resources |
 | `:core:presentation` | Shared presentation utilities (`UiText`, platform helpers, reusable UI patterns) |
 | `:feature:home:{domain,data,presentation}` | Monthly expense feed, spending limit progress & warnings, add/edit expense keypad, drag-to-reorder category editor |
@@ -135,9 +135,9 @@ Every screen separates state management from rendering via a **Root / Screen com
 - `ViewModel` exposes a single immutable `StateFlow<State>`, handles `onAction(Action)`, and emits one-shot side effects (`UiEvent`) over a `Channel`.
 - Stateless `Screen` composables accept `State` and `(Action) -> Unit`, keeping UI previews clean and ViewModel logic 100% unit-testable in `commonTest`.
 
-### 2. Zero-Data-Loss Realm → Room KMP Migration
-Originally built on Realm Kotlin, Qash was migrated to **Room KMP** (`androidx.room` + `androidx.sqlite:sqlite-bundled`) for long-term KMP stability and SQL performance:
-- Implemented an automated, idempotent `RealmToRoomMigrator` that detects legacy Realm data on startup and migrates expenses, types, categories, and spending limits into Room without disrupting existing App Store / Google Play users.
+### 2. Offline-First Room KMP Persistence
+Qash uses **Room KMP** (`androidx.room` + `androidx.sqlite:sqlite-bundled`) as its sole local persistence engine for long-term KMP stability and SQL performance:
+- All expenses, types, categories, and spending limits are stored in SQLite via typed Room DAOs and reactive `Flow` queries.
 - Versioned exported Room schemas under `core/data/schemas/`.
 
 ### 3. Build Scalability with Convention Plugins
@@ -161,7 +161,7 @@ All 15 modules share a single Version Catalog (`gradle/libs.versions.toml`) and 
 | **UI & Design System** | Compose Multiplatform `1.7.0`, Material 3, Custom `MoneyTheme`, Custom Compose `Canvas` Charts, `colorpicker-compose` |
 | **Architecture & Navigation** | Clean Architecture, MVI, Type-Safe Navigation Compose (`navigation-compose`) |
 | **Dependency Injection** | Koin (`koin-core`, `koin-compose`, `koin-compose-viewmodel`) |
-| **Local Persistence** | Room KMP (`2.7.0-alpha11`), Bundled SQLite (`sqlite-bundled`), `multiplatform-settings` |
+| **Local Persistence** | Room KMP (`2.7.0-alpha11`), Bundled SQLite (`sqlite-bundled`), AndroidX DataStore Preferences (`1.1.1`) |
 | **Data & Files** | `kotlinx.serialization`, `kotlinx-datetime`, `FileKit`, `de.halfbit:csv` |
 | **Build & CI/CD** | Gradle Convention Plugins (`build-logic`), Version Catalogs, KSP, BuildKonfig, Bitrise |
 | **Testing** | `kotlin.test`, `kotlinx-coroutines-test`, Fake Repositories in `commonTest` |
