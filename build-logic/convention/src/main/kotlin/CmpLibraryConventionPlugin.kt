@@ -16,11 +16,14 @@ class CmpLibraryConventionPlugin : Plugin<Project> {
                 "commonMainImplementation"(libs.findLibrary("jetbrains-compose-ui").get())
                 "commonMainImplementation"(libs.findLibrary("jetbrains-compose-foundation").get())
                 "commonMainImplementation"(libs.findLibrary("jetbrains-compose-material3").get())
+                "commonMainImplementation"(libs.findLibrary("jetbrains-compose-material-icons-core").get())
                 "commonMainImplementation"(libs.findLibrary("jetbrains-compose-runtime").get())
                 "commonMainImplementation"(libs.findLibrary("jetbrains-compose-components-resources").get())
-                "commonMainImplementation"(libs.findLibrary("jetbrains-compose-components-uiToolingPreview").get())
+                "commonMainImplementation"(libs.findLibrary("jetbrains-compose-ui-tooling-preview").get())
 
-                // Android previews: KMP modules cannot use debugImplementation.
+                // Android previews for com.android.kotlin.multiplatform.library require androidRuntimeClasspath.
+                "androidRuntimeClasspath"(libs.findLibrary("jetbrains-compose-ui-tooling").get())
+                "androidRuntimeClasspath"(libs.findLibrary("androidx-customview-poolingcontainer").get())
                 "androidMainImplementation"(platform(libs.findLibrary("androidx-compose-bom").get()))
                 "androidMainImplementation"(libs.findLibrary("androidx-compose-ui-tooling").get())
                 "androidMainImplementation"(libs.findLibrary("androidx-compose-ui-tooling-preview").get())

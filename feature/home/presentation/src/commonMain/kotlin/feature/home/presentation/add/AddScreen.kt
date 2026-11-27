@@ -568,7 +568,7 @@ private fun ItemSection(
     }
 }
 
-@org.jetbrains.compose.ui.tooling.preview.Preview
+@androidx.compose.ui.tooling.preview.Preview
 @Composable
 private fun AddScreenPreview() {
     app.presentation.AppTheme {

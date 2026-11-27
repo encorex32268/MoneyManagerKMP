@@ -6,9 +6,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.kotlinSerialization) apply false
     alias(libs.plugins.compose.compiler) apply false
-    alias(libs.plugins.readlkotlin) apply false
     alias(libs.plugins.konfigplugin) apply false
-    alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.room) apply false
 }

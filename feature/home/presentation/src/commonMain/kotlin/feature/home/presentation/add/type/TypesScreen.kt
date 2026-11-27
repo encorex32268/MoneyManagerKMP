@@ -338,7 +338,7 @@ private fun OnHideTypeItem(
     }
 }
 
-@org.jetbrains.compose.ui.tooling.preview.Preview
+@androidx.compose.ui.tooling.preview.Preview
 @Composable
 private fun TypesScreenPreview() {
     app.presentation.AppTheme {

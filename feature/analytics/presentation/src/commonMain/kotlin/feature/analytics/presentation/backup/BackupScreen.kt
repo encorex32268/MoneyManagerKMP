@@ -159,7 +159,7 @@ fun BackupScreen(
     }
 }
 
-@org.jetbrains.compose.ui.tooling.preview.Preview
+@androidx.compose.ui.tooling.preview.Preview
 @Composable
 private fun BackupScreenPreview() {
     app.presentation.AppTheme {

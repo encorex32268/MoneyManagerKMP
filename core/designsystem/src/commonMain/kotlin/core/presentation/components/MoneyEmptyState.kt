@@ -32,7 +32,7 @@ import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_pie_chart_24_outline
 import moneymanagerkmp.composeapp.generated.resources.baseline_receipt_24_outline
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 /**
  * D3 · Ring & Clarity Empty State Card for screens with no data.

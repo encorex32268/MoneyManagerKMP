@@ -368,7 +368,7 @@ private fun ItemsSection(
     }
 }
 
-@org.jetbrains.compose.ui.tooling.preview.Preview
+@androidx.compose.ui.tooling.preview.Preview
 @Composable
 private fun TypeCategoryEditScreenPreview() {
     app.presentation.AppTheme {

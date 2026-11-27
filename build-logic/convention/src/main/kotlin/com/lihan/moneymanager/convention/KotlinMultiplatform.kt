@@ -14,7 +14,7 @@ internal fun Project.configureKotlinMultiplatform() {
             compileSdk = libs.findVersion("projectCompileSdkVersion").get().toString().toInt()
             minSdk = libs.findVersion("projectMinSdkVersion").get().toString().toInt()
             namespace = pathToPackageName()
-            experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
+            androidResources.enable = true
 
             withHostTestBuilder {}.configure {}
         }

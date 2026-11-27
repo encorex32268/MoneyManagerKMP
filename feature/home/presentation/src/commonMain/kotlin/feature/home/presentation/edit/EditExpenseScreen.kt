@@ -422,7 +422,7 @@ private fun ContentSection(
     }
 }
 
-@org.jetbrains.compose.ui.tooling.preview.Preview
+@androidx.compose.ui.tooling.preview.Preview
 @Composable
 private fun EditExpenseScreenPreview() {
     app.presentation.AppTheme {

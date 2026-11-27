@@ -25,7 +25,7 @@ import moneymanagerkmp.composeapp.generated.resources.home_no_budget_limit
 import moneymanagerkmp.composeapp.generated.resources.home_remaining_budget
 import moneymanagerkmp.composeapp.generated.resources.total_expense
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import toMoneyString
 import kotlin.math.roundToInt
 

@@ -1,45 +1,45 @@
 [versions]
-agp = "8.11.2"
+agp = "9.0.1"
 projectApplicationId = "com.lihan.moneymanager"
 projectCompileSdkVersion = "36"
 projectMinSdkVersion = "24"
 projectTargetSdkVersion = "36"
-projectVersionCode = "26"
-projectVersionName = "1.5.1"
+projectVersionCode = "27"
+projectVersionName = "1.6"
 
 androidx-activityCompose = "1.9.3"
-androidx-compose-bom = "2024.10.01"
-compose-plugin = "1.7.0"
+androidx-compose-bom = "2025.12.00"
+compose-plugin = "1.10.0"
+compose-material3 = "1.9.0"
+compose-material-icons = "1.7.3"
 
 junit = "4.13.2"
-kotlin = "2.0.10"
-ksp = "2.0.10-1.0.24"
-room = "2.7.0-alpha11"
-sqlite = "2.5.0-alpha11"
-kotlinxCoroutinesCore = "1.7.0"
-libraryBase = "2.3.0"
-readmkotlin = "2.1.0"
-kotlinxSerializationJson = "1.6.1"
+kotlin = "2.3.0"
+ksp = "2.3.4"
+room = "2.7.2"
+sqlite = "2.5.2"
+kotlinxCoroutinesCore = "1.10.2"
+kotlinxSerializationJson = "1.8.1"
 
 #KotlinDateTime
-kotlinxDateTime = "0.6.0-RC.2"
+kotlinxDateTime = "0.6.2"
 #Koin
 koin = "3.5.6"
 koinCompose = "1.1.5"
 koinComposeViewModel = "1.2.0-Beta4"
 
 #Navigation
-navigationCompose = "2.8.0-alpha08"
+navigationCompose = "2.9.1"
 
 #Uri
 uriKmpVersion = "0.0.18"
-lifecycleViewmodelCompose = "2.8.0"
+lifecycleViewmodelCompose = "2.9.6"
 
 jetbrainsKotlinJvm = "1.9.0"
 #ColorPicker
 colorpicker = "1.1.2"
-#KeySettings
-keysettings = "1.2.0"
+#DataStore
+datastore = "1.1.1"
 #Splash
 core-splashscreen = "1.0.1"
 #Konfig
@@ -76,18 +76,18 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 jetbrains-compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-plugin" }
 jetbrains-compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-plugin" }
-jetbrains-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-plugin" }
+jetbrains-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-material3" }
+jetbrains-compose-material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "compose-material-icons" }
 jetbrains-compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-plugin" }
 jetbrains-compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-plugin" }
-jetbrains-compose-components-uiToolingPreview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose-plugin" }
+jetbrains-compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-plugin" }
+jetbrains-compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-plugin" }
 
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesCore" }
-library-base = { module = "io.realm.kotlin:library-base", version.ref = "libraryBase" }
-library-sync = { module = "io.realm.kotlin:library-sync", version.ref = "libraryBase" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 
@@ -102,7 +102,7 @@ androidx-navigation = { module = "org.jetbrains.androidx.navigation:navigation-c
 uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uriKmpVersion" }
 lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 
-keysettings-kmp = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "keysettings" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
 
 csv = { module = "de.halfbit:csv", version.ref = "csv" }
@@ -111,6 +111,7 @@ filekit-compose = { module = "io.github.vinceglb:filekit-compose", version.ref =
 
 material3-windowsizeclass-multiplatform = { group = "dev.chrisbanes.material3", name = "material3-window-size-class-multiplatform", version.ref = "material3WindowSizeClassMultiplatform" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-customview-poolingcontainer = { module = "androidx.customview:customview-poolingcontainer", version = "1.1.0" }
 compose-charts = { module = "io.github.ehsannarmani:compose-charts", version.ref = "composeCharts" }
 
 
@@ -124,12 +125,10 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-readlkotlin = { id = "io.realm.kotlin", version.ref = "readmkotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 konfigplugin = { id = "com.codingfeline.buildkonfig", version.ref = "konfig" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
 

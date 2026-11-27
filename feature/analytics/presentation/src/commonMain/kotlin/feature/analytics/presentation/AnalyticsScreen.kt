@@ -280,7 +280,7 @@ private fun ColumnScope.ExpenseSection(
     }
 }
 
-@org.jetbrains.compose.ui.tooling.preview.Preview
+@androidx.compose.ui.tooling.preview.Preview
 @Composable
 private fun AnalyticsScreenPreview() {
     app.presentation.AppTheme {

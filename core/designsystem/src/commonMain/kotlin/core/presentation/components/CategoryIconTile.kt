@@ -35,7 +35,7 @@ import moneymanagerkmp.composeapp.generated.resources.cd_delete
 import moneymanagerkmp.composeapp.generated.resources.food_coffee
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 /**
  * D3 CategoryIconTile:

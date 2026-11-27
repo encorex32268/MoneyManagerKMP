@@ -52,7 +52,7 @@ import moneymanagerkmp.composeapp.generated.resources.home_spending_limit_set
 import moneymanagerkmp.composeapp.generated.resources.home_spending_limit_set_hint
 import moneymanagerkmp.composeapp.generated.resources.save
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import toMoneyString
 import kotlin.math.roundToInt
 

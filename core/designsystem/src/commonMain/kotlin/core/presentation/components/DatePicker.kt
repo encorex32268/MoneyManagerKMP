@@ -30,7 +30,7 @@ import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.cd_next_month
 import moneymanagerkmp.composeapp.generated.resources.cd_previous_month
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 /**
  * D3 MonthPill date selector.

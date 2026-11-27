@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import app.presentation.AppTheme
 import core.ui.MoneyTheme
 import core.ui.MoneyTokens
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun MoneyCard(
