@@ -2,52 +2,34 @@ package app.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import core.data.migration.RealmToRoomMigrator
 import core.domain.KeySettings
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class AppViewModel(
-    private val keySettings: KeySettings,
-    private val realmToRoomMigrator: RealmToRoomMigrator
+    private val keySettings: KeySettings
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(AppState())
-    val state = _state
-        .onStart {
-            realmToRoomMigrator.migrateIfNeeded()
-            _state.update {
-                it.copy(
-                    isDarkMode = keySettings.getDarkLightMode(),
-                    isMigrationReady = true,
-                    showDatabaseUpdateNotice = !keySettings.isDatabaseUpdateNoticeShown()
-                )
-            }
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000L),
-            _state.value
+    val state: StateFlow<AppState> = keySettings.observeDarkLightMode()
+        .map { isDarkMode ->
+            AppState(isDarkMode = isDarkMode)
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = AppState()
         )
 
     fun onAction(event: AppAction) {
         when (event) {
             AppAction.DarkLightChange -> {
-                val currentMode = state.value.isDarkMode
-                _state.update {
-                    it.copy(
-                        isDarkMode = !currentMode
-                    )
+                val targetMode = !state.value.isDarkMode
+                viewModelScope.launch {
+                    keySettings.setDarkLightMode(isDark = targetMode)
                 }
-                keySettings.setDarkLightMode(isDark = !currentMode)
-            }
-            AppAction.DismissDatabaseUpdateNotice -> {
-                _state.update {
-                    it.copy(showDatabaseUpdateNotice = false)
-                }
-                keySettings.setDatabaseUpdateNoticeShown(isShown = true)
             }
         }
     }

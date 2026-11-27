@@ -1,6 +1,5 @@
 package feature.home.presentation.add
 
-import core.domain.KeySettings
 import core.domain.model.Expense
 import core.domain.model.Type
 import core.domain.repository.ExpenseRepository
@@ -50,16 +49,6 @@ private class FakeAddTypeRepository : TypeRepository {
     override suspend fun delete(type: Type) {}
     override suspend fun updateAllSortedTypes(types: List<Type>) {}
     override suspend fun restore(types: List<Type>) {}
-}
-
-private class FakeKeySettings : KeySettings {
-    var dark = false
-    var migrated = false
-
-    override fun setDarkLightMode(isDark: Boolean) { dark = isDark }
-    override fun getDarkLightMode(): Boolean = dark
-    override fun setRealmMigrated(isMigrated: Boolean) { migrated = isMigrated }
-    override fun isRealmMigrated(): Boolean = migrated
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)

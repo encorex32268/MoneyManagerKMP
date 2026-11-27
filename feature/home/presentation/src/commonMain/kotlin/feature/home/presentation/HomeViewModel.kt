@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -30,12 +31,12 @@ class HomeViewModel(
 
     private var currentSpendingLimit: SpendingLimit? = null
     private val selectedMonthYear = MutableStateFlow(MonthYear())
-    private val warningThresholds = MutableStateFlow(
-        Pair(
-            keySettings?.getBudgetWarnMidPercent() ?: KeySettings.DEFAULT_BUDGET_WARN_MID,
-            keySettings?.getBudgetWarnHighPercent() ?: KeySettings.DEFAULT_BUDGET_WARN_HIGH,
-        )
-    )
+    private val warningThresholds = combine(
+        keySettings?.observeBudgetWarnMidPercent() ?: flowOf(KeySettings.DEFAULT_BUDGET_WARN_MID),
+        keySettings?.observeBudgetWarnHighPercent() ?: flowOf(KeySettings.DEFAULT_BUDGET_WARN_HIGH),
+    ) { mid, high ->
+        mid to high
+    }
 
     val state: StateFlow<HomeState> = selectedMonthYear
         .flatMapLatest { (year, month) ->
@@ -83,8 +84,8 @@ class HomeViewModel(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000L),
             initialValue = HomeState(
-                warnMidPercent = warningThresholds.value.first,
-                warnHighPercent = warningThresholds.value.second,
+                warnMidPercent = KeySettings.DEFAULT_BUDGET_WARN_MID,
+                warnHighPercent = KeySettings.DEFAULT_BUDGET_WARN_HIGH,
             ),
         )
 
@@ -112,9 +113,10 @@ class HomeViewModel(
         if (warnMidPercent != null && warnHighPercent != null) {
             val mid = warnMidPercent.coerceIn(10, 85)
             val high = warnHighPercent.coerceIn((mid + 5).coerceAtMost(95), 95)
-            keySettings?.setBudgetWarnMidPercent(mid)
-            keySettings?.setBudgetWarnHighPercent(high)
-            warningThresholds.value = mid to high
+            viewModelScope.launch {
+                keySettings?.setBudgetWarnMidPercent(mid)
+                keySettings?.setBudgetWarnHighPercent(high)
+            }
         }
 
         val expenseLimit = expenseLimitText.toLongOrNull() ?: return

@@ -1,11 +1,11 @@
 package core.data.di
 
-import com.russhwolf.settings.Settings
-import core.data.DefaultKeySettings
-import core.data.RealmFactory
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import core.data.DataStoreKeySettings
 import core.data.database.MoneyManagerDatabase
 import core.data.database.buildMoneyManagerDatabase
-import core.data.migration.RealmToRoomMigrator
+import core.data.datastore.DataStoreFactory
 import core.data.repository.ExpenseRepositoryImpl
 import core.data.repository.SpendingLimitRepositoryImpl
 import core.data.repository.TypeRepositoryImpl
@@ -30,11 +30,11 @@ val coreDataModule = module {
     single { get<MoneyManagerDatabase>().typeDao() }
     single { get<MoneyManagerDatabase>().spendingLimitDao() }
 
-    single { RealmFactory() }
-    singleOf(::RealmToRoomMigrator)
-
+    single<DataStore<Preferences>> {
+        get<DataStoreFactory>().create()
+    }
     single<KeySettings> {
-        DefaultKeySettings(settings = Settings())
+        DataStoreKeySettings(dataStore = get())
     }
 
     singleOf(::ExpenseRepositoryImpl) { bind<ExpenseRepository>() }

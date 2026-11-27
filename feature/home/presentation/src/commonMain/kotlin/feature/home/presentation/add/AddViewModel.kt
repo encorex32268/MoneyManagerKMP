@@ -3,7 +3,6 @@ package feature.home.presentation.add
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import core.domain.KeySettings
 import core.domain.mapper.toCategoryUi
 import core.domain.mapper.toTypeUi
 import core.domain.model.Expense

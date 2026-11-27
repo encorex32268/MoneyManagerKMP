@@ -1,5 +1,6 @@
 package feature.home.presentation
 
+import core.domain.KeySettings
 import core.domain.model.Expense
 import core.domain.model.SpendingLimit
 import core.domain.model.Type
@@ -60,6 +61,19 @@ private class FakeSpendingLimitRepository : SpendingLimitRepository {
     override suspend fun restore(spendingLimits: List<SpendingLimit>) {
         limits.value = spendingLimits
     }
+}
+
+private class FakeHomeKeySettings : KeySettings {
+    val darkMode = MutableStateFlow(false)
+    val warnMid = MutableStateFlow(KeySettings.DEFAULT_BUDGET_WARN_MID)
+    val warnHigh = MutableStateFlow(KeySettings.DEFAULT_BUDGET_WARN_HIGH)
+
+    override fun observeDarkLightMode(): Flow<Boolean> = darkMode
+    override suspend fun setDarkLightMode(isDark: Boolean) { darkMode.value = isDark }
+    override fun observeBudgetWarnMidPercent(): Flow<Int> = warnMid
+    override suspend fun setBudgetWarnMidPercent(percent: Int) { warnMid.value = percent }
+    override fun observeBudgetWarnHighPercent(): Flow<Int> = warnHigh
+    override suspend fun setBudgetWarnHighPercent(percent: Int) { warnHigh.value = percent }
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -153,5 +167,32 @@ class HomeViewModelTest {
         assertEquals(limitsColor_50_70_Color, HomeState(totalExpense = 51, expenseLimit = 100).limitOverColor)
         assertEquals(limitsColor_70_90_Color, HomeState(totalExpense = 71, expenseLimit = 100).limitOverColor)
         assertEquals(limitsColor_100_Color, HomeState(totalExpense = 91, expenseLimit = 100).limitOverColor)
+    }
+
+    @Test
+    fun `OnSpendingLimitChange persists and reflects updated warning thresholds reactively`() = runTest {
+        val homeRepo = FakeHomeRepository()
+        val limitRepo = FakeSpendingLimitRepository()
+        val keySettings = FakeHomeKeySettings()
+        val viewModel = HomeViewModel(homeRepo, limitRepo, keySettings)
+        val job = backgroundScope.launch(testDispatcher) { viewModel.state.collect {} }
+
+        assertEquals(50, viewModel.state.value.warnMidPercent)
+        assertEquals(70, viewModel.state.value.warnHighPercent)
+
+        viewModel.onAction(
+            HomeAction.OnSpendingLimitChange(
+                expenseLimitText = "15000",
+                warnMidPercent = 40,
+                warnHighPercent = 85,
+            )
+        )
+
+        assertEquals(40, keySettings.warnMid.value)
+        assertEquals(85, keySettings.warnHigh.value)
+        assertEquals(40, viewModel.state.value.warnMidPercent)
+        assertEquals(85, viewModel.state.value.warnHighPercent)
+
+        job.cancel()
     }
 }
