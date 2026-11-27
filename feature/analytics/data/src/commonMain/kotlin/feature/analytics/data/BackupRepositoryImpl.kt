@@ -1,6 +1,7 @@
 package feature.analytics.data
 
 import AppLogger
+import UUID
 import core.domain.model.Category
 import core.domain.model.Expense
 import core.domain.model.SpendingLimit
@@ -166,7 +167,7 @@ class BackupRepositoryImpl(
         return result
     }
 
-    private fun parse(csv: Csv): BackupData {
+    internal fun parse(csv: Csv): BackupData {
         val types = mutableListOf<Type>()
         val expenses = mutableListOf<Expense>()
         val spendingLimits = mutableListOf<SpendingLimit>()
@@ -190,17 +191,20 @@ class BackupRepositoryImpl(
             val cost = dataRow.value(COST)?.toLongOrNull() ?: 0
             val content = dataRow.value(CONTENT) ?: ""
             val idString = dataRow.value(OBJ_ID) ?: ""
+            val isIncome = dataRow.value(IS_INCOME)?.toBooleanStrictOrNull() ?: false
             val date = dataRow.value(DATE)?.substringBefore("&")?.toLongOrNull() ?: 0L
 
             AppLogger.d("BackupRepository Parse","isSpending: $isSpending")
              when {
                 isUpsertExpense && typeId != 0L-> {
+                    val resolvedId = idString.ifBlank { UUID().generateUUID() }
                     val expense = Expense(
-                        idString = idString,
+                        id = resolvedId,
+                        idString = resolvedId,
                         categoryId = categoryId,
                         typeId = typeId,
                         description = description,
-                        isIncome = false,
+                        isIncome = isIncome,
                         content = content,
                         timestamp = date,
                         cost = cost
@@ -217,6 +221,7 @@ class BackupRepositoryImpl(
                     val typeName = dataRow.value(TYPE_NAME) ?: ""
                     val typeColorArgb = dataRow.value(TYPE_COLOR_ARGB)?.toIntOrNull() ?: 0
                     val typeOrder = dataRow.value(TYPE_ORDER)
+                    val typeIsShow = dataRow.value(TYPE_IS_SHOW)?.toBooleanStrictOrNull() ?: true
                     val typeIdHex = dataRow.value(TYPE_OBJ_ID) ?: ""
                     val typeCategory = runCatching {
                         val json = dataRow.value(TYPE_CATEGORIES).orEmpty()
@@ -233,12 +238,13 @@ class BackupRepositoryImpl(
                     }
                     if (typeIdHex.isNotEmpty() && typeOrder != null && typeDate?.isNotEmpty() == true) {
                         val type = Type(
+                            id = typeIdHex,
                             typeIdHex = typeIdHex,
                             typeIdTimestamp = typeDateTimestamp,
                             name = typeName,
                             colorArgb = typeColorArgb,
                             order = typeOrder.toIntOrNull() ?: 0,
-                            isShow = true,
+                            isShow = typeIsShow,
                             categories = typeCategory
                         )
                         types.add(type)
@@ -248,6 +254,7 @@ class BackupRepositoryImpl(
 
                 isSpending -> {
                     AppLogger.d("BackupRepository Parse","SpendingLimit: isSpending ${isSpending}")
+                    val rawLimitId = dataRow.value(SPENDING_LIMIT_ID).orEmpty()
                     val year = dataRow.value(SPENDING_LIMIT_YEAR)?.toIntOrNull()?:0
                     val month = dataRow.value(SPENDING_LIMIT_MONTH)?.toIntOrNull()?:0
                     val limit = dataRow.value(SPENDING_LIMIT_LIMIT)?.toLongOrNull()?:0
@@ -255,6 +262,7 @@ class BackupRepositoryImpl(
                     val canRestore = year != 0 && month != 0 && limit != 0L
                     if (canRestore){
                         val spendingLimit = SpendingLimit(
+                            id = rawLimitId.ifBlank { UUID().generateUUID() },
                             year = year,
                             month = month,
                             limit = limit
@@ -273,7 +281,7 @@ class BackupRepositoryImpl(
         )
     }
 
-    private fun buildCsv(
+    internal fun buildCsv(
         expenses: List<Expense>,
         types: List<Type>,
         spendingLimit: List<SpendingLimit>
@@ -312,7 +320,7 @@ class BackupRepositoryImpl(
                     value("${expense.timestamp}&${expense.timestamp.toStringDateYMDByTimestamp()}")
                     value("${expense.isIncome}")
                     value(expense.content)
-                    value(expense.idString)
+                    value(expense.id)
                 }
             }
             types.sortedBy { it.order }.forEachIndexed { index, type ->
@@ -333,7 +341,7 @@ class BackupRepositoryImpl(
                     value("${type.order}")
                     value("${type.isShow}")
                     value(Json.encodeToString(type.categories))
-                    value(type.typeIdHex)
+                    value(type.typeIdHex.ifBlank { type.id })
                 }
             }
             spendingLimit.forEachIndexed { index , limit ->

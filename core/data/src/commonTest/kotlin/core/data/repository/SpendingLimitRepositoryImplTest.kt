@@ -19,6 +19,8 @@ private class FakeSpendingLimitDao : SpendingLimitDao {
 
     override fun getAll(): Flow<List<SpendingLimitRoomEntity>> = items
 
+    override suspend fun getAllOnce(): List<SpendingLimitRoomEntity> = items.value
+
     override fun getSpendingLimit(year: Int, month: Int): Flow<SpendingLimitRoomEntity?> =
         items.map { list -> list.firstOrNull { it.year == year && it.month == month } }
 
@@ -79,5 +81,30 @@ class SpendingLimitRepositoryImplTest {
 
         assertEquals(true, dao.upsertAllCalled)
         assertEquals(2, repo.getAll().first().size)
+    }
+
+    @Test
+    fun `restore deduplicates existing year and month by reusing existing id`() = runTest {
+        val dao = FakeSpendingLimitDao()
+        val repo = SpendingLimitRepositoryImpl(dao)
+
+        repo.insert(SpendingLimit(id = "existing-id", year = 2025, month = 1, limit = 10000))
+
+        repo.restore(
+            listOf(
+                SpendingLimit(id = "new-import-id-1", year = 2025, month = 1, limit = 15000),
+                SpendingLimit(id = "new-import-id-2", year = 2025, month = 1, limit = 18000),
+                SpendingLimit(id = "new-import-id-3", year = 2025, month = 2, limit = 20000)
+            )
+        )
+
+        val all = repo.getAll().first()
+        assertEquals(2, all.size)
+        val jan = all.first { it.year == 2025 && it.month == 1 }
+        assertEquals("existing-id", jan.id)
+        assertEquals(18000, jan.limit)
+        val feb = all.first { it.year == 2025 && it.month == 2 }
+        assertEquals("new-import-id-3", feb.id)
+        assertEquals(20000, feb.limit)
     }
 }

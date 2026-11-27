@@ -39,8 +39,23 @@ class SpendingLimitRepositoryImpl(
 
     override suspend fun restore(spendingLimits: List<SpendingLimit>) {
         AppLogger.d("SpendingLimit", "spending$spendingLimits")
-        if (spendingLimits.isNotEmpty()) {
-            spendingLimitDao.upsertAll(spendingLimits.map { it.toRoomEntity() })
-        }
+        if (spendingLimits.isEmpty()) return
+
+        val existingByYearMonth = spendingLimitDao.getAllOnce()
+            .associateBy { it.year to it.month }
+
+        val deduplicated = spendingLimits
+            .associateBy { it.year to it.month }
+            .values
+            .map { incoming ->
+                val existing = existingByYearMonth[incoming.year to incoming.month]
+                if (existing != null) {
+                    incoming.copy(id = existing.id).toRoomEntity()
+                } else {
+                    incoming.toRoomEntity()
+                }
+            }
+
+        spendingLimitDao.upsertAll(deduplicated)
     }
 }

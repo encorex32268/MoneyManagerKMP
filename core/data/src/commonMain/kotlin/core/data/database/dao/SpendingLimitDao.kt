@@ -12,6 +12,9 @@ interface SpendingLimitDao {
     @Query("SELECT * FROM spending_limits")
     fun getAll(): Flow<List<SpendingLimitRoomEntity>>
 
+    @Query("SELECT * FROM spending_limits")
+    suspend fun getAllOnce(): List<SpendingLimitRoomEntity>
+
     @Query("SELECT * FROM spending_limits WHERE year = :year AND month = :month LIMIT 1")
     fun getSpendingLimit(year: Int, month: Int): Flow<SpendingLimitRoomEntity?>
 
