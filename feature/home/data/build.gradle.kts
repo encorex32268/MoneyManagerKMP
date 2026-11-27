@@ -10,7 +10,6 @@ kotlin {
                 implementation(projects.core.data)
                 implementation(projects.feature.home.domain)
                 implementation(libs.koin.core)
-                implementation(libs.library.base)
                 implementation(libs.kotlinx.coroutines.core)
             }
         }

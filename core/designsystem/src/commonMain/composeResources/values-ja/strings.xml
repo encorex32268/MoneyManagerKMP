@@ -17,8 +17,6 @@
     <string name="dialog_cancel_button">キャンセル</string>
     <string name="dialog_delete_title">削除</string>
     <string name="dialog_delete_content">削除しますか？</string>
-    <string name="dialog_db_update_title">アップデートのお知らせ</string>
-    <string name="dialog_db_update_content">バージョンを更新してください。2週間後に新しいデータベースを基盤とした新バージョンがリリースされ、古いデータベースは削除されます。</string>
     <string name="backup_local">デバイス</string>
     <string name="backup_cloud">Google Drive</string>
 

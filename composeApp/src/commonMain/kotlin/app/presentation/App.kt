@@ -31,7 +31,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import core.presentation.components.OneButtonDialog
 import core.presentation.navigation.AppNavigationBottom
 import core.presentation.navigation.AppNavigationRail
 import core.presentation.navigation.NavigationLayoutType
@@ -43,11 +42,7 @@ import feature.chart.presentation.navigation.ChartRoutes
 import feature.chart.presentation.navigation.chartGraph
 import feature.home.presentation.navigation.HomeRoutes
 import feature.home.presentation.navigation.homeGraph
-import moneymanagerkmp.composeapp.generated.resources.Res
-import moneymanagerkmp.composeapp.generated.resources.dialog_db_update_content
-import moneymanagerkmp.composeapp.generated.resources.dialog_db_update_title
-import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -68,9 +63,6 @@ fun App(
         ){
             LaunchedEffect(appState){
                 onModeChanged(appState.isDarkMode)
-            }
-            if (!appState.isMigrationReady) {
-                return@AppTheme
             }
             val navController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -204,15 +196,6 @@ fun App(
                     }
                 }
 
-            }
-            if (appState.showDatabaseUpdateNotice) {
-                OneButtonDialog(
-                    title = stringResource(Res.string.dialog_db_update_title),
-                    content = stringResource(Res.string.dialog_db_update_content),
-                    onDismissRequest = {
-                        viewModel.onAction(AppAction.DismissDatabaseUpdateNotice)
-                    },
-                )
             }
         }
 
