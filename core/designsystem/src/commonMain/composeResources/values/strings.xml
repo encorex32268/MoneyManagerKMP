@@ -92,8 +92,7 @@
     <string name="cd_move_up">Move up</string>
     <string name="cd_toggle_visibility">Toggle visibility</string>
     <string name="empty_home_title">No expenses yet</string>
-    <string name="empty_home_subtitle">Tap the button below to record your first expense for this month.</string>
-    <string name="empty_home_action">Add Expense</string>
+    <string name="empty_home_subtitle">Tap the + button to record your first expense for this month.</string>
     <string name="empty_chart_title">No chart data</string>
     <string name="empty_chart_subtitle">Add expenses or switch months to see your spending breakdown.</string>
     <string name="empty_analytics_title">No trend data</string>

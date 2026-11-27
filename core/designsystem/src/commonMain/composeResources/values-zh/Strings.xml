@@ -93,8 +93,7 @@
     <string name="cd_move_up">往上移</string>
     <string name="cd_toggle_visibility">隱藏或顯示</string>
     <string name="empty_home_title">本月尚無支出紀錄</string>
-    <string name="empty_home_subtitle">點擊下方按鈕，輕鬆記下本月的第一筆花費。</string>
-    <string name="empty_home_action">記一筆支出</string>
+    <string name="empty_home_subtitle">點擊右下角 + 按鈕，記下本月的第一筆花費。</string>
     <string name="empty_chart_title">本月尚無消費分布</string>
     <string name="empty_chart_subtitle">新增支出或切換月份，即可查看各群組的花費比例。</string>
     <string name="empty_analytics_title">此區間尚無支出趨勢</string>

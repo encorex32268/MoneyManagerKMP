@@ -93,8 +93,7 @@
     <string name="cd_move_up">上へ移動</string>
     <string name="cd_toggle_visibility">表示切替</string>
     <string name="empty_home_title">今月の支出はまだありません</string>
-    <string name="empty_home_subtitle">下のボタンから今月の最初の支出を記録しましょう。</string>
-    <string name="empty_home_action">支出を記録</string>
+    <string name="empty_home_subtitle">右下の＋ボタンから今月の最初の支出を記録しましょう。</string>
     <string name="empty_chart_title">今月のグラフデータがありません</string>
     <string name="empty_chart_subtitle">支出を追加するか月を切り替えると、カテゴリ別の内訳が表示されます。</string>
     <string name="empty_analytics_title">この期間のトレンドデータがありません</string>

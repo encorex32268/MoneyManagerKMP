@@ -48,7 +48,6 @@ import feature.home.presentation.components.SpendingLimitDialog
 import moneymanagerkmp.composeapp.generated.resources.Res
 import moneymanagerkmp.composeapp.generated.resources.baseline_receipt_24_outline
 import moneymanagerkmp.composeapp.generated.resources.cd_add_expense
-import moneymanagerkmp.composeapp.generated.resources.empty_home_action
 import moneymanagerkmp.composeapp.generated.resources.empty_home_subtitle
 import moneymanagerkmp.composeapp.generated.resources.empty_home_title
 import org.jetbrains.compose.resources.painterResource
@@ -214,8 +213,6 @@ private fun HomeScreenNaviBottom(
                 icon = painterResource(Res.drawable.baseline_receipt_24_outline),
                 title = stringResource(Res.string.empty_home_title),
                 subtitle = stringResource(Res.string.empty_home_subtitle),
-                actionLabel = stringResource(Res.string.empty_home_action),
-                onActionClick = { onAction(HomeAction.OnGotoAddScreen) },
             )
         } else {
             LazyColumn(
@@ -279,8 +276,6 @@ private fun HomeScreenNaviRail(
                 icon = painterResource(Res.drawable.baseline_receipt_24_outline),
                 title = stringResource(Res.string.empty_home_title),
                 subtitle = stringResource(Res.string.empty_home_subtitle),
-                actionLabel = stringResource(Res.string.empty_home_action),
-                onActionClick = { onAction(HomeAction.OnGotoAddScreen) },
             )
         } else {
             LazyColumn(
