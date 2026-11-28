@@ -4,8 +4,8 @@
 
 **A production cross-platform personal finance app built with Kotlin Multiplatform & Compose Multiplatform, shipped on Google Play and the App Store.**
 
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.10-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
-[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.7.0-4285F4?logo=jetpackcompose&logoColor=white)](https://www.jetbrains.com/lp/compose-multiplatform/)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.3.0-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.10.0-4285F4?logo=jetpackcompose&logoColor=white)](https://www.jetbrains.com/lp/compose-multiplatform/)
 [![Android](https://img.shields.io/badge/Android-API%2024%E2%80%9336-3DDC84?logo=android&logoColor=white)](https://play.google.com/store/apps/details?id=com.lihan.moneymanager)
 [![iOS](https://img.shields.io/badge/iOS-SwiftUI%20Host-000000?logo=apple&logoColor=white)](https://apps.apple.com/us/app/moneymanager-expensetracker/id6503697767)
 [![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2B%20MVI-0A66C2)](#architecture--modularization)
@@ -146,7 +146,7 @@ All 15 modules share a single Version Catalog (`gradle/libs.versions.toml`) and 
 - `convention.android.application`, `convention.android.application.compose`, `convention.room`, `convention.buildkonfig`
 
 ### 4. Multiplatform Testing & CI/CD
-- **Unit Tests**: **17 `commonTest` test suites (53 tests)** across `:core:domain`, `:core:data`, and all three `:feature` modules covering ViewModels, repositories, mappers, and date/number formatters using `kotlin.test` and `kotlinx-coroutines-test` with in-memory fakes.
+- **Unit Tests**: **19 `commonTest` test suites (60 tests)** across `:core:domain`, `:core:data`, and all three `:feature` modules covering ViewModels, repositories, mappers, and date/number formatters using `kotlin.test` and `kotlinx-coroutines-test` with in-memory fakes.
 - **Bitrise CI/CD** (`bitrise.yml`):
   - `ci_test_and_build` (on Pull Requests): Runs all KMP & Android unit tests (`testAndroidHostTest testDebugUnitTest`) and builds the Debug APK on JDK 21.
   - `deploy_android` (on `master` / `main`): Runs the full test suite, builds & signs the Release AAB, and supports automated deployment to Firebase App Distribution and Google Play Internal Track.
@@ -157,13 +157,13 @@ All 15 modules share a single Version Catalog (`gradle/libs.versions.toml`) and 
 
 | Category | Technologies |
 | --- | --- |
-| **Language & Multiplatform** | Kotlin `2.0.10`, Kotlin Multiplatform (Android + iOS), Coroutines & Flow |
-| **UI & Design System** | Compose Multiplatform `1.7.0`, Material 3, Custom `MoneyTheme`, Custom Compose `Canvas` Charts, `colorpicker-compose` |
+| **Language & Multiplatform** | Kotlin `2.3.0`, Kotlin Multiplatform (Android + iOS), Coroutines & Flow |
+| **UI & Design System** | Compose Multiplatform `1.10.0`, Material 3, Custom `MoneyTheme`, Custom Compose `Canvas` Charts, `colorpicker-compose` |
 | **Architecture & Navigation** | Clean Architecture, MVI, Type-Safe Navigation Compose (`navigation-compose`) |
 | **Dependency Injection** | Koin (`koin-core`, `koin-compose`, `koin-compose-viewmodel`) |
-| **Local Persistence** | Room KMP (`2.7.0-alpha11`), Bundled SQLite (`sqlite-bundled`), AndroidX DataStore Preferences (`1.1.1`) |
+| **Local Persistence** | Room KMP (`2.7.2`), Bundled SQLite (`sqlite-bundled` `2.5.2`), AndroidX DataStore Preferences (`1.1.1`) |
 | **Data & Files** | `kotlinx.serialization`, `kotlinx-datetime`, `FileKit`, `de.halfbit:csv` |
-| **Build & CI/CD** | Gradle Convention Plugins (`build-logic`), Version Catalogs, KSP, BuildKonfig, Bitrise |
+| **Build & CI/CD** | Gradle `9.1`, AGP `9.0`, Convention Plugins (`build-logic`), Version Catalogs, KSP, BuildKonfig, Bitrise |
 | **Testing** | `kotlin.test`, `kotlinx-coroutines-test`, Fake Repositories in `commonTest` |
 
 ---
@@ -172,7 +172,7 @@ All 15 modules share a single Version Catalog (`gradle/libs.versions.toml`) and 
 
 ### Prerequisites
 - **JDK 21** (required by Gradle & AGP)
-- **Android Studio** (Ladybug or newer) for Android & KMP development
+- **Android Studio** (latest stable, supporting AGP 9.0) for Android & KMP development
 - **Xcode** (macOS) to build and run the iOS app
 
 ### Build & Run
